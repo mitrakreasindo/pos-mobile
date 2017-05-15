@@ -2,35 +2,89 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+
+        <item android:title="Main">
+            <menu>
+                <item
+                    android:id="@+id/nd_sales"
+                    android:icon="@drawable/ic_add_shopping_cart"
+                    android:title="Sales" />
+                <item
+                    android:id="@+id/nd_edit_sales"
+                    android:icon="@drawable/ic_action_cart"
+                    android:title="Edit Sales" />
+                <item
+                    android:id="@+id/nd_customer_payment"
+                    android:icon="@drawable/ic_payment"
+                    android:title="Customer Payment" />
+                <item
+                    android:id="@+id/nd_payment"
+                    android:icon="@drawable/ic_payment"
+                    android:title="Payment" />
+
+                <item
+                    android:id="@+id/nd_close_cash"
+                    android:icon="@drawable/ic_dialpad"
+                    android:title="Close Cash" />
+            </menu>
+        </item>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Administration">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nd_customer"
+                android:icon="@drawable/ic_contact_mail"
+                android:title="Customers" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nd_stock"
+                android:icon="@drawable/ic_folder_open"
+                android:title="Stock" />
+            <item
+                android:id="@+id/nd_administration_sales"
+                android:icon="@drawable/ic_assessment"
+                android:title="Sales" />
+            <item
+                android:id="@+id/nd_maintenance"
+                android:icon="@drawable/ic_settings"
+                android:title="Maintenance" />
+            <item
+                android:id="@+id/nd_presence_management"
+                android:icon="@drawable/ic_group"
+                android:title="Presence Management" />
         </menu>
     </item>
 
+    <item android:title="Utilities">
+        <menu>
+            <item
+                android:id="@+id/nd_tools"
+                android:icon="@drawable/ic_build"
+                android:title="Tools" />
+        </menu>
+    </item>
+    <item android:title="System">
+        <menu>
+            <item
+                android:id="@+id/nd_change_password"
+                android:icon="@drawable/ic_action_key"
+                android:title="Change Password" />
+            <item
+                android:id="@+id/nd_configuration"
+                android:icon="@drawable/ic_settings"
+                android:title="Configuration" />
+            <item
+                android:id="@+id/nd_printers"
+                android:icon="@drawable/ic_local_printshop"
+                android:title="Printers" />
+            <item
+                android:id="@+id/nd_check_in_out"
+                android:icon="@drawable/ic_timer"
+                android:title="Check In/Out" />
+            <item
+                android:id="@+id/nd_logout"
+                android:icon="@drawable/ic_power_settings_new"
+                android:title="Log out" />
+        </menu>
+    </item>
 </menu>
