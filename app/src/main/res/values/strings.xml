@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">POS</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="id_label">The ID is</string>
+    <string name="id_value">[id]</string>
+    <string name="content_label">The Content is</string>
+    <string name="content_value">[content]</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register New User</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- Strings related to register -->
+    <string name="person_name">Fullname</string>
+    <string name="person_pass">Password</string>
+    <string name="reinput_pass">Re-input Password</string>
+    <string name="card_no">Card No</string>
+    <string name="person_role">Role</string>
+    <string name="visibility">Visibility</string>
+    <string name="radio_visible">Visible</string>
+    <string name="radio_invisible">Invisible</string>
+    <string name="image_code">Image</string>
+    <string name="image_select">Select</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    
+</resources>
