@@ -54,7 +54,6 @@ public class MaintenanceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
 
-
         unbinder = ButterKnife.bind(this, super.onCreateView(inflater, container, savedInstanceState));
         return super.onCreateView(inflater, container, savedInstanceState);
 
