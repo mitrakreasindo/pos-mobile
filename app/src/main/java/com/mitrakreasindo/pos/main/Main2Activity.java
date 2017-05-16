@@ -3,7 +3,6 @@ package com.mitrakreasindo.pos.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,9 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String valueUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,13 @@ public class Main2Activity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Logout();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -43,14 +47,12 @@ public class Main2Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String value = getIntent().getExtras().getString("USERNAME");
-
-        System.out.println(value);
-//        Toast.makeText(Main2Activity.this, "Welcome "+value, Toast.LENGTH_LONG);
+        valueUser = getIntent().getExtras().getString("USERNAME");
+        Toast.makeText(Main2Activity.this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
 
         View headerLayout = navigationView.getHeaderView(0);
         TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
-        textViewUser.setText(value);
+        textViewUser.setText(valueUser);
     }
 
     @Override
@@ -91,22 +93,22 @@ public class Main2Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        if (id == R.id.nd_logout)
+        {
+            Logout();
+        }
+//      else if (id == R.id.nav_gallery)
+//      {
+//      }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void Logout()
+    {
+        Toast.makeText(this, "Goodbye "+ valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
