@@ -31,6 +31,10 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".maintenance.UsersActivity"
+            android:label="@string/users"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

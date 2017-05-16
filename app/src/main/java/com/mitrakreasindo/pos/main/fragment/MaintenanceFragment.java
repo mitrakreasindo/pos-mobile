@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.LoginActivity;
 import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.UsersActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,12 +58,19 @@ public class MaintenanceFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-//        View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
+        CardView mtncUsers;
+        View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
 
-//        unbinder = ButterKnife.bind(this, super.onCreateView(inflater, container, savedInstanceState));
-//        return super.onCreateView(inflater, container, savedInstanceState);
+        mtncUsers = (CardView) view.findViewById(R.id.mtnc_users);
 
-        return inflater.inflate(R.layout.fragment_maintenance, container, false);
+        mtncUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), UsersActivity.class));
+            }
+        });
+
+        return view;
 
     }
 

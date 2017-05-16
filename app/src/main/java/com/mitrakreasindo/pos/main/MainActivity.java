@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         {
             Logout();
         }else if(id == R.id.nd_maintenance){
-            Toast.makeText(this, "Maintenance fragment", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Maintenance", Toast.LENGTH_LONG).show();
             getSupportActionBar().setTitle("Maintenance");
             MaintenanceFragment maintenanceFragment = new MaintenanceFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
