@@ -86,10 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     public void onClick(View view) {
-        //attemptLogin();
-        Intent intent = new Intent(this, Main2Activity.class);
-        intent.putExtra("USERNAME", mUsernameView.getText().toString());
-        startActivity(intent);
+        attemptLogin();
     }
 
     public void Register(View view) {
@@ -152,17 +149,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
+    private void attemptLogin()
+    {
+        if (mAuthTask != null)
             return;
-        }
 
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUsernameView.getText().toString();
+        String user = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -176,29 +173,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email))
+        // Check for a valid user name.
+        if (TextUtils.isEmpty(user))
         {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (!isEmailValid(email))
-        {
-            mUsernameView.setError(getString(R.string.error_invalid_email));
-            focusView = mUsernameView;
-            cancel = true;
         }
+//        else if (!isEmailValid(user))
+//        {
+//            mUsernameView.setError(getString(R.string.error_invalid_user));
+//            focusView = mUsernameView;
+//            cancel = true;
+//        }
 
-        if (cancel) {
+        if (cancel)
+        {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+        }
+        else
+        {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+
+            Intent intent = new Intent(this, Main2Activity.class);
+            intent.putExtra("USERNAME", mUsernameView.getText().toString());
+            startActivity(intent);
+
+            mUsernameView.setText("");
+
+            showProgress(false);
         }
     }
 
