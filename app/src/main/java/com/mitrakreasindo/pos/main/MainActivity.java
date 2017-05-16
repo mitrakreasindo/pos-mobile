@@ -3,6 +3,8 @@ package com.mitrakreasindo.pos.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,10 +16,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String valueUser;
+    private int mPrevSelectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity
         TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
         textViewUser.setText(valueUser);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -96,10 +102,14 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nd_logout)
         {
             Logout();
+        }else if(id == R.id.nd_maintenance){
+            Toast.makeText(this, "Maintenance fragment", Toast.LENGTH_LONG).show();
+            getSupportActionBar().setTitle("Maintenance");
+            MaintenanceFragment maintenanceFragment = new MaintenanceFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_content, maintenanceFragment, maintenanceFragment.getTag()).commit();
         }
-//      else if (id == R.id.nav_gallery)
-//      {
-//      }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
