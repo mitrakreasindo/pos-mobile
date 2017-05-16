@@ -35,10 +35,22 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_main">POS Main Menu</string>
+    <string name="error_incorrect_reinput_password">Password is not match</string>
+    <string name="error_empty_name">Name required</string>
+    <string name="error_empty_pass">Password required</string>
+    <string name="error_empty_repass">Re-input password required</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!--spinner combobox role on register-->
+    <string-array name="spinner_roles">
+        <item>Administrator</item>
+        <item>Manager</item>
+        <item>Employee</item>
+        <item>Guest</item>
+    </string-array>
 
 </resources>

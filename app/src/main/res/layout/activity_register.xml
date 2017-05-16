@@ -33,7 +33,6 @@
         android:layout_below="@id/textview_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginBottom="5dp"
         android:inputType="textPersonName" />
 
@@ -49,7 +48,6 @@
         android:layout_below="@id/textview_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginBottom="5dp"
         android:inputType="textPassword" />
 
@@ -65,7 +63,6 @@
         android:layout_below="@id/textview_repass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginBottom="5dp"
         android:inputType="textPassword" />
 
@@ -76,18 +73,18 @@
         android:layout_height="wrap_content"
         android:text="@string/person_role" />
 
-    <EditText
-        android:id="@+id/edittext_role"
+    <Spinner
+        android:id="@+id/spinner_roles"
         android:layout_below="@id/textview_role"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginBottom="5dp"
-        android:inputType="text" />
+        android:theme="@style/ThemeSpinner"
+        style="@style/Widget.AppCompat.Spinner.Underlined" />
 
     <TextView
         android:id="@+id/textview_visibility"
-        android:layout_below="@id/edittext_role"
+        android:layout_below="@id/spinner_roles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/visibility" />
