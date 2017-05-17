@@ -1,21 +1,20 @@
 package com.mitrakreasindo.pos.main.maintenance;
 
-import android.graphics.pdf.PdfDocument;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.telecom.Call;
 import android.view.View;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.model.User;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +30,10 @@ public class UsersActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.list_users)
     RecyclerView listUsers;
+    @BindView(R.id.main_content)
+    ConstraintLayout mainContent;
+    @BindView(R.id.fab_users)
+    FloatingActionButton fabUsers;
 
     private UserListAdapter userListAdapter;
 
@@ -42,7 +45,9 @@ public class UsersActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+//        setSupportActionBar(toolbar);
         toolbar.setTitle("Users");
+        toolbar.setSubtitle("news");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,10 +62,18 @@ public class UsersActivity extends AppCompatActivity {
         listUsers.setLayoutManager(layoutManager);
         listUsers.setItemAnimator(new DefaultItemAnimator());
 
+        fabUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(UsersActivity.this, UserFormActivity.class));
+            }
+        });
+
     }
 
-    private void getUsers(){
+    private void getUsers() {
 //        List<User> users = respon
     }
+
 
 }
