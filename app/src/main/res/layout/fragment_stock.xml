@@ -31,66 +31,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_products"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_products"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/products" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Products"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_product_location"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_product_location"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Product Location"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_location" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -98,66 +55,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_auxiliary_product"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_auxiliary_products"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/auxiliary_products" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_content_paste"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Auxiliary Products"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_categories"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_categories"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_content_paste"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Categories"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/categories" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -165,66 +79,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_product_attributes"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_product_attributes"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_attributes" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_content_paste"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Product Attributes"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_attribute_values"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_attributes_values"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_settings_input_component"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Attribute Values"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/attributes_values" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -232,66 +103,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_product_attribute_sets"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_product_attribute_sets"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_attribute_sets" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_location_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Product Attribute Sets"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_product_attribute_use"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_product_attribute_use"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_domain"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Product Attribute Use"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_attribute_use" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -299,66 +127,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_stock_diary"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_stock_diary"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/stock_diary" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_view_list"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Stock Diary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_stock_movement"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_stock_movement"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_home"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Stock Movement"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/stock_movement" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -366,67 +151,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_promotions"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_promotions"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/promotions" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_view_list"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Promotions"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_recipes"
-                        app:cardBackgroundColor="@color/gray300"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_mnt_recipes"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_home"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Recipes"
-                                android:textAlignment="center"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/recipes" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -454,63 +195,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_report_labels_barcode"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_report_labels_barcode"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/labels_barcode" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Labels: Barcode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_report_inventory"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_report_inventory"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Inventory"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/inventory" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -518,63 +219,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_report_current_inventory"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_report_current_directory"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/current_directory" />
 
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:textAlignment="center"
-                                android:text="Current Inventory"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/stok_report_inventory_broken"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="3dp"
+                    <Button
+                        android:id="@+id/btn_stok_report_inventory_broken"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40">
-
-                        <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:src="@drawable/ic_group"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:text="Inventory: Broken"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/inventory_broken" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -585,22 +246,107 @@
                     <Button
                         android:id="@+id/btn_stok_report_inventory_difference"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".40"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
                         android:drawableTop="@drawable/ic_group"
                         android:textAllCaps="false"
-                        android:text="Inventory: Difference" />
+                        android:text="@string/inventory_difference" />
 
                     <Button
                         android:id="@+id/btn_stok_report_inventory_difference_detail"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_weight=".40"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
                         android:drawableTop="@drawable/ic_group"
                         android:textAllCaps="false"
-                        android:text="Inventory: Difference Detail" />
+                        android:text="@string/inventory_difference_detail" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_stok_report_inventory_list_detaile"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/inventory_list_detail" />
+
+                    <Button
+                        android:id="@+id/btn_stok_report_inventory_reorder"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/inventory_reorder" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_stok_report_product_catalogue_list"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_catalogue_list" />
+
+                    <Button
+                        android:id="@+id/btn_stok_report_products"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/products_report" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_stok_report_product_labels"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/product_labels" />
+
+                    <Button
+                        android:id="@+id/btn_stok_report_catalogue"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/catalogue" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_stok_report_labels_shelf_egde_labels"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:drawableTop="@drawable/ic_group"
+                        android:textAllCaps="false"
+                        android:text="@string/labels_shelf_egde_labels" />
                 </LinearLayout>
 
             </LinearLayout>
