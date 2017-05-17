@@ -35,6 +35,9 @@
         <activity android:name=".maintenance.UsersActivity"
             android:label="@string/users"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".maintenance.UserDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -41,8 +41,7 @@ public class UsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_users);
         ButterKnife.bind(this);
 
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left);
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setTitle("Users");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

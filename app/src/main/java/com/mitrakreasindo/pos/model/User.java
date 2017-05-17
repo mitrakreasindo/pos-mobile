@@ -47,26 +47,26 @@ public class User {
 
         User user2 = new User();
         user2.setId(2);
-        user2.setName("Nur Cahyo");
-        user2.setRole("Administrator");
+        user2.setName("Divergent");
+        user2.setRole("all");
         users.add(user2);
 
         User user3 = new User();
         user3.setId(3);
-        user3.setName("Nur Cahyo");
-        user3.setRole("Administrator");
+        user3.setName("Dauntles");
+        user3.setRole("police");
         users.add(user3);
 
         User user4 = new User();
         user4.setId(4);
-        user4.setName("Nur Cahyo");
-        user4.setRole("Administrator");
+        user4.setName("Erudite");
+        user4.setRole("ads manager");
         users.add(user4);
 
         User user5 = new User();
         user5.setId(5);
-        user5.setName("Nur Cahyo");
-        user5.setRole("Administrator");
+        user5.setName("User 5");
+        user5.setRole("mimin");
         users.add(user5);
 
         User user6 = new User();
