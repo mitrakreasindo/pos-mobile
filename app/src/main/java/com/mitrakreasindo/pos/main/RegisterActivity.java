@@ -99,8 +99,6 @@ public class RegisterActivity extends AppCompatActivity
         pass = edtPass.getText().toString();
         repass = edtRepass.getText().toString();
 
-        boolean cancel = false;
-
         if (TextUtils.isEmpty(name))
         {
             edtName.setError(getString(R.string.error_empty_name));
