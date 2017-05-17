@@ -71,4 +71,33 @@
         <item>Guest</item>
     </string-array>
 
+    <!--Menu Stock-->
+    <!--Maintenance-->
+    <string name="products">Products</string>
+    <string name="product_location">Product Location</string>
+    <string name="auxiliary_products">Auxiliary Products</string>
+    <string name="categories">Categories</string>
+    <string name="product_attributes">Product Attributes</string>
+    <string name="attributes_values">Attributes Values</string>
+    <string name="product_attribute_sets">Product Attribute Sets</string>
+    <string name="product_attribute_use">Product Attribute Use</string>
+    <string name="stock_diary">Stock Diary</string>
+    <string name="stock_movement">Stock Movement</string>
+    <string name="promotions">Promotions</string>
+    <string name="recipes">Recipes</string>
+    <!--Reports-->
+    <string name="labels_barcode">Label: Barcode</string>
+    <string name="inventory">Inventory</string>
+    <string name="current_directory">Current Directory</string>
+    <string name="inventory_broken">Inventory: Broken</string>
+    <string name="inventory_difference">Inventory: Difference</string>
+    <string name="inventory_difference_detail">Inventory: Difference Detail</string>
+    <string name="inventory_list_detail">Inventory: List Detail</string>
+    <string name="inventory_reorder">Inventory: Re-Order</string>
+    <string name="product_catalogue_list">Product Catalogue (List)</string>
+    <string name="products_report">Products</string>
+    <string name="product_labels">Product Labels</string>
+    <string name="catalogue">Catalogue</string>
+    <string name="labels_shelf_egde_labels">Labels: Shelf-Edge Labels</string>
+
 </resources>
