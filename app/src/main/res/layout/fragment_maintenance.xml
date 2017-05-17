@@ -10,6 +10,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
+    <!-- Point Of Sale Start -->
+
     <android.support.v7.widget.CardView
         android:layout_margin="5dp"
         android:layout_width="match_parent"
@@ -22,7 +25,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:text="Point Of Sales"
+                android:text="@string/point_of_sales"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -31,65 +34,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_users"
-                    app:cardBackgroundColor="@color/gray300"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_users"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_group"
+                    android:textAllCaps="false"
+                    android:text="@string/users" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_group"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Users"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_roles"
-                    app:cardBackgroundColor="@color/gray300"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_roles"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_group"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:text="Roles"
-                            android:textAlignment="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_group"
+                    android:textAllCaps="false"
+                    android:text="@string/roles" />
 
             </LinearLayout>
 
@@ -98,64 +61,53 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_taxes"
-                    app:cardBackgroundColor="@color/gray300"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_taxes"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_content_paste"
+                    android:textAllCaps="false"
+                    android:text="@string/taxes" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_content_paste"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Taxes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_tax_categories"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_tax_categories"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_content_paste"
+                    android:textAllCaps="false"
+                    android:text="@string/tax_categories" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+            </LinearLayout>
 
-                        <ImageView
-                            android:src="@drawable/ic_content_paste"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:text="Tax Categories"
-                            android:textAlignment="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                <Button
+                    android:id="@+id/btn_consumer_tax_categories"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_content_paste"
+                    android:textAllCaps="false"
+                    android:text="@string/consumer_tax_categories" />
+
+                <Button
+                    android:id="@+id/btn_resources"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_settings_input_component"
+                    android:textAllCaps="false"
+                    android:text="@string/resources" />
 
             </LinearLayout>
 
@@ -164,63 +116,55 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_consm_tax_categories"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_locations"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_location_on"
+                    android:textAllCaps="false"
+                    android:text="@string/users" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_content_paste"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Consumer Tax Categories"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_resources"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_floors"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_domain"
+                    android:textAllCaps="false"
+                    android:text="@string/floors" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+            </LinearLayout>
 
-                        <ImageView
-                            android:src="@drawable/ic_settings_input_component"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:text="Resources"
-                            android:textAlignment="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_tables"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_view_list"
+                    android:textAllCaps="false"
+                    android:text="@string/tables" />
+
+                <Button
+                    android:id="@+id/btn_reset_pickup_counter"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_home"
+                    android:textAllCaps="false"
+                    android:text="@string/reset_pickup_counter" />
 
             </LinearLayout>
 
@@ -229,164 +173,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_locations"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
+                <Button
+                    android:id="@+id/btn_release_table_locks"
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_location_on"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Locations"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_floors"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_domain"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:text="Floors"
-                            android:textAlignment="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_tables"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_view_list"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Tables"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_reset_counter"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_home"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:text="Reset Pickup Counter"
-                            android:textAlignment="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/mtnc_release_tab_lock"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="3dp"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40">
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:src="@drawable/ic_view_list"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:textAlignment="center"
-                            android:text="Release Table Locks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_view_list"
+                    android:textAllCaps="false"
+                    android:text="@string/release_table_locks" />
 
                 <LinearLayout
                     android:layout_weight=".40"
@@ -402,6 +197,10 @@
 
     </android.support.v7.widget.CardView>
 
+    <!-- Point Of Sale End -->
+
+
+    <!-- Reports Start -->
 
 <android.support.v7.widget.CardView
     android:layout_margin="5dp"
@@ -415,7 +214,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Reports"
+            android:text="@string/reports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -424,67 +223,32 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/mtnc_report_users"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="3dp"
+            <Button
+                android:id="@+id/btn_report_user"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
                 android:layout_margin="5dp"
-                android:layout_weight=".40">
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_group"
+                android:textAllCaps="false"
+                android:text="@string/users" />
 
-                <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/ic_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:textAlignment="center"
-                        android:text="Users"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/mtnc_sales_user"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="3dp"
+            <Button
+                android:id="@+id/btn_sales_by_user"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
                 android:layout_margin="5dp"
-                android:layout_weight=".40">
-
-                <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/ic_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="Sales By User"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_group"
+                android:textAllCaps="false"
+                android:text="@string/sales_by_user" />
 
         </LinearLayout>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>
+
+    <!-- Reports End -->
 
 </LinearLayout>
 </ScrollView>

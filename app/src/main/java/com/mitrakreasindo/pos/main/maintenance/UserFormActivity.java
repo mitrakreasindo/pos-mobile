@@ -69,7 +69,14 @@ public class UserFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_form);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.action_register);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.action_register);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

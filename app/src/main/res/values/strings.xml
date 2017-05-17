@@ -50,6 +50,18 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="block">Block</string>
+    <string name="point_of_sales">Point Of Sales</string>
+    <string name="sales_by_user">Sales By User</string>
+    <string name="reports">Reports</string>
+    <string name="floors">Floors</string>
+    <string name="release_table_locks">Release Table Locks</string>
+    <string name="reset_pickup_counter">Reset Pickup Counter</string>
+    <string name="tables">Tables</string>
+    <string name="resources">Resources</string>
+    <string name="consumer_tax_categories">Consumer Tax Categories</string>
+    <string name="tax_categories">Tax Categories</string>
+    <string name="taxes">Taxes</string>
+    <string name="roles">Roles</string>
 
     <!--spinner combobox role on register-->
     <string-array name="spinner_roles">
