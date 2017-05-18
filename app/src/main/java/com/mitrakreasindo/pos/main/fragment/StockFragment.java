@@ -14,22 +14,11 @@ import com.mitrakreasindo.pos.main.R;
  */
 public class StockFragment extends Fragment {
 
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-//        CardView mtncUsers;
         View view = inflater.inflate(R.layout.fragment_stock, container, false);
-
-//        mtncUsers = (CardView) view.findViewById(R.id.mtnc_users);
-
-//        mtncUsers.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                startActivity(new Intent(getActivity(), StockActivity.class));
-//            }
-//        });
         return view;
     }
 
@@ -41,6 +30,5 @@ public class StockFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        unbinder.unbind();
     }
 }

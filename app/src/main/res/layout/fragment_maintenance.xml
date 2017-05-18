@@ -10,9 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <!-- Point Of Sale Start -->
-
     <android.support.v7.widget.CardView
         android:layout_margin="5dp"
         android:layout_width="match_parent"
@@ -37,7 +35,7 @@
                 <Button
                     android:id="@+id/btn_users"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_group"
@@ -47,7 +45,7 @@
                 <Button
                     android:id="@+id/btn_roles"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_group"
@@ -64,7 +62,7 @@
                 <Button
                     android:id="@+id/btn_taxes"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_content_paste"
@@ -74,7 +72,7 @@
                 <Button
                     android:id="@+id/btn_tax_categories"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_content_paste"
@@ -92,7 +90,7 @@
                 <Button
                     android:id="@+id/btn_consumer_tax_categories"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_content_paste"
@@ -102,7 +100,7 @@
                 <Button
                     android:id="@+id/btn_resources"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_settings_input_component"
@@ -119,7 +117,7 @@
                 <Button
                     android:id="@+id/btn_locations"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_location_on"
@@ -129,7 +127,7 @@
                 <Button
                     android:id="@+id/btn_floors"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_domain"
@@ -149,7 +147,7 @@
                 <Button
                     android:id="@+id/btn_tables"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_view_list"
@@ -159,7 +157,7 @@
                 <Button
                     android:id="@+id/btn_reset_pickup_counter"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_home"
@@ -176,7 +174,7 @@
                 <Button
                     android:id="@+id/btn_release_table_locks"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_view_list"
@@ -226,7 +224,7 @@
             <Button
                 android:id="@+id/btn_report_user"
                 android:layout_width="0dp"
-                android:layout_height="75dp"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight=".40"
                 android:drawableTop="@drawable/ic_group"
@@ -236,7 +234,7 @@
             <Button
                 android:id="@+id/btn_sales_by_user"
                 android:layout_width="0dp"
-                android:layout_height="75dp"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight=".40"
                 android:drawableTop="@drawable/ic_group"
