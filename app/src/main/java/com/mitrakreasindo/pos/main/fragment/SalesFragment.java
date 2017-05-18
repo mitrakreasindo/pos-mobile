@@ -29,7 +29,7 @@ public class SalesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        
+
     }
 
     @Override
@@ -97,17 +97,6 @@ public class SalesFragment extends Fragment {
                         break;
 
                 }
-            }
-        });
-
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
-                {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-                return false;
             }
         });
 
