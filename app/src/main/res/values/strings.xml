@@ -99,5 +99,9 @@
     <string name="product_labels">Product Labels</string>
     <string name="catalogue">Catalogue</string>
     <string name="labels_shelf_egde_labels">Labels: Shelf-Edge Labels</string>
+    <string name="search_product">Search Product</string>
+    <string name="sales">Sales</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="total">Total</string>
 
 </resources>
