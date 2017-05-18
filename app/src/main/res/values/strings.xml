@@ -103,5 +103,7 @@
     <string name="sales">Sales</string>
     <string name="subtotal">Subtotal</string>
     <string name="total">Total</string>
+    <string name="options">Options</string>
+    <string name="go_to_customers">Go to Customers</string>
 
 </resources>
