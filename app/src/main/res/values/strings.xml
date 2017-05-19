@@ -105,5 +105,12 @@
     <string name="total">Total</string>
     <string name="options">Options</string>
     <string name="go_to_customers">Go to Customers</string>
+    <string name="find_customers">Find Customers</string>
+    <string name="split_sale">Split Sale</string>
+    <string name="reprint_last_ticket">Reprint Last Ticket</string>
+    <string name="new_sale">New Sale</string>
+    <string name="cancel_sale">Cancel Sale</string>
+    <string name="lay_always">Lay Always</string>
+    <string name="send_to_kitchen_printer">Send to Kitchen Printer</string>
 
 </resources>

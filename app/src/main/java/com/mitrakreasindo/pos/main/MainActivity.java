@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
+import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -40,7 +42,8 @@ public class MainActivity extends AppCompatActivity
         {
             @Override
             public void onClick(View view) {
-                Logout();
+                startActivity(new Intent(MainActivity.this, RoleActivity.class));
+//                Logout();
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }

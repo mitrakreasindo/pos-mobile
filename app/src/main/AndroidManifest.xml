@@ -43,6 +43,8 @@
         <activity android:name=".maintenance.UserFormActivity"
             android:label="@string/users"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".maintenance.role.RoleActivity"></activity>
     </application>
 
 </manifest>

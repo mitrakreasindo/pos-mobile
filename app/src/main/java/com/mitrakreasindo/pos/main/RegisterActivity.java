@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity
             Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
     }
 
-    private class HttpRequestTask extends AsyncTask<Void, Void, String>
+    public class HttpRequestTask extends AsyncTask<Void, Void, String>
     {
         @Override
         protected String doInBackground(Void... params)
