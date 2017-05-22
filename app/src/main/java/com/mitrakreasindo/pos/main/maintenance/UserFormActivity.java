@@ -22,8 +22,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.RegisterActivity;
+import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.service.RoleService;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,11 +36,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by error on 17/05/17.
@@ -60,7 +69,7 @@ public class UserFormActivity extends AppCompatActivity {
     EditText edittextRepass;
     @BindView(R.id.textview_role)
     TextView textviewRole;
-    @BindView(R.id.spinner_roles)
+    @BindView(R.id.spinner_role)
     Spinner spinnerRoles;
     @BindView(R.id.textview_visibility)
     TextView textviewVisibility;
@@ -81,38 +90,13 @@ public class UserFormActivity extends AppCompatActivity {
     @BindView(R.id.button_cancel)
     Button buttonCancel;
 
-//    @Override
-//    protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        setContentView(R.layout.activity_register);
-////        ButterKnife.bind(this);
-//
-////        setSupportActionBar(toolbar);
-////        getSupportActionBar().setTitle(R.string.action_register);
-////        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                onBackPressed();
-////            }
-////        });
-////
-////        buttonConfirm.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////
-////            }
-////        });
-//    }
+    private List<Roles> roles = new ArrayList<>();
+
+    private RoleService roleService;
+    private Roles role;
 
 
     int RESULT_LOAD_IMG;
-//    EditText edtName, edtPass, edtRepass, edtRole;
-//    RadioButton rdbVisible, rdbInvisible;
-//    ImageView imageView;
-//    String name, pass, repass, role;
-//    String visibility;
-//    View focusView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -121,6 +105,7 @@ public class UserFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_form);
         ButterKnife.bind(this);
 
+        roleService = ClientService.createService().create(RoleService.class);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.action_register);
@@ -131,6 +116,21 @@ public class UserFormActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("Data :", String.valueOf(new ArrayList<Roles>()));
+
+//        roles = getRole();
+
+//        Adapter Spinner
+//        ArrayAdapter<Roles> rolesArrayAdapter = new ArrayAdapter<Roles>(this, android.R.layout.simple_spinner_item, roles);
+//        spinnerRoles.setAdapter(rolesArrayAdapter);
+
+
+
+
+
+
+
+
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,21 +138,8 @@ public class UserFormActivity extends AppCompatActivity {
             }
         });
 
-//        edtName = (EditText) findViewById(R.id.edittext_name);
-//        edtPass = (EditText) findViewById(R.id.edittext_pass);
-//        edtRepass = (EditText) findViewById(R.id.edittext_repass);
-//        rdbVisible = (RadioButton) findViewById(R.id.radiobutton_visible);
-//        rdbInvisible = (RadioButton) findViewById(R.id.radiobutton_invisible);
-//        imageView = (ImageView) findViewById(R.id.imageview);
-//
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner_roles);
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.spinner_roles, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner.setAdapter(adapter);
+        getRole();
+
     }
 
 
@@ -197,5 +184,23 @@ public class UserFormActivity extends AppCompatActivity {
 
         finish();
 
+    }
+
+    private void getRole() {
+
+        final Call<List<Roles>> role = roleService.getRoleAll();
+        role.enqueue(new Callback<List<Roles>>() {
+            @Override
+            public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response) {
+                List<Roles> data = response.body();
+                ArrayAdapter<Roles> rolesArrayAdapter = new ArrayAdapter<Roles>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+                spinnerRoles.setAdapter(rolesArrayAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Roles>> call, Throwable t) {
+
+            }
+        });
     }
 }

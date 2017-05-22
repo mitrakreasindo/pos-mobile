@@ -80,7 +80,7 @@
                     android:text="@string/person_role" />
 
                 <Spinner
-                    android:id="@+id/spinner_roles"
+                    android:id="@+id/spinner_role"
                     android:layout_below="@id/textview_role"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

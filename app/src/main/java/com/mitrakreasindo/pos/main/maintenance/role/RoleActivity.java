@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
@@ -53,6 +54,8 @@ public class RoleActivity extends AppCompatActivity {
         listRole.setAdapter(roleAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         listRole.setLayoutManager(layoutManager);
+
+        Log.d("Data :", String.valueOf(roleAdapter));
 
         getRole();
 

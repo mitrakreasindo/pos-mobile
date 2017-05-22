@@ -59,4 +59,10 @@ public class Roles {
     public void setSflag(boolean sflag) {
         this.sflag = sflag;
     }
+
+    @Override
+    public String toString(){
+
+        return name;
+    }
 }
