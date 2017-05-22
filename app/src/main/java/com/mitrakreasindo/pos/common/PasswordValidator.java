@@ -24,7 +24,7 @@ public class PasswordValidator
      */
 
     private static final String PASSWORD_PATTERN =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*-+=,.?])(?=\\S+$).{8,10}$";
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=\\S+$).{8,10}$";
 
     public PasswordValidator()
     {

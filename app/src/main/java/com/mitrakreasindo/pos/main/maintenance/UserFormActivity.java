@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,22 +21,13 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.RegisterActivity;
-import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.model.Roles;
 import com.mitrakreasindo.pos.service.RoleService;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +57,7 @@ public class UserFormActivity extends AppCompatActivity {
     EditText edittextRepass;
     @BindView(R.id.textview_role)
     TextView textviewRole;
-    @BindView(R.id.spinner_role)
+    @BindView(R.id.spinner_roles)
     Spinner spinnerRoles;
     @BindView(R.id.textview_visibility)
     TextView textviewVisibility;

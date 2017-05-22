@@ -1,11 +1,14 @@
 package com.mitrakreasindo.pos.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,21 +27,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity
 {
-    int RESULT_LOAD_IMG;
-    EditText edtName, edtPass, edtRepass, edtRole;
-    RadioButton rdbVisible, rdbInvisible;
-    ImageView imageView;
-    String name, pass, repass, role;
-    String visibility;
-    View focusView = null;
-    PasswordValidator passwordValidator;
+    private int RESULT_TAKE_PHOTO = 0;
+    private int RESULT_PICK_GALLERY = 1;
+
+    private EditText edtName, edtPass, edtRepass, edtRole;
+    private RadioButton rdbVisible, rdbInvisible;
+    private ImageView imageView;
+    private String name, pass, repass, role;
+    private String visibility;
+    private View focusView = null;
+    private PasswordValidator passwordValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -116,6 +120,17 @@ public class RegisterActivity extends AppCompatActivity
             focusView = edtPass;
             return false;
         }
+        else if (!passwordValidator.validate(pass))
+        {
+            edtPass.setError("- Password must at least 8 chars and max 10 chars \n" +
+                    "- Contains at least 1 digit (0-9)\n" +
+                    "- 1 lower case alphabet char (a-z)\n" +
+                    "- 1 upper case alphabet char (A-Z)\n" +
+                    "- 1 special char (~!@#$%^&*-+=,.?)\n" +
+                    "- No whitespace allowed");
+            focusView = edtPass;
+            return false;
+        }
         else if (TextUtils.isEmpty(repass))
         {
             edtRepass.setError(getString(R.string.error_empty_repass));
@@ -128,44 +143,62 @@ public class RegisterActivity extends AppCompatActivity
             focusView = edtRepass;
             return false;
         }
-        else if (!passwordValidator.validate(pass))
-        {
-            edtPass.setError("Password must at least 8 chars and max 10 chars.\n" +
-                    "Contains at least 1 digit [0-9],\n" +
-                    "1 lower case alphabet char [a-z],\n" +
-                    "1 upper case alphabet char [A-Z],\n" +
-                    "1 special char [~!@#$%^&*-+=,.?].\n" +
-                    "No whitespace allowed");
-            focusView = edtPass;
-            return false;
-        }
         else
             return true;
     }
     
     public void Select(View view)
     {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Options");
+        builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        Toast.makeText(RegisterActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
+                        break;
+
+                    case 1:
+                        Toast.makeText(RegisterActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
+                        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(reqCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK)
         {
             try
             {
                 final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+
+                switch (requestCode)
+                {
+                    case 0:
+                        Bundle extras = data.getExtras();
+                        Bitmap bitmap = (Bitmap) extras.get("data");
+                        imageView.setImageBitmap(bitmap);
+                        break;
+
+                    case 1:
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        imageView.setImageBitmap(selectedImage);
+                        break;
+                }
             }
-            catch (FileNotFoundException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
