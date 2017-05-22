@@ -17,6 +17,8 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.PasswordValidator;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -36,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity
     String name, pass, repass, role;
     String visibility;
     View focusView = null;
+    PasswordValidator passwordValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -91,6 +94,8 @@ public class RegisterActivity extends AppCompatActivity
 
     private boolean attemptRegister()
     {
+        passwordValidator = new PasswordValidator();
+
         edtName.setError(null);
         edtPass.setError(null);
         edtRepass.setError(null);
@@ -121,6 +126,17 @@ public class RegisterActivity extends AppCompatActivity
         {
             edtRepass.setError(getString(R.string.error_incorrect_reinput_password));
             focusView = edtRepass;
+            return false;
+        }
+        else if (!passwordValidator.validate(pass))
+        {
+            edtPass.setError("Password must at least 8 chars and max 10 chars.\n" +
+                    "Contains at least 1 digit [0-9],\n" +
+                    "1 lower case alphabet char [a-z],\n" +
+                    "1 upper case alphabet char [A-Z],\n" +
+                    "1 special char [~!@#$%^&*-+=,.?].\n" +
+                    "No whitespace allowed");
+            focusView = edtPass;
             return false;
         }
         else
