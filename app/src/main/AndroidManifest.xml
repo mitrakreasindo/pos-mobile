@@ -37,6 +37,12 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".maintenance.role.RoleActivity"></activity>
+
+        <activity android:name=".maintenance.user.UserFormActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".maintenance.user.UserDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

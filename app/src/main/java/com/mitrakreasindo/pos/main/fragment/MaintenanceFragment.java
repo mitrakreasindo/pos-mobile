@@ -10,11 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.UsersActivity;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
 
 /**
  * Created by error on 15/05/17.
@@ -35,7 +31,7 @@ public class MaintenanceFragment extends Fragment {
         btnUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), UsersActivity.class));
+                startActivity(new Intent(getActivity(), UserActivity.class));
             }
         });
 

@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.maintenance;
+package com.mitrakreasindo.pos.main.maintenance.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.model.User;
 
@@ -21,10 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by error on 16/05/17.
+ * Created by lisa on 23/05/17.
  */
 
-public class UsersActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
 
     @BindView(R.id.toolbar)
@@ -66,7 +65,7 @@ public class UsersActivity extends AppCompatActivity {
         fabUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UsersActivity.this, UserFormActivity.class));
+                startActivity(new Intent(UserActivity.this, UserFormActivity.class));
             }
         });
 
