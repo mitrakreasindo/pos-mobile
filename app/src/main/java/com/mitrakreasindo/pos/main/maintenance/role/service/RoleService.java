@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.service;
+package com.mitrakreasindo.pos.main.maintenance.role.service;
 
 import com.mitrakreasindo.pos.model.Roles;
 

@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.maintenance.adapter;
+package com.mitrakreasindo.pos.main.maintenance.user.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,52 +12,54 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
+import com.mitrakreasindo.pos.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by error on 19/05/17.
+ * Created by error on 16/05/17.
  */
 
-public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
+public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
 
-    private List<Roles> roles = new ArrayList<Roles>();
+    private List<User> users = new ArrayList<User>();
     private Context context;
     private LayoutInflater inflater;
 
-    public RoleAdapter(Context context, List<Roles> roles){
+    public UserListAdapter(Context context, List<User> users){
         this.context = context;
-        this.roles = roles;
+        this.users = users;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public RoleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.adapter_role, parent, false);
+                .inflate(R.layout.adapter_user_list, parent, false);
 
-        return new RoleAdapter.ViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(RoleAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final Roles role = roles.get(position);
-        holder.txtName.setText(role.getName());
+        final User user = users.get(position);
+        holder.txtName.setText(user.getName());
+        holder.txtRole.setText(user.getRole());
 
 //        On Click
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, UserDetailActivity.class);
-//                intent.putExtra("name", user.getName());
-//                intent.putExtra("role", user.getRole());
-//                context.startActivity(intent);
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserDetailActivity.class);
+                intent.putExtra("name", user.getName());
+                intent.putExtra("role", user.getRole());
+                context.startActivity(intent);
+            }
+        });
 
 
 //        On Long Click
@@ -86,19 +88,19 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
         });
     }
 
-    public void addRole(Roles role){
-        roles.add(role);
+    public void addUser(User user){
+        users.add(user);
         notifyDataSetChanged();
     }
 
-    public void addRole(List<Roles> roles){
-        this.roles.addAll(roles);
+    public void addUser(List<User> users){
+        this.users.addAll(users);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return roles.size();
+        return users.size();
     }
 
     @Override
@@ -106,17 +108,13 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
         return 0;
     }
 
-    public void clear(){
-        roles.clear();
-        notifyDataSetChanged();
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtName;
+        private TextView txtName, txtRole;
         public ViewHolder(View itemView) {
             super(itemView);
-            txtName = (TextView) itemView.findViewById(R.id.txt_role_name);
+            txtName = (TextView) itemView.findViewById(R.id.txt_name);
+            txtRole = (TextView) itemView.findViewById(R.id.txt_role);
         }
     }
 }

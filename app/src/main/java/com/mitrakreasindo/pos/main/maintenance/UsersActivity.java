@@ -13,7 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.adapter.UserListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
+import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.model.User;
 
 import butterknife.BindView;

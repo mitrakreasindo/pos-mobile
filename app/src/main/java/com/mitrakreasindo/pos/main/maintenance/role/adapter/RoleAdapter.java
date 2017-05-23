@@ -1,8 +1,7 @@
-package com.mitrakreasindo.pos.main.maintenance.adapter;
+package com.mitrakreasindo.pos.main.maintenance.role.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,54 +11,52 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.UserDetailActivity;
-import com.mitrakreasindo.pos.model.User;
+import com.mitrakreasindo.pos.model.Roles;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by error on 16/05/17.
+ * Created by error on 19/05/17.
  */
 
-public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
+public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
 
-    private List<User> users = new ArrayList<User>();
+    private List<Roles> roles = new ArrayList<Roles>();
     private Context context;
     private LayoutInflater inflater;
 
-    public UserListAdapter(Context context, List<User> users){
+    public RoleAdapter(Context context, List<Roles> roles){
         this.context = context;
-        this.users = users;
+        this.roles = roles;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RoleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.adapter_user_list, parent, false);
+                .inflate(R.layout.adapter_role, parent, false);
 
-        return new ViewHolder(itemView);
+        return new RoleAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RoleAdapter.ViewHolder holder, int position) {
 
-        final User user = users.get(position);
-        holder.txtName.setText(user.getName());
-        holder.txtRole.setText(user.getRole());
+        final Roles role = roles.get(position);
+        holder.txtName.setText(role.getName());
 
 //        On Click
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UserDetailActivity.class);
-                intent.putExtra("name", user.getName());
-                intent.putExtra("role", user.getRole());
-                context.startActivity(intent);
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, UserDetailActivity.class);
+//                intent.putExtra("name", user.getName());
+//                intent.putExtra("role", user.getRole());
+//                context.startActivity(intent);
+//            }
+//        });
 
 
 //        On Long Click
@@ -88,19 +85,19 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         });
     }
 
-    public void addUser(User user){
-        users.add(user);
+    public void addRole(Roles role){
+        roles.add(role);
         notifyDataSetChanged();
     }
 
-    public void addUser(List<User> users){
-        this.users.addAll(users);
+    public void addRole(List<Roles> roles){
+        this.roles.addAll(roles);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return roles.size();
     }
 
     @Override
@@ -108,13 +105,17 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         return 0;
     }
 
+    public void clear(){
+        roles.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtName, txtRole;
+        private TextView txtName;
         public ViewHolder(View itemView) {
             super(itemView);
-            txtName = (TextView) itemView.findViewById(R.id.txt_name);
-            txtRole = (TextView) itemView.findViewById(R.id.txt_role);
+            txtName = (TextView) itemView.findViewById(R.id.txt_role_name);
         }
     }
 }
