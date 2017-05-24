@@ -36,16 +36,19 @@
             android:label="@string/users"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".maintenance.role.RoleActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".maintenance.user.UserFormActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".maintenance.user.UserDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".maintenance.role.RoleFormActivity">
-        </activity>
+        <activity
+            android:name=".maintenance.role.RoleFormActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".maintenance.role.RoleActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".stock.CategoryActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
-
 </manifest>

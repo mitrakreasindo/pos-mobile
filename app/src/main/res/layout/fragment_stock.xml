@@ -74,8 +74,8 @@
                         android:layout_margin="5dp"
                         android:layout_weight=".40"
                         android:drawableTop="@drawable/ic_list"
-                        android:textAllCaps="false"
-                        android:text="@string/categories" />
+                        android:text="@string/categories"
+                        android:textAllCaps="false"/>
                 </LinearLayout>
 
                 <LinearLayout

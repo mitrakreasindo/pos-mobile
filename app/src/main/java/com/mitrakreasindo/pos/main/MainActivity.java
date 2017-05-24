@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -59,7 +58,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         valueUser = getIntent().getExtras().getString("USERNAME");
-        Toast.makeText(MainActivity.this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Current Schema: " +
+                getIntent().getExtras().getString("COMPANY"), Toast.LENGTH_SHORT).show();
 
         View headerLayout = navigationView.getHeaderView(0);
         TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
