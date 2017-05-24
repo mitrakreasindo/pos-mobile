@@ -50,6 +50,7 @@
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_group"
                     android:textAllCaps="false"
+                    android:onClick="openRoles"
                     android:text="@string/roles" />
 
             </LinearLayout>

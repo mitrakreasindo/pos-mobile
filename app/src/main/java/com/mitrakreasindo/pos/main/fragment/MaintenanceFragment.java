@@ -10,42 +10,63 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
 
 /**
  * Created by error on 15/05/17.
  */
 
-public class MaintenanceFragment extends Fragment {
+public class MaintenanceFragment extends Fragment
+{
 
 
-    @Nullable
-    @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+  @Nullable
+  @Override
+  public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState)
+  {
 
-        Button btnUsers;
-        View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
+    Button btnUsers, btnRoles;
+    View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
 
-        btnUsers = (Button) view.findViewById(R.id.btn_users);
+    btnUsers = (Button) view.findViewById(R.id.btn_users);
+    btnRoles = (Button) view.findViewById(R.id.btn_roles);
 
-        btnUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), UserActivity.class));
-            }
-        });
+    btnRoles.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), RoleActivity.class));
+      }
+    });
 
-        return view;
 
-    }
+    btnUsers.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), UserActivity.class));
+      }
+    });
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
+
+    return view;
+
+  }
+
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+  {
+    super.onViewCreated(view, savedInstanceState);
+  }
+
+  @Override
+  public void onDestroyView()
+  {
+    super.onDestroyView();
+  }
+
 }

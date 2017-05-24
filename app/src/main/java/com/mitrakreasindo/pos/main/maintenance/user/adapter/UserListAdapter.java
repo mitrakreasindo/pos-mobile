@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
+import com.mitrakreasindo.pos.main.maintenance.user.model.People;
 import com.mitrakreasindo.pos.model.User;
 
 import java.util.ArrayList;
@@ -25,14 +26,14 @@ import java.util.List;
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>
 {
 
-  private List<User> users = new ArrayList<User>();
+  private List<People> peoples = new ArrayList<People>();
   private Context context;
   private LayoutInflater inflater;
 
-  public UserListAdapter(Context context, List<User> users)
+  public UserListAdapter(Context context, List<People> peoples)
   {
     this.context = context;
-    this.users = users;
+    this.peoples = peoples;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -50,9 +51,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   public void onBindViewHolder(ViewHolder holder, int position)
   {
 
-    final User user = users.get(position);
-    holder.txtName.setText(user.getName());
-    holder.txtRole.setText(user.getRole());
+    final People people = peoples.get(position);
+    holder.txtName.setText(people.getName());
+    holder.txtRole.setText(people.getEmail());
 
 //        On Click
     holder.itemView.setOnClickListener(new View.OnClickListener()
@@ -61,8 +62,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       public void onClick(View v)
       {
         Intent intent = new Intent(context, UserDetailActivity.class);
-        intent.putExtra("name", user.getName());
-        intent.putExtra("role", user.getRole());
+        intent.putExtra("name", people.getName());
+        intent.putExtra("email", people.getEmail());
+        intent.putExtra("role", people.getRole().getName());
         context.startActivity(intent);
       }
     });
@@ -99,22 +101,27 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     });
   }
 
-  public void addUser(User user)
+  public void addUser(People people)
   {
-    users.add(user);
+    peoples.add(people);
     notifyDataSetChanged();
   }
 
-  public void addUser(List<User> users)
+  public void clear(){
+    peoples.clear();
+    notifyDataSetChanged();
+  }
+
+  public void addUser(List<People> peoples)
   {
-    this.users.addAll(users);
+    this.peoples.addAll(peoples);
     notifyDataSetChanged();
   }
 
   @Override
   public int getItemCount()
   {
-    return users.size();
+    return peoples.size();
   }
 
   @Override

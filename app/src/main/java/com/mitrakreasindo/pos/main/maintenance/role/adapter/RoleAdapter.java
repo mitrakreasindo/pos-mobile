@@ -4,17 +4,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
 import com.mitrakreasindo.pos.model.Roles;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by error on 19/05/17.
@@ -25,6 +32,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
     private List<Roles> roles = new ArrayList<Roles>();
     private Context context;
     private LayoutInflater inflater;
+    private RoleService roleService;
 
     public RoleAdapter(Context context, List<Roles> roles){
         this.context = context;
@@ -75,7 +83,19 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder> {
 
                             case 1:
                                 Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
+                                roleService = ClientService.createService().create(RoleService.class);
+                                Log.d("DELETE CATEGORY", "DELETE CATEGORY");
+                                Call<List<Roles>> call = roleService.deleteRole(role.getId());
+                                call.enqueue(new Callback<List<Roles>>() {
+                                    @Override
+                                    public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response) {
+                                    }
+                                    @Override
+                                    public void onFailure(Call<List<Roles>> call, Throwable t) {
+                                    }
+                                });
                                 break;
+
                         }
                     }
                 });
