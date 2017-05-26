@@ -22,14 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.ClientService;
-import com.mitrakreasindo.pos.RestVariable;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
-import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;
 import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -86,10 +83,10 @@ public class UserFormActivity extends AppCompatActivity {
     Button buttonConfirm;
     @BindView(R.id.button_cancel)
     Button buttonCancel;
-    private List<Roles> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     private RoleService roleService;
-    private Roles role;
+    private Role role;
     private People people;
     private PeopleService peopleService;
 
@@ -177,17 +174,17 @@ public class UserFormActivity extends AppCompatActivity {
     private void getRole()
     {
 
-        final Call<List<Roles>> role = roleService.getRoleAll();
-        role.enqueue(new Callback<List<Roles>>() {
+        final Call<List<Role>> role = roleService.getRoleAll();
+        role.enqueue(new Callback<List<Role>>() {
             @Override
-            public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response) {
-                List<Roles> data = response.body();
-                ArrayAdapter<Roles> rolesArrayAdapter = new ArrayAdapter<Roles>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+            public void onResponse(Call<List<Role>> call, Response<List<Role>> response) {
+                List<Role> data = response.body();
+                ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
                 spinnerRole.setAdapter(rolesArrayAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Roles>> call, Throwable t) {
+            public void onFailure(Call<List<Role>> call, Throwable t) {
 
             }
         });
@@ -207,7 +204,7 @@ public class UserFormActivity extends AppCompatActivity {
 //        String example = "Convert Java String";
 //        byte[] bytes = example.getBytes();
 
-        role = new Roles();
+        role = new Role();
         role.setId("1");
 
 

@@ -1,6 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.role.service;
 
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 import java.util.List;
 
@@ -20,15 +20,15 @@ public interface RoleService
 {
 
   @GET("chromis.roles/public/")
-  Call<List<Roles>> getRoleAll();
+  Call<List<Role>> getRoleAll();
 
   @POST("chromis.roles/public/")
-  Call<List<Roles>> postRole(@Body Roles role);
+  Call<List<Role>> postRole(@Body Role role);
 
   @DELETE("chromis.roles/public/{id}")
-  Call<List<Roles>> deleteRole(@Path("id") String id);
+  Call<List<Role>> deleteRole(@Path("id") String id);
 
   @PUT("chromis.roles/public/")
-  Call<List<Roles>> updateRole(@Body Roles role);
+  Call<List<Role>> updateRole(@Body Role role);
 
 }

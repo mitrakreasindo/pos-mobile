@@ -4,7 +4,8 @@ package com.mitrakreasindo.pos.model;
  * Created by hendric on 2017-05-19.
  */
 
-public class Roles {
+public class Role
+{
     private String id;
     private String name;
     private byte[] permissions;

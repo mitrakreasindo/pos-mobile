@@ -16,7 +16,7 @@ import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +32,12 @@ import retrofit2.Response;
 public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 {
 
-  private List<Roles> roles = new ArrayList<Roles>();
+  private List<Role> roles = new ArrayList<Role>();
   private Context context;
   private LayoutInflater inflater;
   private RoleService roleService;
 
-  public RoleAdapter(Context context, List<Roles> roles)
+  public RoleAdapter(Context context, List<Role> roles)
   {
     this.context = context;
     this.roles = roles;
@@ -58,7 +58,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   public void onBindViewHolder(RoleAdapter.ViewHolder holder, int position)
   {
 
-    final Roles role = roles.get(position);
+    final Role role = roles.get(position);
     holder.txtName.setText(role.getName());
 
 //        On Click
@@ -100,17 +100,17 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 
                 roleService = ClientService.createService().create(RoleService.class);
                 Log.d("DELETE CATEGORY", "DELETE CATEGORY");
-                Call<List<Roles>> call = roleService.deleteRole(role.getId());
-                call.enqueue(new Callback<List<Roles>>()
+                Call<List<Role>> call = roleService.deleteRole(role.getId());
+                call.enqueue(new Callback<List<Role>>()
                 {
                   @Override
-                  public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response)
+                  public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
                   {
 
                   }
 
                   @Override
-                  public void onFailure(Call<List<Roles>> call, Throwable t)
+                  public void onFailure(Call<List<Role>> call, Throwable t)
                   {
                   }
                 });
@@ -127,13 +127,13 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     });
   }
 
-  public void addRole(Roles role)
+  public void addRole(Role role)
   {
     roles.add(role);
     notifyDataSetChanged();
   }
 
-  public void addRole(List<Roles> roles)
+  public void addRole(List<Role> roles)
   {
     this.roles.addAll(roles);
     notifyDataSetChanged();
@@ -172,20 +172,20 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   private void getRole()
   {
 
-    final Call<List<Roles>> role = roleService.getRoleAll();
-    role.enqueue(new Callback<List<Roles>>()
+    final Call<List<Role>> role = roleService.getRoleAll();
+    role.enqueue(new Callback<List<Role>>()
     {
       @Override
-      public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response)
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         clear();
-        List<Roles> rolesList = response.body();
+        List<Role> rolesList = response.body();
 
         addRole(rolesList);
       }
 
       @Override
-      public void onFailure(Call<List<Roles>> call, Throwable t)
+      public void onFailure(Call<List<Role>> call, Throwable t)
       {
 
       }

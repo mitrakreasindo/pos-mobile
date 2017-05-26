@@ -1,7 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.user.service;
 
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;
-import com.mitrakreasindo.pos.model.Roles;
 
 import java.util.List;
 

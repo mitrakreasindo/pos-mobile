@@ -13,7 +13,7 @@ import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.RestVariable;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class RoleFormActivity extends AppCompatActivity
   @BindView(R.id.log_id)
   TextView logId;
 
-  private Roles role;
+  private Role role;
   private RoleService roleService;
 
   @Override
@@ -89,25 +89,25 @@ public class RoleFormActivity extends AppCompatActivity
     String example = "Convert Java String";
     byte[] bytes = example.getBytes();
 
-    role = new Roles();
+    role = new Role();
     role.setName(roleField.getText().toString());
     role.setRightslevel(3);
     role.setPermissions(bytes);
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Roles>> call = roleService.postRole(role);
-    call.enqueue(new Callback<List<Roles>>()
+    Call<List<Role>> call = roleService.postRole(role);
+    call.enqueue(new Callback<List<Role>>()
     {
       @Override
-      public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response)
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Post Role !!!");
         onBackPressed();
       }
 
       @Override
-      public void onFailure(Call<List<Roles>> call, Throwable t)
+      public void onFailure(Call<List<Role>> call, Throwable t)
       {
       }
     });
@@ -124,7 +124,7 @@ public class RoleFormActivity extends AppCompatActivity
     Bundle bundle = getIntent().getExtras();
     String id = bundle.getString("id");
 
-    role = new Roles();
+    role = new Role();
     role.setId(id);
     role.setName(roleField.getText().toString());
     role.setRightslevel(3);
@@ -132,17 +132,17 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Roles>> call = roleService.updateRole(role);
-    call.enqueue(new Callback<List<Roles>>()
+    Call<List<Role>> call = roleService.updateRole(role);
+    call.enqueue(new Callback<List<Role>>()
     {
       @Override
-      public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response)
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
 
       }
 
       @Override
-      public void onFailure(Call<List<Roles>> call, Throwable t)
+      public void onFailure(Call<List<Role>> call, Throwable t)
       {
 
       }

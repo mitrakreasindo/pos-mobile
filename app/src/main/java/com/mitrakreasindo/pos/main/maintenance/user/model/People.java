@@ -1,6 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.user.model;
 
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 /**
  * Created by lisa on 24/05/17.
@@ -17,7 +17,7 @@ public class People
   private String siteguid;
   private Boolean sflag;
   private String email;
-  private Roles role;
+  private Role role;
 
   public String getId()
   {
@@ -109,12 +109,12 @@ public class People
     this.email = email;
   }
 
-  public Roles getRole()
+  public Role getRole()
   {
     return role;
   }
 
-  public void setRole(Roles role)
+  public void setRole(Role role)
   {
     this.role = role;
   }

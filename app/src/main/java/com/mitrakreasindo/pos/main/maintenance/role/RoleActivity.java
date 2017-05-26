@@ -3,7 +3,6 @@ package com.mitrakreasindo.pos.main.maintenance.role;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +16,7 @@ import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.adapter.RoleAdapter;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
-import com.mitrakreasindo.pos.model.Roles;
+import com.mitrakreasindo.pos.model.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class RoleActivity extends AppCompatActivity
 
   private RoleAdapter roleAdapter;
   private RoleService roleService;
-  private Roles roles;
+  private Role role;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -66,7 +65,7 @@ public class RoleActivity extends AppCompatActivity
 //        roleAdapter = new RoleAdapter()
 
     roleService = ClientService.createService().create(RoleService.class);
-    roleAdapter = new RoleAdapter(this, new ArrayList<Roles>());
+    roleAdapter = new RoleAdapter(this, new ArrayList<Role>());
 
     listRole.setHasFixedSize(true);
     listRole.setAdapter(roleAdapter);
@@ -90,19 +89,19 @@ public class RoleActivity extends AppCompatActivity
   private void getRole()
   {
 
-    final Call<List<Roles>> role = roleService.getRoleAll();
-    role.enqueue(new Callback<List<Roles>>()
+    final Call<List<Role>> role = roleService.getRoleAll();
+    role.enqueue(new Callback<List<Role>>()
     {
       @Override
-      public void onResponse(Call<List<Roles>> call, Response<List<Roles>> response)
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
-        List<Roles> rolesList = response.body();
+        List<Role> rolesList = response.body();
         roleAdapter.clear();
         roleAdapter.addRole(rolesList);
       }
 
       @Override
-      public void onFailure(Call<List<Roles>> call, Throwable t)
+      public void onFailure(Call<List<Role>> call, Throwable t)
       {
 
       }
