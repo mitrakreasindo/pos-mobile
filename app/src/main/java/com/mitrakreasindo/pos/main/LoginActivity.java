@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -27,10 +28,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.model.Login;
+import com.mitrakreasindo.pos.service.LoginService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -57,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   private UserLoginTask mAuthTask = null;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String companyCode;
+  private int responseCode;
+  private String responseMessage;
 
   // UI references.
   private EditText mUsernameView;
@@ -100,7 +111,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     companyCode = sharedPreferenceEditor.LoadPreferences(this, "");
     attemptLogin();
-
   }
 
   public void Register(View view)
@@ -217,19 +227,65 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
+//      mAuthTask = new UserLoginTask(email, password);
+//      mAuthTask.execute((Void) null);
       showProgress(true);
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
-
-      Intent intent = new Intent(this, MainActivity.class);
-      intent.putExtra("USERNAME", mUsernameView.getText().toString());
-      intent.putExtra("COMPANY", companyCode);
-      startActivity(intent);
-
-      mUsernameView.setText("");
-
+      postLogin(companyCode, user, password);
       showProgress(false);
+      mUsernameView.setText("");
+      mPasswordView.setText("");
     }
+  }
+
+  private void postLogin(String kodeMerchant, String username, String password)
+  {
+    LoginService loginService = ClientService.createService().create(LoginService.class);;
+
+    final ProgressDialog progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage("Please wait...");
+    progressDialog.show();
+
+    System.out.println(kodeMerchant);
+    System.out.println(username);
+    System.out.println(password);
+
+    Call<HashMap<Integer,String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
+    call.enqueue(new Callback<HashMap<Integer,String>>()
+    {
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+
+          Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+
+          if (responseCode == 0)
+          {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("USERNAME", mUsernameView.getText().toString());
+            intent.putExtra("COMPANY", companyCode);
+            startActivity(intent);
+          }
+          else
+          {
+            mUsernameView.requestFocus();
+          }
+        }
+      }
+
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        responseCode = 2;
+        responseMessage = "Cannot login. :( There is something wrong.";
+      }
+    });
+
+    progressDialog.hide();
   }
 
   private boolean isEmailValid(String email)
