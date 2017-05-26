@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:onClick="Confirm"
+                        android:onClick="savePeople"
                         android:layout_weight=".40"
                         android:layout_gravity="left"
                         android:layout_marginRight="5dp"

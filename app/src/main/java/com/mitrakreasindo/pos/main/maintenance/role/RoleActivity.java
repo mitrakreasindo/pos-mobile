@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
@@ -76,6 +77,14 @@ public class RoleActivity extends AppCompatActivity
 
     getRole();
 
+  }
+
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    Toast.makeText(this, "i'am resuming this activity", Toast.LENGTH_LONG).show();
+    getRole();
   }
 
   private void getRole()

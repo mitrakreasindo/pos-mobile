@@ -9,20 +9,26 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
  * Created by error on 19/05/17.
  */
 
-public interface RoleService {
+public interface RoleService
+{
 
-    @GET("chromis.roles/public/")
-    Call<List<Roles>> getRoleAll();
+  @GET("chromis.roles/public/")
+  Call<List<Roles>> getRoleAll();
 
-    @POST("chromis.roles/public/")
-    Call<List<Roles>> postRole(@Body Roles role);
+  @POST("chromis.roles/public/")
+  Call<List<Roles>> postRole(@Body Roles role);
 
-    @DELETE("chromis.roles/public/{id}")
-    Call<List<Roles>> deleteRole(@Path("id") String id);
+  @DELETE("chromis.roles/public/{id}")
+  Call<List<Roles>> deleteRole(@Path("id") String id);
+
+  @PUT("chromis.roles/public/")
+  Call<List<Roles>> updateRole(@Body Roles role);
+
 }

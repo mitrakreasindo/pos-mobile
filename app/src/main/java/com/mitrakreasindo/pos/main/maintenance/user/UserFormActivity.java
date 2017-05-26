@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,8 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.RestVariable;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
+import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
+import com.mitrakreasindo.pos.main.maintenance.user.model.People;
+import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
 import com.mitrakreasindo.pos.model.Roles;
 
 import java.io.FileNotFoundException;
@@ -83,6 +90,8 @@ public class UserFormActivity extends AppCompatActivity {
 
     private RoleService roleService;
     private Roles role;
+    private People people;
+    private PeopleService peopleService;
 
 
     int RESULT_LOAD_IMG;
@@ -95,6 +104,7 @@ public class UserFormActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         roleService = ClientService.createService().create(RoleService.class);
+        peopleService = ClientService.createService().create(PeopleService.class);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.action_register);
@@ -108,6 +118,8 @@ public class UserFormActivity extends AppCompatActivity {
         });
 
 
+//        spinnerRole.setOnItemClickListener(new );
+
         buttonConfirm.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -116,6 +128,7 @@ public class UserFormActivity extends AppCompatActivity {
 
             }
         });
+
 
         getRole();
 
@@ -157,8 +170,8 @@ public class UserFormActivity extends AppCompatActivity {
     public void Cancel(View view)
     {
 
-        finish();
-
+//        finish();
+        postPeople();
     }
 
     private void getRole()
@@ -178,5 +191,63 @@ public class UserFormActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void postPeople()
+    {
+
+        final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        Log.d(getClass().getSimpleName(), "Post Role !!!");
+
+        String roleValue = spinnerRole.getSelectedItem().toString();
+
+
+//        String example = "Convert Java String";
+//        byte[] bytes = example.getBytes();
+
+        role = new Roles();
+        role.setId("1");
+
+
+        people = new People();
+        people.setName(edittextName.getText().toString());
+        people.setApppassword(edittextPass.getText().toString());
+        people.setCard(null);
+//        people.setRole();
+        people.setVisible(true);
+        people.setImage(null);
+        people.setSiteguid(null);
+        people.setSflag(true);
+        people.setEmail(null);
+        people.setRole(role);
+//        people.setRole(spinnerRole.getSelectedItem().toString());
+
+        Call<List<People>> call = peopleService.postPeople(people);
+        call.enqueue(new Callback<List<People>>() {
+            @Override
+            public void onResponse(Call<List<People>> call, Response<List<People>> response) {
+                Log.d(getClass().getSimpleName(), "Success Post Role !!!");
+                onBackPressed();
+            }
+
+            @Override
+            public void onFailure(Call<List<People>> call, Throwable t) {
+//        progressDialog.dismiss();
+//        Toast.makeText(RoleFormActivity.this, "Failure Post Role", Toast.LENGTH_LONG);
+            }
+        });
+
+        Intent intent = new Intent(UserFormActivity.this, UserActivity.class);
+        startActivity(intent);
+
+        finish();
+
+    }
+
+    public void savePeople(View view)
+    {
+        postPeople();
     }
 }

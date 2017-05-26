@@ -225,7 +225,10 @@ public class RegisterActivity extends AppCompatActivity
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
 
-                final String url = "http://192.168.1.113:8080/ManualServices/resources/PeopleServices/QueryString/" +
+//                final String url = "http://192.168.1.113:8080/ManualServices/resources/PeopleServices/QueryString/" +
+//                        "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
+
+                final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.people/public/" +
                         "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
