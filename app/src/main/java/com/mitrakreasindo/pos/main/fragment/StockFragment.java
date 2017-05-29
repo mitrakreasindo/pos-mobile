@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.CategoryActivity;
+import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 
 /**
  * A simple {@link Fragment} subclass.

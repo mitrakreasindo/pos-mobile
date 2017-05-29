@@ -17,7 +17,6 @@ import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;
 import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
-import com.mitrakreasindo.pos.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ import retrofit2.Response;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>
 {
-
   private List<People> peoples = new ArrayList<People>();
   private Context context;
   private LayoutInflater inflater;

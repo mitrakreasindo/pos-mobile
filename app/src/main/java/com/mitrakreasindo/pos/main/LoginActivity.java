@@ -237,17 +237,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
   }
 
-  private void postLogin(String kodeMerchant, String username, String password)
+  private void postLogin(final String kodeMerchant, final String username, String password)
   {
     LoginService loginService = ClientService.createService().create(LoginService.class);;
 
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
-
-    System.out.println(kodeMerchant);
-    System.out.println(username);
-    System.out.println(password);
 
     Call<HashMap<Integer,String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
     call.enqueue(new Callback<HashMap<Integer,String>>()
@@ -266,8 +262,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
           if (responseCode == 0)
           {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("USERNAME", mUsernameView.getText().toString());
-            intent.putExtra("COMPANY", companyCode);
+            intent.putExtra("USERNAME", username);
+            intent.putExtra("COMPANY", kodeMerchant);
             startActivity(intent);
           }
           else

@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock;
+package com.mitrakreasindo.pos.main.stock.category;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +22,6 @@ public class CategoryActivity extends AppCompatActivity
     setContentView(R.layout.activity_category);
     ButterKnife.bind(this);
     toolbar.setTitle("Categories");
-    toolbar.setSubtitle("news");
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

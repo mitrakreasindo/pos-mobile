@@ -48,7 +48,7 @@
             android:name=".maintenance.role.RoleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".stock.CategoryActivity"
+            android:name=".stock.category.CategoryActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 </manifest>
