@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.category.controller;
+package com.mitrakreasindo.pos.main.stock.product.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.category.model.Category;
+import com.mitrakreasindo.pos.main.stock.product.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,36 +20,35 @@ import java.util.List;
  * Created by hendric on 2017-05-29.
  */
 
-public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder>
+public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder>
 {
-
-  private List<Category> categories = new ArrayList<Category>();
+  private List<Product> products = new ArrayList<Product>();
   private Context context;
   private LayoutInflater inflater;
 //  private CategoryService categoryService;
 
-  public CategoryListAdapter(Context context, List<Category> categories)
+  public ProductListAdapter(Context context, List<Product> products)
   {
     this.context = context;
-    this.categories = categories;
+    this.products = products;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+  public ProductListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater.from(parent.getContext())
-      .inflate(R.layout.adapter_category, parent, false);
+      .inflate(R.layout.adapter_product, parent, false);
 
-    return new ViewHolder(itemView);
+    return new ProductListAdapter.ViewHolder(itemView);
   }
 
   @Override
-  public void onBindViewHolder(CategoryListAdapter.ViewHolder holder, int position)
+  public void onBindViewHolder(ProductListAdapter.ViewHolder holder, int position)
   {
 
-    final Category category = categories.get(position);
-    holder.txtCategory.setText(category.getName());
+    final Product product = products.get(position);
+    holder.txtProduct.setText(product.getName());
 
     //On Click
     holder.itemView.setOnClickListener(new View.OnClickListener()
@@ -108,7 +107,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 //                });
 
 //                getCategories();
-                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Product deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
           }
@@ -119,27 +118,27 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     });
   }
 
-  public void addCategory(Category category)
+  public void addProduct(Product product)
   {
-    categories.add(category);
+    products.add(product);
     notifyDataSetChanged();
   }
 
   public void clear(){
-    categories.clear();
+    products.clear();
     notifyDataSetChanged();
   }
 
-  public void addProduct(List<Category> products)
+  public void addProduct(List<Product> products)
   {
-    this.categories.addAll(products);
+    this.products.addAll(products);
     notifyDataSetChanged();
   }
 
   @Override
   public int getItemCount()
   {
-    return categories.size();
+    return products.size();
   }
 
   @Override
@@ -151,12 +150,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtCategory;
+    private TextView txtProduct;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtCategory = (TextView) itemView.findViewById(R.id.txt_category);
+      txtProduct = (TextView) itemView.findViewById(R.id.txt_product);
     }
   }
 
