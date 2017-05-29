@@ -61,17 +61,6 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     final Role role = roles.get(position);
     holder.txtName.setText(role.getName());
 
-//        On Click
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, UserDetailActivity.class);
-//                intent.putExtra("name", user.getName());
-//                intent.putExtra("role", user.getRole());
-//                context.startActivity(intent);
-//            }
-//        });
-
 
 //        On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()

@@ -11,13 +11,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;
+import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
 import com.mitrakreasindo.pos.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by error on 16/05/17.
@@ -29,6 +36,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   private List<People> peoples = new ArrayList<People>();
   private Context context;
   private LayoutInflater inflater;
+  private PeopleService peopleService;
 
   public UserListAdapter(Context context, List<People> peoples)
   {
@@ -87,10 +95,35 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             {
               case 0:
                 Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, UserFormActivity.class);
+                intent.putExtra("id", people.getName());
+                intent.putExtra("name", people.getApppassword());
+                context.startActivity(intent);
                 break;
 
               case 1:
                 Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
+                peopleService = ClientService.createService().create(PeopleService.class);
+                Call<List<People>> call = peopleService.deletePeople(people.getId());
+                call.enqueue(new Callback<List<People>>()
+                {
+                  @Override
+                  public void onResponse(Call<List<People>> call, Response<List<People>> response)
+                  {
+
+                  }
+
+                  @Override
+                  public void onFailure(Call<List<People>> call, Throwable t)
+                  {
+
+                  }
+
+
+                });
+
+                getPeoples();
+                Toast.makeText(context, "User deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
           }
@@ -141,5 +174,27 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       txtName = (TextView) itemView.findViewById(R.id.txt_name);
       txtRole = (TextView) itemView.findViewById(R.id.txt_role);
     }
+  }
+
+  private void getPeoples()
+  {
+    final Call<List<People>> people = peopleService.getPeopleAll();
+    people.enqueue(new Callback<List<People>>()
+    {
+      @Override
+      public void onResponse(Call<List<People>> call, Response<List<People>> response)
+      {
+        List<People> peopleList = response.body();
+        clear();
+        addUser(peopleList);
+      }
+
+      @Override
+      public void onFailure(Call<List<People>> call, Throwable t)
+      {
+
+      }
+    });
+
   }
 }
