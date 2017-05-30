@@ -19,6 +19,7 @@ import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -136,6 +137,11 @@ public class MainActivity extends AppCompatActivity
             SalesFragment salesFragment = new SalesFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content, salesFragment, salesFragment.getTag()).commit();
+        }
+        else if (id == R.id.nd_customer_payment)
+        {
+            Toast.makeText(this, "Product", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, ProductActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

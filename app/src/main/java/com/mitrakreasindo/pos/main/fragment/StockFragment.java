@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +25,8 @@ public class StockFragment extends Fragment
     View view = inflater.inflate(R.layout.fragment_stock, container, false);
 
     Button btnCategories = (Button) view.findViewById(R.id.btn_stok_mnt_categories);
+    Button btnProducts = (Button) view.findViewById(R.id.btn_stok_mnt_products);
+
 
     btnCategories.setOnClickListener(new View.OnClickListener()
     {
@@ -31,6 +34,15 @@ public class StockFragment extends Fragment
       public void onClick(View v)
       {
         startActivity(new Intent(getActivity(), CategoryActivity.class));
+      }
+    });
+
+    btnProducts.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), ProductActivity.class));
       }
     });
 

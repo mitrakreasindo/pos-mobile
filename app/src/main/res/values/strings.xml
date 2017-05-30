@@ -117,5 +117,18 @@
     <string name="send_to_kitchen_printer">Send to Kitchen Printer</string>
     <string name="role">Role</string>
     <string name="save">Save</string>
+    <string name="title_activity_product">ProductActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="barcode">Barcode</string>
+    <string name="reference">Reference</string>
+    <string name="name">Name</string>
+    <string name="short_name">Short Name</string>
+    <string name="category">Category</string>
+    <string name="sell_price">Sell Price</string>
+    <string name="stock_cost_by_year">Stock Cost by Year</string>
+    <string name="stock_volume">Stock Volume</string>
+    <string name="catalog_ranking">Catalog ranking</string>
+    <string name="pack_quantity">Pack Quantity</string>
+    <string name="of_product">of Product</string>
 
 </resources>

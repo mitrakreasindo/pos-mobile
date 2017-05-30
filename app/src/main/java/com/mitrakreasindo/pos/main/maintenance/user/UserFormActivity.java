@@ -239,20 +239,16 @@ public class UserFormActivity extends AppCompatActivity
     role = new Role();
     role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
 
-//    data.get(spinnerRole.getSelectedItemPosition()).getId();
-
     people = new People();
     people.setName(edittextName.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
-//        people.setRole();
     people.setVisible(true);
     people.setImage(null);
     people.setSiteguid(null);
     people.setSflag(true);
     people.setEmail(null);
     people.setRole(role);
-//        people.setRole(spinnerRole.getSelectedItem().toString());
 
     Call<List<People>> call = peopleService.postPeople(people);
     call.enqueue(new Callback<List<People>>()
