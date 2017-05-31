@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
 
-          Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+          Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
 
           if (responseCode == 0)
           {
@@ -278,6 +278,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       {
         responseCode = 2;
         responseMessage = "Cannot login. :( There is something wrong.";
+
+        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
 

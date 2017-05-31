@@ -8,7 +8,7 @@ public class Category
 {
   private String id;
   private String name;
-  private String parentid;
+  private Category parentid;
   private String texttip;
   private boolean catshowname;
   private byte[] image;
@@ -37,12 +37,12 @@ public class Category
     this.name = name;
   }
 
-  public String getParentid()
+  public Category getParentid()
   {
     return parentid;
   }
 
-  public void setParentid(String parentid)
+  public void setParentid(Category parentid)
   {
     this.parentid = parentid;
   }

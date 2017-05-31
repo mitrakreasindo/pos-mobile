@@ -1,17 +1,15 @@
 package com.mitrakreasindo.pos.main.stock.category.controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.model.Category;
+import com.mitrakreasindo.pos.main.stock.category.service.CategoryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +21,10 @@ import java.util.List;
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder>
 {
 
-  private List<Category> categories = new ArrayList<Category>();
+  private List<Category> categories = new ArrayList<Category>();;
   private Context context;
   private LayoutInflater inflater;
-//  private CategoryService categoryService;
+  private CategoryService categoryService;
 
   public CategoryListAdapter(Context context, List<Category> categories)
   {
@@ -52,42 +50,42 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     holder.txtCategory.setText(category.getName());
 
     //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
+//    holder.itemView.setOnClickListener(new View.OnClickListener()
+//    {
+//      @Override
+//      public void onClick(View v)
+//      {
 //        Intent intent = new Intent(context, UserDetailActivity.class);
 //        intent.putExtra("name", category.getName());
 //        context.startActivity(intent);
-      }
-    });
+//      }
+//    });
 
     //On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
-    {
-      @Override
-      public boolean onLongClick(final View v)
-      {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
-        {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
-          {
-            switch (which)
-            {
-              case 0:
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
+//    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+//    {
+//      @Override
+//      public boolean onLongClick(final View v)
+//      {
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setTitle("Options");
+//        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
+//        {
+//          @Override
+//          public void onClick(DialogInterface dialog, int which)
+//          {
+//            switch (which)
+//            {
+//              case 0:
+//                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
 //                Intent intent = new Intent(context, UserFormActivity.class);
 //                intent.putExtra("id", category.getName());
 //                intent.putExtra("name", category.getApppassword());
 //                context.startActivity(intent);
-                break;
-
-              case 1:
-                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
+//                break;
+//
+//              case 1:
+//                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
 //                categoryService = ClientService.createService().create(CategoryService.class);
 //                Call<List<Category>> call = categoryService.deleteCategory(category.getId());
 //                call.enqueue(new Callback<List<Category>>()
@@ -106,17 +104,17 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 //
 //
 //                });
-
+//
 //                getCategories();
-                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
-                break;
-            }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+//                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
+//                break;
+//            }
+//          }
+//        });
+//        builder.show();
+//        return false;
+//      }
+//    });
   }
 
   public void addCategory(Category category)
@@ -125,14 +123,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     notifyDataSetChanged();
   }
 
-  public void clear(){
-    categories.clear();
+  public void addCategory(List<Category> categories)
+  {
+    this.categories.addAll(categories);
     notifyDataSetChanged();
   }
 
-  public void addProduct(List<Category> products)
-  {
-    this.categories.addAll(products);
+  public void clear(){
+    categories.clear();
     notifyDataSetChanged();
   }
 
@@ -160,8 +158,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
   }
 
-  private void getCategories()
-  {
+//  private void getCategories()
+//  {
 //    final Call<List<Category>> category = categoryService.getCategoryAll();
 //    category.enqueue(new Callback<List<Category>>()
 //    {
@@ -179,6 +177,5 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 //
 //      }
 //    });
-
-  }
+//  }
 }
