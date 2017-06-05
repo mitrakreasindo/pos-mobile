@@ -1,5 +1,8 @@
 package com.mitrakreasindo.pos.main.stock.product.model;
 
+import com.mitrakreasindo.pos.main.stock.category.model.Category;
+import com.mitrakreasindo.pos.model.TaxCategory;
+
 /**
  * Created by hendric on 2017-05-29.
  */
@@ -13,11 +16,8 @@ public class Product
   private String name;
   private double pricebuy;
   private double pricesell;
-  private String category;
-  private String taxcat;
-  private String attributeset;
-  private double stockcost;
-  private double stockvolume;
+  private Double stockcost;
+  private Double stockvolume;
   private boolean iscom;
   private boolean isscale;
   private boolean iskitchen;
@@ -36,16 +36,20 @@ public class Product
   private boolean alwaysavailable;
   private String discounted;
   private boolean candiscount;
-  private boolean iscatalog;
-  private int catorder;
+  private Boolean iscatalog;
+  private Integer catorder;
   private boolean ispack;
-  private double packquantity;
-  private String packproduct;
-  private String promotionid;
-  private boolean allproducts;
-  private boolean managestock;
+  private Double packquantity;
+  private Boolean allproducts;
+  private Boolean managestock;
   private String siteguid;
-  private boolean sflag;
+  private Boolean sflag;
+  private String attributesetId;
+  private Category category;
+
+  private Product packproduct;
+  private String promotionid;
+  private TaxCategory taxcat;
 
   public String getId()
   {
@@ -117,52 +121,22 @@ public class Product
     this.pricesell = pricesell;
   }
 
-  public String getCategory()
-  {
-    return category;
-  }
-
-  public void setCategory(String category)
-  {
-    this.category = category;
-  }
-
-  public String getTaxcat()
-  {
-    return taxcat;
-  }
-
-  public void setTaxcat(String taxcat)
-  {
-    this.taxcat = taxcat;
-  }
-
-  public String getAttributeset()
-  {
-    return attributeset;
-  }
-
-  public void setAttributeset(String attributeset)
-  {
-    this.attributeset = attributeset;
-  }
-
-  public double getStockcost()
+  public Double getStockcost()
   {
     return stockcost;
   }
 
-  public void setStockcost(double stockcost)
+  public void setStockcost(Double stockcost)
   {
     this.stockcost = stockcost;
   }
 
-  public double getStockvolume()
+  public Double getStockvolume()
   {
     return stockvolume;
   }
 
-  public void setStockvolume(double stockvolume)
+  public void setStockvolume(Double stockvolume)
   {
     this.stockvolume = stockvolume;
   }
@@ -347,22 +321,22 @@ public class Product
     this.candiscount = candiscount;
   }
 
-  public boolean iscatalog()
+  public Boolean getIscatalog()
   {
     return iscatalog;
   }
 
-  public void setIscatalog(boolean iscatalog)
+  public void setIscatalog(Boolean iscatalog)
   {
     this.iscatalog = iscatalog;
   }
 
-  public int getCatorder()
+  public Integer getCatorder()
   {
     return catorder;
   }
 
-  public void setCatorder(int catorder)
+  public void setCatorder(Integer catorder)
   {
     this.catorder = catorder;
   }
@@ -377,52 +351,32 @@ public class Product
     this.ispack = ispack;
   }
 
-  public double getPackquantity()
+  public Double getPackquantity()
   {
     return packquantity;
   }
 
-  public void setPackquantity(double packquantity)
+  public void setPackquantity(Double packquantity)
   {
     this.packquantity = packquantity;
   }
 
-  public String getPackproduct()
-  {
-    return packproduct;
-  }
-
-  public void setPackproduct(String packproduct)
-  {
-    this.packproduct = packproduct;
-  }
-
-  public String getPromotionid()
-  {
-    return promotionid;
-  }
-
-  public void setPromotionid(String promotionid)
-  {
-    this.promotionid = promotionid;
-  }
-
-  public boolean isAllproducts()
+  public Boolean getAllproducts()
   {
     return allproducts;
   }
 
-  public void setAllproducts(boolean allproducts)
+  public void setAllproducts(Boolean allproducts)
   {
     this.allproducts = allproducts;
   }
 
-  public boolean isManagestock()
+  public Boolean getManagestock()
   {
     return managestock;
   }
 
-  public void setManagestock(boolean managestock)
+  public void setManagestock(Boolean managestock)
   {
     this.managestock = managestock;
   }
@@ -437,13 +391,63 @@ public class Product
     this.siteguid = siteguid;
   }
 
-  public boolean isSflag()
+  public Boolean getSflag()
   {
     return sflag;
   }
 
-  public void setSflag(boolean sflag)
+  public void setSflag(Boolean sflag)
   {
     this.sflag = sflag;
+  }
+
+  public String getAttributesetId()
+  {
+    return attributesetId;
+  }
+
+  public void setAttributesetId(String attributesetId)
+  {
+    this.attributesetId = attributesetId;
+  }
+
+  public Category getCategory()
+  {
+    return category;
+  }
+
+  public void setCategory(Category category)
+  {
+    this.category = category;
+  }
+
+  public Product getPackproduct()
+  {
+    return packproduct;
+  }
+
+  public void setPackproduct(Product packproduct)
+  {
+    this.packproduct = packproduct;
+  }
+
+  public String getPromotionid()
+  {
+    return promotionid;
+  }
+
+  public void setPromotionid(String promotionid)
+  {
+    this.promotionid = promotionid;
+  }
+
+  public TaxCategory getTaxcat()
+  {
+    return taxcat;
+  }
+
+  public void setTaxcat(TaxCategory taxcat)
+  {
+    this.taxcat = taxcat;
   }
 }

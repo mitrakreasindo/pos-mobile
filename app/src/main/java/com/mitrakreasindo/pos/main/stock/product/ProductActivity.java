@@ -1,202 +1,151 @@
 package com.mitrakreasindo.pos.main.stock.product;
 
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mitrakreasindo.pos.ClientService;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.product.fragment.StockFragment;
+import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
+import com.mitrakreasindo.pos.main.stock.product.model.Product;
+import com.mitrakreasindo.pos.main.stock.product.service.ProductService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ProductActivity extends AppCompatActivity
 {
 
-  /**
-   * The {@link android.support.v4.view.PagerAdapter} that will provide
-   * fragments for each of the sections. We use a
-   * {@link FragmentPagerAdapter} derivative, which will keep every
-   * loaded fragment in memory. If this becomes too memory intensive, it
-   * may be best to switch to a
-   * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-   */
-  private SectionsPagerAdapter mSectionsPagerAdapter;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.list_product)
+  RecyclerView listProduct;
+  @BindView(R.id.txt_action_toolbar)
+  public TextView txtActionToolbar;
+  @BindView(R.id.main_content)
+  ConstraintLayout mainContent;
 
-  /**
-   * The {@link ViewPager} that will host the section contents.
-   */
-  private ViewPager mViewPager;
+  private ProductService productService;
+  private ProductListAdapter productListAdapter;
+  private Product product;
+
+  public boolean is_action_mode = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_product);
+    ButterKnife.bind(this);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    // Create the adapter that will return a fragment for each of the three
-    // primary sections of the activity.
-    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-    // Set up the ViewPager with the sections adapter.
-    mViewPager = (ViewPager) findViewById(R.id.container);
-    mViewPager.setAdapter(mSectionsPagerAdapter);
+    productService = ClientService.createService().create(ProductService.class);
 
-    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-    tabLayout.setupWithViewPager(mViewPager);
+    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener()
+    listProduct.setHasFixedSize(true);
+    listProduct.setAdapter(productListAdapter);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+    listProduct.setLayoutManager(layoutManager);
+
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
-      public void onClick(View view)
+      public void onClick(View v)
       {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        onBackPressed();
       }
     });
 
+    if (!is_action_mode)
+    {
+      txtActionToolbar.setVisibility(View.GONE);
+    }
+    else
+    {
+      txtActionToolbar.setVisibility(View.VISIBLE);
+    }
 
-
+    getProducts();
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.menu_product, menu);
+    return true;
+  }
 
-//  @Override
-//  public boolean onCreateOptionsMenu(Menu menu)
-//  {
-//    // Inflate the menu; this adds items to the action bar if it is present.
-//    getMenuInflater().inflate(R.menu.menu_product, menu);
-//    return true;
-//  }
-//
-//  @Override
-//  public boolean onOptionsItemSelected(MenuItem item)
-//  {
-//    // Handle action bar item clicks here. The action bar will
-//    // automatically handle clicks on the Home/Up button, so long
-//    // as you specify a parent activity in AndroidManifest.xml.
-//    int id = item.getItemId();
-//
-//    //noinspection SimplifiableIfStatement
-//    if (id == R.id.action_settings)
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.product_action_add)
+    {
+      startActivity(new Intent(this, ProductFormActivity.class));
+    }
+//    if (id == R.id.menu_action)
 //    {
+//      toolbar.getMenu().clear();
+//      toolbar.inflateMenu(R.menu.menu_action_mode);
+//      txtActionToolbar.setVisibility(View.VISIBLE);
+//      is_action_mode = true;
+//      productListAdapter.notifyDataSetChanged();
+//
 //      return true;
 //    }
-//
-//    return super.onOptionsItemSelected(item);
-//  }
 
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragment extends Fragment
-  {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    public PlaceholderFragment()
-    {
-    }
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static PlaceholderFragment newInstance(int sectionNumber)
-    {
-      PlaceholderFragment fragment = new PlaceholderFragment();
-      Bundle args = new Bundle();
-      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-      fragment.setArguments(args);
-      return fragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-      if(getArguments().getInt(ARG_SECTION_NUMBER) == 1)
-      {
-        View rootView = inflater.inflate(R.layout.fragment_product_general, container, false);
-        return rootView;
-      }
-      else if(getArguments().getInt(ARG_SECTION_NUMBER) == 2)
-      {
-        View rootView = inflater.inflate(R.layout.fragment_product_stock, container, false);
-        return rootView;
-      }
-      else if (getArguments().getInt(ARG_SECTION_NUMBER) == 3)
-      {
-        View rootView = inflater.inflate(R.layout.fragment_product_image, container, false);
-        return rootView;
-      }
-
-      View rootView = inflater.inflate(R.layout.fragment_product, container, false);
-      TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-      textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-      return rootView;
-
-    }
+    return true;
   }
 
-  /**
-   * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-   * one of the sections/tabs/pages.
-   */
-  public class SectionsPagerAdapter extends FragmentPagerAdapter
+  private void getProducts()
   {
-
-    public SectionsPagerAdapter(FragmentManager fm)
+    final Call<List<Product>> listCall = productService.getProductAll();
+    listCall.enqueue(new Callback<List<Product>>()
     {
-      super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position)
-    {
-      // getItem is called to instantiate the fragment for the given page.
-      // Return a PlaceholderFragment (defined as a static inner class below).
-      return PlaceholderFragment.newInstance(position + 1);
-    }
-
-    @Override
-    public int getCount()
-    {
-      // Show 3 total pages.
-      return 3;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position)
-    {
-      switch (position)
+      @Override
+      public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
       {
-        case 0:
-          return "General";
-        case 1:
-          return "Stock";
-        case 2:
-          return "Image";
+        List<Product> productList = response.body();
+        Log.d("DATA :: ", productList.toString());
+        productListAdapter.clear();
+        productListAdapter.addProduct(productList);
       }
-      return null;
-    }
+
+      @Override
+      public void onFailure(Call<List<Product>> call, Throwable t)
+      {
+
+      }
+    });
+
   }
+
+  public void fabAddProduct(View view)
+  {
+    startActivity(new Intent(this, ProductFormActivity.class));
+  }
+
+
 }

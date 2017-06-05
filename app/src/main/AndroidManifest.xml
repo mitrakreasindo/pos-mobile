@@ -51,6 +51,11 @@
             android:name=".stock.category.CategoryActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".stock.product.ProductFormActivity"
+            android:label="@string/title_activity_product"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".stock.product.ProductActivity"
             android:label="@string/title_activity_product"
             android:theme="@style/AppTheme.NoActionBar">

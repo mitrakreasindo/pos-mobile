@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 /**
  * A simple {@link Fragment} subclass.

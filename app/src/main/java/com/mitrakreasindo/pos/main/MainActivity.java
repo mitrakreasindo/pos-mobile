@@ -19,7 +19,7 @@ import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
-import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nd_customer_payment)
         {
             Toast.makeText(this, "Product", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, ProductActivity.class));
+            startActivity(new Intent(this, ProductFormActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

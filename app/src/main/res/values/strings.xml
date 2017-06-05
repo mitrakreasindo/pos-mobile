@@ -130,5 +130,6 @@
     <string name="catalog_ranking">Catalog ranking</string>
     <string name="pack_quantity">Pack Quantity</string>
     <string name="of_product">of Product</string>
+    <string name="add">Add</string>
 
 </resources>
