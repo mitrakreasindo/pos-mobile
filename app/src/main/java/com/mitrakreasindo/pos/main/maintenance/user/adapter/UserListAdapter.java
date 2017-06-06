@@ -116,8 +116,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                   {
 
                   }
-
-
                 });
 
                 getPeoples();

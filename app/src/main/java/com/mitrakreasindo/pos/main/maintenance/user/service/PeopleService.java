@@ -22,6 +22,9 @@ public interface PeopleService
   @GET("chromis.people/public/")
   Call<List<People>> getPeopleAll();
 
+  @GET("chromis.people/{kodeMerchant}/{id}")
+  Call<List<People>> getPeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+
   @POST("chromis.people/public/")
   Call<List<People>> postPeople(@Body People people);
 

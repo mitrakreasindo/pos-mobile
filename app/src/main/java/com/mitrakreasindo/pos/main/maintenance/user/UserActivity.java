@@ -11,8 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;
@@ -47,6 +50,8 @@ public class UserActivity extends AppCompatActivity
   private UserListAdapter userListAdapter;
   private PeopleService peopleService;
   private People people;
+  private EditText txtFilter;
+  private SharedPreferenceEditor sharedPreferenceEditor = new SharedPreferenceEditor();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -56,12 +61,13 @@ public class UserActivity extends AppCompatActivity
     setContentView(R.layout.activity_users);
     ButterKnife.bind(this);
 
+    txtFilter = (EditText)findViewById(R.id.edittext_filter);
+
     peopleService = ClientService.createService().create(PeopleService.class);
 
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 //        setSupportActionBar(toolbar);
     toolbar.setTitle("Users");
-    toolbar.setSubtitle("news");
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -110,5 +116,38 @@ public class UserActivity extends AppCompatActivity
 
       }
     });
+  }
+
+  private void getPeopleByName(String kodeMerchant, String name)
+  {
+    final Call<List<People>> people = peopleService.getPeople(kodeMerchant, name);
+    people.enqueue(new Callback<List<People>>()
+    {
+      @Override
+      public void onResponse(Call<List<People>> call, Response<List<People>> response)
+      {
+        List<People> userList = response.body();
+        if (userList == null)
+        {
+          Toast.makeText(UserActivity.this, "Something wrong", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+          userListAdapter.clear();
+          userListAdapter.addUser(userList);
+        }
+      }
+
+      @Override
+      public void onFailure(Call<List<People>> call, Throwable t)
+      {
+
+      }
+    });
+  }
+
+  private void Search (View v)
+  {
+    getPeopleByName(sharedPreferenceEditor.LoadPreferences(this,""), txtFilter.getText().toString());
   }
 }
