@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;

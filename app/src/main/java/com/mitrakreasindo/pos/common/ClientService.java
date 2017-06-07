@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos;
+package com.mitrakreasindo.pos.common;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;

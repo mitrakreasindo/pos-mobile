@@ -28,7 +28,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SQLiteDBHelper;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.maintenance.user.model.People;

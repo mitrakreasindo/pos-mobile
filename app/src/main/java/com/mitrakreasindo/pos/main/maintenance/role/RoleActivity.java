@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.adapter.RoleAdapter;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;

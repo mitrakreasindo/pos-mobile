@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.ClientService;
-import com.mitrakreasindo.pos.RestVariable;
+import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;

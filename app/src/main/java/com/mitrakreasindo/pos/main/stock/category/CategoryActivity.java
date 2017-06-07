@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
 import com.mitrakreasindo.pos.main.stock.category.model.Category;

@@ -17,13 +17,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.ClientService;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 
 import com.mitrakreasindo.pos.main.stock.product.model.Product;
 import com.mitrakreasindo.pos.main.stock.product.service.ProductService;
-
-import java.util.ArrayList;
 
 
 public class ProductFormActivity extends AppCompatActivity
