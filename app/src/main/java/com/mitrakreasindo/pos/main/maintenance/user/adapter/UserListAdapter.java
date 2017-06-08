@@ -3,6 +3,7 @@ package com.mitrakreasindo.pos.main.maintenance.user.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
@@ -31,7 +30,8 @@ import retrofit2.Response;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>
 {
-  private List<People> peoples = new ArrayList<People>();
+  private List<People> peoples = new ArrayList<>();
+  private Cursor cursor;
   private Context context;
   private LayoutInflater inflater;
   private PeopleService peopleService;
@@ -40,6 +40,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   {
     this.context = context;
     this.peoples = peoples;
+    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+  }
+
+  public UserListAdapter(Context context, Cursor cursor)
+  {
+    this.context = context;
+    this.cursor = cursor;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -56,6 +63,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   @Override
   public void onBindViewHolder(ViewHolder holder, int position)
   {
+//    holder.txtName.setText(cursor.getColumnIndexOrThrow("name"));
+//    holder.txtRole.setText(String.valueOf(cursor.getColumnIndexOrThrow("role")));
 
     final People people = peoples.get(position);
     holder.txtName.setText(people.getName());
@@ -93,32 +102,32 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             {
               case 0:
                 Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, UserFormActivity.class);
-                intent.putExtra("id", people.getName());
-                intent.putExtra("name", people.getApppassword());
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, UserFormActivity.class);
+//                intent.putExtra("id", people.getName());
+//                intent.putExtra("name", people.getApppassword());
+//                context.startActivity(intent);
                 break;
 
               case 1:
                 Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
-                peopleService = ClientService.createService().create(PeopleService.class);
-                Call<List<People>> call = peopleService.deletePeople(people.getId());
-                call.enqueue(new Callback<List<People>>()
-                {
-                  @Override
-                  public void onResponse(Call<List<People>> call, Response<List<People>> response)
-                  {
-
-                  }
-
-                  @Override
-                  public void onFailure(Call<List<People>> call, Throwable t)
-                  {
-
-                  }
-                });
-
-                getPeoples();
+//                peopleService = ClientService.createService().create(PeopleService.class);
+//                Call<List<People>> call = peopleService.deletePeople(people.getId());
+//                call.enqueue(new Callback<List<People>>()
+//                {
+//                  @Override
+//                  public void onResponse(Call<List<People>> call, Response<List<People>> response)
+//                  {
+//
+//                  }
+//
+//                  @Override
+//                  public void onFailure(Call<List<People>> call, Throwable t)
+//                  {
+//
+//                  }
+//                });
+//
+//                getPeoples();
                 Toast.makeText(context, "User deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
@@ -146,6 +155,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     this.peoples.addAll(peoples);
     notifyDataSetChanged();
   }
+
+//  public void addUser(Cursor cursor)
+//  {
+//    this.cursor = cursor;
+//    notifyDataSetChanged();
+//  }
 
   @Override
   public int getItemCount()

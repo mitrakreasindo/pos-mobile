@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.Product;
@@ -27,13 +28,13 @@ public class TableProductHelper
   private static final String DATABASE_TABLE = "products";
   private static final String TAG = "DBAdapter";
 
-//  private static final String KEY_ID = "id";
-//  private static final String KEY_NAME = "name";
-//  private static final String KEY_PARENTID = "parentid";
-//  private static final String KEY_TEXTTIP = "texttip";
-//  private static final String KEY_IMAGE = "image";
-//  private static final String KEY_COLOUR = "colour";
-//  private static final String KEY_CATORDER = "catorder";
+  private static final String KEY_ID = "id";
+  private static final String KEY_NAME = "name";
+  private static final String KEY_PARENTID = "parentid";
+  private static final String KEY_TEXTTIP = "texttip";
+  private static final String KEY_IMAGE = "image";
+  private static final String KEY_COLOUR = "colour";
+  private static final String KEY_CATORDER = "catorder";
 
   private final Context context;
   private DatabaseHelper DBHelper;
@@ -51,7 +52,7 @@ public class TableProductHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 

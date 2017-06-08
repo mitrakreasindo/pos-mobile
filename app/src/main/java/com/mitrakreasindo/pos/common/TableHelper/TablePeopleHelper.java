@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,7 +53,7 @@ public class TablePeopleHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 
@@ -101,8 +103,35 @@ public class TablePeopleHelper
       initialValues.put(KEY_ROLE, list.get(i).getRole().getId());
       initialValues.put(KEY_VISIBLE, list.get(i).isVisible());
       initialValues.put(KEY_IMAGE, list.get(i).getImage());
+
+      db.insert(DATABASE_TABLE, null, initialValues);
     }
-    return db.insert(DATABASE_TABLE, null, initialValues);
+    return 0;
+  }
+
+  public List<People> populatePeople(Cursor cursor)
+  {
+    try
+    {
+      List<People> list = new ArrayList<>();
+
+      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+
+      for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
+      {
+        String name = cursor.getString(nameIndex);
+        People people = new People();
+        people.setName(name);
+        list.add(people);
+      }
+
+      return list;
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public int deleteAll()
@@ -110,11 +139,22 @@ public class TablePeopleHelper
     return db.delete(DATABASE_TABLE, null, null);
   }
 
-  public Cursor getAllData()
+  public List<People> getData()
   {
-    return db.query(DATABASE_TABLE,
+    open();
+
+    return populatePeople(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE},
-      null, null, null, null, null);
+      null, null, null, null, null));
+  }
+
+  public List<People> getData(String name)
+  {
+    open();
+
+    return populatePeople(db.query(DATABASE_TABLE,
+      new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE},
+      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
   public void downloadData()

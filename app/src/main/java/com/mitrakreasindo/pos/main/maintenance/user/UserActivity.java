@@ -10,12 +10,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.model.People;
@@ -36,8 +39,6 @@ import retrofit2.Response;
 
 public class UserActivity extends AppCompatActivity
 {
-
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.list_users)
@@ -51,6 +52,7 @@ public class UserActivity extends AppCompatActivity
   private PeopleService peopleService;
   private People people;
   private EditText txtFilter;
+  private TablePeopleHelper tablePeopleHelper;
   private SharedPreferenceEditor sharedPreferenceEditor = new SharedPreferenceEditor();
 
   @Override
@@ -93,8 +95,34 @@ public class UserActivity extends AppCompatActivity
       }
     });
 
-    getPeoples();
+    tablePeopleHelper = new TablePeopleHelper(this);
 
+    userListAdapter.clear();
+    userListAdapter.addUser(tablePeopleHelper.getData());
+
+//    getPeoples();
+    txtFilter.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        userListAdapter.clear();
+        userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
+      }
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+      }
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+      }
+    });
+  }
+
+  public void Search (View v)
+  {
+    userListAdapter.clear();
+    userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
+//    getPeopleByName(sharedPreferenceEditor.LoadPreferences(this,""), txtFilter.getText().toString());
   }
 
   private void getPeoples()
@@ -144,10 +172,5 @@ public class UserActivity extends AppCompatActivity
 
       }
     });
-  }
-
-  private void Search (View v)
-  {
-    getPeopleByName(sharedPreferenceEditor.LoadPreferences(this,""), txtFilter.getText().toString());
   }
 }

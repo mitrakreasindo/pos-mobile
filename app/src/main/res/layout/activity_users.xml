@@ -38,14 +38,15 @@
                 android:inputType="textFilter" />
 
             <Button
+                android:id="@+id/button_filter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/button_filter"
-                android:text="Search"
+                android:layout_alignRight="@id/edittext_filter"
                 android:layout_weight=".25"
                 android:background="@color/white"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_alignRight="@id/edittext_filter"/>
+                android:onClick="Search"
+                android:text="Search"
+                android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>
 

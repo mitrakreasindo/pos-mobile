@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.model.Login;
@@ -114,10 +115,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     companyCode = sharedPreferenceEditor.LoadPreferences(this, "");
     attemptLogin();
-    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
-    tablePeopleHelper.downloadData();
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
-    tableRoleHelper.downloadData();
   }
 
   public void Register(View view)
@@ -268,6 +265,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
           if (responseCode == 0)
           {
+            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(LoginActivity.this);
+            tablePeopleHelper.downloadData();
+            TableRoleHelper tableRoleHelper = new TableRoleHelper(LoginActivity.this);
+            tableRoleHelper.downloadData();
+            TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(LoginActivity.this);
+            tableCategoryHelper.downloadData();
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
             intent.putExtra("COMPANY", kodeMerchant);

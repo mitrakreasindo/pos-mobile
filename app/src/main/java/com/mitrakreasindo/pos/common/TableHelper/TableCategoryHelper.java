@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.service.CategoryService;
@@ -51,7 +52,7 @@ public class TableCategoryHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 
@@ -81,13 +82,18 @@ public class TableCategoryHelper
     {
       initialValues.put(KEY_ID, list.get(i).getId());
       initialValues.put(KEY_NAME, list.get(i).getName());
-      initialValues.put(KEY_PARENTID, list.get(i).getParentid().getId());
+      if (list.get(i).getParentid() != null)
+      {
+        initialValues.put(KEY_PARENTID, list.get(i).getParentid().getId());
+      }
       initialValues.put(KEY_TEXTTIP, list.get(i).getTexttip());
       initialValues.put(KEY_IMAGE, list.get(i).getImage());
       initialValues.put(KEY_COLOUR, list.get(i).getColour());
       initialValues.put(KEY_CATORDER, list.get(i).getCatorder());
+
+      db.insert(DATABASE_TABLE, null, initialValues);
     }
-    return db.insert(DATABASE_TABLE, null, initialValues);
+    return 0;
   }
 
   public int deleteAll()
