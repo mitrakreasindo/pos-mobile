@@ -22,11 +22,6 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.PasswordValidator;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -222,17 +217,17 @@ public class RegisterActivity extends AppCompatActivity
                 vars.put("role", role);
                 vars.put("visible", visibility);
 
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
+//                HttpHeaders headers = new HttpHeaders();HttpHeaders
+//                headers.setContentType(MediaType.APPLICATION_JSON);
 
 //                final String url = "http://192.168.1.113:8080/ManualServices/resources/PeopleServices/QueryString/" +
 //                        "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
 
                 final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.people/public/" +
                         "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-                String register = restTemplate.getForObject(url, String.class, vars);
+//                RestTemplate restTemplate = new RestTemplate();
+//                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+//                String register = restTemplate.getForObject(url, String.class, vars);
 
 //                Register register = new Register();
 //                register.setId("9");
@@ -245,8 +240,8 @@ public class RegisterActivity extends AppCompatActivity
 
 //                HttpEntity<Register> entity = new HttpEntity<>(register, headers);
                 System.out.println(role);
-                System.out.println(register);
-                return register;
+//                System.out.println(register);
+//                return register;
             }
             catch (Exception e)
             {

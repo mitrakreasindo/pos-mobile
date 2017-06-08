@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.main.stock.product.model.Product;
+import com.mitrakreasindo.pos.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;

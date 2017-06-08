@@ -1,6 +1,6 @@
-package com.mitrakreasindo.pos.main.maintenance.user.service;
+package com.mitrakreasindo.pos.service;
 
-import com.mitrakreasindo.pos.main.maintenance.user.model.People;
+import com.mitrakreasindo.pos.model.People;
 
 import java.util.List;
 
@@ -18,7 +18,6 @@ import retrofit2.http.Path;
 
 public interface PeopleService
 {
-
   @GET("chromis.people/public/")
   Call<List<People>> getPeopleAll();
 

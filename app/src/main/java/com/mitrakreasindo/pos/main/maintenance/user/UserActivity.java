@@ -18,8 +18,8 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
-import com.mitrakreasindo.pos.main.maintenance.user.model.People;
-import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
+import com.mitrakreasindo.pos.model.People;
+import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.util.ArrayList;
 import java.util.List;

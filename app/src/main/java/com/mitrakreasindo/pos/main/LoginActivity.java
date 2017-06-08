@@ -29,10 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.SQLiteDBHelper;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.main.maintenance.user.model.People;
-import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.model.Login;
 import com.mitrakreasindo.pos.service.LoginService;
 
@@ -78,18 +77,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   private View mProgressView;
   private View mLoginFormView;
 
-  private PeopleService peopleService;
-  private SQLiteDBHelper sqlite_obj;
-  private List<String> list1, list2;
-
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
-
-    sqlite_obj = new SQLiteDBHelper(this);
-    peopleService = ClientService.createService().create(PeopleService.class);
 
     // Set up the login form.
     mUsernameView = (EditText) findViewById(R.id.username);
@@ -122,7 +114,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     companyCode = sharedPreferenceEditor.LoadPreferences(this, "");
     attemptLogin();
-    getAllPeople();
+    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
+    tablePeopleHelper.downloadData();
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    tableRoleHelper.downloadData();
   }
 
   public void Register(View view)
@@ -486,42 +481,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
   }
 
-  private void getAllPeople()
-  {
-    final Call<List<People>> people = peopleService.getPeopleAll();
-    people.enqueue(new Callback<List<People>>()
-    {
-      @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
-      {
-        List<People> peopleList = response.body();
-        insert(peopleList);
-      }
-
-      @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
-      {
-
-      }
-    });
-  }
-
-  private void insert(List<People> peopleList)
-  {
-    sqlite_obj.open();
-    sqlite_obj.deleteAll();
-
-    for(int i=0; i<peopleList.size(); i++)
-    {
-      sqlite_obj.insertPeople(
-        peopleList.get(i).getName(),
-        peopleList.get(i).getApppassword(),
-        peopleList.get(i).getCard(),
-        peopleList.get(i).getRole().getId(),
-        peopleList.get(i).isVisible(),
-        peopleList.get(i).getImage());
-    }
-    sqlite_obj.close();
-  }
+//  private void insert(List<People> peopleList)
+//  {
+//    sqlite_obj.open();
+//    sqlite_obj.deleteAll();
+//    sqlite_obj.insert(peopleList);
+//
+//    for(int i=0; i<peopleList.size(); i++)
+//    {
+//      sqlite_obj.insert(
+//        peopleList.get(i).getId(),
+//        peopleList.get(i).getName(),
+//        peopleList.get(i).getApppassword(),
+//        peopleList.get(i).getCard(),
+//        peopleList.get(i).getRole().getId(),
+//        peopleList.get(i).isVisible(),
+//        peopleList.get(i).getImage());
+//    }
+//    sqlite_obj.close();
+//  }
 }
 

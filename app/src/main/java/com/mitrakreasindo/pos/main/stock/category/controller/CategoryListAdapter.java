@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.category.model.Category;
-import com.mitrakreasindo.pos.main.stock.category.service.CategoryService;
+import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
 import java.util.List;

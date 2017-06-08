@@ -1,7 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.product.model;
-
-import com.mitrakreasindo.pos.main.stock.category.model.Category;
-import com.mitrakreasindo.pos.model.TaxCategory;
+package com.mitrakreasindo.pos.model;
 
 /**
  * Created by hendric on 2017-05-29.
@@ -16,8 +13,8 @@ public class Product
   private String name;
   private double pricebuy;
   private double pricesell;
-  private Double stockcost;
-  private Double stockvolume;
+  private double stockcost;
+  private double stockvolume;
   private boolean iscom;
   private boolean isscale;
   private boolean iskitchen;
@@ -36,14 +33,14 @@ public class Product
   private boolean alwaysavailable;
   private String discounted;
   private boolean candiscount;
-  private Boolean iscatalog;
-  private Integer catorder;
+  private boolean iscatalog;
+  private int catorder;
   private boolean ispack;
-  private Double packquantity;
-  private Boolean allproducts;
-  private Boolean managestock;
+  private double packquantity;
+  private boolean allproducts;
+  private boolean managestock;
   private String siteguid;
-  private Boolean sflag;
+  private boolean sflag;
   private String attributesetId;
   private Category category;
 

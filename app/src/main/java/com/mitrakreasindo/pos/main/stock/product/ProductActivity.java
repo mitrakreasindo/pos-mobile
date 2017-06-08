@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
-import com.mitrakreasindo.pos.main.stock.product.model.Product;
-import com.mitrakreasindo.pos.main.stock.product.service.ProductService;
+import com.mitrakreasindo.pos.model.Product;
+import com.mitrakreasindo.pos.service.ProductService;
 
 import java.util.ArrayList;
 import java.util.List;

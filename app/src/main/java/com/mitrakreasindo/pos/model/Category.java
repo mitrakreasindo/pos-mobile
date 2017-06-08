@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.category.model;
+package com.mitrakreasindo.pos.model;
 
 /**
  * Created by hendric on 2017-05-29.

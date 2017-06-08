@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.role.service.RoleService;
-import com.mitrakreasindo.pos.main.maintenance.user.model.People;
-import com.mitrakreasindo.pos.main.maintenance.user.service.PeopleService;
+import com.mitrakreasindo.pos.service.RoleService;
+import com.mitrakreasindo.pos.model.People;
+import com.mitrakreasindo.pos.service.PeopleService;
 import com.mitrakreasindo.pos.model.Role;
 
 import java.io.FileNotFoundException;

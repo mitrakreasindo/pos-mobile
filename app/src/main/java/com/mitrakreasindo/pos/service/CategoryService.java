@@ -1,6 +1,6 @@
-package com.mitrakreasindo.pos.main.stock.category.service;
+package com.mitrakreasindo.pos.service;
 
-import com.mitrakreasindo.pos.main.stock.category.model.Category;
+import com.mitrakreasindo.pos.model.Category;
 
 import java.util.List;
 

@@ -1,6 +1,4 @@
-package com.mitrakreasindo.pos.main.maintenance.user.model;
-
-import com.mitrakreasindo.pos.model.Role;
+package com.mitrakreasindo.pos.model;
 
 /**
  * Created by lisa on 24/05/17.
