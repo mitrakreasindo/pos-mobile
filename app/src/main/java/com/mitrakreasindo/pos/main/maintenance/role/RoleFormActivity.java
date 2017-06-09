@@ -2,12 +2,15 @@ package com.mitrakreasindo.pos.main.maintenance.role;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
@@ -29,10 +32,12 @@ public class RoleFormActivity extends AppCompatActivity
 
   @BindView(R.id.role_field)
   EditText roleField;
-  @BindView(R.id.submit_role)
-  Button submitRole;
-  @BindView(R.id.log_id)
-  TextView logId;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.appbar)
+  AppBarLayout appbar;
+  @BindView(R.id.main_content)
+  CoordinatorLayout mainContent;
 
   private Role role;
   private RoleService roleService;
@@ -44,6 +49,16 @@ public class RoleFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_role_form);
     ButterKnife.bind(this);
 
+    setSupportActionBar(toolbar);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
+
     roleService = ClientService.createService().create(RoleService.class);
 
     final Bundle bundle = getIntent().getExtras();
@@ -51,28 +66,40 @@ public class RoleFormActivity extends AppCompatActivity
     if (bundle != null)
     {
       String name = bundle.getString("name");
-      String id = bundle.getString("id");
+      String roleId = bundle.getString("id");
 
-      logId.setText(id);
       roleField.setText(name);
     }
 
-    submitRole.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        if (bundle != null)
-        {
-          updateRole();
-        }
-        else
-        {
-          postRole();
-        }
+  }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.default_form_menu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+
+    int id = item.getItemId();
+
+    final Bundle bundle = getIntent().getExtras();
+
+    if (id == R.id.action_confirm)
+    {
+      if (bundle != null)
+      {
+        updateRole();
       }
-    });
+      else
+      {
+        postRole();
+      }
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void postRole()

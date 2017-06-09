@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:layout_margin="10dp"
-        app:cardElevation="4dp"
+        android:id="@+id/item_category"
+        app:cardCornerRadius="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:src="@drawable/employee"
-                android:layout_margin="10dp"
+            <TextView
+                android:id="@+id/txt_role_name"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/txt_role_name"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <include layout="@layout/divider" />
-            </LinearLayout>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
 
+    <include layout="@layout/divider"/>
 
 </LinearLayout>

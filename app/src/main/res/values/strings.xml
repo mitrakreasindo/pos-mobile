@@ -117,7 +117,7 @@
     <string name="send_to_kitchen_printer">Send to Kitchen Printer</string>
     <string name="role">Role</string>
     <string name="save">Save</string>
-    <string name="title_activity_product">ProductActivity</string>
+    <string name="title_activity_product">Product</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="barcode">Barcode</string>
     <string name="reference">Reference</string>
@@ -131,5 +131,13 @@
     <string name="pack_quantity">Pack Quantity</string>
     <string name="of_product">of Product</string>
     <string name="add">Add</string>
+    <string name="add_product">Add Product</string>
+    <string name="add_category">Add Category</string>
+    <string name="add_diary">Add Diary</string>
+    <string name="date">Date</string>
+    <string name="in_stock">In Stock</string>
+    <string name="units">Units</string>
+    <string name="buy_price">Buy Price</string>
+    <string name="reason">Reason</string>
 
 </resources>

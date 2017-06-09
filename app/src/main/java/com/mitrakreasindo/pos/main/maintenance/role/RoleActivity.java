@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,8 +40,6 @@ public class RoleActivity extends AppCompatActivity
   Toolbar toolbar;
   @BindView(R.id.list_role)
   RecyclerView listRole;
-  @BindView(R.id.fab_add_role)
-  FloatingActionButton fabAddRole;
 
   private RoleAdapter roleAdapter;
   private RoleService roleService;
@@ -53,16 +53,15 @@ public class RoleActivity extends AppCompatActivity
     setContentView(R.layout.activity_role);
     ButterKnife.bind(this);
 
-
-    fabAddRole.setOnClickListener(new View.OnClickListener()
+    setSupportActionBar(toolbar);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-        startActivity(new Intent(RoleActivity.this, RoleFormActivity.class));
+        onBackPressed();
       }
     });
-//        roleAdapter = new RoleAdapter()
 
     roleService = ClientService.createService().create(RoleService.class);
     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());
@@ -72,10 +71,27 @@ public class RoleActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listRole.setLayoutManager(layoutManager);
 
-    Log.d("Data :", String.valueOf(roleAdapter));
-
     getRole();
 
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.action_add)
+    {
+      startActivity(new Intent(this, RoleFormActivity.class));
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override

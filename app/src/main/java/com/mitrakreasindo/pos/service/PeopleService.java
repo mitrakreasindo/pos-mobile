@@ -30,6 +30,6 @@ public interface PeopleService
   @DELETE("chromis.people/public/{id}")
   Call<List<People>> deletePeople(@Path("id") String id);
 
-  @PUT("chromis.people/public/")
-  Call<List<People>> updatePeople(@Body People people);
+  @PUT("chromis.people/public/{id}")
+  Call<List<People>> updatePeople(@Path("id") String id, @Body People people);
 }

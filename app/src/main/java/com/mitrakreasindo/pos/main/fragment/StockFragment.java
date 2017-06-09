@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
+import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
@@ -27,6 +28,7 @@ public class StockFragment extends Fragment
 
     Button btnCategories = (Button) view.findViewById(R.id.btn_stok_mnt_categories);
     Button btnProducts = (Button) view.findViewById(R.id.btn_stok_mnt_products);
+    Button btnDiary = (Button) view.findViewById(R.id.btn_stok_mnt_stock_diary);
 
 
     btnCategories.setOnClickListener(new View.OnClickListener()
@@ -44,6 +46,14 @@ public class StockFragment extends Fragment
       public void onClick(View v)
       {
         startActivity(new Intent(getActivity(), ProductActivity.class));
+      }
+    });
+    btnDiary.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), DiaryActivity.class));
       }
     });
 

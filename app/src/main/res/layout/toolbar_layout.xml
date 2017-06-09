@@ -2,10 +2,11 @@
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
+    android:id="@+id/toolbar_layout"
+    app:titleTextColor="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+    app:navigationIcon="@drawable/ic_keyboard_arrow_left">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
             android:id="@+id/txt_action_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="0 item selected"/>
     </RelativeLayout>
 

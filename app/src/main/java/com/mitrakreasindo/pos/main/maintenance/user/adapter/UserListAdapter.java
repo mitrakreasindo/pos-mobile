@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
@@ -102,10 +103,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             {
               case 0:
                 Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(context, UserFormActivity.class);
-//                intent.putExtra("id", people.getName());
-//                intent.putExtra("name", people.getApppassword());
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, UserFormActivity.class);
+                intent.putExtra("id", people.getId());
+                intent.putExtra("name", people.getName());
+                intent.putExtra("password", people.getApppassword());
+                intent.putExtra("role", people.getRole().getName());
+                context.startActivity(intent);
                 break;
 
               case 1:

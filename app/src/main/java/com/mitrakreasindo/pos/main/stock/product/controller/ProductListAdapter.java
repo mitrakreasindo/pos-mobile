@@ -29,7 +29,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   private Context context;
   private LayoutInflater inflater;
   private ProductActivity productActivity;
-  private ArrayList<Product> list_product = new ArrayList<>();
+  public List<Product> list_product = new ArrayList<>();
   int counter = 0;
 
   public ProductListAdapter(Context context, List<Product> products)
@@ -53,8 +53,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   public void onBindViewHolder(final ProductListAdapter.ViewHolder holder, final int position)
   {
 
-
-    holder.productItem.setOnClickListener(new View.OnClickListener()
+//    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
+    holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
@@ -66,9 +66,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         }
         else
         {
-
           holder.checkBox.toggle();
-
+          prepareSelection(holder, position);
           Toast.makeText(context, "IF TRUE", Toast.LENGTH_LONG).show();
           notifyDataSetChanged();
         }
@@ -76,14 +75,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     });
 
 
-    holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
+    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {
       @Override
       public boolean onLongClick(View v)
       {
         productActivity.is_action_mode = true;
-        productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
         holder.checkBox.setChecked(true);
+        prepareSelection(holder, position);
+        productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
         notifyDataSetChanged();
         return true;
       }
@@ -99,76 +99,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     if (!productActivity.is_action_mode)
     {
       holder.checkBox.setVisibility(View.GONE);
+      holder.checkBox.setChecked(false);
     }
     else
     {
       holder.checkBox.setVisibility(View.VISIBLE);
     }
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        prepareSelection(v, position);
-      }
-    });
-
-    //On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
-    {
-      @Override
-      public boolean onLongClick(final View v)
-      {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
-        {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
-          {
-            switch (which)
-            {
-              case 0:
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(context, UserFormActivity.class);
-//                intent.putExtra("id", category.getName());
-//                intent.putExtra("name", category.getApppassword());
-//                context.startActivity(intent);
-                break;
-
-              case 1:
-                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
-//                categoryService = ClientService.createService().create(CategoryService.class);
-//                Call<List<Category>> call = categoryService.deleteCategory(category.getId());
-//                call.enqueue(new Callback<List<Category>>()
-//                {
-//                  @Override
-//                  public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-//                  {
-//
-//                  }
-//
-//                  @Override
-//                  public void onFailure(Call<List<Category>> call, Throwable t)
-//                  {
-//
-//                  }
-//
-//
-//                });
-//
-//                getCategories();
-                Toast.makeText(context, "Product deleted!", Toast.LENGTH_LONG).show();
-                break;
-            }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
   }
 
   public void addProduct(Product product)
@@ -223,8 +160,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   }
 
 
-  public void prepareSelection(View view, int position){
-    if (((CheckBox) view).isChecked()){
+  public void prepareSelection(final ProductListAdapter.ViewHolder holder, int position){
+
+    if (holder.checkBox.isChecked()){
       list_product.add(products.get(position));
       counter = counter + 1;
       updateCounter(counter);
@@ -235,16 +173,43 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       counter = counter - 1;
       updateCounter(counter);
     }
+    notifyDataSetChanged();
   }
 
   public void updateCounter(int counter){
+
+
+
     if (counter == 0){
       productActivity.txtActionToolbar.setText("0 item selected");
+      productActivity.is_action_mode = false;
+//      holder.checkBox.setChecked(false);
+      productActivity.txtActionToolbar.setVisibility(View.GONE);
+      productActivity.toolbar.getMenu().clear();
+      productActivity.toolbar.inflateMenu(R.menu.default_list_menu);
+      notifyDataSetChanged();
     }
     else
     {
       productActivity.txtActionToolbar.setText(counter + " item selected");
+      productActivity.toolbar.getMenu().clear();
+      productActivity.toolbar.inflateMenu(R.menu.menu_action_mode);
+
     }
+    notifyDataSetChanged();
+  }
+
+  public void deleteMultipleProduct()
+  {
+    productActivity.is_action_mode = false;
+    productActivity.txtActionToolbar.setVisibility(View.GONE);
+    productActivity.toolbar.getMenu().clear();
+    productActivity.toolbar.inflateMenu(R.menu.default_list_menu);
+//    list_product.clear();
+    counter = 0;
+    list_product.clear();
+    notifyDataSetChanged();
+
   }
 
 

@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.stock.category;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -8,7 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
@@ -32,9 +36,7 @@ public class CategoryActivity extends AppCompatActivity
   @BindView(R.id.list_category)
   RecyclerView listCategory;
   @BindView(R.id.main_content)
-  ConstraintLayout mainContent;
-  @BindView(R.id.fab_categories)
-  FloatingActionButton fabCategories;
+  LinearLayout mainContent;
 
   private CategoryService categoryService;
   private CategoryListAdapter categoryListAdapter;
@@ -47,16 +49,7 @@ public class CategoryActivity extends AppCompatActivity
     setContentView(R.layout.activity_category);
     ButterKnife.bind(this);
 
-    categoryService = ClientService.createService().create(CategoryService.class);
-
-    categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
-
-    listCategory.setHasFixedSize(true);
-    listCategory.setAdapter(categoryListAdapter);
-    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-    listCategory.setLayoutManager(layoutManager);
-
-    toolbar.setTitle("Categories");
+    setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -66,7 +59,35 @@ public class CategoryActivity extends AppCompatActivity
       }
     });
 
+    categoryService = ClientService.createService().create(CategoryService.class);
+
+    categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+
+    listCategory.setHasFixedSize(true);
+    listCategory.setAdapter(categoryListAdapter);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+    listCategory.setLayoutManager(layoutManager);
+
     getCategories();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.action_add)
+    {
+      startActivity(new Intent(this, CategoryFormActivity.class));
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void getCategories()

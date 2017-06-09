@@ -11,18 +11,11 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:navigationIcon="@drawable/ic_keyboard_arrow_left"
-            app:titleTextColor="@color/white"/>
+        <include layout="@layout/include_toolbar" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,14 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_categories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_person_add"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -32,16 +32,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <LinearLayout
-        android:layout_gravity="end|bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<LinearLayout-->
+        <!--android:layout_gravity="end|bottom"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-        <Button
-            android:layout_margin="10dp"
-            android:text="@string/save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:text="@string/save"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
+    <!--</LinearLayout>-->
 
 </android.support.design.widget.CoordinatorLayout>

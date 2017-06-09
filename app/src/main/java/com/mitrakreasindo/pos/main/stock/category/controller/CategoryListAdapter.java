@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.main.stock.category.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
@@ -58,18 +60,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     final Category category = categories.get(position);
     holder.txtCategory.setText(category.getName());
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-//        Intent intent = new Intent(context, UserDetailActivity.class);
-//        intent.putExtra("name", category.getName());
-//        context.startActivity(intent);
-      }
-    });
-
     //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {
@@ -87,10 +77,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             {
               case 0:
                 Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(context, UserFormActivity.class);
-//                intent.putExtra("id", category.getName());
-//                intent.putExtra("name", category.getApppassword());
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, CategoryFormActivity.class);
+                intent.putExtra("id", category.getId());
+                intent.putExtra("name", category.getName());
+                context.startActivity(intent);
                 break;
 
               case 1:

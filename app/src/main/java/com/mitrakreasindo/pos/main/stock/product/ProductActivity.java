@@ -3,6 +3,7 @@ package com.mitrakreasindo.pos.main.stock.product;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +12,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
@@ -32,14 +38,14 @@ import retrofit2.Response;
 public class ProductActivity extends AppCompatActivity
 {
 
-  @BindView(R.id.toolbar)
-  Toolbar toolbar;
+  @BindView(R.id.toolbar_layout)
+  public Toolbar toolbar;
   @BindView(R.id.list_product)
   RecyclerView listProduct;
   @BindView(R.id.txt_action_toolbar)
   public TextView txtActionToolbar;
   @BindView(R.id.main_content)
-  ConstraintLayout mainContent;
+  LinearLayout mainContent;
 
   private ProductService productService;
   private ProductListAdapter productListAdapter;
@@ -55,6 +61,14 @@ public class ProductActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     setSupportActionBar(toolbar);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
 
     productService = ClientService.createService().create(ProductService.class);
 
@@ -89,8 +103,8 @@ public class ProductActivity extends AppCompatActivity
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
   {
-    getMenuInflater().inflate(R.menu.menu_product, menu);
-    return true;
+    getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
@@ -98,22 +112,16 @@ public class ProductActivity extends AppCompatActivity
   {
     int id = item.getItemId();
 
-    if (id == R.id.product_action_add)
+    if (id == R.id.action_add)
     {
       startActivity(new Intent(this, ProductFormActivity.class));
     }
-//    if (id == R.id.menu_action)
-//    {
-//      toolbar.getMenu().clear();
-//      toolbar.inflateMenu(R.menu.menu_action_mode);
-//      txtActionToolbar.setVisibility(View.VISIBLE);
-//      is_action_mode = true;
-//      productListAdapter.notifyDataSetChanged();
-//
-//      return true;
-//    }
-
-    return true;
+    else if (id == R.id.menu_delete)
+    {
+//      productListAdapter.updateCounter(productListAdapter.list_product);
+      productListAdapter.deleteMultipleProduct();
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void getProducts()
@@ -138,11 +146,5 @@ public class ProductActivity extends AppCompatActivity
     });
 
   }
-
-  public void fabAddProduct(View view)
-  {
-    startActivity(new Intent(this, ProductFormActivity.class));
-  }
-
 
 }
