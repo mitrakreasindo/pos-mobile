@@ -14,11 +14,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.RestVariable;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
 import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
@@ -50,6 +49,9 @@ public class CategoryFormActivity extends AppCompatActivity
 
   private Bundle bundle;
 
+  private SharedPreferenceEditor sharedPreferenceEditor;
+  private String kodeMerchant;
+
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -60,6 +62,8 @@ public class CategoryFormActivity extends AppCompatActivity
     categoryService = ClientService.createService().create(CategoryService.class);
 
     categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     bundle = getIntent().getExtras();
 
@@ -131,7 +135,7 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     category.setSflag(true);
 
-    Call<List<Category>> call = categoryService.postCategory(category);
+    Call<List<Category>> call = categoryService.postCategory(kodeMerchant, category);
     call.enqueue(new Callback<List<Category>>()
     {
       @Override
@@ -177,7 +181,7 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     category.setSflag(true);
 
-    Call<List<Category>> call = categoryService.updateCategory(category.getId(), category);
+    Call<List<Category>> call = categoryService.updateCategory(kodeMerchant, category.getId(), category);
     call.enqueue(new Callback<List<Category>>()
     {
       @Override

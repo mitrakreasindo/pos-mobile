@@ -15,7 +15,6 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
@@ -164,9 +163,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
   }
 
-  private void getCategories()
+  private void getCategories(String kodeMerchant)
   {
-    final Call<List<Category>> category = categoryService.getCategoryAll();
+    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
     category.enqueue(new Callback<List<Category>>()
     {
       @Override

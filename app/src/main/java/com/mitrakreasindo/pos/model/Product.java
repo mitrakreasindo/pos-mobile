@@ -43,7 +43,6 @@ public class Product
   private boolean sflag;
   private String attributesetId;
   private Category category;
-
   private Product packproduct;
   private String promotionid;
   private TaxCategory taxcat;

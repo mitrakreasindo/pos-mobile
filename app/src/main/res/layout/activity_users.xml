@@ -44,8 +44,8 @@
                 android:layout_alignRight="@id/edittext_filter"
                 android:layout_weight=".25"
                 android:background="@color/white"
-                android:onClick="Search"
-                android:text="Search"
+                android:onClick="Filter"
+                android:text="Clear"
                 android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>

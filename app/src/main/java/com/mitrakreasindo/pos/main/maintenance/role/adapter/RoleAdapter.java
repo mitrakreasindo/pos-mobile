@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
 import com.mitrakreasindo.pos.service.RoleService;
@@ -36,9 +37,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   private Context context;
   private LayoutInflater inflater;
   private RoleService roleService;
+  private SharedPreferenceEditor sharedPreferenceEditor;
 
   public RoleAdapter(Context context, List<Role> roles)
   {
+    sharedPreferenceEditor = new SharedPreferenceEditor();
     this.context = context;
     this.roles = roles;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -89,7 +92,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 
                 roleService = ClientService.createService().create(RoleService.class);
                 Log.d("DELETE CATEGORY", "DELETE CATEGORY");
-                Call<List<Role>> call = roleService.deleteRole(role.getId());
+                Call<List<Role>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "") , role.getId());
                 call.enqueue(new Callback<List<Role>>()
                 {
                   @Override
@@ -164,10 +167,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     }
   }
 
-  private void getRole()
+  private void getRole(String kodeMerchant)
   {
 
-    final Call<List<Role>> role = roleService.getRoleAll();
+    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
     role.enqueue(new Callback<List<Role>>()
     {
       @Override

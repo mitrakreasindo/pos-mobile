@@ -1,8 +1,6 @@
 package com.mitrakreasindo.pos.main.stock.product.controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -88,7 +86,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         return true;
       }
     });
-
 
     final Product product = products.get(position);
     holder.txtCodeProduct.setText(product.getCode());

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.People;
@@ -54,7 +53,7 @@ public class TablePeopleHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 
@@ -165,9 +164,9 @@ public class TablePeopleHelper
       KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
-  public void downloadData()
+  public void downloadData(String kodeMerchant)
   {
-    final Call<List<People>> call = service.getPeopleAll();
+    final Call<List<People>> call = service.getPeopleAll(kodeMerchant);
     call.enqueue(new Callback<List<People>>()
     {
       @Override

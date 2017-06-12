@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.People;
@@ -98,6 +99,9 @@ public class UserFormActivity extends AppCompatActivity
   int RESULT_LOAD_IMG;
   private Bundle bundle;
 
+  private SharedPreferenceEditor sharedPreferenceEditor;
+  private String kodeMerchant;
+
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -114,13 +118,15 @@ public class UserFormActivity extends AppCompatActivity
     final String password = bundle.getString("password");
     final String roleId = bundle.getString("role");
 
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+
     Log.d("DATA NAME : ", name);
 
 //    Role r = new Role();
 //    r.setId(roleId);
 //    final int position = rolesArrayAdapter.getPosition(role);
 
-    final Call<List<Role>> role = roleService.getRoleAll();
+    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
     role.enqueue(new Callback<List<Role>>()
     {
       @Override
@@ -268,7 +274,7 @@ public class UserFormActivity extends AppCompatActivity
     people.setEmail(null);
     people.setRole(role);
 
-    Call<List<People>> call = peopleService.postPeople(people);
+    Call<List<People>> call = peopleService.postPeople(kodeMerchant, people);
     call.enqueue(new Callback<List<People>>()
     {
       @Override
@@ -322,7 +328,7 @@ public class UserFormActivity extends AppCompatActivity
     people.setRole(role);
 //        people.setRole(spinnerRole.getSelectedItem().toString());
 
-    Call<List<People>> call = peopleService.postPeople(people);
+    Call<List<People>> call = peopleService.postPeople(kodeMerchant, people);
     call.enqueue(new Callback<List<People>>()
     {
       @Override

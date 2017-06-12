@@ -1,11 +1,7 @@
 package com.mitrakreasindo.pos.main.stock.category;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
@@ -50,6 +46,9 @@ public class CategoryActivity extends AppCompatActivity
 
   private TableCategoryHelper tableCategoryHelper;
 
+  private SharedPreferenceEditor sharedPreferenceEditor;
+  private String kodeMerchant;
+
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -66,6 +65,8 @@ public class CategoryActivity extends AppCompatActivity
         onBackPressed();
       }
     });
+
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     categoryService = ClientService.createService().create(CategoryService.class);
 
@@ -88,7 +89,7 @@ public class CategoryActivity extends AppCompatActivity
   protected void onStart()
   {
     super.onStart();
-    getCategories();
+    getCategories(kodeMerchant);
   }
 
   @Override
@@ -131,9 +132,9 @@ public class CategoryActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  private void getCategories()
+  private void getCategories(String kodeMerchant)
   {
-    final Call<List<Category>> category = categoryService.getCategoryAll();
+    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
     category.enqueue(new Callback<List<Category>>()
     {
       @Override

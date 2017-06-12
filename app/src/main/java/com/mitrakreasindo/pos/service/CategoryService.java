@@ -1,7 +1,6 @@
 package com.mitrakreasindo.pos.service;
 
 import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.model.Role;
 
 import java.util.List;
 
@@ -19,14 +18,14 @@ import retrofit2.http.Path;
 
 public interface CategoryService
 {
-  @GET("chromis.categories/public")
-  Call<List<Category>> getCategoryAll();
+  @GET("chromis.categories/{kodeMerchant}/")
+  Call<List<Category>> getCategoryAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("chromis.categories/public")
-  Call<List<Category>> postCategory(@Body Category category);
+  @POST("chromis.categories/{kodeMerchant}/")
+  Call<List<Category>> postCategory(@Path("kodeMerchant") String kodeMerchant, @Body Category category);
 
-  @PUT("chromis.categories/public/{id}")
-  Call<List<Category>> updateCategory(@Path("id") String id, @Body Category category);
+  @PUT("chromis.categories/{kodeMerchant}/{id}")
+  Call<List<Category>> updateCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Category category);
 
   @DELETE("chromis.categories/public/{id}")
   Call<List<Category>> deleteCategory(@Path("id") String id);

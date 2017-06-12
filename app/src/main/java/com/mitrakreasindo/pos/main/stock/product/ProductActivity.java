@@ -2,8 +2,6 @@ package com.mitrakreasindo.pos.main.stock.product;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +10,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.main.MainActivity;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
@@ -50,6 +45,7 @@ public class ProductActivity extends AppCompatActivity
   private ProductService productService;
   private ProductListAdapter productListAdapter;
   private Product product;
+  private TableProductHelper tableProductHelper;
 
   public boolean is_action_mode = false;
 
@@ -97,7 +93,12 @@ public class ProductActivity extends AppCompatActivity
       txtActionToolbar.setVisibility(View.VISIBLE);
     }
 
-    getProducts();
+    tableProductHelper = new TableProductHelper(this);
+
+    productListAdapter.clear();
+    productListAdapter.addProduct(tableProductHelper.getData());
+
+//    getProducts();
   }
 
   @Override
@@ -124,9 +125,9 @@ public class ProductActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  private void getProducts()
+  private void getProducts(String kodeMerchant)
   {
-    final Call<List<Product>> listCall = productService.getProductAll();
+    final Call<List<Product>> listCall = productService.getProductAll(kodeMerchant);
     listCall.enqueue(new Callback<List<Product>>()
     {
       @Override

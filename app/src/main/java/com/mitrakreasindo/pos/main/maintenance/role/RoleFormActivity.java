@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
@@ -41,6 +42,8 @@ public class RoleFormActivity extends AppCompatActivity
 
   private Role role;
   private RoleService roleService;
+  private String kodeMerchant;
+  private SharedPreferenceEditor sharedPreferenceEditor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +63,8 @@ public class RoleFormActivity extends AppCompatActivity
     });
 
     roleService = ClientService.createService().create(RoleService.class);
+
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     final Bundle bundle = getIntent().getExtras();
 
@@ -123,7 +128,7 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Role>> call = roleService.postRole(role);
+    Call<List<Role>> call = roleService.postRole(kodeMerchant, role);
     call.enqueue(new Callback<List<Role>>()
     {
       @Override
@@ -159,7 +164,7 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Role>> call = roleService.updateRole(role);
+    Call<List<Role>> call = roleService.updateRole(kodeMerchant, role);
     call.enqueue(new Callback<List<Role>>()
     {
       @Override

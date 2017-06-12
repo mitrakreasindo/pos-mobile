@@ -190,9 +190,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     }
   }
 
-  private void getPeoples()
+  private void getPeoples(String kodeMerchant)
   {
-    final Call<List<People>> people = peopleService.getPeopleAll();
+    final Call<List<People>> people = peopleService.getPeopleAll(kodeMerchant);
     people.enqueue(new Callback<List<People>>()
     {
       @Override

@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.model.People;
-import com.mitrakreasindo.pos.model.Role;
-import com.mitrakreasindo.pos.service.CategoryService;
 import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.service.CategoryService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -141,8 +139,8 @@ public class TableCategoryHelper
     open();
 
     return populateCategory(db.query(DATABASE_TABLE,
-            new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-            null, null, null, null, null));
+      new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
+      null, null, null, null, null));
   }
 
   public List<Category> getData(String name)
@@ -150,13 +148,13 @@ public class TableCategoryHelper
     open();
 
     return populateCategory(db.query(DATABASE_TABLE,
-            new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+      new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
+      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
-  public void downloadData()
+  public void downloadData(String kodeMerchant)
   {
-    final Call<List<Category>> call = service.getCategoryAll();
+    final Call<List<Category>> call = service.getCategoryAll(kodeMerchant);
     call.enqueue(new Callback<List<Category>>()
     {
       @Override

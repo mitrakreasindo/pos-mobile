@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.service.RoleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class TableRoleHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 
@@ -99,9 +98,9 @@ public class TableRoleHelper
       null, null, null, null, null);
   }
 
-  public void downloadData()
+  public void downloadData(String kodeMerchant)
   {
-    final Call<List<Role>> call = service.getRoleAll();
+    final Call<List<Role>> call = service.getRoleAll(kodeMerchant);
     call.enqueue(new Callback<List<Role>>()
     {
       @Override

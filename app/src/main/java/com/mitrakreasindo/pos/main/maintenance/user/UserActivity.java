@@ -118,16 +118,14 @@ public class UserActivity extends AppCompatActivity
     });
   }
 
-  public void Search (View v)
+  public void Filter (View v)
   {
-    userListAdapter.clear();
-    userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
-//    getPeopleByName(sharedPreferenceEditor.LoadPreferences(this,""), txtFilter.getText().toString());
+    txtFilter.setText("");
   }
 
-  private void getPeoples()
+  private void getPeoples(String kodeMerchant)
   {
-    final Call<List<People>> people = peopleService.getPeopleAll();
+    final Call<List<People>> people = peopleService.getPeopleAll(kodeMerchant);
     people.enqueue(new Callback<List<People>>()
     {
       @Override
