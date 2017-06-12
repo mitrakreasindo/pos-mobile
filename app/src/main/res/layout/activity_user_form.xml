@@ -48,7 +48,7 @@
                     android:text="@string/person_pass" />
 
                 <EditText
-                    android:id="@+id/edittext_pass"
+                    android:id="@+id/edittext_password"
                     android:layout_below="@id/textview_pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

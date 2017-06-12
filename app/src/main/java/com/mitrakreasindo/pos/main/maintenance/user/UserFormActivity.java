@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public class UserFormActivity extends AppCompatActivity
   EditText edittextName;
   @BindView(R.id.textview_pass)
   TextView textviewPass;
-  @BindView(R.id.edittext_pass)
+  @BindView(R.id.edittext_password)
   EditText edittextPass;
   @BindView(R.id.textview_repass)
   TextView textviewRepass;
@@ -92,9 +93,10 @@ public class UserFormActivity extends AppCompatActivity
   private PeopleService peopleService;
 
   List<Role> data;
-
+  private ArrayAdapter<Role> rolesArrayAdapter;
 
   int RESULT_LOAD_IMG;
+  private Bundle bundle;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -106,6 +108,17 @@ public class UserFormActivity extends AppCompatActivity
     roleService = ClientService.createService().create(RoleService.class);
     peopleService = ClientService.createService().create(PeopleService.class);
 
+    bundle = getIntent().getExtras();
+    String peopleId = bundle.getString("id");
+    final String name = bundle.getString("name");
+    final String password = bundle.getString("password");
+    final String roleId = bundle.getString("role");
+
+    Log.d("DATA NAME : ", name);
+
+//    Role r = new Role();
+//    r.setId(roleId);
+//    final int position = rolesArrayAdapter.getPosition(role);
 
     final Call<List<Role>> role = roleService.getRoleAll();
     role.enqueue(new Callback<List<Role>>()
@@ -114,12 +127,26 @@ public class UserFormActivity extends AppCompatActivity
       public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         data = response.body();
-        final ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+//        ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+        rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
         spinnerRole.setAdapter(rolesArrayAdapter);
 
-        Role r = data.get(spinnerRole.getSelectedItemPosition());
+//        Role r = data.get(spinnerRole.getSelectedItemPosition());
+//
+//        String roleId = r.getId();
 
-        String roleId = r.getId();
+        Role r = new Role();
+        r.setId(roleId);
+        final int position = rolesArrayAdapter.getPosition(r);
+
+        if (bundle != null)
+        {
+          Log.d("ROLE", roleId);
+
+          edittextName.setText(name);
+          edittextPass.setText(password);
+          spinnerRole.setSelection(position);
+        }
 
       }
 
@@ -141,11 +168,6 @@ public class UserFormActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
-    String spinData = String.valueOf(spinnerRole.getSelectedItemId());
-
-
-    Log.d("SPINNER VALUE : ", spinData);
 
 
 //    getRole();
@@ -195,7 +217,7 @@ public class UserFormActivity extends AppCompatActivity
   public void Cancel(View view)
   {
 
-        finish();
+    finish();
 //    postPeople();
   }
 
@@ -231,11 +253,11 @@ public class UserFormActivity extends AppCompatActivity
     Log.d(getClass().getSimpleName(), "Post Role !!!");
 
 
-
     role = new Role();
     role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
 
     people = new People();
+    people.setId(UUID.randomUUID().toString());
     people.setName(edittextName.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
@@ -285,8 +307,6 @@ public class UserFormActivity extends AppCompatActivity
 
     role = new Role();
     role.setId("1");
-
-
 
 
     people = new People();

@@ -80,7 +80,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         Intent intent = new Intent(context, UserDetailActivity.class);
         intent.putExtra("name", people.getName());
         intent.putExtra("email", people.getEmail());
-        intent.putExtra("role", people.getRole().getName());
+        intent.putExtra("role", people.getRole().getId());
         context.startActivity(intent);
       }
     });
@@ -107,7 +107,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                 intent.putExtra("id", people.getId());
                 intent.putExtra("name", people.getName());
                 intent.putExtra("password", people.getApppassword());
-                intent.putExtra("role", people.getRole().getName());
+                intent.putExtra("role", people.getRole().getId());
                 context.startActivity(intent);
                 break;
 

@@ -103,7 +103,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
                   {
                   }
                 });
-                getRole();
+                removeRole(role);
                 Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
                 break;
 
@@ -119,6 +119,12 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   public void addRole(Role role)
   {
     roles.add(role);
+    notifyDataSetChanged();
+  }
+
+  public void removeRole(Role role)
+  {
+    roles.remove(role);
     notifyDataSetChanged();
   }
 

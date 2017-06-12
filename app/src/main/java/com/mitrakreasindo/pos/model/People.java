@@ -116,7 +116,4 @@ public class People
   {
     this.role = role;
   }
-
-
-
 }

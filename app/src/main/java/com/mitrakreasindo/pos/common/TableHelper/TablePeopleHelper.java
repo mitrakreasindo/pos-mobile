@@ -8,6 +8,7 @@ import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.People;
+import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -116,12 +117,19 @@ public class TablePeopleHelper
       List<People> list = new ArrayList<>();
 
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int roleIndex = cursor.getColumnIndexOrThrow(KEY_ROLE);
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String name = cursor.getString(nameIndex);
+        String role = cursor.getString(roleIndex);
+
+        Role r = new Role();
+        r.setId(role);
+
         People people = new People();
         people.setName(name);
+        people.setRole(r);
         list.add(people);
       }
 
