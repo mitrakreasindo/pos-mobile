@@ -7,10 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.model.People;
+import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.CategoryService;
 import com.mitrakreasindo.pos.model.Category;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -96,6 +99,31 @@ public class TableCategoryHelper
     return 0;
   }
 
+  public List<Category> populateCategory(Cursor cursor)
+  {
+    try
+    {
+      List<Category> list = new ArrayList<>();
+
+      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
+      {
+        String name = cursor.getString(nameIndex);
+
+        Category category = new Category();
+        category.setName(name);
+        list.add(category);
+      }
+
+      return list;
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);
@@ -106,6 +134,24 @@ public class TableCategoryHelper
     return db.query(DATABASE_TABLE,
       new String[]{KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
       null, null, null, null, null);
+  }
+
+  public List<Category> getData()
+  {
+    open();
+
+    return populateCategory(db.query(DATABASE_TABLE,
+            new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
+            null, null, null, null, null));
+  }
+
+  public List<Category> getData(String name)
+  {
+    open();
+
+    return populateCategory(db.query(DATABASE_TABLE,
+            new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
+            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
   public void downloadData()

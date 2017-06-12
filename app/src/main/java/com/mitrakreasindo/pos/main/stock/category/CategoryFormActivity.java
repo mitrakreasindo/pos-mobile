@@ -59,6 +59,8 @@ public class CategoryFormActivity extends AppCompatActivity
 
     categoryService = ClientService.createService().create(CategoryService.class);
 
+    categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+
     bundle = getIntent().getExtras();
 
     setSupportActionBar(toolbar);
@@ -101,6 +103,7 @@ public class CategoryFormActivity extends AppCompatActivity
         postCategory();
         Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
       }
+
     }
     return super.onOptionsItemSelected(item);
   }
@@ -135,6 +138,8 @@ public class CategoryFormActivity extends AppCompatActivity
       public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Post Category !!!");
+        categoryListAdapter.addCategory(category);
+        categoryListAdapter.notifyDataSetChanged();
         onBackPressed();
       }
 
@@ -143,7 +148,6 @@ public class CategoryFormActivity extends AppCompatActivity
       {
       }
     });
-
     onBackPressed();
 
   }

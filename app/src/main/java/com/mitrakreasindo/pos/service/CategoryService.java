@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -21,10 +22,13 @@ public interface CategoryService
   @GET("chromis.categories/public")
   Call<List<Category>> getCategoryAll();
 
-  @POST("chromis.categories/public/")
+  @POST("chromis.categories/public")
   Call<List<Category>> postCategory(@Body Category category);
 
   @PUT("chromis.categories/public/{id}")
   Call<List<Category>> updateCategory(@Path("id") String id, @Body Category category);
+
+  @DELETE("chromis.categories/public/{id}")
+  Call<List<Category>> deleteCategory(@Path("id") String id);
 
 }

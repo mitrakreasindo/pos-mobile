@@ -15,6 +15,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
@@ -84,27 +85,27 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 break;
 
               case 1:
-                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
                 categoryService = ClientService.createService().create(CategoryService.class);
-//                Call<List<Category>> call = categoryService.deleteCategory(category.getId());
-//                call.enqueue(new Callback<List<Category>>()
-//                {
-//                  @Override
-//                  public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-//                  {
-//
-//                  }
-//
-//                  @Override
-//                  public void onFailure(Call<List<Category>> call, Throwable t)
-//                  {
-//
-//                  }
-//
-//
-//                });
-//
-//                getCategories();
+                Call<List<Category>> call = categoryService.deleteCategory(category.getId());
+                call.enqueue(new Callback<List<Category>>()
+                {
+                  @Override
+                  public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
+                  {
+
+                  }
+
+                  @Override
+                  public void onFailure(Call<List<Category>> call, Throwable t)
+                  {
+
+                  }
+
+
+                });
+
+                removeCategory(category);
                 Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
@@ -130,6 +131,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   public void addCategory(List<Category> categories)
   {
     this.categories.addAll(categories);
+    notifyDataSetChanged();
+  }
+
+  public void removeCategory(Category category)
+  {
+    categories.remove(category);
     notifyDataSetChanged();
   }
 
