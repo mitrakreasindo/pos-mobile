@@ -43,13 +43,12 @@ public class RoleActivity extends AppCompatActivity
   Toolbar toolbar;
   @BindView(R.id.list_role)
   RecyclerView listRole;
-  @BindView(R.id.edit_text_filter)
+  @BindView(R.id.edittext_filter)
   EditText editTextFilter;
 
   private RoleAdapter roleAdapter;
   private RoleService roleService;
   private Role role;
-  private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
   private TableRoleHelper tableRoleHelper;
 
@@ -71,9 +70,7 @@ public class RoleActivity extends AppCompatActivity
       }
     });
 
-    sharedPreferenceEditor = new SharedPreferenceEditor();
-
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
 
     roleService = ClientService.createService().create(RoleService.class);
     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());

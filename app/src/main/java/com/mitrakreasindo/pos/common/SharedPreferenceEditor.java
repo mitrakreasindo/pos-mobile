@@ -13,11 +13,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SharedPreferenceEditor
 {
-  private String filename;
-  private String key;
-  private String companyCode;
+  private static String filename;
+  private static String key;
+  private static String companyCode;
 
-  public boolean SavePreferences(Context context, String value)
+  public static boolean SavePreferences(Context context, String value)
   {
     try
     {
@@ -36,7 +36,7 @@ public class SharedPreferenceEditor
     }
   }
 
-  public String LoadPreferences(Context context, String defaultValue)
+  public static String LoadPreferences(Context context, String defaultValue)
   {
     try
     {

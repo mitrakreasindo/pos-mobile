@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
@@ -53,7 +52,6 @@ public class UserActivity extends AppCompatActivity
   private People people;
   private EditText txtFilter;
   private TablePeopleHelper tablePeopleHelper;
-  private SharedPreferenceEditor sharedPreferenceEditor = new SharedPreferenceEditor();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)

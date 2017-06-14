@@ -96,10 +96,8 @@ public class UserFormActivity extends AppCompatActivity
   List<Role> data;
   private ArrayAdapter<Role> rolesArrayAdapter;
 
-  int RESULT_LOAD_IMG;
+  private int RESULT_LOAD_IMG;
   private Bundle bundle;
-
-  private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
 
   @Override
@@ -118,7 +116,7 @@ public class UserFormActivity extends AppCompatActivity
     final String password = bundle.getString("password");
     final String roleId = bundle.getString("role");
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
 
     Log.d("DATA NAME : ", name);
 

@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
    * Keep track of the login task to ensure we can cancel it if requested.
    */
   private UserLoginTask mAuthTask = null;
-  private SharedPreferenceEditor sharedPreferenceEditor;
   private String companyCode;
   private int responseCode;
   private String responseMessage;
@@ -108,19 +107,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     mLoginFormView = findViewById(R.id.login_form);
     mProgressView = findViewById(R.id.login_progress);
-
-    sharedPreferenceEditor = new SharedPreferenceEditor();
   }
 
   public void onClick(View view)
   {
-    companyCode = sharedPreferenceEditor.LoadPreferences(this, "");
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
     attemptLogin();
   }
 
   public void Register(View view)
   {
-    if (sharedPreferenceEditor.SavePreferences(this, "public"))
+    if (SharedPreferenceEditor.SavePreferences(this, "public"))
       Toast.makeText(this, "Company Code Saved", Toast.LENGTH_SHORT).show();
     else
       Toast.makeText(this, "Company Code Not Saved", Toast.LENGTH_SHORT).show();
@@ -236,6 +233,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //      mAuthTask.execute((Void) null);
       showProgress(true);
       postLogin(companyCode, user, password);
+//      Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//      intent.putExtra("USERNAME", user);
+//      intent.putExtra("COMPANY", companyCode);
+//      startActivity(intent);
+
       showProgress(false);
       mUsernameView.setText("");
       mPasswordView.setText("");

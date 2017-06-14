@@ -30,7 +30,6 @@ import retrofit2.Response;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder>
 {
-
   private List<Category> categories = new ArrayList<Category>();
   private Context context;
   private LayoutInflater inflater;
