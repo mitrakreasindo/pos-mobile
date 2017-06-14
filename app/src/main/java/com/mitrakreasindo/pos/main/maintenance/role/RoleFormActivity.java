@@ -64,6 +64,8 @@ public class RoleFormActivity extends AppCompatActivity
 
     roleService = ClientService.createService().create(RoleService.class);
 
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     final Bundle bundle = getIntent().getExtras();

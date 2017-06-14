@@ -43,23 +43,22 @@
         </activity>
         <activity
             android:name=".maintenance.user.UserActivity"
-            android:label="@string/users"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/users"/>
         <activity
             android:name=".maintenance.user.UserFormActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/add_user"/>
         <activity
             android:name=".maintenance.user.UserDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".maintenance.role.RoleFormActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/add_role"/>
         <activity
             android:name=".maintenance.role.RoleActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/roles"/>
         <activity
             android:name=".stock.category.CategoryActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/category"/>
         <activity
             android:name=".stock.product.ProductActivity"
             android:label="@string/title_activity_product">

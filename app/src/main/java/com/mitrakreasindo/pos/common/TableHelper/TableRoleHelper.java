@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.RoleService;
+import com.mitrakreasindo.pos.model.Role;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,7 +51,7 @@ public class TableRoleHelper
   {
     DatabaseHelper(Context context)
     {
-      super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
+      super(context, DATABASE_NAME, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), null, DATABASE_VERSION);
     }
   }
 
@@ -91,12 +94,56 @@ public class TableRoleHelper
     return db.delete(DATABASE_TABLE, null, null);
   }
 
+  public List<Role> populateRole(Cursor cursor)
+  {
+    try
+    {
+      List<Role> list = new ArrayList<>();
+
+      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
+      {
+        String name = cursor.getString(nameIndex);
+
+        Role role = new Role();
+        role.setName(name);
+        list.add(role);
+      }
+
+      return list;
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   public Cursor getAllData()
   {
     return db.query(DATABASE_TABLE,
       new String[]{KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
       null, null, null, null, null);
   }
+
+  public List<Role> getData()
+  {
+    open();
+
+    return populateRole(db.query(DATABASE_TABLE,
+            new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+            null, null, null, null, null));
+  }
+
+  public List<Role> getData(String name)
+  {
+    open();
+
+    return populateRole(db.query(DATABASE_TABLE,
+            new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+  }
+
 
   public void downloadData(String kodeMerchant)
   {

@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.adapter.RoleAdapter;
 import com.mitrakreasindo.pos.model.Role;
@@ -39,12 +43,15 @@ public class RoleActivity extends AppCompatActivity
   Toolbar toolbar;
   @BindView(R.id.list_role)
   RecyclerView listRole;
+  @BindView(R.id.edit_text_filter)
+  EditText editTextFilter;
 
   private RoleAdapter roleAdapter;
   private RoleService roleService;
   private Role role;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
+  private TableRoleHelper tableRoleHelper;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -64,6 +71,8 @@ public class RoleActivity extends AppCompatActivity
       }
     });
 
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     roleService = ClientService.createService().create(RoleService.class);
@@ -74,7 +83,32 @@ public class RoleActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listRole.setLayoutManager(layoutManager);
 
-    getRole(kodeMerchant);
+    tableRoleHelper = new TableRoleHelper(this);
+
+    roleAdapter.clear();
+    roleAdapter.addRole(tableRoleHelper.getData());
+
+    editTextFilter.addTextChangedListener(new TextWatcher()
+    {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count)
+      {
+        roleAdapter.clear();
+        roleAdapter.addRole(tableRoleHelper.getData(editTextFilter.getText().toString()));
+      }
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+
+      }
+    });
 
   }
 
@@ -102,7 +136,7 @@ public class RoleActivity extends AppCompatActivity
   {
     super.onResume();
     Toast.makeText(this, "i'am resuming this activity", Toast.LENGTH_LONG).show();
-    getRole(kodeMerchant);
+//    getRole(kodeMerchant);
   }
 
   private void getRole(String kodeMerchant)

@@ -97,25 +97,25 @@ public class CategoryActivity extends AppCompatActivity
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
 
-    MenuItem searchItem = menu.findItem(R.id.action_search);
-    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-    {
-      @Override
-      public boolean onQueryTextSubmit(String query)
-      {
-        return false;
-      }
-
-      @Override
-      public boolean onQueryTextChange(String newText)
-      {
-        categoryListAdapter.clear();
-        categoryListAdapter.addCategory(tableCategoryHelper.getData(newText.toString()));
-        return false;
-      }
-    });
+//    MenuItem searchItem = menu.findItem(R.id.action_search);
+//    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//
+//    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+//    {
+//      @Override
+//      public boolean onQueryTextSubmit(String query)
+//      {
+//        return false;
+//      }
+//
+//      @Override
+//      public boolean onQueryTextChange(String newText)
+//      {
+//        categoryListAdapter.clear();
+//        categoryListAdapter.addCategory(tableCategoryHelper.getData(newText.toString()));
+//        return false;
+//      }
+//    });
 
     return super.onCreateOptionsMenu(menu);
   }

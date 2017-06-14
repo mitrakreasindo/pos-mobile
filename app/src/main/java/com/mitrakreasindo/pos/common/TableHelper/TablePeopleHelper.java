@@ -109,6 +109,20 @@ public class TablePeopleHelper
     return 0;
   }
 
+  public int deleteAll()
+  {
+    return db.delete(DATABASE_TABLE, null, null);
+  }
+
+  public List<People> getData()
+  {
+    open();
+
+    return populatePeople(db.query(DATABASE_TABLE,
+      new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE},
+      null, null, null, null, null));
+  }
+
   public List<People> populatePeople(Cursor cursor)
   {
     try
@@ -139,20 +153,6 @@ public class TablePeopleHelper
       e.printStackTrace();
       return null;
     }
-  }
-
-  public int deleteAll()
-  {
-    return db.delete(DATABASE_TABLE, null, null);
-  }
-
-  public List<People> getData()
-  {
-    open();
-
-    return populatePeople(db.query(DATABASE_TABLE,
-      new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE},
-      null, null, null, null, null));
   }
 
   public List<People> getData(String name)

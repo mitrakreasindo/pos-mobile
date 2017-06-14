@@ -140,5 +140,7 @@
     <string name="units">Units</string>
     <string name="buy_price">Buy Price</string>
     <string name="reason">Reason</string>
+    <string name="add_role">Add Role</string>
+    <string name="add_user">Add User</string>
 
 </resources>
