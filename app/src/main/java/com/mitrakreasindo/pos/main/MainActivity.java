@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
         tableCategoryHelper.downloadData(companyCode);
         TableProductHelper tableProductHelper = new TableProductHelper(this);
-        tableProductHelper.downloadData(companyCode);
+        tableProductHelper.downloadDataAlternate();
     }
 
     @Override

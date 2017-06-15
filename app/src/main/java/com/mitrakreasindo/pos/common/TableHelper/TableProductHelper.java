@@ -4,12 +4,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,10 +73,61 @@ public class TableProductHelper
     DBHelper.close();
   }
 
+  public long insert(Product[] list)
+  {
+    long response = 0;
+
+    ContentValues initialValues = new ContentValues();
+    for(int i=0; i<list.length; i++)
+    {
+      initialValues.put(context.getString(R.string.tproduct_id), list[i].getId());
+      initialValues.put(context.getString(R.string.tproduct_reference), list[i].getReference());
+      initialValues.put(context.getString(R.string.tproduct_code), list[i].getCode());
+      initialValues.put(context.getString(R.string.tproduct_codetype), list[i].getCodetype());
+      initialValues.put(context.getString(R.string.tproduct_name), list[i].getName());
+      initialValues.put(context.getString(R.string.tproduct_pricebuy), list[i].getPricebuy());
+      initialValues.put(context.getString(R.string.tproduct_pricesell), list[i].getPricesell());
+      initialValues.put(context.getString(R.string.tproduct_category), list[i].getCategory().getId());
+      initialValues.put(context.getString(R.string.tproduct_taxcat), list[i].getTaxcat().getId());
+      initialValues.put(context.getString(R.string.tproduct_attributeset_id), list[i].getAttributesetId());
+      initialValues.put(context.getString(R.string.tproduct_stockcost), list[i].getStockcost());
+      initialValues.put(context.getString(R.string.tproduct_stockvolume), list[i].getStockvolume());
+      initialValues.put(context.getString(R.string.tproduct_iscom), list[i].iscom());
+      initialValues.put(context.getString(R.string.tproduct_isscale), list[i].isscale());
+      initialValues.put(context.getString(R.string.tproduct_iskitchen), list[i].iskitchen());
+      initialValues.put(context.getString(R.string.tproduct_printkb), list[i].isPrintkb());
+      initialValues.put(context.getString(R.string.tproduct_sendstatus), list[i].isSendstatus());
+      initialValues.put(context.getString(R.string.tproduct_isservice), list[i].isservice());
+      initialValues.put(context.getString(R.string.tproduct_display), list[i].getDisplay());
+      initialValues.put(context.getString(R.string.tproduct_attributes), list[i].getAttributes());
+      initialValues.put(context.getString(R.string.tproduct_isvprice), list[i].isvprice());
+      initialValues.put(context.getString(R.string.tproduct_isverpatrib), list[i].isverpatrib());
+      initialValues.put(context.getString(R.string.tproduct_texttip), list[i].getTexttip());
+      initialValues.put(context.getString(R.string.tproduct_warranty), list[i].isWarranty());
+      initialValues.put(context.getString(R.string.tproduct_image), list[i].getImage());
+      initialValues.put(context.getString(R.string.tproduct_stockunits), list[i].getStockunits());
+      initialValues.put(context.getString(R.string.tproduct_alias), list[i].getAlias());
+      initialValues.put(context.getString(R.string.tproduct_alwaysavailable), list[i].isAlwaysavailable());
+      initialValues.put(context.getString(R.string.tproduct_discounted), list[i].getDiscounted());
+      initialValues.put(context.getString(R.string.tproduct_candiscount), list[i].isCandiscount());
+      initialValues.put(context.getString(R.string.tproduct_iscatalog), list[i].getIscatalog());
+      initialValues.put(context.getString(R.string.tproduct_catorder), list[i].getCatorder());
+      initialValues.put(context.getString(R.string.tproduct_ispack), list[i].ispack());
+      initialValues.put(context.getString(R.string.tproduct_packquantity), list[i].getPackquantity());
+      initialValues.put(context.getString(R.string.tproduct_packproduct), list[i].getPackproduct());
+      initialValues.put(context.getString(R.string.tproduct_promotionid), list[i].getPromotionid());
+      initialValues.put(context.getString(R.string.tproduct_allproducts), list[i].getAllproducts());
+      initialValues.put(context.getString(R.string.tproduct_managestock), list[i].getManagestock());
+      initialValues.put(context.getString(R.string.tproduct_siteguid), list[i].getSiteguid());
+      initialValues.put(context.getString(R.string.tproduct_sflag), list[i].getSflag());
+      response += db.insert(DATABASE_TABLE, null, initialValues);
+    }
+    return response;
+  }
+
   public long insert(List<Product> list)
   {
     ContentValues initialValues = new ContentValues();
-    System.out.println("LIST PRODUCT:"+list.size());
     for(int i=0; i<list.size(); i++)
     {
       initialValues.put(context.getString(R.string.tproduct_id), list.get(i).getId());
@@ -107,7 +164,7 @@ public class TableProductHelper
       initialValues.put(context.getString(R.string.tproduct_catorder), list.get(i).getCatorder());
       initialValues.put(context.getString(R.string.tproduct_ispack), list.get(i).ispack());
       initialValues.put(context.getString(R.string.tproduct_packquantity), list.get(i).getPackquantity());
-      initialValues.put(context.getString(R.string.tproduct_packproduct), list.get(i).getPackproduct().getId());
+      initialValues.put(context.getString(R.string.tproduct_packproduct), list.get(i).getPackproduct());
       initialValues.put(context.getString(R.string.tproduct_promotionid), list.get(i).getPromotionid());
       initialValues.put(context.getString(R.string.tproduct_allproducts), list.get(i).getAllproducts());
       initialValues.put(context.getString(R.string.tproduct_managestock), list.get(i).getManagestock());
@@ -208,6 +265,41 @@ public class TableProductHelper
           context.getString(R.string.tproduct_sflag)
         },
       null, null, null, null, null));
+  }
+
+  private class HttpRequestTask extends AsyncTask<Void, Void, Product[]>
+  {
+    @Override
+    protected Product[] doInBackground(Void... params)
+    {
+      try
+      {
+        final String url = RestVariable.URL_GET_PRODUCT;
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        Product[] product = restTemplate.getForObject(url, Product[].class);
+        return product;
+      }
+      catch (Exception e)
+      {
+        Log.e("TableProductHelper", e.getMessage(), e);
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Product[] list)
+    {
+      open();
+      deleteAll();
+      insert(list);
+      close();
+    }
+  }
+
+  public void downloadDataAlternate()
+  {
+    new HttpRequestTask().execute();
   }
 
   public void downloadData(final String kodeMerchant)

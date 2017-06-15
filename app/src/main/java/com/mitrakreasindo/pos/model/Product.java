@@ -11,45 +11,52 @@ public class Product
   private String code;
   private String codetype;
   private String name;
-  private double pricebuy;
-  private double pricesell;
+  private Double pricebuy;
+  private Double pricesell;
   private Category category;
   private TaxCategory taxcat;
-  private String attributeset_id;
-  private double stockcost;
-  private double stockvolume;
-  private boolean iscom;
-  private boolean isscale;
-  private boolean iskitchen;
-  private boolean printkb;
-  private boolean sendstatus;
-  private boolean isservice;
+  private String attributesetId;
+  private Double stockcost;
+  private Double stockvolume;
+  private Boolean iscom;
+  private Boolean isscale;
+  private Boolean iskitchen;
+  private Boolean printkb;
+  private Boolean sendstatus;
+  private Boolean isservice;
   private String display;
   private byte[] attributes;
-  private boolean isvprice;
-  private boolean isverpatrib;
+  private Boolean isvprice;
+  private Boolean isverpatrib;
   private String texttip;
-  private boolean warranty;
+  private Boolean warranty;
   private byte[] image;
-  private double stockunits;
+  private Double stockunits;
   private String alias;
-  private boolean alwaysavailable;
+  private Boolean alwaysavailable;
   private String discounted;
-  private boolean candiscount;
-  private boolean iscatalog;
-  private int catorder;
-  private boolean ispack;
-  private double packquantity;
-  private Product packproduct;
+  private Boolean candiscount;
+  private Boolean iscatalog;
+  private Integer catorder;
+  private Boolean ispack;
+  private Double packquantity;
+  private String packproduct;
   private String promotionid;
-  private boolean allproducts;
-  private boolean managestock;
+  private Boolean allproducts;
+  private Boolean managestock;
   private String siteguid;
-  private boolean sflag;
+  private Boolean sflag;
 
   public String getId()
   {
-    return id;
+    if (id == null)
+    {
+      return "null";
+    }
+    else
+    {
+      return id;
+    }
   }
 
   public void setId(String id)
@@ -97,29 +104,36 @@ public class Product
     this.name = name;
   }
 
-  public double getPricebuy()
+  public Double getPricebuy()
   {
     return pricebuy;
   }
 
-  public void setPricebuy(double pricebuy)
+  public void setPricebuy(Double pricebuy)
   {
     this.pricebuy = pricebuy;
   }
 
-  public double getPricesell()
+  public Double getPricesell()
   {
     return pricesell;
   }
 
-  public void setPricesell(double pricesell)
+  public void setPricesell(Double pricesell)
   {
     this.pricesell = pricesell;
   }
 
   public Double getStockcost()
   {
-    return stockcost;
+    if (stockcost == null)
+    {
+      return 0.0;
+    }
+    else
+    {
+      return stockcost;
+    }
   }
 
   public void setStockcost(Double stockcost)
@@ -129,7 +143,14 @@ public class Product
 
   public Double getStockvolume()
   {
-    return stockvolume;
+    if (stockvolume == null)
+    {
+      return 0.0;
+    }
+    else
+    {
+      return stockvolume;
+    }
   }
 
   public void setStockvolume(Double stockvolume)
@@ -137,62 +158,62 @@ public class Product
     this.stockvolume = stockvolume;
   }
 
-  public boolean iscom()
+  public Boolean iscom()
   {
     return iscom;
   }
 
-  public void setIscom(boolean iscom)
+  public void setIscom(Boolean iscom)
   {
     this.iscom = iscom;
   }
 
-  public boolean isscale()
+  public Boolean isscale()
   {
     return isscale;
   }
 
-  public void setIsscale(boolean isscale)
+  public void setIsscale(Boolean isscale)
   {
     this.isscale = isscale;
   }
 
-  public boolean iskitchen()
+  public Boolean iskitchen()
   {
     return iskitchen;
   }
 
-  public void setIskitchen(boolean iskitchen)
+  public void setIskitchen(Boolean iskitchen)
   {
     this.iskitchen = iskitchen;
   }
 
-  public boolean isPrintkb()
+  public Boolean isPrintkb()
   {
     return printkb;
   }
 
-  public void setPrintkb(boolean printkb)
+  public void setPrintkb(Boolean printkb)
   {
     this.printkb = printkb;
   }
 
-  public boolean isSendstatus()
+  public Boolean isSendstatus()
   {
     return sendstatus;
   }
 
-  public void setSendstatus(boolean sendstatus)
+  public void setSendstatus(Boolean sendstatus)
   {
     this.sendstatus = sendstatus;
   }
 
-  public boolean isservice()
+  public Boolean isservice()
   {
     return isservice;
   }
 
-  public void setIsservice(boolean isservice)
+  public void setIsservice(Boolean isservice)
   {
     this.isservice = isservice;
   }
@@ -217,22 +238,22 @@ public class Product
     this.attributes = attributes;
   }
 
-  public boolean isvprice()
+  public Boolean isvprice()
   {
     return isvprice;
   }
 
-  public void setIsvprice(boolean isvprice)
+  public void setIsvprice(Boolean isvprice)
   {
     this.isvprice = isvprice;
   }
 
-  public boolean isverpatrib()
+  public Boolean isverpatrib()
   {
     return isverpatrib;
   }
 
-  public void setIsverpatrib(boolean isverpatrib)
+  public void setIsverpatrib(Boolean isverpatrib)
   {
     this.isverpatrib = isverpatrib;
   }
@@ -247,12 +268,12 @@ public class Product
     this.texttip = texttip;
   }
 
-  public boolean isWarranty()
+  public Boolean isWarranty()
   {
     return warranty;
   }
 
-  public void setWarranty(boolean warranty)
+  public void setWarranty(Boolean warranty)
   {
     this.warranty = warranty;
   }
@@ -267,12 +288,12 @@ public class Product
     this.image = image;
   }
 
-  public double getStockunits()
+  public Double getStockunits()
   {
     return stockunits;
   }
 
-  public void setStockunits(double stockunits)
+  public void setStockunits(Double stockunits)
   {
     this.stockunits = stockunits;
   }
@@ -287,12 +308,12 @@ public class Product
     this.alias = alias;
   }
 
-  public boolean isAlwaysavailable()
+  public Boolean isAlwaysavailable()
   {
     return alwaysavailable;
   }
 
-  public void setAlwaysavailable(boolean alwaysavailable)
+  public void setAlwaysavailable(Boolean alwaysavailable)
   {
     this.alwaysavailable = alwaysavailable;
   }
@@ -307,12 +328,12 @@ public class Product
     this.discounted = discounted;
   }
 
-  public boolean isCandiscount()
+  public Boolean isCandiscount()
   {
     return candiscount;
   }
 
-  public void setCandiscount(boolean candiscount)
+  public void setCandiscount(Boolean candiscount)
   {
     this.candiscount = candiscount;
   }
@@ -337,12 +358,12 @@ public class Product
     this.catorder = catorder;
   }
 
-  public boolean ispack()
+  public Boolean ispack()
   {
     return ispack;
   }
 
-  public void setIspack(boolean ispack)
+  public void setIspack(Boolean ispack)
   {
     this.ispack = ispack;
   }
@@ -399,12 +420,12 @@ public class Product
 
   public String getAttributesetId()
   {
-    return attributeset_id;
+    return attributesetId;
   }
 
-  public void setAttributesetId(String attributeset_id)
+  public void setAttributesetId(String attributesetId)
   {
-    this.attributeset_id = attributeset_id;
+    this.attributesetId = attributesetId;
   }
 
   public Category getCategory()
@@ -417,12 +438,12 @@ public class Product
     this.category = category;
   }
 
-  public Product getPackproduct()
+  public String getPackproduct()
   {
     return packproduct;
   }
 
-  public void setPackproduct(Product packproduct)
+  public void setPackproduct(String packproduct)
   {
     this.packproduct = packproduct;
   }
