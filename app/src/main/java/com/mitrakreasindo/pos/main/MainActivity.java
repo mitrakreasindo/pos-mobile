@@ -15,6 +15,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
@@ -24,9 +29,9 @@ import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-
     private String valueUser;
     private int mPrevSelectedId;
+    private String companyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,8 +71,18 @@ public class MainActivity extends AppCompatActivity
         View headerLayout = navigationView.getHeaderView(0);
         TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
         textViewUser.setText(valueUser);
-    }
 
+        companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
+
+        TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
+        tablePeopleHelper.downloadData(companyCode);
+        TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+        tableRoleHelper.downloadData(companyCode);
+        TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
+        tableCategoryHelper.downloadData(companyCode);
+        TableProductHelper tableProductHelper = new TableProductHelper(this);
+        tableProductHelper.downloadData(companyCode);
+    }
 
     @Override
     public void onBackPressed() {

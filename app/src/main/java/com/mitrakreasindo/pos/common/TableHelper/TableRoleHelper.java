@@ -7,9 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.service.RoleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -144,8 +143,7 @@ public class TableRoleHelper
             KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
-
-  public void downloadData(String kodeMerchant)
+  public void downloadData(final String kodeMerchant)
   {
     final Call<List<Role>> call = service.getRoleAll(kodeMerchant);
     call.enqueue(new Callback<List<Role>>()
@@ -153,11 +151,18 @@ public class TableRoleHelper
       @Override
       public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
-        List<Role> list = response.body();
-        open();
-        deleteAll();
-        insert(list);
-        close();
+        final List<Role> list = response.body();
+        new Thread(new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            open();
+            deleteAll();
+            insert(list);
+            close();
+          }
+        }).start();
       }
 
       @Override

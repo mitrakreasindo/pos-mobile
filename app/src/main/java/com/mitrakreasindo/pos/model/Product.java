@@ -13,6 +13,9 @@ public class Product
   private String name;
   private double pricebuy;
   private double pricesell;
+  private Category category;
+  private TaxCategory taxcat;
+  private String attributeset_id;
   private double stockcost;
   private double stockvolume;
   private boolean iscom;
@@ -37,15 +40,12 @@ public class Product
   private int catorder;
   private boolean ispack;
   private double packquantity;
+  private Product packproduct;
+  private String promotionid;
   private boolean allproducts;
   private boolean managestock;
   private String siteguid;
   private boolean sflag;
-  private String attributesetId;
-  private Category category;
-  private Product packproduct;
-  private String promotionid;
-  private TaxCategory taxcat;
 
   public String getId()
   {
@@ -399,12 +399,12 @@ public class Product
 
   public String getAttributesetId()
   {
-    return attributesetId;
+    return attributeset_id;
   }
 
-  public void setAttributesetId(String attributesetId)
+  public void setAttributesetId(String attributeset_id)
   {
-    this.attributesetId = attributesetId;
+    this.attributeset_id = attributeset_id;
   }
 
   public Category getCategory()

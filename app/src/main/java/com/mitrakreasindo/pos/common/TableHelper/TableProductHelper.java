@@ -89,6 +89,7 @@ public class TableProductHelper
       initialValues.put(context.getString(R.string.tproduct_isscale), list.get(i).isscale());
       initialValues.put(context.getString(R.string.tproduct_iskitchen), list.get(i).iskitchen());
       initialValues.put(context.getString(R.string.tproduct_printkb), list.get(i).isPrintkb());
+      initialValues.put(context.getString(R.string.tproduct_sendstatus), list.get(i).isSendstatus());
       initialValues.put(context.getString(R.string.tproduct_isservice), list.get(i).isservice());
       initialValues.put(context.getString(R.string.tproduct_display), list.get(i).getDisplay());
       initialValues.put(context.getString(R.string.tproduct_attributes), list.get(i).getAttributes());
@@ -101,6 +102,7 @@ public class TableProductHelper
       initialValues.put(context.getString(R.string.tproduct_alias), list.get(i).getAlias());
       initialValues.put(context.getString(R.string.tproduct_alwaysavailable), list.get(i).isAlwaysavailable());
       initialValues.put(context.getString(R.string.tproduct_discounted), list.get(i).getDiscounted());
+      initialValues.put(context.getString(R.string.tproduct_candiscount), list.get(i).isCandiscount());
       initialValues.put(context.getString(R.string.tproduct_iscatalog), list.get(i).getIscatalog());
       initialValues.put(context.getString(R.string.tproduct_catorder), list.get(i).getCatorder());
       initialValues.put(context.getString(R.string.tproduct_ispack), list.get(i).ispack());
@@ -180,6 +182,7 @@ public class TableProductHelper
           context.getString(R.string.tproduct_isscale),
           context.getString(R.string.tproduct_iskitchen),
           context.getString(R.string.tproduct_printkb),
+          context.getString(R.string.tproduct_sendstatus),
           context.getString(R.string.tproduct_isservice),
           context.getString(R.string.tproduct_display),
           context.getString(R.string.tproduct_attributes),
@@ -192,6 +195,7 @@ public class TableProductHelper
           context.getString(R.string.tproduct_alias),
           context.getString(R.string.tproduct_alwaysavailable),
           context.getString(R.string.tproduct_discounted),
+          context.getString(R.string.tproduct_candiscount),
           context.getString(R.string.tproduct_iscatalog),
           context.getString(R.string.tproduct_catorder),
           context.getString(R.string.tproduct_ispack),
@@ -206,7 +210,7 @@ public class TableProductHelper
       null, null, null, null, null));
   }
 
-  public void downloadData(String kodeMerchant)
+  public void downloadData(final String kodeMerchant)
   {
     final Call<List<Product>> call = service.getProductAll(kodeMerchant);
     call.enqueue(new Callback<List<Product>>()
@@ -214,12 +218,18 @@ public class TableProductHelper
       @Override
       public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
       {
-        List<Product> list = response.body();
-        System.out.println("List Size"+list.size());
-        open();
-        deleteAll();
-        insert(list);
-        close();
+        final List<Product> list = response.body();
+        new Thread(new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            open();
+            deleteAll();
+            insert(list);
+            close();
+          }
+        }).start();
       }
 
       @Override

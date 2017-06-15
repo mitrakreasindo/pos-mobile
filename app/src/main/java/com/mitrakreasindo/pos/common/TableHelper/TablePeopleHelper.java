@@ -164,7 +164,7 @@ public class TablePeopleHelper
       KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
   }
 
-  public void downloadData(String kodeMerchant)
+  public void downloadData(final String kodeMerchant)
   {
     final Call<List<People>> call = service.getPeopleAll(kodeMerchant);
     call.enqueue(new Callback<List<People>>()
@@ -172,11 +172,18 @@ public class TablePeopleHelper
       @Override
       public void onResponse(Call<List<People>> call, Response<List<People>> response)
       {
-        List<People> list = response.body();
-        open();
-        deleteAll();
-        insert(list);
-        close();
+        final List<People> list = response.body();
+        new Thread(new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            open();
+            deleteAll();
+            insert(list);
+            close();
+          }
+        }).start();
       }
 
       @Override

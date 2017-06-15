@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -30,10 +29,6 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.model.Login;
 import com.mitrakreasindo.pos.service.LoginService;
 
@@ -69,8 +64,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
    */
   private UserLoginTask mAuthTask = null;
   private String companyCode;
-  private int responseCode;
-  private String responseMessage;
 
   // UI references.
   private EditText mUsernameView;
@@ -231,14 +224,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       // perform the user login attempt.
 //      mAuthTask = new UserLoginTask(email, password);
 //      mAuthTask.execute((Void) null);
-      showProgress(true);
+//      showProgress(true);
       postLogin(companyCode, user, password);
 //      Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //      intent.putExtra("USERNAME", user);
 //      intent.putExtra("COMPANY", companyCode);
 //      startActivity(intent);
 
-      showProgress(false);
+//      showProgress(false);
       mUsernameView.setText("");
       mPasswordView.setText("");
     }
@@ -246,42 +239,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
   private void postLogin(final String kodeMerchant, final String username, String password)
   {
-    LoginService loginService = ClientService.createService().create(LoginService.class);;
+    final LoginService loginService = ClientService.createService().create(LoginService.class);
 
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
-    progressDialog.show();
+//    final ProgressDialog progressDialog = new ProgressDialog(this);
+//    progressDialog.setMessage("Please wait...");
+//    progressDialog.show();
 
-    Call<HashMap<Integer,String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
-    call.enqueue(new Callback<HashMap<Integer,String>>()
+    Call<HashMap<Integer, String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
+      private int responseCode;
+      private String responseMessage;
+
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        HashMap<Integer, String> data = response.body();
+        final HashMap<Integer, String> data = response.body();
         for (int resultKey : data.keySet())
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
 
-          Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
-
           if (responseCode == 0)
           {
-//            new Thread(new Runnable()
-//            {
-//              public void run()
-//              {
-                TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(LoginActivity.this);
-                tablePeopleHelper.downloadData(companyCode);
-                TableRoleHelper tableRoleHelper = new TableRoleHelper(LoginActivity.this);
-                tableRoleHelper.downloadData(companyCode);
-                TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(LoginActivity.this);
-                tableCategoryHelper.downloadData(companyCode);
-                TableProductHelper tableProductHelper = new TableProductHelper(LoginActivity.this);
-                tableProductHelper.downloadData(companyCode);
-//              }
-//            });
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
             intent.putExtra("COMPANY", kodeMerchant);
@@ -292,6 +272,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mUsernameView.requestFocus();
           }
         }
+        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
@@ -299,12 +280,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       {
         responseCode = 2;
         responseMessage = "Cannot login. :( There is something wrong.";
-
         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-
-    progressDialog.hide();
+//    progressDialog.hide();
   }
 
   private boolean isEmailValid(String email)
