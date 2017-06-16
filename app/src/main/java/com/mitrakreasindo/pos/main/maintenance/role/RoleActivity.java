@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,13 +39,14 @@ import retrofit2.Response;
 
 public class RoleActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.list_role)
   RecyclerView listRole;
-  @BindView(R.id.edittext_filter)
-  EditText editTextFilter;
+  @BindView(R.id.edit_filter)
+  EditText txtFilter;
+  @BindView(R.id.button_filter)
+  Button btnClearFilter;
 
   private RoleAdapter roleAdapter;
   private RoleService roleService;
@@ -70,6 +72,15 @@ public class RoleActivity extends AppCompatActivity
       }
     });
 
+    btnClearFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        txtFilter.setText("");
+      }
+    });
+
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
 
     roleService = ClientService.createService().create(RoleService.class);
@@ -85,25 +96,21 @@ public class RoleActivity extends AppCompatActivity
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());
 
-    editTextFilter.addTextChangedListener(new TextWatcher()
+    txtFilter.addTextChangedListener(new TextWatcher()
     {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
         roleAdapter.clear();
-        roleAdapter.addRole(tableRoleHelper.getData(editTextFilter.getText().toString()));
+        roleAdapter.addRole(tableRoleHelper.getData(txtFilter.getText().toString()));
       }
-
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)
       {
-
       }
-
       @Override
       public void afterTextChanged(Editable s)
       {
-
       }
     });
 

@@ -13,6 +13,8 @@
 
         <include layout="@layout/toolbar_layout" />
 
+        <include layout="@layout/filter_bar" />
+
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout

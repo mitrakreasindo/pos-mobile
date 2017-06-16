@@ -3,7 +3,6 @@ package com.mitrakreasindo.pos.main.maintenance.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
@@ -43,14 +44,17 @@ public class UserActivity extends AppCompatActivity
   @BindView(R.id.list_users)
   RecyclerView listUsers;
   @BindView(R.id.main_content)
-  ConstraintLayout mainContent;
+  LinearLayout mainContent;
   @BindView(R.id.fab_users)
   FloatingActionButton fabUsers;
+  @BindView(R.id.edit_filter)
+  EditText txtFilter;
+  @BindView(R.id.button_filter)
+  Button btnClearFilter;
 
   private UserListAdapter userListAdapter;
   private PeopleService peopleService;
   private People people;
-  private EditText txtFilter;
   private TablePeopleHelper tablePeopleHelper;
 
   @Override
@@ -61,7 +65,14 @@ public class UserActivity extends AppCompatActivity
     setContentView(R.layout.activity_users);
     ButterKnife.bind(this);
 
-    txtFilter = (EditText)findViewById(R.id.edittext_filter);
+    btnClearFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        txtFilter.setText("");
+      }
+    });
 
     peopleService = ClientService.createService().create(PeopleService.class);
 
@@ -114,11 +125,6 @@ public class UserActivity extends AppCompatActivity
       {
       }
     });
-  }
-
-  public void Filter (View v)
-  {
-    txtFilter.setText("");
   }
 
   private void getPeoples(String kodeMerchant)

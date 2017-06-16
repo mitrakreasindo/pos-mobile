@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Main-->
+    <string name="toogle_sales">%1$s</string>
+    <string name="toogle_edit_sales">%2$s</string>
+    <string name="toogle_customer_payment">%3$s</string>
+    <string name="toogle_payment">%4$s</string>
+    <string name="toogle_close_cash">%5$s</string>
+
+    <!--Administration-->
+    <string name="toogle_customer">%6$s</string>
+    <string name="toogle_stock">%7$s</string>
+    <string name="toogle_administration_sales">%8$s</string>
+    <string name="toogle_maintenance">%9$s</string>
+    <string name="toogle_presence_management">%10$s</string>
+
+    <!--Utilities-->
+    <string name="toogle_tools">%11$s</string>
+
+    <!--System-->
+    <string name="toogle_change_password">%12$s</string>
+    <string name="toogle_configuration">%13$s</string>
+    <string name="toogle_printers">%14$s</string>
+    <string name="toogle_check_in_out">%15$s</string>
+    <string name="toogle_logout">%16$s</string>
+</resources>

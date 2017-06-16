@@ -6,10 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,10 +45,13 @@ public class ProductActivity extends AppCompatActivity
   public TextView txtActionToolbar;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
+  @BindView(R.id.edit_filter)
+  EditText txtFilter;
+  @BindView(R.id.button_filter)
+  Button btnClearFilter;
 
   private ProductService productService;
   private ProductListAdapter productListAdapter;
-  private Product product;
   private TableProductHelper tableProductHelper;
 
   public boolean is_action_mode = false;
@@ -56,6 +63,9 @@ public class ProductActivity extends AppCompatActivity
     setContentView(R.layout.activity_product);
     ButterKnife.bind(this);
 
+    productService = ClientService.createService().create(ProductService.class);
+    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
+
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -66,9 +76,14 @@ public class ProductActivity extends AppCompatActivity
       }
     });
 
-    productService = ClientService.createService().create(ProductService.class);
-
-    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
+    btnClearFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        txtFilter.setText("");
+      }
+    });
 
     listProduct.setHasFixedSize(true);
     listProduct.setAdapter(productListAdapter);
@@ -99,6 +114,21 @@ public class ProductActivity extends AppCompatActivity
     productListAdapter.addProduct(tableProductHelper.getData());
 
 //    getProducts();
+    txtFilter.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        productListAdapter.clear();
+        productListAdapter.addProduct(tableProductHelper.getData(txtFilter.getText().toString()));
+      }
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+      }
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+      }
+    });
   }
 
   @Override
@@ -145,7 +175,5 @@ public class ProductActivity extends AppCompatActivity
 
       }
     });
-
   }
-
 }
