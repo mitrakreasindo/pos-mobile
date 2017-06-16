@@ -111,6 +111,10 @@ public class UserFormActivity extends AppCompatActivity
     peopleService = ClientService.createService().create(PeopleService.class);
 
     bundle = getIntent().getExtras();
+    if (bundle != null)
+    {
+
+    }
     String peopleId = bundle.getString("id");
     final String name = bundle.getString("name");
     final String password = bundle.getString("password");

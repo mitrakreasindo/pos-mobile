@@ -2,16 +2,17 @@ package com.mitrakreasindo.pos.main.stock.category;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.mitrakreasindo.pos.common.ClientService;
@@ -39,6 +40,8 @@ public class CategoryActivity extends AppCompatActivity
   RecyclerView listCategory;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
+  @BindView(R.id.edit_text_filter)
+  EditText editTextFilter;
 
   private CategoryService categoryService;
   private CategoryListAdapter categoryListAdapter;
@@ -66,6 +69,8 @@ public class CategoryActivity extends AppCompatActivity
       }
     });
 
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     categoryService = ClientService.createService().create(CategoryService.class);
@@ -79,6 +84,27 @@ public class CategoryActivity extends AppCompatActivity
 
     tableCategoryHelper = new TableCategoryHelper(this);
 
+    editTextFilter.addTextChangedListener(new TextWatcher()
+    {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count)
+      {
+        categoryListAdapter.clear();
+        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
+      }
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+
+      }
+    });
     categoryListAdapter.clear();
     categoryListAdapter.addCategory(tableCategoryHelper.getData());
 

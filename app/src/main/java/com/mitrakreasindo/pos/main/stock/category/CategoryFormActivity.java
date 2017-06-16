@@ -63,6 +63,8 @@ public class CategoryFormActivity extends AppCompatActivity
 
     categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
 
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     bundle = getIntent().getExtras();

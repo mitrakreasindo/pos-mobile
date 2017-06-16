@@ -47,6 +47,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.3.0'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile 'de.codecrafters.tableview:tableview:2.6.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

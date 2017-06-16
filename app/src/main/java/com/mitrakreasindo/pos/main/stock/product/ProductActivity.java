@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
@@ -54,6 +55,7 @@ public class ProductActivity extends AppCompatActivity
   private ProductListAdapter productListAdapter;
   private TableProductHelper tableProductHelper;
 
+//  private SharedPreferenceEditor sharedPreferenceEditor;
   public boolean is_action_mode = false;
 
   @Override

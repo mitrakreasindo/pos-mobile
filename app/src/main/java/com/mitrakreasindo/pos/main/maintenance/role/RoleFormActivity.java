@@ -42,6 +42,7 @@ public class RoleFormActivity extends AppCompatActivity
 
   private Role role;
   private RoleService roleService;
+  private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
 
   @Override
@@ -63,7 +64,9 @@ public class RoleFormActivity extends AppCompatActivity
 
     roleService = ClientService.createService().create(RoleService.class);
 
-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     final Bundle bundle = getIntent().getExtras();
 

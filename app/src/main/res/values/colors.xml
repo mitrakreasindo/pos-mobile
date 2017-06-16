@@ -10,5 +10,13 @@
     <color name="gray400">#BDBDBD</color>
     <color name="gray500">#9E9E9E</color>
     <color name="white">#FFF</color>
+
     <color name="red500">#F44336</color>
+    <color name="red400">#F44336</color>
+
+    <color name="teal">#1DE9B6</color>
+    <color name="light_green">#00E676</color>
+    <color name="blue">#4FC3F7</color>
+    <color name="blue_gray">#90A4AE</color>
+    <color name="deep_purple">#7E57C2</color>
 </resources>
