@@ -1,0 +1,380 @@
+Index: app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryFormActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryFormActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryFormActivity.java	(revision )
+@@ -63,6 +63,8 @@
+ 
+     categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+ 
++    sharedPreferenceEditor = new SharedPreferenceEditor();
++
+     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+ 
+     bundle = getIntent().getExtras();
+\ No newline at end of file
+Index: app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserActivity.java	(revision )
+@@ -14,6 +14,7 @@
+ import android.text.TextWatcher;
+ import android.view.View;
+ import android.widget.EditText;
++import android.widget.LinearLayout;
+ import android.widget.Toast;
+ 
+ import com.mitrakreasindo.pos.common.ClientService;
+@@ -43,7 +44,7 @@
+   @BindView(R.id.list_users)
+   RecyclerView listUsers;
+   @BindView(R.id.main_content)
+-  ConstraintLayout mainContent;
++  LinearLayout mainContent;
+   @BindView(R.id.fab_users)
+   FloatingActionButton fabUsers;
+ 
+Index: app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java	(revision )
+@@ -15,6 +15,11 @@
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
++import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
++import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
++import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
++import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
++import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+ import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
+ import com.mitrakreasindo.pos.main.fragment.SalesFragment;
+ import com.mitrakreasindo.pos.main.fragment.StockFragment;
+@@ -28,6 +33,8 @@
+     private String valueUser;
+     private int mPrevSelectedId;
+ 
++    private String companyCode;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState)
+     {
+@@ -37,6 +44,8 @@
+         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
+ 
++        companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
++
+         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+         fab.setOnClickListener(new View.OnClickListener()
+         {
+@@ -66,6 +75,18 @@
+         View headerLayout = navigationView.getHeaderView(0);
+         TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
+         textViewUser.setText(valueUser);
++
++
++
++        TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
++        tablePeopleHelper.downloadData(companyCode);
++        TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
++        tableRoleHelper.downloadData(companyCode);
++        TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
++        tableCategoryHelper.downloadData(companyCode);
++        TableProductHelper tableProductHelper = new TableProductHelper(this);
++        tableProductHelper.downloadDataById(companyCode, "xxx999_999xxx_x9x9x9");
++
+     }
+ 
+ 
+Index: app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/stock/category/CategoryActivity.java	(revision )
+@@ -2,16 +2,17 @@
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
+-import android.support.v4.view.MenuItemCompat;
+ import android.support.v7.app.AppCompatActivity;
+ import android.support.v7.widget.LinearLayoutManager;
+ import android.support.v7.widget.RecyclerView;
+-import android.support.v7.widget.SearchView;
+ import android.support.v7.widget.Toolbar;
++import android.text.Editable;
++import android.text.TextWatcher;
+ import android.util.Log;
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.view.View;
++import android.widget.EditText;
+ import android.widget.LinearLayout;
+ 
+ import com.mitrakreasindo.pos.common.ClientService;
+@@ -39,6 +40,8 @@
+   RecyclerView listCategory;
+   @BindView(R.id.main_content)
+   LinearLayout mainContent;
++  @BindView(R.id.edit_text_filter)
++  EditText editTextFilter;
+ 
+   private CategoryService categoryService;
+   private CategoryListAdapter categoryListAdapter;
+@@ -66,6 +69,8 @@
+       }
+     });
+ 
++    sharedPreferenceEditor = new SharedPreferenceEditor();
++
+     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+ 
+     categoryService = ClientService.createService().create(CategoryService.class);
+@@ -79,6 +84,27 @@
+ 
+     tableCategoryHelper = new TableCategoryHelper(this);
+ 
++    editTextFilter.addTextChangedListener(new TextWatcher()
++    {
++      @Override
++      public void onTextChanged(CharSequence s, int start, int before, int count)
++      {
++        categoryListAdapter.clear();
++        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
++      }
++
++      @Override
++      public void beforeTextChanged(CharSequence s, int start, int count, int after)
++      {
++
++      }
++
++      @Override
++      public void afterTextChanged(Editable s)
++      {
++
++      }
++    });
+     categoryListAdapter.clear();
+     categoryListAdapter.addCategory(tableCategoryHelper.getData());
+ 
+Index: app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleActivity.java	(revision )
+@@ -51,7 +51,7 @@
+   private Role role;
+   private String kodeMerchant;
+   private TableRoleHelper tableRoleHelper;
+-
++  private SharedPreferenceEditor sharedPreferenceEditor;
+   @Override
+   protected void onCreate(@Nullable Bundle savedInstanceState)
+   {
+@@ -70,7 +70,9 @@
+       }
+     });
+ 
+-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
++    sharedPreferenceEditor = new SharedPreferenceEditor();
++
++    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+ 
+     roleService = ClientService.createService().create(RoleService.class);
+     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());
+Index: app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserFormActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserFormActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/maintenance/user/UserFormActivity.java	(revision )
+@@ -111,6 +111,10 @@
+     peopleService = ClientService.createService().create(PeopleService.class);
+ 
+     bundle = getIntent().getExtras();
++    if (bundle != null)
++    {
++
++    }
+     String peopleId = bundle.getString("id");
+     final String name = bundle.getString("name");
+     final String password = bundle.getString("password");
+\ No newline at end of file
+Index: app/src/main/java/com/mitrakreasindo/pos/common/TableHelper/TableProductHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/TableHelper/TableProductHelper.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/common/TableHelper/TableProductHelper.java	(revision )
+@@ -4,6 +4,7 @@
+ import android.content.Context;
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
++import android.util.Log;
+ 
+ import com.mitrakreasindo.pos.common.ClientService;
+ import com.mitrakreasindo.pos.main.R;
+@@ -209,13 +210,17 @@
+   public void downloadData(String kodeMerchant)
+   {
+     final Call<List<Product>> call = service.getProductAll(kodeMerchant);
++
++//    List<Product> result = call.execute().body();
+     call.enqueue(new Callback<List<Product>>()
+     {
+       @Override
+       public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
+       {
++        Log.d("TEST", "TEST");
+         List<Product> list = response.body();
+-        System.out.println("List Size"+list.size());
++        System.out.println("List Size" + list.size());
++
+         open();
+         deleteAll();
+         insert(list);
+@@ -227,5 +232,35 @@
+       {
+       }
+     });
++  }
++
++  public void downloadDataById(String kodeMerchant, String id)
++  {
++    final Call<List<Product>> call = service.getProductById(kodeMerchant, id);
++
++//    List<Product> result = call.execute().body();
++    call.enqueue(new Callback<List<Product>>()
++    {
++      @Override
++      public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
++      {
++        Log.d("TEST", "TEST");
++        List<Product> list = response.body();
++        System.out.println("List Size"+list.size());
++
++        open();
++        deleteAll();
++        insert(list);
++        close();
++      }
++
++      @Override
++      public void onFailure(Call<List<Product>> call, Throwable t)
++      {
++      }
++    });
++
++
++
+   }
+ }
+Index: app/src/main/java/com/mitrakreasindo/pos/service/ProductService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/service/ProductService.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/service/ProductService.java	(revision )
+@@ -16,4 +16,7 @@
+ {
+   @GET("chromis.products/{kodeMerchant}/")
+   Call<List<Product>> getProductAll(@Path("kodeMerchant") String kodeMerchant);
++
++  @GET("chromis.products/{kodeMerchant}/{id}")
++  Call<List<Product>> getProductById(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+ }
+Index: app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleFormActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleFormActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/maintenance/role/RoleFormActivity.java	(revision )
+@@ -42,6 +42,7 @@
+ 
+   private Role role;
+   private RoleService roleService;
++  private SharedPreferenceEditor sharedPreferenceEditor;
+   private String kodeMerchant;
+ 
+   @Override
+@@ -63,7 +64,9 @@
+ 
+     roleService = ClientService.createService().create(RoleService.class);
+ 
+-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
++    sharedPreferenceEditor = new SharedPreferenceEditor();
++
++    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+ 
+     final Bundle bundle = getIntent().getExtras();
+ 
+Index: app/src/main/java/com/mitrakreasindo/pos/main/stock/product/ProductActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/stock/product/ProductActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/stock/product/ProductActivity.java	(revision )
+@@ -14,6 +14,7 @@
+ import android.widget.TextView;
+ 
+ import com.mitrakreasindo.pos.common.ClientService;
++import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
+ import com.mitrakreasindo.pos.main.R;
+ import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
+@@ -47,6 +48,7 @@
+   private Product product;
+   private TableProductHelper tableProductHelper;
+ 
++//  private SharedPreferenceEditor sharedPreferenceEditor;
+   public boolean is_action_mode = false;
+ 
+   @Override
+Index: app/src/main/java/com/mitrakreasindo/pos/main/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/LoginActivity.java	(revision 6ed1e29799fcce0ab1333dc11c40771ec9ad270d)
++++ app/src/main/java/com/mitrakreasindo/pos/main/LoginActivity.java	(revision )
+@@ -272,14 +272,14 @@
+ //            {
+ //              public void run()
+ //              {
+-                TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(LoginActivity.this);
+-                tablePeopleHelper.downloadData(companyCode);
+-                TableRoleHelper tableRoleHelper = new TableRoleHelper(LoginActivity.this);
+-                tableRoleHelper.downloadData(companyCode);
+-                TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(LoginActivity.this);
+-                tableCategoryHelper.downloadData(companyCode);
+-                TableProductHelper tableProductHelper = new TableProductHelper(LoginActivity.this);
+-                tableProductHelper.downloadData(companyCode);
++//                TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(LoginActivity.this);
++//                tablePeopleHelper.downloadData(companyCode);
++//                TableRoleHelper tableRoleHelper = new TableRoleHelper(LoginActivity.this);
++//                tableRoleHelper.downloadData(companyCode);
++//                TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(LoginActivity.this);
++//                tableCategoryHelper.downloadData(companyCode);
++//                TableProductHelper tableProductHelper = new TableProductHelper(LoginActivity.this);
++//                tableProductHelper.downloadData(companyCode);
+ //              }
+ //            });
+             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

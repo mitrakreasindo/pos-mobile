@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+         Point Of Sale Start 
+        <android.support.v7.widget.CardView
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="ONLINE"
+                    android:textStyle="bold"
+                    android:textColor="@color/light_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/ic_carts"
+                        android:text="@string/sales"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:backgroundTint="@color/red400"
+                        android:layout_weight=".30"/>
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/data"
+                        android:text="@string/data"
+                        android:backgroundTint="@color/teal"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"/>
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/receipt"
+                        android:layout_width="0dp"
+                        android:backgroundTint="@color/light_green"
+                        android:text="@string/receive"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/settings"
+                        android:layout_width="0dp"
+                        android:backgroundTint="@color/blue"
+                        android:text="@string/action_settings"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"/>
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/chart"
+                        android:layout_width="0dp"
+                        android:backgroundTint="@color/deep_purple"
+                        android:text="@string/reports"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"/>
+
+                    <Button
+                        android:textColor="@color/white"
+                        android:drawableTop="@drawable/data_export"
+                        android:layout_width="0dp"
+                        android:text="@string/export"
+                        android:backgroundTint="@color/blue_gray"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Dashboard"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight=".50"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="150.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="126.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="30.24%"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <include layout="@layout/vertical_divider" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight=".50"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="150.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="126.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="30.24%"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_divider"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight=".50"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="150.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="126.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="30.24%"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <include layout="@layout/vertical_divider" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight=".50"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="150.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="@string/today_s_revenue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="126.000.000"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="30.24%"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+        
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+                
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <de.codecrafters.tableview.TableView
+            android:id="@+id/table_product"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <!-- Reports End -->
+
+    </LinearLayout>
+</ScrollView>
