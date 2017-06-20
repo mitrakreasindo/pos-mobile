@@ -98,16 +98,19 @@ public class TableRoleHelper
     {
       List<Role> list = new ArrayList<>();
 
+      int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
+        String id = cursor.getString(idIndex);
         String name = cursor.getString(nameIndex);
 
         Role role = new Role();
+        role.setId(id);
         role.setName(name);
         list.add(role);
       }
-
       return list;
     }
     catch (Exception e)
@@ -129,8 +132,8 @@ public class TableRoleHelper
     open();
 
     return populateRole(db.query(DATABASE_TABLE,
-            new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            null, null, null, null, null));
+            new String[] {"CAST(id AS INTEGER)", KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+            null, null, null, null, "1"));
   }
 
   public List<Role> getData(String name)

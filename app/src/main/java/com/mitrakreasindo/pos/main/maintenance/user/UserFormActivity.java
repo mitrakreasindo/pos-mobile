@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.People;
@@ -92,10 +93,8 @@ public class UserFormActivity extends AppCompatActivity
   private Role role;
   private People people;
   private PeopleService peopleService;
-
-  List<Role> data;
   private ArrayAdapter<Role> rolesArrayAdapter;
-
+  private List<Role> data;
   private int RESULT_LOAD_IMG;
   private Bundle bundle;
   private String kodeMerchant;
@@ -110,60 +109,71 @@ public class UserFormActivity extends AppCompatActivity
     roleService = ClientService.createService().create(RoleService.class);
     peopleService = ClientService.createService().create(PeopleService.class);
 
+    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
+
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    data = tableRoleHelper.getData();
+    rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+    spinnerRole.setAdapter(rolesArrayAdapter);
+
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
+      String peopleId = bundle.getString("id");
+      String name = bundle.getString("name");
+      String password = bundle.getString("password");
+      String roleId = bundle.getString("role");
 
+      Log.d("ROLE", roleId);
+      Log.d("DATA NAME : ", name);
+
+//          Role r = new Role();
+//          r.setId(roleId);
+//          final int position = rolesArrayAdapter.getPosition(r);
+
+      edittextName.setText(name);
+      edittextPass.setText(password);
+      spinnerRole.setSelection(Integer.valueOf(roleId));
     }
-    String peopleId = bundle.getString("id");
-    final String name = bundle.getString("name");
-    final String password = bundle.getString("password");
-    final String roleId = bundle.getString("role");
 
-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
-
-    Log.d("DATA NAME : ", name);
-
-//    Role r = new Role();
-//    r.setId(roleId);
-//    final int position = rolesArrayAdapter.getPosition(role);
-
-    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
-    role.enqueue(new Callback<List<Role>>()
-    {
-      @Override
-      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-      {
-        data = response.body();
-//        ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
-        rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
-        spinnerRole.setAdapter(rolesArrayAdapter);
-
-//        Role r = data.get(spinnerRole.getSelectedItemPosition());
+//    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
+//    role.enqueue(new Callback<List<Role>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+//      {
+//        data = response.body();
+////        ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+//        rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+//        spinnerRole.setAdapter(rolesArrayAdapter);
 //
-//        String roleId = r.getId();
-
-        Role r = new Role();
-        r.setId(roleId);
-        final int position = rolesArrayAdapter.getPosition(r);
-
-        if (bundle != null)
-        {
-          Log.d("ROLE", roleId);
-
-          edittextName.setText(name);
-          edittextPass.setText(password);
-          spinnerRole.setSelection(position);
-        }
-
-      }
-
-      @Override
-      public void onFailure(Call<List<Role>> call, Throwable t)
-      {
-
-      }
-    });
+//        bundle = getIntent().getExtras();
+//        if (bundle != null)
+//        {
+//          String peopleId = bundle.getString("id");
+//          String name = bundle.getString("name");
+//          String password = bundle.getString("password");
+//          String roleId = bundle.getString("role");
+//
+//          Log.d("ROLE", roleId);
+//          Log.d("DATA NAME : ", name);
+//
+////          Role r = new Role();
+////          r.setId(roleId);
+////          final int position = rolesArrayAdapter.getPosition(r);
+//
+//          edittextName.setText(name);
+//          edittextPass.setText(password);
+//          spinnerRole.setSelection(Integer.valueOf(roleId));
+//        }
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Role>> call, Throwable t)
+//      {
+//
+//      }
+//    });
 
 
     setSupportActionBar(toolbar);

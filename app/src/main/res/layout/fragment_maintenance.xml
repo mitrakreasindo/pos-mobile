@@ -123,7 +123,7 @@
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_location_on"
                     android:textAllCaps="false"
-                    android:text="@string/users" />
+                    android:text="@string/location" />
 
                 <Button
                     android:id="@+id/btn_floors"

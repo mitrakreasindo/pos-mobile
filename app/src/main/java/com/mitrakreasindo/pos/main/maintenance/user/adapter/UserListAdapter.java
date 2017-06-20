@@ -85,7 +85,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       }
     });
 
-
 //        On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {

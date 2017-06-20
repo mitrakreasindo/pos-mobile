@@ -2,7 +2,6 @@ package com.mitrakreasindo.pos.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +24,6 @@ import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
-import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     tableCategoryHelper.downloadData(companyCode);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
-    tableProductHelper.downloadDataAlternate();
+    tableProductHelper.downloadDataAlternate(companyCode);
   }
 
   @Override

@@ -62,6 +62,7 @@
     <string name="reset_pickup_counter">Reset Pickup Counter</string>
     <string name="tables">Tables</string>
     <string name="resources">Resources</string>
+    <string name="location">Locations</string>
     <string name="consumer_tax_categories">Consumer Tax Categories</string>
     <string name="tax_categories">Tax Categories</string>
     <string name="taxes">Taxes</string>

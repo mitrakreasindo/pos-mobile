@@ -320,6 +320,12 @@ public class TableProductHelper
 
   private class HttpRequestTask extends AsyncTask<Void, Void, Product[]>
   {
+    private String kodeMerchant;
+
+    public HttpRequestTask(String kodeMerchant){
+      this.kodeMerchant = kodeMerchant;
+    }
+
     @Override
     protected Product[] doInBackground(Void... params)
     {
@@ -328,7 +334,7 @@ public class TableProductHelper
         final String url = RestVariable.URL_GET_PRODUCT;
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        Product[] product = restTemplate.getForObject(url, Product[].class);
+        Product[] product = restTemplate.getForObject(url, Product[].class, kodeMerchant);
         return product;
       }
       catch (Exception e)
@@ -348,9 +354,9 @@ public class TableProductHelper
     }
   }
 
-  public void downloadDataAlternate()
+  public void downloadDataAlternate(String kodeMerchant)
   {
-    new HttpRequestTask().execute();
+    new HttpRequestTask(kodeMerchant).execute();
   }
 
   public void downloadData(final String kodeMerchant)
