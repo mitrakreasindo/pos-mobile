@@ -1,19 +1,25 @@
 package com.mitrakreasindo.pos.main.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.mitrakreasindo.pos.main.MainQueueListAdapter;
+import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.sales.SalesActivity;
 
-import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.model.TableColumnWeightModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lisa on 15/06/17.
@@ -22,9 +28,10 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 public class MainFragment extends Fragment
 {
 
-  private TableView<String[]> table_product;
-  private static final String[][] DATA_TO_SHOW = { { "This", "is", "a", "test" },
-          { "and", "a", "second", "test" } };
+  private RecyclerView listQueue;
+  private MainQueueListAdapter queueListAdapter;
+  private Queue queue;
+  private Button menuSales, menuData, menuReceive, menuSetting, menuReport, menuExport;
 
   @Nullable
   @Override
@@ -32,25 +39,32 @@ public class MainFragment extends Fragment
   {
     View view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
 
-    table_product = (TableView<String[]>) view.findViewById(R.id.table_product);
-    table_product.setColumnCount(4);
+    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
+    queueListAdapter = new MainQueueListAdapter(getContext(), Queue.queueData());
 
-    table_product.setHeaderAdapter(new SimpleTableHeaderAdapter(getContext(), "No", "Nama", "Jumlah", "nilai"));
-    table_product.setDataAdapter(new SimpleTableDataAdapter(getContext(), DATA_TO_SHOW));
+    listQueue.setAdapter(queueListAdapter);
+    listQueue.setHasFixedSize(true);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
+    listQueue.setLayoutManager(layoutManager);
+    listQueue.setItemAnimator(new DefaultItemAnimator());
 
-    SimpleTableHeaderAdapter headerAdapter = new SimpleTableHeaderAdapter(getContext(), "No", "Nama", "Jumlah", "nilai");
+    menuSales = (Button) view.findViewById(R.id.btn_menu_sales);
+    menuData = (Button) view.findViewById(R.id.btn_menu_data);
+    menuReceive = (Button) view.findViewById(R.id.btn_menu_receive);
+    menuSetting = (Button) view.findViewById(R.id.btn_menu_setting);
+    menuReport = (Button) view.findViewById(R.id.btn_menu_report);
+    menuExport = (Button) view.findViewById(R.id.btn_menu_export);
 
-    TableColumnWeightModel columnWeightModel = new TableColumnWeightModel(4);
-    columnWeightModel.setColumnWeight(1, 2);
-    columnWeightModel.setColumnWeight(2, 2);
-    columnWeightModel.setColumnWeight(3, 2);
-    columnWeightModel.setColumnWeight(4, 2);
+    menuSales.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), SalesActivity.class));
+      }
+    });
 
-//    TableColumnDpWidthModel widthModel = new TableColumnDpWidthModel(getContext(), 4, 200);
-//    widthModel.setColumnWidth(1, 50);
-//    widthModel.setColumnWidth(2, 400);
-//    widthModel.setColumnWidth(3, 50);
-//    widthModel.setColumnWidth(4, 100);
+
     return view;
   }
 }

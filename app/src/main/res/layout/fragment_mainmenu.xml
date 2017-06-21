@@ -1,99 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-         Point Of Sale Start 
         <android.support.v7.widget.CardView
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
 
 
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:text="ONLINE"
-                    android:textStyle="bold"
-                    android:textColor="@color/light_green"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="ONLINE"
+                    android:textColor="@color/light_green"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <Button
-                        android:textColor="@color/white"
+                        android:id="@+id/btn_menu_sales"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"
+                        android:backgroundTint="@color/red400"
                         android:drawableTop="@drawable/ic_carts"
                         android:text="@string/sales"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:backgroundTint="@color/red400"
-                        android:layout_weight=".30"/>
+                        android:textColor="@color/white"/>
 
                     <Button
-                        android:textColor="@color/white"
+                        android:id="@+id/btn_menu_data"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"
+                        android:backgroundTint="@color/teal"
                         android:drawableTop="@drawable/data"
                         android:text="@string/data"
-                        android:backgroundTint="@color/teal"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_weight=".30"/>
+                        android:textColor="@color/white"/>
 
                     <Button
-                        android:textColor="@color/white"
-                        android:drawableTop="@drawable/receipt"
+                        android:id="@+id/btn_menu_receive"
                         android:layout_width="0dp"
-                        android:backgroundTint="@color/light_green"
-                        android:text="@string/receive"
                         android:layout_height="80dp"
-                        android:layout_weight=".30"/>
+                        android:layout_weight=".30"
+                        android:backgroundTint="@color/light_green"
+                        android:drawableTop="@drawable/receipt"
+                        android:text="@string/receive"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <Button
-                        android:textColor="@color/white"
-                        android:drawableTop="@drawable/settings"
+                        android:id="@+id/btn_menu_setting"
                         android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"
                         android:backgroundTint="@color/blue"
+                        android:drawableTop="@drawable/settings"
                         android:text="@string/action_settings"
-                        android:layout_height="80dp"
-                        android:layout_weight=".30"/>
+                        android:textColor="@color/white"/>
 
                     <Button
-                        android:textColor="@color/white"
-                        android:drawableTop="@drawable/chart"
+                        android:id="@+id/btn_menu_report"
                         android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".30"
                         android:backgroundTint="@color/deep_purple"
+                        android:drawableTop="@drawable/chart"
                         android:text="@string/reports"
-                        android:layout_height="80dp"
-                        android:layout_weight=".30"/>
+                        android:textColor="@color/white"/>
 
                     <Button
-                        android:textColor="@color/white"
-                        android:drawableTop="@drawable/data_export"
+                        android:id="@+id/btn_menu_export"
                         android:layout_width="0dp"
-                        android:text="@string/export"
-                        android:backgroundTint="@color/blue_gray"
                         android:layout_height="80dp"
-                        android:layout_weight=".30"/>
+                        android:layout_weight=".30"
+                        android:backgroundTint="@color/blue_gray"
+                        android:drawableTop="@drawable/data_export"
+                        android:text="@string/export"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -103,107 +111,110 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
 
 
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:text="Dashboard"
-                    android:textStyle="bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="Dashboard"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:layout_weight=".50"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <TextView
-                            android:text="@string/today_s_revenue"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="150.000.000"
-                            android:textStyle="bold"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="@string/today_s_revenue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
                             android:text="126.000.000"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textStyle="bold"/>
 
                         <TextView
-                            android:text="30.24%"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="30.24%"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
-                    <include layout="@layout/vertical_divider" />
+                    <include layout="@layout/vertical_divider"/>
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:layout_weight=".50"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <TextView
-                            android:text="@string/today_s_revenue"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="150.000.000"
-                            android:textStyle="bold"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="@string/today_s_revenue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
                             android:text="126.000.000"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textStyle="bold"/>
 
                         <TextView
-                            android:text="30.24%"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="30.24%"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
@@ -212,128 +223,165 @@
                 <include layout="@layout/horizontal_divider"/>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:layout_weight=".50"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <TextView
-                            android:text="@string/today_s_revenue"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="150.000.000"
-                            android:textStyle="bold"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="@string/today_s_revenue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
                             android:text="126.000.000"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textStyle="bold"/>
 
                         <TextView
-                            android:text="30.24%"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="30.24%"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
-                    <include layout="@layout/vertical_divider" />
+                    <include layout="@layout/vertical_divider"/>
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:layout_weight=".50"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".50"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <TextView
-                            android:text="@string/today_s_revenue"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="150.000.000"
-                            android:textStyle="bold"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/today_s_revenue"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="@string/today_s_revenue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
                             android:text="126.000.000"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textStyle="bold"/>
 
                         <TextView
-                            android:text="30.24%"
-                            android:textStyle="bold"
-                            android:layout_gravity="right"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="30.24%"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
                 </LinearLayout>
-
-
-
 
             </LinearLayout>
 
 
         </android.support.v7.widget.CardView>
-        
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:background="@color/colorAccent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:text="No"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:text="Name Product"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:text="Nomor Antrian"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:text="Nilai"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
 
                 </LinearLayout>
-                
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_queue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v7.widget.RecyclerView>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
-
-
-        <de.codecrafters.tableview.TableView
-            android:id="@+id/table_product"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-        <!-- Reports End -->
 
     </LinearLayout>
 </ScrollView>
