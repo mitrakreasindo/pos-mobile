@@ -160,17 +160,17 @@ public class TableCategoryHelper
       public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
       {
         final List<Category> list = response.body();
-        new Thread(new Runnable()
-        {
-          @Override
-          public void run()
-          {
+//        new Thread(new Runnable()
+//        {
+//          @Override
+//          public void run()
+//          {
             open();
             deleteAll();
             insert(list);
             close();
-          }
-        }).start();
+//          }
+//        }).start();
       }
 
       @Override

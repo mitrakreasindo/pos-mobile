@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +25,8 @@ public class StockFragment extends Fragment
   public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState)
   {
     View view = inflater.inflate(R.layout.fragment_stock, container, false);
+
+    ItemVisibility.hideButton(R.layout.fragment_stock, view);
 
     Button btnCategories = (Button) view.findViewById(R.id.btn_stok_mnt_categories);
     Button btnProducts = (Button) view.findViewById(R.id.btn_stok_mnt_products);

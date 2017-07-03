@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
@@ -19,8 +20,6 @@ import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
 
 public class MaintenanceFragment extends Fragment
 {
-
-
   @Nullable
   @Override
   public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -28,6 +27,8 @@ public class MaintenanceFragment extends Fragment
 
     Button btnUsers, btnRoles;
     View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
+
+    ItemVisibility.hideButton(R.layout.fragment_maintenance, view);
 
     btnUsers = (Button) view.findViewById(R.id.btn_users);
     btnRoles = (Button) view.findViewById(R.id.btn_roles);

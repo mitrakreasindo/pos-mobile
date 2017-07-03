@@ -368,17 +368,17 @@ public class TableProductHelper
       public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
       {
         final List<Product> list = response.body();
-        new Thread(new Runnable()
-        {
-          @Override
-          public void run()
-          {
+//        new Thread(new Runnable()
+//        {
+//          @Override
+//          public void run()
+//          {
             open();
             deleteAll();
             insert(list);
             close();
-          }
-        }).start();
+//          }
+//        }).start();
       }
 
       @Override

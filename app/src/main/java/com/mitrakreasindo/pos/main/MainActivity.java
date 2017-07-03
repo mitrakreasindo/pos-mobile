@@ -1,12 +1,14 @@
 package com.mitrakreasindo.pos.main;
 
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
+
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     toggle.syncState();
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    ItemVisibility.hideItemNavigation(navigationView);
     navigationView.setNavigationItemSelectedListener(this);
 
     valueUser = getIntent().getExtras().getString("USERNAME");
@@ -75,9 +80,10 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
 
-    FragmentManager fragmentManager = getSupportFragmentManager();
     MainFragment mainFragment = new MainFragment();
-    fragmentManager.beginTransaction().replace(R.id.main_content, mainFragment, mainFragment.getTag()).commit();
+    getSupportFragmentManager().beginTransaction()
+      .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
+    getSupportFragmentManager().executePendingTransactions();
 
     TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
     tablePeopleHelper.downloadData(companyCode);
@@ -99,7 +105,31 @@ public class MainActivity extends AppCompatActivity
     }
     else
     {
-      super.onBackPressed();
+      Fragment mainFragment = getFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
+      if (mainFragment != null && mainFragment.isVisible())
+      {
+        new AlertDialog.Builder(this)
+          .setIcon(android.R.drawable.ic_dialog_alert)
+          .setTitle("Logout from POS++")
+          .setMessage("Are you sure you want to logout?")
+          .setPositiveButton
+            (
+              "Yes", new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                  finish();
+                }
+              }
+            )
+          .setNegativeButton("No", null)
+          .show();
+      }
+      else
+      {
+        super.onBackPressed();
+      }
     }
   }
 
@@ -110,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     return super.onCreateOptionsMenu(menu);
   }
 
-  //    @Override
+//      @Override
 //    public boolean onCreateOptionsMenu(Menu menu)
 //    {
 //        // Inflate the menu; this adds items to the action bar if it is present.
@@ -152,24 +182,30 @@ public class MainActivity extends AppCompatActivity
       Toast.makeText(this, "Maintenance", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Maintenance");
       MaintenanceFragment maintenanceFragment = new MaintenanceFragment();
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      fragmentManager.beginTransaction().replace(R.id.main_content, maintenanceFragment, maintenanceFragment.getTag()).commit();
+      getSupportFragmentManager().beginTransaction()
+        .replace(R.id.main_content, maintenanceFragment, "MAINTENANCE_FRAGMENT")
+        .addToBackStack("MAINTENANCE_FRAGMENT").commit();
+      getSupportFragmentManager().executePendingTransactions();
     }
     else if (id == R.id.nd_stock)
     {
       Toast.makeText(this, "Stock", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Stock");
       StockFragment stockFragment = new StockFragment();
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      fragmentManager.beginTransaction().replace(R.id.main_content, stockFragment, stockFragment.getTag()).commit();
+      getSupportFragmentManager().beginTransaction()
+        .replace(R.id.main_content, stockFragment, "STOCK_FRAGMENT")
+        .addToBackStack("STOCK_FRAGMENT").commit();
+      getSupportFragmentManager().executePendingTransactions();
     }
     else if (id == R.id.nd_sales)
     {
       Toast.makeText(this, "Sales", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Sales");
       SalesFragment salesFragment = new SalesFragment();
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      fragmentManager.beginTransaction().replace(R.id.main_content, salesFragment, salesFragment.getTag()).commit();
+      getSupportFragmentManager().beginTransaction()
+        .replace(R.id.main_content, salesFragment, "SALES_FRAGMENT")
+        .addToBackStack("SALES_FRAGMENT").commit();
+      getSupportFragmentManager().executePendingTransactions();
     }
     else if (id == R.id.nd_customer_payment)
     {

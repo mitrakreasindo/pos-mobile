@@ -49,8 +49,6 @@ import retrofit2.Response;
 
 public class UserFormActivity extends AppCompatActivity
 {
-
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.textview_name)
@@ -97,7 +95,7 @@ public class UserFormActivity extends AppCompatActivity
   private List<Role> data;
   private int RESULT_LOAD_IMG;
   private Bundle bundle;
-  private String kodeMerchant;
+  private String kodeMerchant, peopleId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -119,7 +117,7 @@ public class UserFormActivity extends AppCompatActivity
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
-      String peopleId = bundle.getString("id");
+      peopleId = bundle.getString("id");
       String name = bundle.getString("name");
       String password = bundle.getString("password");
       String roleId = bundle.getString("role");
@@ -127,54 +125,29 @@ public class UserFormActivity extends AppCompatActivity
       Log.d("ROLE", roleId);
       Log.d("DATA NAME : ", name);
 
-//          Role r = new Role();
-//          r.setId(roleId);
-//          final int position = rolesArrayAdapter.getPosition(r);
-
       edittextName.setText(name);
       edittextPass.setText(password);
-      spinnerRole.setSelection(Integer.valueOf(roleId));
+
+      int spinnerPosition = 0;
+
+      if (!roleId.equals(null))
+      {
+        int i = 0;
+        while (i < data.size())
+        {
+          if (data.get(i).getId().equals(roleId))
+          {
+            spinnerPosition = i;
+            break;
+          }
+          i++;
+        }
+
+        Log.d("ROLE_ID", String.valueOf(spinnerPosition));
+        spinnerRole.setSelection(spinnerPosition);
+      }
+
     }
-
-//    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
-//    role.enqueue(new Callback<List<Role>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-//      {
-//        data = response.body();
-////        ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
-//        rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
-//        spinnerRole.setAdapter(rolesArrayAdapter);
-//
-//        bundle = getIntent().getExtras();
-//        if (bundle != null)
-//        {
-//          String peopleId = bundle.getString("id");
-//          String name = bundle.getString("name");
-//          String password = bundle.getString("password");
-//          String roleId = bundle.getString("role");
-//
-//          Log.d("ROLE", roleId);
-//          Log.d("DATA NAME : ", name);
-//
-////          Role r = new Role();
-////          r.setId(roleId);
-////          final int position = rolesArrayAdapter.getPosition(r);
-//
-//          edittextName.setText(name);
-//          edittextPass.setText(password);
-//          spinnerRole.setSelection(Integer.valueOf(roleId));
-//        }
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Role>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-
 
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(R.string.action_register);
@@ -186,13 +159,7 @@ public class UserFormActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
-
-//    getRole();
-
-
   }
-
 
   public void Select(View view)
   {
@@ -228,48 +195,27 @@ public class UserFormActivity extends AppCompatActivity
 
   public void ConfirmRegisterPeople(View view)
   {
-    postPeople();
-    finish();
+    if (bundle != null)
+    {
+      updatePeople();
+    }
+    else
+    {
+      postPeople();
+    }
   }
 
   public void Cancel(View view)
   {
-
     finish();
-//    postPeople();
   }
-
-//  private void getRole()
-//  {
-//
-//    final Call<List<Role>> role = roleService.getRoleAll();
-//    role.enqueue(new Callback<List<Role>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-//      {
-//        final List<Role> data = response.body();
-//        final ArrayAdapter<Role> rolesArrayAdapter = new ArrayAdapter<Role>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
-//        spinnerRole.setAdapter(rolesArrayAdapter);
-//
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Role>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//  }
 
   private void postPeople()
   {
-
     final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
     Log.d(getClass().getSimpleName(), "Post Role !!!");
-
 
     role = new Role();
     role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
@@ -293,7 +239,7 @@ public class UserFormActivity extends AppCompatActivity
       public void onResponse(Call<List<People>> call, Response<List<People>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Post Role !!!");
-        onBackPressed();
+        finish();
       }
 
       @Override
@@ -301,53 +247,41 @@ public class UserFormActivity extends AppCompatActivity
       {
       }
     });
-
-    Intent intent = new Intent(UserFormActivity.this, UserActivity.class);
-    startActivity(intent);
-
-    finish();
-
   }
 
   private void updatePeople()
   {
-
-    final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
-    progressDialog.setMessage("Please wait...");
-    progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
-
-    String roleValue = spinnerRole.getSelectedItem().toString();
-
-
-//        String example = "Convert Java String";
-//        byte[] bytes = example.getBytes();
+//    final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
+//    progressDialog.setMessage("Please wait...");
+//    progressDialog.show();
+    Log.d(getClass().getSimpleName(), "Update Role !!!");
 
     role = new Role();
-    role.setId("1");
-
+    role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
+    Log.d("Spinner Position", String.valueOf(spinnerRole.getSelectedItemPosition()));
+    Log.d("Role ID", data.get(spinnerRole.getSelectedItemPosition()).getId());
 
     people = new People();
     people.setName(edittextName.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
-//        people.setRole();
     people.setVisible(true);
     people.setImage(null);
     people.setSiteguid(null);
     people.setSflag(true);
     people.setEmail(null);
     people.setRole(role);
-//        people.setRole(spinnerRole.getSelectedItem().toString());
 
-    Call<List<People>> call = peopleService.postPeople(kodeMerchant, people);
+    Log.d("KODE MERCHANT", kodeMerchant);
+    Log.d("People ID", peopleId);
+    Call<List<People>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
     call.enqueue(new Callback<List<People>>()
     {
       @Override
       public void onResponse(Call<List<People>> call, Response<List<People>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Post Role !!!");
-        onBackPressed();
+        Log.d(getClass().getSimpleName(), "Success Update Role !!!");
+        finish();
       }
 
       @Override
@@ -355,11 +289,5 @@ public class UserFormActivity extends AppCompatActivity
       {
       }
     });
-
-    Intent intent = new Intent(UserFormActivity.this, UserActivity.class);
-    startActivity(intent);
-
-    finish();
-
   }
 }

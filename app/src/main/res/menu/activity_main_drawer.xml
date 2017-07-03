@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
 
@@ -21,7 +22,6 @@
                     android:id="@+id/nd_payment"
                     android:icon="@drawable/ic_payment"
                     android:title="Payment" />
-
                 <item
                     android:id="@+id/nd_close_cash"
                     android:icon="@drawable/ic_dialpad"
@@ -55,7 +55,9 @@
         </menu>
     </item>
 
-    <item android:title="Utilities">
+    <item
+        android:id="@+id/item_utilities"
+        android:title="Utilities">
         <menu>
             <item
                 android:id="@+id/nd_tools"

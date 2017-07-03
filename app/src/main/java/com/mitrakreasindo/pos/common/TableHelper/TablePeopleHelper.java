@@ -129,11 +129,13 @@ public class TablePeopleHelper
     {
       List<People> list = new ArrayList<>();
 
+      int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
       int roleIndex = cursor.getColumnIndexOrThrow(KEY_ROLE);
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
+        String id = cursor.getString(idIndex);
         String name = cursor.getString(nameIndex);
         String role = cursor.getString(roleIndex);
 
@@ -141,6 +143,7 @@ public class TablePeopleHelper
         r.setId(role);
 
         People people = new People();
+        people.setId(id);
         people.setName(name);
         people.setRole(r);
         list.add(people);
@@ -173,17 +176,17 @@ public class TablePeopleHelper
       public void onResponse(Call<List<People>> call, Response<List<People>> response)
       {
         final List<People> list = response.body();
-        new Thread(new Runnable()
-        {
-          @Override
-          public void run()
-          {
+//        new Thread(new Runnable()
+//        {
+//          @Override
+//          public void run()
+//          {
             open();
             deleteAll();
             insert(list);
             close();
-          }
-        }).start();
+//          }
+//        }).start();
       }
 
       @Override

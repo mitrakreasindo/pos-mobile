@@ -102,7 +102,7 @@ public class RoleActivity extends AppCompatActivity
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
         roleAdapter.clear();
-        roleAdapter.addRole(tableRoleHelper.getData(txtFilter.getText().toString()));
+        roleAdapter.addRole(tableRoleHelper.getDataByName(txtFilter.getText().toString()));
       }
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)

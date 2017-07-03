@@ -136,13 +136,22 @@ public class TableRoleHelper
             null, null, null, null, "1"));
   }
 
-  public List<Role> getData(String name)
+  public List<Role> getDataByName(String name)
   {
     open();
 
     return populateRole(db.query(DATABASE_TABLE,
             new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
             KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+  }
+
+  public List<Role> getDataById(String id)
+  {
+    open();
+
+    return populateRole(db.query(DATABASE_TABLE,
+      new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+      KEY_ID + " LIKE '%"+id+"%'", null, null, null, null));
   }
 
   public void downloadData(final String kodeMerchant)
@@ -154,17 +163,17 @@ public class TableRoleHelper
       public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         final List<Role> list = response.body();
-        new Thread(new Runnable()
-        {
-          @Override
-          public void run()
-          {
+//        new Thread(new Runnable()
+//        {
+//          @Override
+//          public void run()
+//          {
             open();
             deleteAll();
             insert(list);
             close();
-          }
-        }).start();
+//          }
+//        }).start();
       }
 
       @Override
