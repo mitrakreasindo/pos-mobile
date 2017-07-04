@@ -82,6 +82,9 @@
         </activity>
         <activity android:name=".sales.SalesActivity">
         </activity>
+
+        <activity android:name=".stock.diary.activity.DiarySelectProductActivity">
+        </activity>
     </application>
 
 </manifest>

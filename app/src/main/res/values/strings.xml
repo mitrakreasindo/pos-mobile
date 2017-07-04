@@ -147,5 +147,8 @@
     <string name="export">Export</string>
     <string name="logout">Logout</string>
     <string name="today_s_revenue">Today\'s Revenue</string>
+    <string name="product">Product</string>
+    <string name="scan">Scan</string>
+    <string name="select">Select</string>
 
 </resources>

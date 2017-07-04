@@ -13,6 +13,7 @@ import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryActivity;
+import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 
 /**
@@ -55,7 +56,7 @@ public class StockFragment extends Fragment
       @Override
       public void onClick(View v)
       {
-        startActivity(new Intent(getActivity(), DiaryActivity.class));
+        startActivity(new Intent(getActivity(), DiaryFormActivity.class));
       }
     });
 
