@@ -1,6 +1,8 @@
 package com.mitrakreasindo.pos.main.stock.diary.controller;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,11 +53,30 @@ public class DiarySelectProductController extends RecyclerView.Adapter<DiarySele
   public void onBindViewHolder(final DiarySelectProductController.ViewHolder holder, final int position)
   {
     final Product product = products.get(position);
+
+    holder.txtCodeProduct.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Intent intent = new Intent();
+        intent.putExtra("barcode", product.getCode());
+        intent.putExtra("name", product.getName());
+        intent.putExtra("instock", product.getStockunits());
+        intent.putExtra("buyprice", product.getPricebuy());
+        intent.putExtra("sellprice", product.getPricesell());
+        ((Activity) context).setResult(Activity.RESULT_OK, intent);
+        ((Activity) context).onBackPressed();
+      }
+    });
+
     holder.txtCodeProduct.setText(product.getCode());
     holder.txtSellPrice.setText("IDR " + Double.toString(product.getPricesell()));
     holder.txtNameProduct.setText(product.getName());
     holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
     holder.checkBox.setVisibility(View.GONE);
+
+
   }
 
   public void addProduct(Product product)

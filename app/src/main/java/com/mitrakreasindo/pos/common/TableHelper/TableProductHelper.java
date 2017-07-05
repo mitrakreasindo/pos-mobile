@@ -187,6 +187,7 @@ public class TableProductHelper
 
       int codeIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_code));
       int nameIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_name));
+      int inStockIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockunits));
       int priceSellIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_pricesell));
       int priceBuyIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_pricebuy));
 
@@ -194,12 +195,14 @@ public class TableProductHelper
       {
         String code = cursor.getString(codeIndex);
         String name = cursor.getString(nameIndex);
+        double inStock = cursor.getDouble(inStockIndex);
         double priceSell = cursor.getDouble(priceSellIndex);
         double priceBuy = cursor.getDouble(priceBuyIndex);
 
         Product product = new Product();
         product.setCode(code);
         product.setName(name);
+        product.setStockunits(inStock);
         product.setPricesell(priceSell);
         product.setPricebuy(priceBuy);
         list.add(product);

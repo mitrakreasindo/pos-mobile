@@ -150,5 +150,6 @@
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
+    <string name="price">Price</string>
 
 </resources>

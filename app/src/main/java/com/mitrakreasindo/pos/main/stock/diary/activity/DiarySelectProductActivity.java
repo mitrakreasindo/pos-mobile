@@ -1,24 +1,34 @@
 package com.mitrakreasindo.pos.main.stock.diary.activity;
 
-import android.graphics.Color;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
+import com.mitrakreasindo.pos.main.stock.diary.controller.DiarySelectProductController;
+import com.mitrakreasindo.pos.model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,25 +41,35 @@ import butterknife.ButterKnife;
 public class DiarySelectProductActivity extends AppCompatActivity
 {
 
-//  @BindView(R.id.toolbar)
-//  Toolbar toolbar;
-//  @BindView(R.id.appbar)
-//  AppBarLayout appbar;
-//  @BindView(R.id.barcode_scanner)
-//  DecoratedBarcodeView barcodeScanner;
-//  @BindView(R.id.list_select_product)
-//  RecyclerView listSelectProduct;
 
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.appbar)
+  AppBarLayout appbar;
+  @BindView(R.id.barcode_scanner)
+  DecoratedBarcodeView barcodeScanner;
+  @BindView(R.id.list_select_product)
+  RecyclerView listSelectProduct;
+  @BindView(R.id.edit_filter)
+  EditText editFilter;
+  @BindView(R.id.button_filter)
+  Button buttonFilter;
+
+  private DiarySelectProductController diarySelectProductController;
+  private TableProductHelper tableProductHelper;
 
   private static final String TAG = SalesActivity.class.getSimpleName();
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
 
-  private BarcodeCallback callback = new BarcodeCallback() {
+  private BarcodeCallback callback = new BarcodeCallback()
+  {
     @Override
-    public void barcodeResult(BarcodeResult result) {
-      if(result.getText() == null || result.getText().equals(lastText)) {
+    public void barcodeResult(BarcodeResult result)
+    {
+      if (result.getText() == null || result.getText().equals(lastText))
+      {
         // Prevent duplicate scans
         return;
       }
@@ -58,13 +78,14 @@ public class DiarySelectProductActivity extends AppCompatActivity
       barcodeView.setStatusText(result.getText());
       beepManager.playBeepSoundAndVibrate();
 
-      //Added preview of scanned barcode
-//      ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
-//      imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+      editFilter.setText(lastText);
+      Toast.makeText(DiarySelectProductActivity.this, lastText, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
-    public void possibleResultPoints(List<ResultPoint> resultPoints) {
+    public void possibleResultPoints(List<ResultPoint> resultPoints)
+    {
     }
   };
 
@@ -76,41 +97,99 @@ public class DiarySelectProductActivity extends AppCompatActivity
     setContentView(R.layout.activity_diary_select_product);
     ButterKnife.bind(this);
 
+    diarySelectProductController = new DiarySelectProductController(this, new ArrayList<Product>());
+
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
 
     beepManager = new BeepManager(this);
 
+    listSelectProduct.setHasFixedSize(true);
+    listSelectProduct.setAdapter(diarySelectProductController);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+    listSelectProduct.setLayoutManager(layoutManager);
+
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
+
+    tableProductHelper = new TableProductHelper(this);
+
+    diarySelectProductController.clear();
+    diarySelectProductController.addProduct(tableProductHelper.getData());
+
+    editFilter.addTextChangedListener(new TextWatcher()
+    {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count)
+      {
+        diarySelectProductController.clear();
+        diarySelectProductController.addProduct(tableProductHelper.getData(editFilter.getText().toString()));
+      }
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+
+      }
+    });
+
+    buttonFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        editFilter.setText("");
+      }
+    });
+
   }
 
   @Override
-  protected void onResume() {
+  protected void onResume()
+  {
     super.onResume();
 
     barcodeView.resume();
   }
 
   @Override
-  protected void onPause() {
+  protected void onPause()
+  {
     super.onPause();
 
     barcodeView.pause();
   }
 
-  public void pause(View view) {
+  public void pause(View view)
+  {
     barcodeView.pause();
   }
 
-  public void resume(View view) {
+  public void resume(View view)
+  {
     barcodeView.resume();
   }
 
-  public void triggerScan(View view) {
+  public void triggerScan(View view)
+  {
     barcodeView.decodeSingle(callback);
   }
 
   @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
+  public boolean onKeyDown(int keyCode, KeyEvent event)
+  {
     return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
   }
 
