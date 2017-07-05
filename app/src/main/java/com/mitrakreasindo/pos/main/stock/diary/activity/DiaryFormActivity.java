@@ -3,12 +3,11 @@ package com.mitrakreasindo.pos.main.stock.diary.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,9 +20,23 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.RestVariable;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.model.Location;
+import com.mitrakreasindo.pos.model.Product;
+import com.mitrakreasindo.pos.model.StockDiary;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +78,7 @@ public class DiaryFormActivity extends AppCompatActivity
   private Bundle bundle;
   private String barcode, name;
   private double inStock, buyPrice, sellPrice, unit, price;
+  private String companyCode;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -73,6 +87,7 @@ public class DiaryFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_diary_form);
     ButterKnife.bind(this);
 
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -125,6 +140,16 @@ public class DiaryFormActivity extends AppCompatActivity
         }, mYear, mMonth, mDay);
 
         datePickerDialog.show();
+      }
+    });
+
+    button.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Log.d("COMPANY CODE : ", companyCode);
+        postStockDiary();
       }
     });
 
@@ -211,4 +236,86 @@ public class DiaryFormActivity extends AppCompatActivity
     }
     return super.onOptionsItemSelected(item);
   }
+
+
+  public void postStockDiary()
+  {
+    new HttpRequestTask().execute();
+  }
+
+  private class HttpRequestTask extends AsyncTask<Object, Object, StockDiary>
+  {
+    private String kodeMerchant;
+    private StockDiary stockDiary;
+
+    public HttpRequestTask(){
+//      this.kodeMerchant = kodeMerchant;
+    }
+
+    @Override
+    protected void onPreExecute()
+    {
+
+      Location location = new Location();
+      location.setId("0");
+
+      Product product = new Product();
+      product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
+
+      stockDiary = new StockDiary();
+      stockDiary.setId(UUID.randomUUID().toString());
+      stockDiary.setReason(1);
+      stockDiary.setUnits(118);
+      stockDiary.setPrice(400);
+      stockDiary.setAppuser("a");
+      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      stockDiary.setSflag(true);
+      stockDiary.setAttributesetInstanceId(null);
+      stockDiary.setLocation(location);
+      stockDiary.setProduct(product);
+
+    }
+
+    @Override
+    protected StockDiary doInBackground(Object... params)
+    {
+      try
+      {
+//        final String url = RestVariable.SERVER_URL + "chromis.stockdiary/public/";
+        final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.stockdiary/public/";
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+        requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON.toString());
+//        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+//        requestHeaders.setAccept((List<MediaType>) MediaType.APPLICATION_JSON);
+
+        HttpEntity<StockDiary> request = new HttpEntity<StockDiary>(stockDiary, requestHeaders);
+
+
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        ResponseEntity<StockDiary> responseEntity = restTemplate.postForEntity(url, request, StockDiary.class);
+
+//        StockDiary result = restTemplate.postForObject(url, request, StockDiary.class);
+
+//        Log.d("RESULT : ", responseEntity.toString());
+//        return responseEntity.getBody();
+//        System.out.print();
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace();
+        Log.e("TableProductHelper", e.getMessage(), e);
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(StockDiary list)
+    {
+      Toast.makeText(DiaryFormActivity.this, "Stock Diary Created!", Toast.LENGTH_LONG).show();
+    }
+  }
+
 }

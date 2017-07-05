@@ -154,6 +154,8 @@ public class DiarySelectProductActivity extends AppCompatActivity
       }
     });
 
+
+
   }
 
   @Override
