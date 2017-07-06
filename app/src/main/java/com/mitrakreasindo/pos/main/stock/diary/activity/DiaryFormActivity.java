@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.main.stock.diary.activity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,9 +21,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.stock.diary.service.DiaryStockService;
+import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
@@ -35,11 +41,16 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DiaryFormActivity extends AppCompatActivity
 {
@@ -79,6 +90,9 @@ public class DiaryFormActivity extends AppCompatActivity
   private String barcode, name;
   private double inStock, buyPrice, sellPrice, unit, price;
   private String companyCode;
+  private DiaryStockService diaryStockService;
+
+  private StockDiary stockDiary;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -88,6 +102,8 @@ public class DiaryFormActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
+
+    diaryStockService = ClientService.createService().create(DiaryStockService.class);
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -152,34 +168,6 @@ public class DiaryFormActivity extends AppCompatActivity
         postStockDiary();
       }
     });
-
-//      unit = Double.valueOf(diaryUnitField.getText().toString());
-//      price = Double.valueOf(diaryProductPriceField.getText().toString());
-
-//    diaryUnitField.addTextChangedListener(new TextWatcher()
-//    {
-//      @Override
-//      public void onTextChanged(CharSequence s, int start, int before, int count)
-//      {
-//
-//      }
-//
-//      @Override
-//      public void beforeTextChanged(CharSequence s, int start, int count, int after)
-//      {
-//
-//      }
-//
-//      @Override
-//      public void afterTextChanged(Editable s)
-//      {
-//        int unit = Integer.parseInt(diaryUnitField.getText().toString());
-//        int price = Integer.parseInt(diaryProductPriceField.getText().toString());
-//        int total = unit * price;
-//        diaryProductTotal.setText(String.valueOf(total));
-//      }
-//    });
-//
   }
 
   @Override
@@ -220,102 +208,155 @@ public class DiaryFormActivity extends AppCompatActivity
 //    Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu)
+  private void postStockDiary()
   {
-    getMenuInflater().inflate(R.menu.default_form_menu, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
+    final ProgressDialog progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage("Please wait...");
+    progressDialog.show();
+    Log.d(getClass().getSimpleName(), "Post Role !!!");
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item)
-  {
-    if (item.getItemId() == R.id.action_confirm)
+    String example = "Convert Java String";
+    byte[] bytes = example.getBytes();
+
+    Location location = new Location();
+    location.setId("0");
+
+    Product product = new Product();
+    product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
+
+    stockDiary = new StockDiary();
+    stockDiary.setId(UUID.randomUUID().toString());
+    stockDiary.setReason(1);
+    stockDiary.setUnits(118);
+    stockDiary.setPrice(400);
+    stockDiary.setAppuser("a");
+    stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    stockDiary.setSflag(true);
+    stockDiary.setAttributesetInstanceId(null);
+    stockDiary.setLocation(location);
+    stockDiary.setProduct(product);
+
+    Call<List<StockDiary>> call = diaryStockService.postStockDiary(companyCode, stockDiary);
+    call.enqueue(new Callback<List<StockDiary>>()
     {
-
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-
-  public void postStockDiary()
-  {
-    new HttpRequestTask().execute();
-  }
-
-  private class HttpRequestTask extends AsyncTask<Object, Object, StockDiary>
-  {
-    private String kodeMerchant;
-    private StockDiary stockDiary;
-
-    public HttpRequestTask(){
-//      this.kodeMerchant = kodeMerchant;
-    }
-
-    @Override
-    protected void onPreExecute()
-    {
-
-      Location location = new Location();
-      location.setId("0");
-
-      Product product = new Product();
-      product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
-
-      stockDiary = new StockDiary();
-      stockDiary.setId(UUID.randomUUID().toString());
-      stockDiary.setReason(1);
-      stockDiary.setUnits(118);
-      stockDiary.setPrice(400);
-      stockDiary.setAppuser("a");
-      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-      stockDiary.setSflag(true);
-      stockDiary.setAttributesetInstanceId(null);
-      stockDiary.setLocation(location);
-      stockDiary.setProduct(product);
-
-    }
-
-    @Override
-    protected StockDiary doInBackground(Object... params)
-    {
-      try
+      @Override
+      public void onResponse(Call<List<StockDiary>> call, Response<List<StockDiary>> response)
       {
-//        final String url = RestVariable.SERVER_URL + "chromis.stockdiary/public/";
-        final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.stockdiary/public/";
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
-        requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON.toString());
-//        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-//        requestHeaders.setAccept((List<MediaType>) MediaType.APPLICATION_JSON);
-
-        HttpEntity<StockDiary> request = new HttpEntity<StockDiary>(stockDiary, requestHeaders);
-
-
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        ResponseEntity<StockDiary> responseEntity = restTemplate.postForEntity(url, request, StockDiary.class);
-
-//        StockDiary result = restTemplate.postForObject(url, request, StockDiary.class);
-
-//        Log.d("RESULT : ", responseEntity.toString());
-//        return responseEntity.getBody();
-//        System.out.print();
+        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
       }
-      catch (Exception e)
+
+      @Override
+      public void onFailure(Call<List<StockDiary>> call, Throwable t)
       {
-        e.printStackTrace();
-        Log.e("TableProductHelper", e.getMessage(), e);
       }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(StockDiary list)
-    {
-      Toast.makeText(DiaryFormActivity.this, "Stock Diary Created!", Toast.LENGTH_LONG).show();
-    }
+    });
+//    onBackPressed();
+    Log.d("Diary content : ", stockDiary.toString());
+    progressDialog.dismiss();
   }
+
+
+//  @Override
+//  public boolean onCreateOptionsMenu(Menu menu)
+//  {
+//    getMenuInflater().inflate(R.menu.default_form_menu, menu);
+//    return super.onCreateOptionsMenu(menu);
+//  }
+//
+//  @Override
+//  public boolean onOptionsItemSelected(MenuItem item)
+//  {
+//    if (item.getItemId() == R.id.action_confirm)
+//    {
+//
+//    }
+//    return super.onOptionsItemSelected(item);
+//  }
+//
+//
+//  public void postStockDiary()
+//  {
+//    new HttpRequestTask().execute();
+//  }
+//
+//  private class HttpRequestTask extends AsyncTask<Object, Object, StockDiary>
+//  {
+//    private String kodeMerchant;
+//    private StockDiary stockDiary;
+//
+//    public HttpRequestTask(){
+////      this.kodeMerchant = kodeMerchant;
+//    }
+//
+//    @Override
+//    protected void onPreExecute()
+//    {
+//
+//      Location location = new Location();
+//      location.setId("0");
+//
+//      Product product = new Product();
+//      product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
+//
+//      stockDiary = new StockDiary();
+//      stockDiary.setId(UUID.randomUUID().toString());
+//      stockDiary.setReason(1);
+//      stockDiary.setUnits(118);
+//      stockDiary.setPrice(400);
+//      stockDiary.setAppuser("a");
+//      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//      stockDiary.setSflag(true);
+//      stockDiary.setAttributesetInstanceId(null);
+//      stockDiary.setLocation(location);
+//      stockDiary.setProduct(product);
+//
+//    }
+//
+//    @Override
+//    protected StockDiary doInBackground(Object... params)
+//    {
+//
+//      try
+//      {
+//        final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.stockdiary/public/";
+////        final String url = RestVariable.SERVER_URL + "chromis.stockdiary/public/";
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        HttpHeaders requestHeaders = new HttpHeaders();
+//        requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+//        requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON.toString());
+////        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+////        requestHeaders.setAccept((List<MediaType>) MediaType.APPLICATION_JSON);
+//
+//        String json = restTemplate.getForObject(url, String.class);
+//        Map<Integer,String> map = new HashMap<Integer, String>();
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        HttpEntity<StockDiary> request = new HttpEntity<StockDiary>(stockDiary, requestHeaders);
+//
+//        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+//        map = mapper.readValue( json,new TypeReference<HashMap<Integer,String>>(){});
+//        ResponseEntity<StockDiary> responseEntity = restTemplate.postForEntity(url, request, StockDiary.class);
+//
+////        StockDiary result = restTemplate.postForObject(url, request, StockDiary.class);
+//
+////        Log.d("RESULT : ", responseEntity.toString());
+////        return responseEntity.getBody();
+////        System.out.print();
+//      }
+//      catch (Exception e)
+//      {
+//        e.printStackTrace();
+//        Log.e("TableProductHelper", e.getMessage(), e);
+//      }
+//      return null;
+//    }
+//
+//    @Override
+//    protected void onPostExecute(StockDiary list)
+//    {
+//      Toast.makeText(DiaryFormActivity.this, "Stock Diary Created!", Toast.LENGTH_LONG).show();
+//    }
+//  }
 
 }
