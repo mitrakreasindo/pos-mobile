@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<permissions>
+    <navigation>
+        <inactive>nd_edit_sales</inactive>
+        <inactive>nd_customer_payment</inactive>
+        <inactive>nd_payment</inactive>
+        <inactive>nd_customer</inactive>
+        <inactive>nd_administration_sales</inactive>
+        <inactive>nd_presence_management</inactive>
+        <inactive>item_utilities</inactive>
+        <inactive>nd_tools</inactive>
+        <inactive>nd_change_password</inactive>
+        <inactive>nd_configuration</inactive>
+        <inactive>nd_printers</inactive>
+        <inactive>nd_check_in_out</inactive>
+    </navigation>
+
+    <maintenance>
+        <inactive>btn_tax_categories</inactive>
+        <inactive>btn_consumer_tax_categories</inactive>
+        <inactive>btn_resources</inactive>
+        <inactive>btn_locations</inactive>
+        <inactive>btn_floors</inactive>
+        <inactive>btn_tables</inactive>
+        <inactive>btn_reset_pickup_counter</inactive>
+        <inactive>btn_release_table_locks</inactive>
+    </maintenance>
+
+    <stock>
+        <inactive>btn_stok_mnt_product_location</inactive>
+        <inactive>btn_stok_mnt_auxiliary_products</inactive>
+        <inactive>btn_stok_mnt_product_attributes</inactive>
+        <inactive>btn_stok_mnt_attributes_values</inactive>
+        <inactive>btn_stok_mnt_product_attribute_sets</inactive>
+        <inactive>btn_stok_mnt_product_attribute_use</inactive>
+        <inactive>btn_stok_mnt_stock_movement</inactive>
+        <inactive>btn_stok_mnt_promotions</inactive>
+        <inactive>btn_stok_mnt_recipes</inactive>
+    </stock>
+</permissions>

@@ -17,17 +17,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -45,6 +49,11 @@ public class MainActivity extends AppCompatActivity
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
+    TableProductHelper tableProductHelper = new TableProductHelper(this);
 
 //    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //    fab.setOnClickListener(new View.OnClickListener()
@@ -66,10 +75,10 @@ public class MainActivity extends AppCompatActivity
     toggle.syncState();
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    ItemVisibility.hideItemNavigation(navigationView);
     navigationView.setNavigationItemSelectedListener(this);
 
     valueUser = getIntent().getExtras().getString("USERNAME");
+    IDs.setLoginUser(valueUser);
     Toast.makeText(this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
     Toast.makeText(this, "Current Schema: " +
             getIntent().getExtras().getString("COMPANY"), Toast.LENGTH_SHORT).show();
@@ -80,18 +89,18 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
 
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    List<String> list = XMLHelper.XMLReader(this, "navigation", permission);
+    ItemVisibility.hideItemNavigation(navigationView, list);
+
     MainFragment mainFragment = new MainFragment();
     getSupportFragmentManager().beginTransaction()
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
     tablePeopleHelper.downloadData(companyCode);
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     tableRoleHelper.downloadData(companyCode);
-    TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     tableCategoryHelper.downloadData(companyCode);
-    TableProductHelper tableProductHelper = new TableProductHelper(this);
     tableProductHelper.downloadDataAlternate(companyCode);
   }
 

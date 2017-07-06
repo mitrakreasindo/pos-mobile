@@ -109,6 +109,21 @@ public class TablePeopleHelper
     return 0;
   }
 
+  public long insert(People people)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, people.getId());
+    initialValues.put(KEY_NAME, people.getName());
+    initialValues.put(KEY_APPPASSWORD, people.getApppassword());
+    initialValues.put(KEY_CARD, people.getCard());
+    initialValues.put(KEY_ROLE, people.getRole().getId());
+    initialValues.put(KEY_VISIBLE, people.isVisible());
+    initialValues.put(KEY_IMAGE, people.getImage());
+
+    return db.insert(DATABASE_TABLE, null, initialValues);
+  }
+
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);

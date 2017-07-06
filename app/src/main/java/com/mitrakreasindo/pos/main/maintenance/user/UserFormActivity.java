@@ -1,6 +1,5 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,16 +22,17 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.People;
-import com.mitrakreasindo.pos.service.PeopleService;
 import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.service.PeopleService;
+import com.mitrakreasindo.pos.service.RoleService;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,7 +85,6 @@ public class UserFormActivity extends AppCompatActivity
   Button buttonConfirm;
   @BindView(R.id.button_cancel)
   Button buttonCancel;
-  private List<Role> roles = new ArrayList<>();
 
   private RoleService roleService;
   private Role role;
@@ -96,6 +95,7 @@ public class UserFormActivity extends AppCompatActivity
   private int RESULT_LOAD_IMG;
   private Bundle bundle;
   private String kodeMerchant, peopleId;
+  private boolean visibility;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -108,6 +108,8 @@ public class UserFormActivity extends AppCompatActivity
     peopleService = ClientService.createService().create(PeopleService.class);
 
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
+
+    radiobuttonVisible.setChecked(true);
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
@@ -195,27 +197,14 @@ public class UserFormActivity extends AppCompatActivity
 
   public void ConfirmRegisterPeople(View view)
   {
-    if (bundle != null)
+    if (radiobuttonVisible.isChecked())
     {
-      updatePeople();
+      visibility = true;
     }
-    else
+    else if (radiobuttonInvisible.isChecked())
     {
-      postPeople();
+      visibility = false;
     }
-  }
-
-  public void Cancel(View view)
-  {
-    finish();
-  }
-
-  private void postPeople()
-  {
-    final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
-    progressDialog.setMessage("Please wait...");
-    progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
 
     role = new Role();
     role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
@@ -225,68 +214,102 @@ public class UserFormActivity extends AppCompatActivity
     people.setName(edittextName.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
-    people.setVisible(true);
+    people.setVisible(visibility);
     people.setImage(null);
     people.setSiteguid(null);
     people.setSflag(true);
     people.setEmail(null);
     people.setRole(role);
 
-    Call<List<People>> call = peopleService.postPeople(kodeMerchant, people);
-    call.enqueue(new Callback<List<People>>()
+    if (bundle != null)
     {
+      updatePeople(people);
+    }
+    else
+    {
+      postPeople(people);
+    }
+  }
+
+  public void Cancel(View view)
+  {
+    finish();
+  }
+
+  private void postPeople(final People people)
+  {
+    Call<HashMap<Integer, String>> call = peopleService.postPeople(kodeMerchant, people);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
+      private int responseCode;
+      private String responseMessage;
+
       @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Post Role !!!");
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+
+          if (responseCode == 0)
+          {
+            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(UserFormActivity.this);
+            tablePeopleHelper.open();
+            tablePeopleHelper.insert(people);
+            tablePeopleHelper.close();
+          }
+          Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+        }
         finish();
       }
 
       @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        responseCode = -1;
+        responseMessage = "Cannot create new user. :( There is something wrong.";
+        Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }
 
-  private void updatePeople()
+  private void updatePeople(final People people)
   {
-//    final ProgressDialog progressDialog = new ProgressDialog(UserFormActivity.this);
-//    progressDialog.setMessage("Please wait...");
-//    progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Update Role !!!");
-
-    role = new Role();
-    role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
-    Log.d("Spinner Position", String.valueOf(spinnerRole.getSelectedItemPosition()));
-    Log.d("Role ID", data.get(spinnerRole.getSelectedItemPosition()).getId());
-
-    people = new People();
-    people.setName(edittextName.getText().toString());
-    people.setApppassword(edittextPass.getText().toString());
-    people.setCard(null);
-    people.setVisible(true);
-    people.setImage(null);
-    people.setSiteguid(null);
-    people.setSflag(true);
-    people.setEmail(null);
-    people.setRole(role);
-
-    Log.d("KODE MERCHANT", kodeMerchant);
-    Log.d("People ID", peopleId);
-    Call<List<People>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
-    call.enqueue(new Callback<List<People>>()
+    Call<HashMap<Integer, String>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
+      private int responseCode;
+      private String responseMessage;
+
       @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Update Role !!!");
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+
+          if (responseCode == 0)
+          {
+            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(UserFormActivity.this);
+            tablePeopleHelper.open();
+            tablePeopleHelper.insert(people);
+            tablePeopleHelper.close();
+          }
+          Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+        }
         finish();
       }
 
       @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        responseCode = -1;
+        responseMessage = "Cannot update user. :( There is something wrong.";
+        Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }

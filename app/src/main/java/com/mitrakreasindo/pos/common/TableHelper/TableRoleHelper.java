@@ -154,6 +154,21 @@ public class TableRoleHelper
       KEY_ID + " LIKE '%"+id+"%'", null, null, null, null));
   }
 
+  public byte[] getPermission (String name)
+  {
+    byte[] permissions = null;
+
+    open();
+    final String QUERY = "SELECT r.permissions FROM people p JOIN roles r ON p.role = r.id WHERE p.name =?";
+    Cursor cursor = db.rawQuery(QUERY, new String[]{name});
+
+    if (cursor.moveToFirst())
+    {
+      permissions = cursor.getBlob(cursor.getColumnIndexOrThrow(KEY_PERMISSION));
+    }
+    return permissions;
+  }
+
   public void downloadData(final String kodeMerchant)
   {
     final Call<List<Role>> call = service.getRoleAll(kodeMerchant);

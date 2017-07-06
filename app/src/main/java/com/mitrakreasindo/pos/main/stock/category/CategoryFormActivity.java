@@ -155,7 +155,6 @@ public class CategoryFormActivity extends AppCompatActivity
       }
     });
     onBackPressed();
-
   }
 
   private void updateCategory()

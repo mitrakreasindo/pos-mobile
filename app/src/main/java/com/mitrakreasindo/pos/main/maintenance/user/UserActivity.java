@@ -3,7 +3,6 @@ package com.mitrakreasindo.pos.main.maintenance.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +46,8 @@ public class UserActivity extends AppCompatActivity
   RecyclerView listUsers;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
-  @BindView(R.id.fab_users)
-  FloatingActionButton fabUsers;
+//  @BindView(R.id.fab_users)
+//  FloatingActionButton fabUsers;
   @BindView(R.id.edit_filter)
   EditText txtFilter;
   @BindView(R.id.button_filter)
@@ -54,7 +55,6 @@ public class UserActivity extends AppCompatActivity
 
   private UserListAdapter userListAdapter;
   private PeopleService peopleService;
-  private People people;
   private TablePeopleHelper tablePeopleHelper;
 
   @Override
@@ -78,6 +78,7 @@ public class UserActivity extends AppCompatActivity
 
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 //        setSupportActionBar(toolbar);
+    setSupportActionBar(toolbar);
     toolbar.setTitle("Users");
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -95,21 +96,20 @@ public class UserActivity extends AppCompatActivity
     listUsers.setLayoutManager(layoutManager);
     listUsers.setItemAnimator(new DefaultItemAnimator());
 
-    fabUsers.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        startActivity(new Intent(UserActivity.this, UserFormActivity.class));
-      }
-    });
+//    fabUsers.setOnClickListener(new View.OnClickListener()
+//    {
+//      @Override
+//      public void onClick(View v)
+//      {
+//        startActivity(new Intent(UserActivity.this, UserFormActivity.class));
+//      }
+//    });
 
     tablePeopleHelper = new TablePeopleHelper(this);
 
     userListAdapter.clear();
     userListAdapter.addUser(tablePeopleHelper.getData());
 
-//    getPeoples();
     txtFilter.addTextChangedListener(new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -125,6 +125,25 @@ public class UserActivity extends AppCompatActivity
       {
       }
     });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.action_add)
+    {
+      startActivity(new Intent(this, UserFormActivity.class));
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void getPeoples(String kodeMerchant)

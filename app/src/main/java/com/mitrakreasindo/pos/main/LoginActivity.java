@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = 2;
+        responseCode = -1;
         responseMessage = "Cannot login. :( There is something wrong.";
         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }

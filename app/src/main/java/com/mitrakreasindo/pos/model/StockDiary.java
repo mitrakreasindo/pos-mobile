@@ -8,7 +8,6 @@ import java.util.Date;
 
 public class StockDiary
 {
-
   private String id;
   private Date datenew;
   private int reason;
