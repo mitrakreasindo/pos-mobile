@@ -24,12 +24,12 @@ public interface DiaryStockService
   Call<List<StockDiary>> getStockDiaryAll(@Path("kodeMerchant") String kodeMerchant);
 
   @POST("chromis.stockdiary/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary StockDiary);
+  Call<HashMap<Integer, String>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary stockDiary);
 
   @PUT("chromis.stockdiary/{kodeMerchant}/{id}")
-  Call<List<StockDiary>> updateStockDiary(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary StockDiary);
+  Call<HashMap<Integer, String>> updateStockDiary(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary StockDiary);
 
   @DELETE("chromis.stockdiary/public/{id}")
-  Call<List<StockDiary>> deleteStockDiary(@Path("id") String id);
+  Call<HashMap<Integer, String>> deleteStockDiary(@Path("id") String id);
 
 }

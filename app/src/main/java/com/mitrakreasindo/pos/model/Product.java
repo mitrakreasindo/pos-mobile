@@ -158,7 +158,7 @@ public class Product
     this.stockvolume = stockvolume;
   }
 
-  public Boolean iscom()
+  public Boolean getIscom()
   {
     return iscom;
   }
@@ -168,7 +168,7 @@ public class Product
     this.iscom = iscom;
   }
 
-  public Boolean isscale()
+  public Boolean getIsscale()
   {
     return isscale;
   }
@@ -178,7 +178,7 @@ public class Product
     this.isscale = isscale;
   }
 
-  public Boolean iskitchen()
+  public Boolean getIskitchen()
   {
     return iskitchen;
   }
@@ -208,7 +208,7 @@ public class Product
     this.sendstatus = sendstatus;
   }
 
-  public Boolean isservice()
+  public Boolean getIsservice()
   {
     return isservice;
   }
@@ -238,7 +238,7 @@ public class Product
     this.attributes = attributes;
   }
 
-  public Boolean isvprice()
+  public Boolean getIsvprice()
   {
     return isvprice;
   }
@@ -248,7 +248,7 @@ public class Product
     this.isvprice = isvprice;
   }
 
-  public Boolean isverpatrib()
+  public Boolean getIsverpatrib()
   {
     return isverpatrib;
   }
@@ -358,7 +358,7 @@ public class Product
     this.catorder = catorder;
   }
 
-  public Boolean ispack()
+  public Boolean getIspack()
   {
     return ispack;
   }

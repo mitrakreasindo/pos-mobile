@@ -131,7 +131,7 @@ public class TablePeopleHelper
 
   public int delete(String id)
   {
-    return db.delete(DATABASE_TABLE, KEY_ID + "='" + id + "'", null);
+    return db.delete(DATABASE_TABLE, KEY_ID + "= '" + id + "'", null);
   }
 
   public List<People> getData()

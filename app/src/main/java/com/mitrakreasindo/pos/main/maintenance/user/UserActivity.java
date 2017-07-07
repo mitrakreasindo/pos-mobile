@@ -102,12 +102,10 @@ public class UserActivity extends AppCompatActivity
             userListAdapter.clear();
             userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
           }
-
           @Override
           public void beforeTextChanged(CharSequence s, int start, int count, int after)
           {
           }
-
           @Override
           public void afterTextChanged(Editable s)
           {

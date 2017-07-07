@@ -16,7 +16,7 @@ public class StockDiary
   private String appuser;
   private String siteguid;
   private Boolean sflag;
-  private AttributesetInstace attributesetInstanceId;
+  private AttributesetInstace attributesetinstanceId;
   private Location location;
   private Product product;
 
@@ -100,14 +100,14 @@ public class StockDiary
     this.sflag = sflag;
   }
 
-  public AttributesetInstace getAttributesetInstanceId()
+  public AttributesetInstace getAttributesetinstanceId()
   {
-    return attributesetInstanceId;
+    return attributesetinstanceId;
   }
 
-  public void setAttributesetInstanceId(AttributesetInstace attributesetInstanceId)
+  public void setAttributesetinstanceId(AttributesetInstace attributesetinstanceId)
   {
-    this.attributesetInstanceId = attributesetInstanceId;
+    this.attributesetinstanceId = attributesetinstanceId;
   }
 
   public Location getLocation()

@@ -1,17 +1,13 @@
 package com.mitrakreasindo.pos.main.stock.diary.activity;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,32 +17,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.diary.service.DiaryStockService;
-import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
-import com.mitrakreasindo.pos.service.CategoryService;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -94,13 +74,8 @@ public class DiaryFormActivity extends AppCompatActivity
   private double inStock, buyPrice, sellPrice, unit, price;
   private String kodeMerchant;
   private DiaryStockService diaryStockService;
-
   private StockDiary stockDiary;
-
   private SharedPreferenceEditor sharedPreferenceEditor;
-
-  private int responseCode;
-  private String responseMessage;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -187,7 +162,6 @@ public class DiaryFormActivity extends AppCompatActivity
     {
       if (resultCode == RESULT_OK)
       {
-
         barcode = data.getStringExtra("barcode");
         name = data.getStringExtra("name");
         inStock = data.getDoubleExtra("instock", 0);
@@ -203,10 +177,7 @@ public class DiaryFormActivity extends AppCompatActivity
         diaryProductInstockField.setText(String.valueOf(inStock));
         diaryProductBuyPriceField.setText(String.valueOf(buyPrice));
         diaryProductSellPriceField.setText(String.valueOf(sellPrice));
-
-
       }
-
     }
   }
 
@@ -219,11 +190,10 @@ public class DiaryFormActivity extends AppCompatActivity
 
   private void postStockDiary()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-
-    progressDialog.setMessage("Please wait...");
-    progressDialog.show();
-
+//    final ProgressDialog progressDialog = new ProgressDialog(this);
+//
+//    progressDialog.setMessage("Please wait...");
+//    progressDialog.show();
 
     Location location = new Location();
     location.setId("0");
@@ -233,40 +203,51 @@ public class DiaryFormActivity extends AppCompatActivity
 
     stockDiary = new StockDiary();
     stockDiary.setId(UUID.randomUUID().toString());
+    stockDiary.setDatenew(null);
     stockDiary.setReason(1);
-    stockDiary.setUnits(113);
-    stockDiary.setPrice(400);
+    stockDiary.setUnits(10);
+    stockDiary.setPrice(500);
     stockDiary.setAppuser("abcd");
-    stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    stockDiary.setSiteguid(null);
     stockDiary.setSflag(true);
-    stockDiary.setAttributesetInstanceId(null);
+    stockDiary.setAttributesetinstanceId(null);
     stockDiary.setLocation(location);
     stockDiary.setProduct(product);
 
     Call<HashMap<Integer, String>> call = diaryStockService.postStockDiary(kodeMerchant, stockDiary);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
+      private int responseCode;
+      private String responseMessage;
+
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
         final HashMap<Integer, String> data = response.body();
-//        for (int resultKey : data.keySet())
-//        {
-//          responseCode = resultKey;
-//          responseMessage = data.get(resultKey);
-//
-//          Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
-//        }
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+          if (responseCode == 0)
+          {
+
+          }
+          Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+        }
+        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        responseCode = -1;
+        responseMessage = "Cannot create stock diary. :( There is something wrong.";
+        Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
 //    onBackPressed();
-    Log.d("Diary content : ", stockDiary.getId().toString());
 //    progressDialog.dismiss();
   }
 
