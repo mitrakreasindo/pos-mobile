@@ -19,7 +19,6 @@ import retrofit2.http.Path;
 
 public interface TaxService
 {
-
   @GET("chromis.taxes/{kodeMerchant}/")
   Call<List<Tax>> getTaxAll(@Path("kodeMerchant") String kodeMerchant);
 
@@ -31,5 +30,4 @@ public interface TaxService
 
   @DELETE("chromis.taxes/public/{id}")
   Call<HashMap<Integer, String>> deleteTax(@Path("id") String id);
-  
 }
