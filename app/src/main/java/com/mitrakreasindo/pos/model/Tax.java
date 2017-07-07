@@ -1,14 +1,11 @@
 package com.mitrakreasindo.pos.model;
 
-import java.util.Collection;
-
 /**
  * Created by lisa on 22/06/17.
  */
 
 public class Tax
 {
-
   private String id;
   private String name;
   private double rate;

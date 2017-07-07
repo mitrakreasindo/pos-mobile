@@ -24,6 +24,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
+    TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
 
 //    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //    fab.setOnClickListener(new View.OnClickListener()
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity
     tableRoleHelper.downloadData(companyCode);
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
+    tableTaxesHelper.downloadData(companyCode);
   }
 
   @Override
