@@ -1,13 +1,16 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
@@ -28,9 +32,7 @@ import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
-import com.mitrakreasindo.pos.service.RoleService;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -86,16 +88,20 @@ public class UserFormActivity extends AppCompatActivity
   @BindView(R.id.button_cancel)
   Button buttonCancel;
 
-  private RoleService roleService;
+  private int RESULT_TAKE_PHOTO = 0;
+  private int RESULT_PICK_GALLERY = 1;
+
   private Role role;
   private People people;
   private PeopleService peopleService;
   private ArrayAdapter<Role> rolesArrayAdapter;
   private List<Role> data;
-  private int RESULT_LOAD_IMG;
   private Bundle bundle;
   private String kodeMerchant, peopleId;
+  private String name, pass, repass;
   private boolean visibility;
+  private PasswordValidator passwordValidator;
+  private View focusView = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -104,7 +110,6 @@ public class UserFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_user_form);
     ButterKnife.bind(this);
 
-    roleService = ClientService.createService().create(RoleService.class);
     peopleService = ClientService.createService().create(PeopleService.class);
 
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
@@ -165,27 +170,56 @@ public class UserFormActivity extends AppCompatActivity
 
   public void Select(View view)
   {
-    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        photoPickerIntent.setType("image/*");
-    startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("Options");
+    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        switch (which){
+          case 0:
+            Toast.makeText(UserFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
+            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
+            break;
+
+          case 1:
+            Toast.makeText(UserFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
+            break;
+        }
+      }
+    });
+    builder.show();
   }
 
   @Override
-  protected void onActivityResult(int reqCode, int resultCode, Intent data)
-  {
-    super.onActivityResult(reqCode, resultCode, data);
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK)
     {
       try
       {
         final Uri imageUri = data.getData();
-        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-        imageview.setImageBitmap(selectedImage);
+
+        switch (requestCode)
+        {
+          case 0:
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            imageview.setImageBitmap(bitmap);
+            break;
+
+          case 1:
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            imageview.setImageBitmap(selectedImage);
+            break;
+        }
       }
-      catch (FileNotFoundException e)
+      catch (Exception e)
       {
         e.printStackTrace();
         Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -195,7 +229,111 @@ public class UserFormActivity extends AppCompatActivity
       Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
   }
 
-  public void ConfirmRegisterPeople(View view)
+  private boolean attemptRegister()
+  {
+    passwordValidator = new PasswordValidator();
+
+    edittextName.setError(null);
+    edittextPass.setError(null);
+    edittextRepass.setError(null);
+
+    name = edittextName.getText().toString();
+    pass = edittextPass.getText().toString();
+    repass = edittextRepass.getText().toString();
+
+    if (TextUtils.isEmpty(name))
+    {
+      edittextName.setError(getString(R.string.error_empty_name));
+      focusView = edittextName;
+      return false;
+    }
+    else if (TextUtils.isEmpty(pass))
+    {
+      edittextPass.setError(getString(R.string.error_empty_pass));
+      focusView = edittextPass;
+      return false;
+    }
+    else if (!passwordValidator.validate(pass))
+    {
+      edittextPass.setError("- Password must at least 8 chars and max 10 chars \n" +
+        "- Contains at least 1 digit (0-9)\n" +
+        "- 1 lower case alphabet char (a-z)\n" +
+        "- 1 upper case alphabet char (A-Z)\n" +
+        "- 1 special char (~!@#$%^&*-+=,.?)\n" +
+        "- No whitespace allowed");
+      focusView = edittextPass;
+      return false;
+    }
+    else if (TextUtils.isEmpty(repass))
+    {
+      edittextRepass.setError(getString(R.string.error_empty_repass));
+      focusView = edittextRepass;
+      return false;
+    }
+    else if (!pass.equals(repass))
+    {
+      edittextRepass.setError(getString(R.string.error_incorrect_reinput_password));
+      focusView = edittextRepass;
+      return false;
+    }
+    else
+      return true;
+  }
+
+  private boolean attemptUpdate()
+  {
+    boolean flag = false;
+
+    passwordValidator = new PasswordValidator();
+
+    edittextName.setError(null);
+    edittextPass.setError(null);
+    edittextRepass.setError(null);
+
+    name = edittextName.getText().toString();
+    pass = edittextPass.getText().toString();
+    repass = edittextRepass.getText().toString();
+
+    if (TextUtils.isEmpty(name))
+    {
+      edittextName.setError(getString(R.string.error_empty_name));
+      focusView = edittextName;
+      flag = false;
+    }
+    else if (!TextUtils.isEmpty(pass))
+    {
+      if (!passwordValidator.validate(pass))
+      {
+        edittextPass.setError("- Password must at least 8 chars and max 10 chars \n" +
+          "- Contains at least 1 digit (0-9)\n" +
+          "- 1 lower case alphabet char (a-z)\n" +
+          "- 1 upper case alphabet char (A-Z)\n" +
+          "- 1 special char (~!@#$%^&*-+=,.?)\n" +
+          "- No whitespace allowed");
+        focusView = edittextPass;
+        flag = false;
+      }
+      else if (TextUtils.isEmpty(repass))
+      {
+        edittextRepass.setError(getString(R.string.error_empty_repass));
+        focusView = edittextRepass;
+        flag = false;
+      }
+      else if (!pass.equals(repass))
+      {
+        edittextRepass.setError(getString(R.string.error_incorrect_reinput_password));
+        focusView = edittextRepass;
+        flag = false;
+      }
+      else
+        flag = true;
+    }
+    else
+      flag = true;
+    return flag;
+  }
+
+  public People PrepareData ()
   {
     if (radiobuttonVisible.isChecked())
     {
@@ -210,7 +348,14 @@ public class UserFormActivity extends AppCompatActivity
     role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
 
     people = new People();
-    people.setId(UUID.randomUUID().toString());
+    if (bundle == null)
+    {
+      people.setId(UUID.randomUUID().toString());
+    }
+    else
+    {
+      people.setId(peopleId);
+    }
     people.setName(edittextName.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
@@ -221,13 +366,24 @@ public class UserFormActivity extends AppCompatActivity
     people.setEmail(null);
     people.setRole(role);
 
-    if (bundle != null)
+    return people;
+  }
+
+  public void ConfirmRegisterPeople(View view)
+  {
+    if (bundle == null)
     {
-      updatePeople(people);
+      if (attemptRegister())
+      {
+        postPeople(PrepareData());
+      }
     }
     else
     {
-      postPeople(people);
+      if (attemptUpdate())
+      {
+        updatePeople(PrepareData());
+      }
     }
   }
 
@@ -252,6 +408,7 @@ public class UserFormActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
 
           if (responseCode == 0)
           {
@@ -291,6 +448,7 @@ public class UserFormActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
 
           if (responseCode == 0)
           {

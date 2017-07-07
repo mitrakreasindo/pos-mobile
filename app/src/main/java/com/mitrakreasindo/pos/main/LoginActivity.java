@@ -115,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     else
       Toast.makeText(this, "Company Code Not Saved", Toast.LENGTH_SHORT).show();
 
-    Intent intent = new Intent(this, RegisterActivity.class);
-    startActivity(intent);
+//    Intent intent = new Intent(this, RegisterActivity.class);
+//    startActivity(intent);
   }
 
   private void populateAutoComplete()

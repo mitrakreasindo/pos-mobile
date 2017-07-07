@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -26,13 +25,9 @@ import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by lisa on 23/05/17.
@@ -46,8 +41,6 @@ public class UserActivity extends AppCompatActivity
   RecyclerView listUsers;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
-//  @BindView(R.id.fab_users)
-//  FloatingActionButton fabUsers;
   @BindView(R.id.edit_filter)
   EditText txtFilter;
   @BindView(R.id.button_filter)
@@ -96,35 +89,30 @@ public class UserActivity extends AppCompatActivity
     listUsers.setLayoutManager(layoutManager);
     listUsers.setItemAnimator(new DefaultItemAnimator());
 
-//    fabUsers.setOnClickListener(new View.OnClickListener()
-//    {
-//      @Override
-//      public void onClick(View v)
-//      {
-//        startActivity(new Intent(UserActivity.this, UserFormActivity.class));
-//      }
-//    });
-
     tablePeopleHelper = new TablePeopleHelper(this);
 
     userListAdapter.clear();
     userListAdapter.addUser(tablePeopleHelper.getData());
 
-    txtFilter.addTextChangedListener(new TextWatcher() {
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count) {
-        userListAdapter.clear();
-        userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
-      }
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after)
-      {
-      }
-      @Override
-      public void afterTextChanged(Editable s)
-      {
-      }
-    });
+    txtFilter.addTextChangedListener(new TextWatcher()
+        {
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count)
+          {
+            userListAdapter.clear();
+            userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
+          }
+
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after)
+          {
+          }
+
+          @Override
+          public void afterTextChanged(Editable s)
+          {
+          }
+        });
   }
 
   @Override
@@ -144,54 +132,5 @@ public class UserActivity extends AppCompatActivity
       startActivity(new Intent(this, UserFormActivity.class));
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  private void getPeoples(String kodeMerchant)
-  {
-    final Call<List<People>> people = peopleService.getPeopleAll(kodeMerchant);
-    people.enqueue(new Callback<List<People>>()
-    {
-      @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
-      {
-        List<People> peopleList = response.body();
-        userListAdapter.clear();
-        userListAdapter.addUser(peopleList);
-      }
-
-      @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
-      {
-
-      }
-    });
-  }
-
-  private void getPeopleByName(String kodeMerchant, String name)
-  {
-    final Call<List<People>> people = peopleService.getPeople(kodeMerchant, name);
-    people.enqueue(new Callback<List<People>>()
-    {
-      @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
-      {
-        List<People> userList = response.body();
-        if (userList == null)
-        {
-          Toast.makeText(UserActivity.this, "Something wrong", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-          userListAdapter.clear();
-          userListAdapter.addUser(userList);
-        }
-      }
-
-      @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
-      {
-
-      }
-    });
   }
 }

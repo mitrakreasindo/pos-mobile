@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
@@ -19,6 +23,7 @@ import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,6 +39,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   private List<People> peoples = new ArrayList<>();
   private Cursor cursor;
   private Context context;
+  private String kodeMerchant;
   private LayoutInflater inflater;
   private PeopleService peopleService;
 
@@ -111,25 +117,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                 break;
 
               case 1:
-                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
-//                peopleService = ClientService.createService().create(PeopleService.class);
-//                Call<List<People>> call = peopleService.deletePeople(people.getId());
-//                call.enqueue(new Callback<List<People>>()
-//                {
-//                  @Override
-//                  public void onResponse(Call<List<People>> call, Response<List<People>> response)
-//                  {
-//
-//                  }
-//
-//                  @Override
-//                  public void onFailure(Call<List<People>> call, Throwable t)
-//                  {
-//
-//                  }
-//                });
-//
-//                getPeoples();
+                deletePeople(SharedPreferenceEditor.LoadPreferences(context, ""), people.getId());
                 Toast.makeText(context, "User deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
@@ -189,25 +177,43 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     }
   }
 
-  private void getPeoples(String kodeMerchant)
+  private void deletePeople(String kodeMerchant, final String id)
   {
-    final Call<List<People>> people = peopleService.getPeopleAll(kodeMerchant);
-    people.enqueue(new Callback<List<People>>()
+    peopleService = ClientService.createService().create(PeopleService.class);
+    final Call<HashMap<Integer, String>> people = peopleService.deletePeople(kodeMerchant, id);
+    people.enqueue(new Callback<HashMap<Integer, String>>()
     {
+      private int responseCode;
+      private String responseMessage;
+
       @Override
-      public void onResponse(Call<List<People>> call, Response<List<People>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        List<People> peopleList = response.body();
-        clear();
-        addUser(peopleList);
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+          if (responseCode == 0)
+          {
+            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(context);
+            tablePeopleHelper.open();
+            tablePeopleHelper.delete(id);
+            tablePeopleHelper.close();
+          }
+          Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+        }
       }
 
       @Override
-      public void onFailure(Call<List<People>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-
+        responseCode = -1;
+        responseMessage = "Cannot delete user. :( There is something wrong.";
+        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-
   }
 }

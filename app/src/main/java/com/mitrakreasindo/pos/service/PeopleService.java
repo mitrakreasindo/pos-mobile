@@ -32,5 +32,5 @@ public interface PeopleService
   Call<HashMap<Integer, String>> updatePeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body People people);
 
   @DELETE("chromis.people/{kodeMerchant}/{id}")
-  Call<List<People>> deletePeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+  Call<HashMap<Integer, String>> deletePeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }
