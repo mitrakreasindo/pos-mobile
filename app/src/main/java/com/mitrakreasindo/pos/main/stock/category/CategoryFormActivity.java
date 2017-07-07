@@ -91,9 +91,6 @@ public class CategoryFormActivity extends AppCompatActivity
       categoryField.setText(name);
     }
 
-
-    Log.e("CAT ID", categoryId);
-
 //    category = new Category();
 
 //    if (bundle == null){

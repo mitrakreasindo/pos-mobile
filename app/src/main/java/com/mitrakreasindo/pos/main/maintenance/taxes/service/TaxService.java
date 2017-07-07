@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.main.maintenance.taxes.service;
 
 import com.mitrakreasindo.pos.model.Tax;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,12 +24,12 @@ public interface TaxService
   Call<List<Tax>> getTaxAll(@Path("kodeMerchant") String kodeMerchant);
 
   @POST("chromis.taxes/{kodeMerchant}/")
-  Call<List<Tax>> postTax(@Path("kodeMerchant") String kodeMerchant, @Body Tax tax);
+  Call<HashMap<Integer, String>> postTax(@Path("kodeMerchant") String kodeMerchant, @Body Tax tax);
 
   @PUT("chromis.taxes/{kodeMerchant}/{id}")
-  Call<List<Tax>> updateTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Tax tax);
+  Call<HashMap<Integer, String>> updateTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Tax tax);
 
   @DELETE("chromis.taxes/public/{id}")
-  Call<List<Tax>> deleteTax(@Path("id") String id);
+  Call<HashMap<Integer, String>> deleteTax(@Path("id") String id);
   
 }

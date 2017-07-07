@@ -108,10 +108,8 @@ public class TaxesActivity extends AppCompatActivity
 
       }
     });
-//    categoryListAdapter.clear();
-//    categoryListAdapter.addCategory(tableCategoryHelper.getData());
 
-//    getCategories();
+    getTaxes(kodeMerchant);
   }
 
   @Override
@@ -161,26 +159,25 @@ public class TaxesActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-//  private void getTaxes(String kodeMerchant)
-//  {
-//    final Call<List<Tax>> tax = taxService.getTaxAll(kodeMerchant);
-//    tax.enqueue(new Callback<List<Tax>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
-//      {
-////        List<Tax> taxList = response.body();
-////        Log.d("DATA :: ", taxList.toString());
-////        categoryListAdapter.clear();
-////        categoryListAdapter.addCategory(categoryList);
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Tax>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//
-//  }
+  private void getTaxes(String kodeMerchant)
+  {
+    final Call<List<Tax>> tax = taxService.getTaxAll(kodeMerchant);
+    tax.enqueue(new Callback<List<Tax>>()
+    {
+      @Override
+      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+      {
+        List<Tax> taxList = response.body();
+        taxesListAdapter.clear();
+        taxesListAdapter.addTax(taxList);
+      }
+
+      @Override
+      public void onFailure(Call<List<Tax>> call, Throwable t)
+      {
+
+      }
+    });
+
+  }
 }

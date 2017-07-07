@@ -15,14 +15,16 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
-import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Tax;
-import com.mitrakreasindo.pos.service.CategoryService;
+import com.mitrakreasindo.pos.model.TaxCategory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,8 +43,10 @@ public class TaxesFormActivity extends AppCompatActivity
   AppBarLayout appbar;
   @BindView(R.id.main_content)
   CoordinatorLayout mainContent;
-  @BindView(R.id.category_field)
-  EditText categoryField;
+  @BindView(R.id.tax_field)
+  EditText taxField;
+  @BindView(R.id.rate_field)
+  EditText rateField;
 
   private Tax tax;
   private TaxService taxService;
@@ -58,7 +62,7 @@ public class TaxesFormActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_category_form);
+    setContentView(R.layout.activity_tax_form);
     ButterKnife.bind(this);
 
     taxService = ClientService.createService().create(TaxService.class);
@@ -84,7 +88,9 @@ public class TaxesFormActivity extends AppCompatActivity
     if (bundle != null)
     {
       String name = bundle.getString("name");
-      categoryField.setText(name);
+      String rate = bundle.getString("rate");
+      taxField.setText(name);
+      rateField.setText(rate);
     }
   }
 
@@ -121,32 +127,54 @@ public class TaxesFormActivity extends AppCompatActivity
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
-    Log.d(getClass().getSimpleName(), categoryField.getText().toString());
 
-    tax = new Tax();
+    TaxCategory taxCategory = new TaxCategory();
+    taxCategory.setId(UUID.randomUUID().toString());
+
+    final Tax tax = new Tax();
     tax.setId(UUID.randomUUID().toString());
-    tax.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    tax.setSflag(true);
+    tax.setName(taxField.getText().toString());
+    tax.setRate(Double.valueOf(rateField.getText().toString()));
+    tax.setCategory(taxCategory);
 
-    Call<List<Tax>> call = taxService.postTax(kodeMerchant, tax);
-    call.enqueue(new Callback<List<Tax>>()
+    Call<HashMap<Integer, String>> call = taxService.postTax(kodeMerchant, tax);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
+
+      private int responseCode;
+      private String responseMessage;
+
       @Override
-      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-        taxesListAdapter.addCategory(tax);
-        taxesListAdapter.notifyDataSetChanged();
+
+//        final HashMap<Integer, String> data = response.body();
+//        for (int resultKey : data.keySet())
+//        {
+//          responseCode = resultKey;
+//          responseMessage = data.get(resultKey);
+//
+//          Log.e("RESPONSE ", responseMessage);
+//          if (responseCode == 0)
+//          {
+//            taxesListAdapter.addTax(tax);
+//            taxesListAdapter.notifyDataSetChanged();
+//
+//          }
+//        }
+
+//        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
+//        Toast.makeText(TaxesFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
+
         onBackPressed();
       }
 
       @Override
-      public void onFailure(Call<List<Tax>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
       }
     });
-    onBackPressed();
+//    onBackPressed();
 
   }
 
@@ -156,33 +184,56 @@ public class TaxesFormActivity extends AppCompatActivity
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
-    Log.d(getClass().getSimpleName(), categoryField.getText().toString());
 
-    String taxId = bundle.getString("id");
+    String id = bundle.getString("id");
+    String categoryId = bundle.getString("category");
 
-    tax = new Tax();
-    tax.setId(UUID.randomUUID().toString());
-    tax.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    tax.setSflag(true);
+    TaxCategory taxCategory = new TaxCategory();
+    taxCategory.setId(categoryId);
 
-    Call<List<Tax>> call = taxService.updateTax(kodeMerchant, tax.getId(), tax);
-    call.enqueue(new Callback<List<Tax>>()
+    final Tax tax = new Tax();
+    tax.setId(id);
+    tax.setName(taxField.getText().toString());
+    tax.setRate(Double.valueOf(rateField.getText().toString()));
+    tax.setCategory(taxCategory);
+
+    Call<HashMap<Integer, String>> call = taxService.updateTax(kodeMerchant, id, tax);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
+
+      private int responseCode;
+      private String responseMessage;
+
       @Override
-      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-        Log.d(getClass().getSimpleName(), "Success Update Category !!!");
+
+//        final HashMap<Integer, String> data = response.body();
+//        for (int resultKey : data.keySet())
+//        {
+//          responseCode = resultKey;
+//          responseMessage = data.get(resultKey);
+//
+//          Log.e("RESPONSE ", responseMessage);
+//          if (responseCode == 0)
+//          {
+//            taxesListAdapter.addTax(tax);
+//            taxesListAdapter.notifyDataSetChanged();
+//
+//          }
+//        }
+
+//        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
+//        Toast.makeText(TaxesFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
+
         onBackPressed();
       }
 
       @Override
-      public void onFailure(Call<List<Tax>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
       }
     });
-
-    onBackPressed();
 
   }
 }

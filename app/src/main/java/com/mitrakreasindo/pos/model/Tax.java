@@ -9,7 +9,6 @@ import java.util.Collection;
 public class Tax
 {
 
-  private Collection<TaxLine> taxLineCollection;
   private String id;
   private String name;
   private double rate;
@@ -19,19 +18,7 @@ public class Tax
   private Boolean sflag;
   private TaxCategory category;
   private TaxCusCategory custcategory;
-  private Collection<Tax> taxesCollection;
   private Tax parentid;
-  private Collection<TicketLine> ticketlinesCollection;
-
-  public Collection<TaxLine> getTaxLineCollection()
-  {
-    return taxLineCollection;
-  }
-
-  public void setTaxLineCollection(Collection<TaxLine> taxLineCollection)
-  {
-    this.taxLineCollection = taxLineCollection;
-  }
 
   public String getId()
   {
@@ -123,16 +110,6 @@ public class Tax
     this.custcategory = custcategory;
   }
 
-  public Collection<Tax> getTaxesCollection()
-  {
-    return taxesCollection;
-  }
-
-  public void setTaxesCollection(Collection<Tax> taxesCollection)
-  {
-    this.taxesCollection = taxesCollection;
-  }
-
   public Tax getParentid()
   {
     return parentid;
@@ -141,15 +118,5 @@ public class Tax
   public void setParentid(Tax parentid)
   {
     this.parentid = parentid;
-  }
-
-  public Collection<TicketLine> getTicketlinesCollection()
-  {
-    return ticketlinesCollection;
-  }
-
-  public void setTicketlinesCollection(Collection<TicketLine> ticketlinesCollection)
-  {
-    this.ticketlinesCollection = ticketlinesCollection;
   }
 }

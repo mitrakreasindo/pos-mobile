@@ -18,6 +18,7 @@ import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.model.Tax;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,7 +48,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater.from(parent.getContext())
-      .inflate(R.layout.adapter_category, parent, false);
+      .inflate(R.layout.adapter_tax, parent, false);
 
     return new ViewHolder(itemView);
   }
@@ -57,7 +58,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   {
 
     final Tax tax = taxes.get(position);
-    holder.txtCategory.setText(tax.getName());
+    holder.txtTax.setText(tax.getName());
 
     //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
@@ -79,31 +80,29 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
                 Intent intent = new Intent(context, TaxesFormActivity.class);
                 intent.putExtra("id", tax.getId());
                 intent.putExtra("name", tax.getName());
+                intent.putExtra("rate", String.valueOf(tax.getRate()));
+                intent.putExtra("category", tax.getCategory().getId());
                 context.startActivity(intent);
                 break;
 
               case 1:
                 Toast.makeText(context, "Tax Deleted", Toast.LENGTH_LONG).show();
                 taxService = ClientService.createService().create(TaxService.class);
-                Call<List<Tax>> call = taxService.deleteTax(tax.getId());
-                call.enqueue(new Callback<List<Tax>>()
+                Call<HashMap<Integer, String>> call = taxService.deleteTax(tax.getId());
+                call.enqueue(new Callback<HashMap<Integer, String>>()
                 {
                   @Override
-                  public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
                   {
 
                   }
-
                   @Override
-                  public void onFailure(Call<List<Tax>> call, Throwable t)
+                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
                   {
-
                   }
-
-
                 });
 
-                removeCategory(tax);
+                removeTax(tax);
                 Toast.makeText(context, "Tax deleted!", Toast.LENGTH_LONG).show();
                 break;
             }
@@ -115,24 +114,25 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
     });
   }
 
-  public void addCategory(Tax tax)
+  public void addTax(Tax tax)
   {
     taxes.add(tax);
     notifyDataSetChanged();
   }
 
-  public void clear(){
+  public void clear()
+  {
     taxes.clear();
     notifyDataSetChanged();
   }
 
-  public void addCategory(List<Tax> taxes)
+  public void addTax(List<Tax> taxes)
   {
     this.taxes.addAll(taxes);
     notifyDataSetChanged();
   }
 
-  public void removeCategory(Tax tax)
+  public void removeTax(Tax tax)
   {
     taxes.remove(tax);
     notifyDataSetChanged();
@@ -153,12 +153,12 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtCategory;
+    private TextView txtTax;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtCategory = (TextView) itemView.findViewById(R.id.txt_category);
+      txtTax = (TextView) itemView.findViewById(R.id.txt_tax);
     }
   }
 
