@@ -26,9 +26,9 @@ public interface CategoryService
   Call<HashMap<Integer, String>> postCategory(@Path("kodeMerchant") String kodeMerchant, @Body Category category);
 
   @PUT("chromis.categories/{kodeMerchant}/{id}")
-  Call<List<Category>> updateCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Category category);
+  Call<HashMap<Integer, String>> updateCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Category category);
 
-  @DELETE("chromis.categories/public/{id}")
-  Call<List<Category>> deleteCategory(@Path("id") String id);
+  @DELETE("chromis.categories/{kodeMerchant}/{id}")
+  Call<HashMap<Integer, String>> deleteCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
 }

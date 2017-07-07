@@ -119,11 +119,14 @@ public class TableCategoryHelper
       List<Category> list = new ArrayList<>();
 
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String name = cursor.getString(nameIndex);
+        String id = cursor.getString(idIndex);
 
         Category category = new Category();
+        category.setId(id);
         category.setName(name);
         list.add(category);
       }
@@ -140,6 +143,11 @@ public class TableCategoryHelper
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);
+  }
+
+  public int delete(String id)
+  {
+    return db.delete(DATABASE_TABLE, KEY_ID + "='" + id + "'", null);
   }
 
   public Cursor getAllData()

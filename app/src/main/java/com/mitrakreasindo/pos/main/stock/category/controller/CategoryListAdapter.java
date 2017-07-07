@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,7 +63,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     final Category category = categories.get(position);
     holder.txtCategory.setText(category.getName());
-
+    Log.e("ID CAT FROM ADAPTER", category.getId());
     //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {
@@ -85,17 +90,36 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
               case 1:
                 Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
                 categoryService = ClientService.createService().create(CategoryService.class);
-                Call<List<Category>> call = categoryService.deleteCategory(category.getId());
-                call.enqueue(new Callback<List<Category>>()
+                Call<HashMap<Integer, String>> call = categoryService.deleteCategory(SharedPreferenceEditor.LoadPreferences(context, ""), category.getId());
+                call.enqueue(new Callback<HashMap<Integer, String>>()
                 {
-                  @Override
-                  public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-                  {
 
+                  private int responseCode;
+                  private String responseMessage;
+
+                  @Override
+                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+                  {
+                    final HashMap<Integer, String> data = response.body();
+                    for (int resultKey : data.keySet())
+                    {
+                      responseCode = resultKey;
+                      responseMessage = data.get(resultKey);
+                      Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+                      if (responseCode == 0)
+                      {
+                        TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(context);
+                        tableCategoryHelper.open();
+                        tableCategoryHelper.delete(category.getId());
+                        tableCategoryHelper.close();
+                      }
+                      Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+                    }
                   }
 
                   @Override
-                  public void onFailure(Call<List<Category>> call, Throwable t)
+                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
                   {
 
                   }
@@ -162,25 +186,25 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
   }
 
-  private void getCategories(String kodeMerchant)
-  {
-    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
-    category.enqueue(new Callback<List<Category>>()
-    {
-      @Override
-      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-      {
-        List<Category> categoryList = response.body();
-        clear();
-        addCategory(categoryList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Category>> call, Throwable t)
-      {
-
-      }
-    });
-
-  }
+//  private void getCategories(String kodeMerchant)
+//  {
+//    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
+//    category.enqueue(new Callback<List<Category>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
+//      {
+//        List<Category> categoryList = response.body();
+//        clear();
+//        addCategory(categoryList);
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Category>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//
+//  }
 }
