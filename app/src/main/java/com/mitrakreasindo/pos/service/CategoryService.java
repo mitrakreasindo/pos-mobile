@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.service;
 
 import com.mitrakreasindo.pos.model.Category;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,7 +23,7 @@ public interface CategoryService
   Call<List<Category>> getCategoryAll(@Path("kodeMerchant") String kodeMerchant);
 
   @POST("chromis.categories/{kodeMerchant}/")
-  Call<List<Category>> postCategory(@Path("kodeMerchant") String kodeMerchant, @Body Category category);
+  Call<HashMap<Integer, String>> postCategory(@Path("kodeMerchant") String kodeMerchant, @Body Category category);
 
   @PUT("chromis.categories/{kodeMerchant}/{id}")
   Call<List<Category>> updateCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Category category);

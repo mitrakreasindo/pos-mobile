@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.CategoryService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -94,6 +95,21 @@ public class TableCategoryHelper
       db.insert(DATABASE_TABLE, null, initialValues);
     }
     return 0;
+  }
+
+  public long insert(Category category)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, category.getId());
+    initialValues.put(KEY_NAME, category.getName());
+    initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    initialValues.put(KEY_TEXTTIP, category.getTexttip());
+    initialValues.put(KEY_IMAGE, category.getImage());
+    initialValues.put(KEY_COLOUR, category.getColour());
+    initialValues.put(KEY_CATORDER, category.getCatorder());
+
+    return db.insert(DATABASE_TABLE, null, initialValues);
   }
 
   public List<Category> populateCategory(Cursor cursor)

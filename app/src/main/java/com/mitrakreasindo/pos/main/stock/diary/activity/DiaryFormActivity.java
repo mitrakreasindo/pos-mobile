@@ -26,12 +26,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.diary.service.DiaryStockService;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
+import com.mitrakreasindo.pos.service.CategoryService;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -89,10 +92,15 @@ public class DiaryFormActivity extends AppCompatActivity
   private Bundle bundle;
   private String barcode, name;
   private double inStock, buyPrice, sellPrice, unit, price;
-  private String companyCode;
+  private String kodeMerchant;
   private DiaryStockService diaryStockService;
 
   private StockDiary stockDiary;
+
+  private SharedPreferenceEditor sharedPreferenceEditor;
+
+  private int responseCode;
+  private String responseMessage;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -101,9 +109,10 @@ public class DiaryFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_diary_form);
     ButterKnife.bind(this);
 
-    companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
-
     diaryStockService = ClientService.createService().create(DiaryStockService.class);
+    sharedPreferenceEditor = new SharedPreferenceEditor();
+
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -164,7 +173,7 @@ public class DiaryFormActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        Log.d("COMPANY CODE : ", companyCode);
+        Log.d("COMPANY CODE : ", kodeMerchant);
         postStockDiary();
       }
     });
@@ -211,12 +220,10 @@ public class DiaryFormActivity extends AppCompatActivity
   private void postStockDiary()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
+
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
 
-    String example = "Convert Java String";
-    byte[] bytes = example.getBytes();
 
     Location location = new Location();
     location.setId("0");
@@ -227,32 +234,40 @@ public class DiaryFormActivity extends AppCompatActivity
     stockDiary = new StockDiary();
     stockDiary.setId(UUID.randomUUID().toString());
     stockDiary.setReason(1);
-    stockDiary.setUnits(118);
+    stockDiary.setUnits(113);
     stockDiary.setPrice(400);
-    stockDiary.setAppuser("a");
+    stockDiary.setAppuser("abcd");
     stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     stockDiary.setSflag(true);
     stockDiary.setAttributesetInstanceId(null);
     stockDiary.setLocation(location);
     stockDiary.setProduct(product);
 
-    Call<List<StockDiary>> call = diaryStockService.postStockDiary(companyCode, stockDiary);
-    call.enqueue(new Callback<List<StockDiary>>()
+    Call<HashMap<Integer, String>> call = diaryStockService.postStockDiary(kodeMerchant, stockDiary);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       @Override
-      public void onResponse(Call<List<StockDiary>> call, Response<List<StockDiary>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Post Category !!!");
+        final HashMap<Integer, String> data = response.body();
+//        for (int resultKey : data.keySet())
+//        {
+//          responseCode = resultKey;
+//          responseMessage = data.get(resultKey);
+//
+//          Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+//        }
       }
 
       @Override
-      public void onFailure(Call<List<StockDiary>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
       }
     });
 //    onBackPressed();
-    Log.d("Diary content : ", stockDiary.toString());
-    progressDialog.dismiss();
+    Log.d("Diary content : ", stockDiary.getId().toString());
+//    progressDialog.dismiss();
   }
 
 

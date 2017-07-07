@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.category;
+package com.mitrakreasindo.pos.main.maintenance.taxes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +19,10 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryActivity extends AppCompatActivity
+public class TaxesActivity extends AppCompatActivity
 {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -43,9 +45,10 @@ public class CategoryActivity extends AppCompatActivity
   @BindView(R.id.edit_text_filter)
   EditText editTextFilter;
 
-  private CategoryService categoryService;
-  private CategoryListAdapter categoryListAdapter;
-  private Category category;
+  private Tax tax;
+  private TaxService taxService;
+
+  private TaxesListAdapter taxesListAdapter;
 
   private TableCategoryHelper tableCategoryHelper;
 
@@ -73,12 +76,12 @@ public class CategoryActivity extends AppCompatActivity
 
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
 
-    categoryService = ClientService.createService().create(CategoryService.class);
+    taxService = ClientService.createService().create(TaxService.class);
 
-    categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+    taxesListAdapter = new TaxesListAdapter(this, new ArrayList<Tax>());
 
     listCategory.setHasFixedSize(true);
-    listCategory.setAdapter(categoryListAdapter);
+    listCategory.setAdapter(taxesListAdapter);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listCategory.setLayoutManager(layoutManager);
 
@@ -89,8 +92,8 @@ public class CategoryActivity extends AppCompatActivity
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-        categoryListAdapter.clear();
-        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
+//        categoryListAdapter.clear();
+//        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
       }
 
       @Override
@@ -105,8 +108,8 @@ public class CategoryActivity extends AppCompatActivity
 
       }
     });
-    categoryListAdapter.clear();
-    categoryListAdapter.addCategory(tableCategoryHelper.getData());
+//    categoryListAdapter.clear();
+//    categoryListAdapter.addCategory(tableCategoryHelper.getData());
 
 //    getCategories();
   }
@@ -115,14 +118,33 @@ public class CategoryActivity extends AppCompatActivity
   protected void onStart()
   {
     super.onStart();
-    categoryListAdapter.clear();
-    categoryListAdapter.addCategory(tableCategoryHelper.getData());
+//    getTaxes(kodeMerchant);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
+
+//    MenuItem searchItem = menu.findItem(R.id.action_search);
+//    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//
+//    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+//    {
+//      @Override
+//      public boolean onQueryTextSubmit(String query)
+//      {
+//        return false;
+//      }
+//
+//      @Override
+//      public boolean onQueryTextChange(String newText)
+//      {
+//        categoryListAdapter.clear();
+//        categoryListAdapter.addCategory(tableCategoryHelper.getData(newText.toString()));
+//        return false;
+//      }
+//    });
 
     return super.onCreateOptionsMenu(menu);
   }
@@ -134,31 +156,31 @@ public class CategoryActivity extends AppCompatActivity
 
     if (id == R.id.action_add)
     {
-      startActivity(new Intent(this, CategoryFormActivity.class));
+      startActivity(new Intent(this, TaxesFormActivity.class));
     }
     return super.onOptionsItemSelected(item);
   }
 
-  private void getCategories(String kodeMerchant)
-  {
-    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
-    category.enqueue(new Callback<List<Category>>()
-    {
-      @Override
-      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-      {
-        List<Category> categoryList = response.body();
-        Log.d("DATA :: ", categoryList.toString());
-        categoryListAdapter.clear();
-        categoryListAdapter.addCategory(categoryList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Category>> call, Throwable t)
-      {
-
-      }
-    });
-
-  }
+//  private void getTaxes(String kodeMerchant)
+//  {
+//    final Call<List<Tax>> tax = taxService.getTaxAll(kodeMerchant);
+//    tax.enqueue(new Callback<List<Tax>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+//      {
+////        List<Tax> taxList = response.body();
+////        Log.d("DATA :: ", taxList.toString());
+////        categoryListAdapter.clear();
+////        categoryListAdapter.addCategory(categoryList);
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Tax>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//
+//  }
 }

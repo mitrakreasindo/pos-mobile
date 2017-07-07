@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.category;
+package com.mitrakreasindo.pos.main.maintenance.taxes;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -15,16 +15,14 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
-import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryFormActivity extends AppCompatActivity
+public class TaxesFormActivity extends AppCompatActivity
 {
 
   @BindView(R.id.toolbar)
@@ -46,10 +44,10 @@ public class CategoryFormActivity extends AppCompatActivity
   @BindView(R.id.category_field)
   EditText categoryField;
 
-  private Category category;
-  private CategoryService categoryService;
+  private Tax tax;
+  private TaxService taxService;
 
-  private CategoryListAdapter categoryListAdapter;
+  private TaxesListAdapter taxesListAdapter;
 
   private Bundle bundle;
 
@@ -63,9 +61,9 @@ public class CategoryFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_category_form);
     ButterKnife.bind(this);
 
-    categoryService = ClientService.createService().create(CategoryService.class);
+    taxService = ClientService.createService().create(TaxService.class);
 
-    categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
+    taxesListAdapter = new TaxesListAdapter(this, new ArrayList<Tax>());
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
@@ -126,101 +124,60 @@ public class CategoryFormActivity extends AppCompatActivity
     Log.d(getClass().getSimpleName(), "Post Role !!!");
     Log.d(getClass().getSimpleName(), categoryField.getText().toString());
 
-    Category parentCategory = new Category();
-    parentCategory.setId(null);
+    tax = new Tax();
+    tax.setId(UUID.randomUUID().toString());
+    tax.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    tax.setSflag(true);
 
-    category = new Category();
-    category.setId(UUID.randomUUID().toString());
-    category.setName(categoryField.getText().toString());
-    category.setTexttip("");
-    category.setCatshowname(true);
-    category.setImage(null);
-    category.setParentid(parentCategory);
-    category.setColour("");
-    category.setCatorder(11);
-    category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    category.setSflag(true);
-
-
-    Call<HashMap<Integer, String>> call = categoryService.postCategory(kodeMerchant, category);
-    call.enqueue(new Callback<HashMap<Integer, String>>()
+    Call<List<Tax>> call = taxService.postTax(kodeMerchant, tax);
+    call.enqueue(new Callback<List<Tax>>()
     {
-
-      private int responseCode;
-      private String responseMessage;
-
       @Override
-      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
       {
-
-        final HashMap<Integer, String> data = response.body();
-        for (int resultKey : data.keySet())
-        {
-          responseCode = resultKey;
-          responseMessage = data.get(resultKey);
-
-          if (responseCode == 0)
-          {
-            TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(CategoryFormActivity.this);
-            tableCategoryHelper.open();
-            tableCategoryHelper.insert(category);
-            tableCategoryHelper.close();
-
-          }
-        }
-
         Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-        Toast.makeText(CategoryFormActivity.this, "Succesful", Toast.LENGTH_SHORT).show();
-
+        taxesListAdapter.addCategory(tax);
+        taxesListAdapter.notifyDataSetChanged();
         onBackPressed();
-
       }
 
       @Override
-      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      public void onFailure(Call<List<Tax>> call, Throwable t)
       {
       }
     });
-
+    onBackPressed();
 
   }
 
   private void updateCategory()
   {
+
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
     Log.d(getClass().getSimpleName(), "Post Role !!!");
     Log.d(getClass().getSimpleName(), categoryField.getText().toString());
 
-    String example = "Convert Java String";
-    byte[] bytes = example.getBytes();
-    String categoryId = bundle.getString("id");
+    String taxId = bundle.getString("id");
 
-    category = new Category();
-    category.setId(categoryId);
-    category.setName(categoryField.getText().toString());
-    category.setTexttip("");
-    category.setCatshowname(true);
-    category.setImage(null);
-    category.setParentid(null);
-    category.setColour("");
-    category.setCatorder(11);
-    category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    category.setSflag(true);
+    tax = new Tax();
+    tax.setId(UUID.randomUUID().toString());
+    tax.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    tax.setSflag(true);
 
-    Call<List<Category>> call = categoryService.updateCategory(kodeMerchant, category.getId(), category);
-    call.enqueue(new Callback<List<Category>>()
+    Call<List<Tax>> call = taxService.updateTax(kodeMerchant, tax.getId(), tax);
+    call.enqueue(new Callback<List<Tax>>()
     {
       @Override
-      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
+      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Update Category !!!");
         onBackPressed();
       }
 
       @Override
-      public void onFailure(Call<List<Category>> call, Throwable t)
+      public void onFailure(Call<List<Tax>> call, Throwable t)
       {
       }
     });

@@ -15,6 +15,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
+import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class MaintenanceFragment extends Fragment
   @Override
   public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState)
   {
-    Button btnUsers, btnRoles;
+    Button btnUsers, btnRoles, btnTaxes;
     View view = inflater.inflate(R.layout.fragment_maintenance, container, false);
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(getContext());
@@ -40,6 +41,7 @@ public class MaintenanceFragment extends Fragment
 
     btnUsers = (Button) view.findViewById(R.id.btn_users);
     btnRoles = (Button) view.findViewById(R.id.btn_roles);
+    btnTaxes = (Button) view.findViewById(R.id.btn_taxes);
 
     btnRoles.setOnClickListener(new View.OnClickListener()
     {
@@ -58,6 +60,16 @@ public class MaintenanceFragment extends Fragment
         startActivity(new Intent(getActivity(), UserActivity.class));
       }
     });
+
+    btnTaxes.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        startActivity(new Intent(getActivity(), TaxesActivity.class));
+      }
+    });
+
 
     return view;
   }

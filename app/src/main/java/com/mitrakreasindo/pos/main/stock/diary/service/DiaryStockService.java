@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.main.stock.diary.service;
 
 import com.mitrakreasindo.pos.model.StockDiary;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,7 +24,7 @@ public interface DiaryStockService
   Call<List<StockDiary>> getStockDiaryAll(@Path("kodeMerchant") String kodeMerchant);
 
   @POST("chromis.stockdiary/{kodeMerchant}/")
-  Call<List<StockDiary>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary StockDiary);
+  Call<HashMap<Integer, String>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary StockDiary);
 
   @PUT("chromis.stockdiary/{kodeMerchant}/{id}")
   Call<List<StockDiary>> updateStockDiary(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary StockDiary);

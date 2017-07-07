@@ -78,7 +78,7 @@ public class TableProductHelper
     long response = 0;
 
     ContentValues initialValues = new ContentValues();
-    for(int i=0; i<list.length; i++)
+    for (int i = 0; i < list.length; i++)
     {
       initialValues.put(context.getString(R.string.tproduct_id), list[i].getId());
       initialValues.put(context.getString(R.string.tproduct_reference), list[i].getReference());
@@ -128,7 +128,7 @@ public class TableProductHelper
   public long insert(List<Product> list)
   {
     ContentValues initialValues = new ContentValues();
-    for(int i=0; i<list.size(); i++)
+    for (int i = 0; i < list.size(); i++)
     {
       initialValues.put(context.getString(R.string.tproduct_id), list.get(i).getId());
       initialValues.put(context.getString(R.string.tproduct_reference), list.get(i).getReference());
@@ -316,8 +316,8 @@ public class TableProductHelper
           context.getString(R.string.tproduct_siteguid),
           context.getString(R.string.tproduct_sflag)
         },
-        context.getString(R.string.tproduct_code) + " LIKE '%"+str+"%' OR " +
-        context.getString(R.string.tproduct_name) + " LIKE '%"+str+"%'",
+      context.getString(R.string.tproduct_code) + " LIKE '%" + str + "%' OR " +
+        context.getString(R.string.tproduct_name) + " LIKE '%" + str + "%'",
       null, null, null, null));
   }
 
@@ -325,7 +325,8 @@ public class TableProductHelper
   {
     private String kodeMerchant;
 
-    public HttpRequestTask(String kodeMerchant){
+    public HttpRequestTask(String kodeMerchant)
+    {
       this.kodeMerchant = kodeMerchant;
     }
 
@@ -376,10 +377,10 @@ public class TableProductHelper
 //          @Override
 //          public void run()
 //          {
-            open();
-            deleteAll();
-            insert(list);
-            close();
+        open();
+        deleteAll();
+        insert(list);
+        close();
 //          }
 //        }).start();
       }

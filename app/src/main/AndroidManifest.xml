@@ -85,6 +85,14 @@
 
         <activity android:name=".stock.diary.activity.DiarySelectProductActivity">
         </activity>
+
+        <activity
+            android:name=".maintenance.taxes.TaxesActivity"
+            android:label="@string/taxes"/>
+
+        <activity
+            android:name=".maintenance.taxes.TaxesFormActivity"
+            android:label="@string/tax_form"/>
     </application>
 
 </manifest>
