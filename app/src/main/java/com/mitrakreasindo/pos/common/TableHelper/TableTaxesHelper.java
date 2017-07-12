@@ -11,6 +11,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
+import com.mitrakreasindo.pos.model.TaxCusCategory;
 import com.mitrakreasindo.pos.service.TaxService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -117,7 +118,23 @@ public class TableTaxesHelper
     initialValues.put(KEY_RATECASCADE, tax.isRatecascade());
     initialValues.put(KEY_RATEORDER, tax.getRateorder());
 
-    return db.insert(DATABASE_TABLE, null, initialValues);
+    return db.insert(DATABASE_TABLE, null,initialValues);
+  }
+
+  public long update(Tax tax)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, tax.getId());
+    initialValues.put(KEY_NAME, tax.getName());
+    initialValues.put(KEY_CATEGORY, tax.getCategory().getId());
+    initialValues.put(KEY_CUSTCATEGORY, tax.getCustcategory().getId());
+    initialValues.put(KEY_PARENTID, tax.getParentid().getId());
+    initialValues.put(KEY_RATE, tax.getRate());
+    initialValues.put(KEY_RATECASCADE, tax.isRatecascade());
+    initialValues.put(KEY_RATEORDER, tax.getRateorder());
+
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {tax.getId()});
   }
 
   public int deleteAll()
@@ -140,6 +157,7 @@ public class TableTaxesHelper
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
       int rateIndex = cursor.getColumnIndexOrThrow(KEY_RATE);
       int categoryIndex = cursor.getColumnIndexOrThrow(KEY_CATEGORY);
+      int cusCategoryIndex = cursor.getColumnIndexOrThrow(KEY_CUSTCATEGORY);
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
@@ -147,15 +165,20 @@ public class TableTaxesHelper
         String name = cursor.getString(nameIndex);
         Double rate = cursor.getDouble(rateIndex);
         String category = cursor.getString(categoryIndex);
+        String cusCategory = cursor.getString(cusCategoryIndex);
 
         TaxCategory tc = new TaxCategory();
         tc.setId(category);
+
+        TaxCusCategory tcc = new TaxCusCategory();
+        tcc.setId(cusCategory);
 
         Tax tax = new Tax();
         tax.setId(id);
         tax.setName(name);
         tax.setRate(rate);
         tax.setCategory(tc);
+        tax.setCustcategory(tcc);
         list.add(tax);
       }
       return list;

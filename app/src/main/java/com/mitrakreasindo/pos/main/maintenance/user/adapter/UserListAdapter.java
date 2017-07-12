@@ -19,6 +19,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
+import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
@@ -42,6 +43,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   private String kodeMerchant;
   private LayoutInflater inflater;
   private PeopleService peopleService;
+  private People user;
 
   public UserListAdapter(Context context, List<People> peoples)
   {
@@ -72,7 +74,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   {
 //    holder.txtName.setText(cursor.getColumnIndexOrThrow("name"));
 //    holder.txtRole.setText(String.valueOf(cursor.getColumnIndexOrThrow("role")));
-
+    user = peoples.get(position);
     final People people = peoples.get(position);
     holder.txtName.setText(people.getName());
     holder.txtRole.setText(people.getEmail());
@@ -146,6 +148,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     notifyDataSetChanged();
   }
 
+  public void removePeople(People people)
+  {
+    peoples.remove(people);
+    notifyDataSetChanged();
+  }
+
 //  public void addUser(Cursor cursor)
 //  {
 //    this.cursor = cursor;
@@ -202,7 +210,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             tablePeopleHelper.open();
             tablePeopleHelper.delete(id);
             tablePeopleHelper.close();
+
           }
+
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
       }
@@ -214,6 +224,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         responseMessage = "Cannot delete user. :( There is something wrong.";
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
+
+
     });
+
+    removePeople(user);
   }
 }

@@ -139,26 +139,26 @@ public class CategoryActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  private void getCategories(String kodeMerchant)
-  {
-    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
-    category.enqueue(new Callback<List<Category>>()
-    {
-      @Override
-      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-      {
-        List<Category> categoryList = response.body();
-        Log.d("DATA :: ", categoryList.toString());
-        categoryListAdapter.clear();
-        categoryListAdapter.addCategory(categoryList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Category>> call, Throwable t)
-      {
-
-      }
-    });
-
-  }
+//  private void getCategories(String kodeMerchant)
+//  {
+//    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
+//    category.enqueue(new Callback<List<Category>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
+//      {
+//        List<Category> categoryList = response.body();
+//        Log.d("DATA :: ", categoryList.toString());
+//        categoryListAdapter.clear();
+//        categoryListAdapter.addCategory(categoryList);
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Category>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//
+//  }
 }

@@ -29,11 +29,13 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -102,6 +104,7 @@ public class UserFormActivity extends AppCompatActivity
   private boolean visibility;
   private PasswordValidator passwordValidator;
   private View focusView = null;
+  private UserListAdapter userListAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -119,6 +122,7 @@ public class UserFormActivity extends AppCompatActivity
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
     rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+    userListAdapter = new UserListAdapter(this, new ArrayList<People>());
     spinnerRole.setAdapter(rolesArrayAdapter);
 
     bundle = getIntent().getExtras();
@@ -416,6 +420,9 @@ public class UserFormActivity extends AppCompatActivity
             tablePeopleHelper.open();
             tablePeopleHelper.insert(people);
             tablePeopleHelper.close();
+
+            userListAdapter.addUser(people);
+            userListAdapter.notifyDataSetChanged();
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
@@ -454,7 +461,7 @@ public class UserFormActivity extends AppCompatActivity
           {
             TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(UserFormActivity.this);
             tablePeopleHelper.open();
-            tablePeopleHelper.insert(people);
+            tablePeopleHelper.update(people);
             tablePeopleHelper.close();
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();

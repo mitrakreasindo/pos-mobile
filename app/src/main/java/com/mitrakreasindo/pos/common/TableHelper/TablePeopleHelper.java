@@ -124,6 +124,21 @@ public class TablePeopleHelper
     return db.insert(DATABASE_TABLE, null, initialValues);
   }
 
+  public long update(People people)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, people.getId());
+    initialValues.put(KEY_NAME, people.getName());
+    initialValues.put(KEY_APPPASSWORD, people.getApppassword());
+    initialValues.put(KEY_CARD, people.getCard());
+    initialValues.put(KEY_ROLE, people.getRole().getId());
+    initialValues.put(KEY_VISIBLE, people.isVisible());
+    initialValues.put(KEY_IMAGE, people.getImage());
+
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{people.getId()});
+  }
+
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);

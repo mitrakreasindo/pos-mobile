@@ -13,8 +13,8 @@ public class TaxCusCategory
   private String name;
   private String siteguid;
   private Boolean sflag;
-  private Collection<Tax> taxesCollection;
-  private Collection<Customer> customersCollection;
+//  private Collection<Tax> taxesCollection;
+//  private Collection<Customer> customersCollection;
 
   public String getId()
   {
@@ -56,23 +56,23 @@ public class TaxCusCategory
     this.sflag = sflag;
   }
 
-  public Collection<Tax> getTaxesCollection()
-  {
-    return taxesCollection;
-  }
-
-  public void setTaxesCollection(Collection<Tax> taxesCollection)
-  {
-    this.taxesCollection = taxesCollection;
-  }
-
-  public Collection<Customer> getCustomersCollection()
-  {
-    return customersCollection;
-  }
-
-  public void setCustomersCollection(Collection<Customer> customersCollection)
-  {
-    this.customersCollection = customersCollection;
-  }
+//  public Collection<Tax> getTaxesCollection()
+//  {
+//    return taxesCollection;
+//  }
+//
+//  public void setTaxesCollection(Collection<Tax> taxesCollection)
+//  {
+//    this.taxesCollection = taxesCollection;
+//  }
+//
+//  public Collection<Customer> getCustomersCollection()
+//  {
+//    return customersCollection;
+//  }
+//
+//  public void setCustomersCollection(Collection<Customer> customersCollection)
+//  {
+//    this.customersCollection = customersCollection;
+//  }
 }

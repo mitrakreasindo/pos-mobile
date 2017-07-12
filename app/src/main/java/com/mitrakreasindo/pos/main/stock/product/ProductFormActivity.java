@@ -1,33 +1,52 @@
 package com.mitrakreasindo.pos.main.stock.product;
 
+import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.main.R;
-
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class ProductFormActivity extends AppCompatActivity
 {
+
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.tabs)
+  TabLayout tabs;
+  @BindView(R.id.appbar)
+  AppBarLayout appbar;
+  @BindView(R.id.container)
+  ViewPager container;
+  @BindView(R.id.btn_save_product)
+  Button btnSaveProduct;
+  @BindView(R.id.main_content)
+  CoordinatorLayout mainContent;
+
+  private Product product;
 
   private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -36,19 +55,16 @@ public class ProductFormActivity extends AppCompatActivity
   private ProductService productService;
 
 
-  private Product product;
-
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_product_form);
+    ButterKnife.bind(this);
+
+    setSupportActionBar(toolbar);
 
     productService = ClientService.createService().create(ProductService.class);
-
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -67,7 +83,14 @@ public class ProductFormActivity extends AppCompatActivity
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
-
+    btnSaveProduct.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Toast.makeText(ProductFormActivity.this, "Test Save", Toast.LENGTH_LONG).show();
+      }
+    });
 
   }
 
@@ -97,8 +120,24 @@ public class ProductFormActivity extends AppCompatActivity
   {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    @BindView(R.id.edittext_reference)
+    EditText edittextReference;
+    @BindView(R.id.edittext_barcode)
+    EditText edittextBarcode;
+    @BindView(R.id.edittext_general_name)
+    EditText edittextGeneralName;
+    @BindView(R.id.edittext_general_shortname)
+    EditText edittextGeneralShortname;
+    @BindView(R.id.spinner_general_category)
+    Spinner spinnerGeneralCategory;
+    @BindView(R.id.edittext_general_buyprice)
+    EditText edittextGeneralBuyprice;
+    @BindView(R.id.edittext_general_sell_price)
+    EditText edittextGeneralSellPrice;
 
-    public PlaceholderFragment() {}
+    public PlaceholderFragment()
+    {
+    }
 
     public static PlaceholderFragment newInstance(int sectionNumber)
     {
@@ -113,12 +152,12 @@ public class ProductFormActivity extends AppCompatActivity
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-      if(getArguments().getInt(ARG_SECTION_NUMBER) == 1)
+      if (getArguments().getInt(ARG_SECTION_NUMBER) == 1)
       {
         View rootView = inflater.inflate(R.layout.fragment_product_general, container, false);
         return rootView;
       }
-      else if(getArguments().getInt(ARG_SECTION_NUMBER) == 2)
+      else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2)
       {
         View rootView = inflater.inflate(R.layout.fragment_product_stock, container, false);
         return rootView;
@@ -136,6 +175,7 @@ public class ProductFormActivity extends AppCompatActivity
       return rootView;
 
     }
+
   }
 
   public class SectionsPagerAdapter extends FragmentPagerAdapter
@@ -174,7 +214,8 @@ public class ProductFormActivity extends AppCompatActivity
     }
   }
 
-  private void getProducts(){
+  private void getProducts()
+  {
 
   }
 }

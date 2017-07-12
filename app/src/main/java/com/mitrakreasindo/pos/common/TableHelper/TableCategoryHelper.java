@@ -112,6 +112,21 @@ public class TableCategoryHelper
     return db.insert(DATABASE_TABLE, null, initialValues);
   }
 
+  public long update(Category category)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, category.getId());
+    initialValues.put(KEY_NAME, category.getName());
+    initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    initialValues.put(KEY_TEXTTIP, category.getTexttip());
+    initialValues.put(KEY_IMAGE, category.getImage());
+    initialValues.put(KEY_COLOUR, category.getColour());
+    initialValues.put(KEY_CATORDER, category.getCatorder());
+
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {category.getId()});
+  }
+
   public List<Category> populateCategory(Cursor cursor)
   {
     try

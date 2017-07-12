@@ -154,5 +154,6 @@
     <string name="tax_form">Tax Form</string>
     <string name="tax">Tax</string>
     <string name="rate">Rate</string>
+    <string name="attributes">Attributes</string>
 
 </resources>

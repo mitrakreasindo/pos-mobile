@@ -91,28 +91,6 @@ public class CategoryFormActivity extends AppCompatActivity
       categoryField.setText(name);
     }
 
-//    category = new Category();
-
-//    if (bundle == null){
-//      category.setId(UUID.randomUUID().toString());
-//    }else {
-//      categoryId = bundle.getString("id");
-//      category.setId(categoryId);
-//    }
-//
-//    Category parentCategory = new Category();
-//    parentCategory.setId(null);
-//
-//    category.setName(categoryField.getText().toString());
-//    category.setTexttip("");
-//    category.setCatshowname(true);
-//    category.setImage(null);
-//    category.setParentid(parentCategory);
-//    category.setColour("");
-//    category.setCatorder(11);
-//    category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    category.setSflag(true);
-
   }
 
   @Override
@@ -192,13 +170,14 @@ public class CategoryFormActivity extends AppCompatActivity
             tableCategoryHelper.insert(category);
             tableCategoryHelper.close();
 
+            categoryListAdapter.addCategory(category);
+            categoryListAdapter.notifyDataSetChanged();
           }
+          Log.d(getClass().getSimpleName(), "Success Post Category !!!");
+          Toast.makeText(CategoryFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
         }
 
-        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-        Toast.makeText(CategoryFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
-
-        onBackPressed();
+        finish();
 
       }
 
@@ -247,28 +226,32 @@ public class CategoryFormActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
-
+          Log.e("RESPONSE CODE", String.valueOf(responseCode));
           Log.e("RESPONSE ", responseMessage);
 
           if (responseCode == 0)
           {
+            Log.e("CATEGORY ID ", category.getId());
             TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(CategoryFormActivity.this);
             tableCategoryHelper.open();
-            tableCategoryHelper.insert(category);
+            tableCategoryHelper.update(category);
             tableCategoryHelper.close();
+
+
           }
+          Toast.makeText(CategoryFormActivity.this, "Succesfull update category", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(CategoryFormActivity.this, "Succesfull update category", Toast.LENGTH_SHORT).show();
-        onBackPressed();
+        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        responseCode = -1;
+        responseMessage = "Cannot update category. :( There is something wrong.";
+        Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-
-    onBackPressed();
 
   }
 }

@@ -95,22 +95,32 @@ public class UserActivity extends AppCompatActivity
     userListAdapter.addUser(tablePeopleHelper.getData());
 
     txtFilter.addTextChangedListener(new TextWatcher()
-        {
-          @Override
-          public void onTextChanged(CharSequence s, int start, int before, int count)
-          {
-            userListAdapter.clear();
-            userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
-          }
-          @Override
-          public void beforeTextChanged(CharSequence s, int start, int count, int after)
-          {
-          }
-          @Override
-          public void afterTextChanged(Editable s)
-          {
-          }
-        });
+    {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count)
+      {
+        userListAdapter.clear();
+        userListAdapter.addUser(tablePeopleHelper.getData(txtFilter.getText().toString()));
+      }
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+      }
+    });
+  }
+
+  @Override
+  protected void onStart()
+  {
+    super.onStart();
+    userListAdapter.clear();
+    userListAdapter.addUser(tablePeopleHelper.getData());
   }
 
   @Override

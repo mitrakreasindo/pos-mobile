@@ -16,12 +16,14 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
+import com.mitrakreasindo.pos.model.TaxCusCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,11 +133,19 @@ public class TaxesFormActivity extends AppCompatActivity
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId(UUID.randomUUID().toString());
 
+    TaxCusCategory taxCusCategory = new TaxCusCategory();
+    taxCusCategory.setId(null);
+
+    Tax tax1 = new Tax();
+    tax1.setId(null);
+
     final Tax tax = new Tax();
     tax.setId(UUID.randomUUID().toString());
     tax.setName(taxField.getText().toString());
     tax.setRate(Double.valueOf(rateField.getText().toString()));
     tax.setCategory(taxCategory);
+    tax.setCustcategory(taxCusCategory);
+    tax.setParentid(tax1);
 
     Call<HashMap<Integer, String>> call = taxService.postTax(kodeMerchant, tax);
     call.enqueue(new Callback<HashMap<Integer, String>>()
@@ -148,25 +158,26 @@ public class TaxesFormActivity extends AppCompatActivity
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
 
-//        final HashMap<Integer, String> data = response.body();
-//        for (int resultKey : data.keySet())
-//        {
-//          responseCode = resultKey;
-//          responseMessage = data.get(resultKey);
-//
-//          Log.e("RESPONSE ", responseMessage);
-//          if (responseCode == 0)
-//          {
-//            taxesListAdapter.addTax(tax);
-//            taxesListAdapter.notifyDataSetChanged();
-//
-//          }
-//        }
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
 
-//        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-//        Toast.makeText(TaxesFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
+          Log.e("RESPONSE ", responseMessage);
+          if (responseCode == 0)
+          {
+            TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(TaxesFormActivity.this);
+            tableTaxesHelper.open();
+            tableTaxesHelper.insert(tax);
+            tableTaxesHelper.close();
 
-        onBackPressed();
+            taxesListAdapter.addTax(tax);
+            taxesListAdapter.notifyDataSetChanged();
+          }
+          Toast.makeText(TaxesFormActivity.this, "Succesfull add taxes", Toast.LENGTH_SHORT).show();
+        }
+        finish();
       }
 
       @Override
@@ -174,7 +185,6 @@ public class TaxesFormActivity extends AppCompatActivity
       {
       }
     });
-//    onBackPressed();
 
   }
 
@@ -191,11 +201,19 @@ public class TaxesFormActivity extends AppCompatActivity
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId(categoryId);
 
+    TaxCusCategory taxCusCategory = new TaxCusCategory();
+    taxCusCategory.setId(null);
+
+    Tax tax1 = new Tax();
+    tax1.setId(null);
+
     final Tax tax = new Tax();
     tax.setId(id);
     tax.setName(taxField.getText().toString());
     tax.setRate(Double.valueOf(rateField.getText().toString()));
     tax.setCategory(taxCategory);
+    tax.setCustcategory(taxCusCategory);
+    tax.setParentid(tax1);
 
     Call<HashMap<Integer, String>> call = taxService.updateTax(kodeMerchant, id, tax);
     call.enqueue(new Callback<HashMap<Integer, String>>()
@@ -208,25 +226,27 @@ public class TaxesFormActivity extends AppCompatActivity
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
 
-//        final HashMap<Integer, String> data = response.body();
-//        for (int resultKey : data.keySet())
-//        {
-//          responseCode = resultKey;
-//          responseMessage = data.get(resultKey);
-//
-//          Log.e("RESPONSE ", responseMessage);
-//          if (responseCode == 0)
-//          {
-//            taxesListAdapter.addTax(tax);
-//            taxesListAdapter.notifyDataSetChanged();
-//
-//          }
-//        }
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
 
-//        Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-//        Toast.makeText(TaxesFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
+          Log.e("RESPONSE ", responseMessage);
+          if (responseCode == 0)
+          {
+            TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(TaxesFormActivity.this);
+            tableTaxesHelper.open();
+            tableTaxesHelper.update(tax);
+            tableTaxesHelper.close();
 
-        onBackPressed();
+            taxesListAdapter.addTax(tax);
+            taxesListAdapter.notifyDataSetChanged();
+
+          }
+          Toast.makeText(TaxesFormActivity.this, "Succesfull update tax", Toast.LENGTH_SHORT).show();
+        }
+        finish();
       }
 
       @Override

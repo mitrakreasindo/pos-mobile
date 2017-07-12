@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
@@ -50,7 +51,7 @@ public class TaxesActivity extends AppCompatActivity
 
   private TaxesListAdapter taxesListAdapter;
 
-  private TableCategoryHelper tableCategoryHelper;
+  private TableTaxesHelper tableTaxesHelper;
 
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
@@ -85,15 +86,18 @@ public class TaxesActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listCategory.setLayoutManager(layoutManager);
 
-    tableCategoryHelper = new TableCategoryHelper(this);
+    tableTaxesHelper = new TableTaxesHelper(this);
+
+    taxesListAdapter.clear();
+    taxesListAdapter.addTax(tableTaxesHelper.getData());
 
     editTextFilter.addTextChangedListener(new TextWatcher()
     {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-//        categoryListAdapter.clear();
-//        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
+        taxesListAdapter.clear();
+        taxesListAdapter.addTax(tableTaxesHelper.getData(editTextFilter.getText().toString()));
       }
 
       @Override
@@ -109,41 +113,20 @@ public class TaxesActivity extends AppCompatActivity
       }
     });
 
-    getTaxes(kodeMerchant);
   }
 
   @Override
   protected void onStart()
   {
     super.onStart();
-//    getTaxes(kodeMerchant);
+    taxesListAdapter.clear();
+    taxesListAdapter.addTax(tableTaxesHelper.getData());
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
-
-//    MenuItem searchItem = menu.findItem(R.id.action_search);
-//    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//
-//    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-//    {
-//      @Override
-//      public boolean onQueryTextSubmit(String query)
-//      {
-//        return false;
-//      }
-//
-//      @Override
-//      public boolean onQueryTextChange(String newText)
-//      {
-//        categoryListAdapter.clear();
-//        categoryListAdapter.addCategory(tableCategoryHelper.getData(newText.toString()));
-//        return false;
-//      }
-//    });
-
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -159,25 +142,25 @@ public class TaxesActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  private void getTaxes(String kodeMerchant)
-  {
-    final Call<List<Tax>> tax = taxService.getTaxAll(kodeMerchant);
-    tax.enqueue(new Callback<List<Tax>>()
-    {
-      @Override
-      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
-      {
-        List<Tax> taxList = response.body();
-        taxesListAdapter.clear();
-        taxesListAdapter.addTax(taxList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Tax>> call, Throwable t)
-      {
-
-      }
-    });
-
-  }
+//  private void getTaxes(String kodeMerchant)
+//  {
+//    final Call<List<Tax>> tax = taxService.getTaxAll(kodeMerchant);
+//    tax.enqueue(new Callback<List<Tax>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Tax>> call, Response<List<Tax>> response)
+//      {
+//        List<Tax> taxList = response.body();
+//        taxesListAdapter.clear();
+//        taxesListAdapter.addTax(taxList);
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Tax>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//
+//  }
 }

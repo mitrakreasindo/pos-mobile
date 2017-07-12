@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
@@ -91,10 +93,29 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
                 Call<HashMap<Integer, String>> call = taxService.deleteTax(tax.getId());
                 call.enqueue(new Callback<HashMap<Integer, String>>()
                 {
+
+                  private int responseCode;
+                  private String responseMessage;
+
                   @Override
                   public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
                   {
+                    final HashMap<Integer, String> data = response.body();
+                    for (int resultKey : data.keySet())
+                    {
+                      responseCode = resultKey;
+                      responseMessage = data.get(resultKey);
 
+                      Log.e("RESPONSE ", responseMessage);
+                      if (responseCode == 0)
+                      {
+                        TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(context);
+                        tableTaxesHelper.open();
+                        tableTaxesHelper.delete(tax.getId());
+                        tableTaxesHelper.close();
+                      }
+                      Toast.makeText(context, "Succesfull delete taxes", Toast.LENGTH_SHORT).show();
+                    }
                   }
                   @Override
                   public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
