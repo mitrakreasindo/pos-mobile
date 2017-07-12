@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,8 +28,11 @@ import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -37,7 +43,6 @@ import retrofit2.Response;
 
 public class DiaryFormActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.appbar)
@@ -68,6 +73,7 @@ public class DiaryFormActivity extends AppCompatActivity
   Spinner diaryProductReasonSpinner;
   @BindView(R.id.diary_product_total)
   TextView diaryProductTotal;
+
   private int mYear, mMonth, mDay, mHour, mMinute, mSecond;
   private Bundle bundle;
   private String barcode, name;
@@ -152,6 +158,84 @@ public class DiaryFormActivity extends AppCompatActivity
         postStockDiary();
       }
     });
+
+    diaryProductPriceField.addTextChangedListener(new TextWatcher()
+    {
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count)
+      {
+        if (s.length() > 0)
+        {
+          formatTotalPrice();
+        }
+        else
+        {
+          diaryProductTotal.setText("0");
+        }
+      }
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after)
+      {
+      }
+      @Override
+      public void afterTextChanged(Editable s)
+      {
+        try
+        {
+          diaryProductPriceField.removeTextChangedListener(this);
+          String originalString = s.toString();
+
+          if (originalString.contains(",")) {
+            originalString = originalString.replaceAll(",", "");
+          }
+          Long longval = Long.parseLong(originalString);
+
+          DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+          diaryProductPriceField.setText(decimalFormat.format(longval));
+          diaryProductPriceField.setSelection(diaryProductPriceField.getText().length());
+        }
+        catch (Exception e)
+        {
+          e.printStackTrace();
+        }
+        diaryProductPriceField.addTextChangedListener(this);
+      }
+    });
+
+    diaryUnitField.addTextChangedListener(new TextWatcher()
+    {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+      {
+      }
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+      {
+        if (charSequence.length() > 0 && diaryProductPriceField.getText().toString().length() > 0)
+        {
+          formatTotalPrice();
+        }
+        else
+        {
+          diaryProductTotal.setText("0");
+        }
+      }
+      @Override
+      public void afterTextChanged(Editable editable)
+      {
+      }
+    });
+
+    //Spinner Items
+    List<String> spinnerArray =  new ArrayList<>();
+    spinnerArray.add("Stock In (+)");
+    spinnerArray.add("Stock Out (-)");
+
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+      this, android.R.layout.simple_spinner_item, spinnerArray);
+
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    diaryProductReasonSpinner.setAdapter(adapter);
   }
 
   @Override
@@ -186,6 +270,21 @@ public class DiaryFormActivity extends AppCompatActivity
   {
     super.onResume();
 //    Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
+  }
+
+  private void formatTotalPrice()
+  {
+    String originalString = diaryProductPriceField.getText().toString();
+
+    if (originalString.contains(",")) {
+      originalString = originalString.replaceAll(",", "");
+    }
+    Long longval = Long.parseLong(originalString);
+
+    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+    diaryProductTotal.setText(decimalFormat.format(
+      Double.parseDouble(diaryUnitField.getText().toString()) *
+        Double.parseDouble(longval.toString())));
   }
 
   private void postStockDiary()

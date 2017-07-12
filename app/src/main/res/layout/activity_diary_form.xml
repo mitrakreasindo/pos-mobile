@@ -296,14 +296,14 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total :"
+                android:text="Total ($) :"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/diary_product_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 1.000.000"/>
+                android:text="$ 0"/>
 
 
         </LinearLayout>
