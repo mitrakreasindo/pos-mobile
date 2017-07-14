@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   {
 
 //    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
-    holder.itemView.setOnClickListener(new View.OnClickListener()
+    holder.productItem.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
@@ -73,13 +74,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     });
 
 
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+    holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
     {
       @Override
       public boolean onLongClick(View v)
       {
         productActivity.is_action_mode = true;
-        holder.checkBox.setChecked(true);
+        holder.checkBox.toggle();
         prepareSelection(holder, position);
         productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
         notifyDataSetChanged();
@@ -140,7 +141,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private TextView txtCodeProduct, txtNameProduct, txtBuyPrice,txtSellPrice;
     private CheckBox checkBox;
-    private CardView productItem;
+    private LinearLayout productItem;
 
     public ViewHolder(View itemView)
     {
@@ -148,7 +149,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
       txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
       checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
-      productItem = (CardView) itemView.findViewById(R.id.item_product);
+      productItem = (LinearLayout) itemView.findViewById(R.id.item_product);
       txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
       txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
     }

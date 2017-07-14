@@ -13,15 +13,22 @@ import com.mitrakreasindo.pos.main.R;
  * Created by lisa on 30/05/17.
  */
 
-public class StockFragment extends Fragment
+public class ProductImageFragment extends Fragment
 {
+
+  public ProductImageFragment(){}
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+  }
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
   {
-    View view = inflater.inflate(R.layout.fragment_stock, container, false);
-
-    return view;
+    View rootView = inflater.inflate(R.layout.fragment_product_image, container, false);
+    return rootView;
   }
 }

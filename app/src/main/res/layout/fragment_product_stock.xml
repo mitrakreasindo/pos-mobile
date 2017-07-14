@@ -2,9 +2,11 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".stock.product.fragment.ProductStockFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                     android:text="@string/stock_cost_by_year"/>
 
                 <EditText
-                    android:id="@+id/edittext_reference"
+                    android:id="@+id/edittext_stock_by_year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -43,7 +45,7 @@
                     android:text="@string/stock_volume"/>
 
                 <EditText
-                    android:id="@+id/edittext_barcode"
+                    android:id="@+id/edittext_stock_volume"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -56,7 +58,7 @@
                     android:text="@string/catalog_ranking"/>
 
                 <EditText
-                    android:id="@+id/edittext_general_name"
+                    android:id="@+id/edittext_stock_catalog_ranking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -69,7 +71,7 @@
                     android:text="@string/pack_quantity"/>
 
                 <EditText
-                    android:id="@+id/edittext_general_shortname"
+                    android:id="@+id/edittext_stock_pack_quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -82,7 +84,7 @@
                     android:text="@string/of_product"/>
 
                 <Spinner
-                    android:id="@+id/spinner_general_category"
+                    android:id="@+id/spinner_stock_of_product"
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
