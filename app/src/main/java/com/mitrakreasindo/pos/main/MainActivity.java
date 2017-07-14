@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
     textViewUser.setText(valueUser);
 
-    companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
     List<String> list = XMLHelper.XMLReader(this, "navigation", permission);

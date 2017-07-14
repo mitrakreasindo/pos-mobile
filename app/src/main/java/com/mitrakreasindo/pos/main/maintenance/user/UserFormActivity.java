@@ -29,7 +29,7 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.user.controller.UserListAdapter;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
@@ -115,7 +115,7 @@ public class UserFormActivity extends AppCompatActivity
 
     peopleService = ClientService.createService().create(PeopleService.class);
 
-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     radiobuttonVisible.setChecked(true);
 
@@ -153,13 +153,10 @@ public class UserFormActivity extends AppCompatActivity
           }
           i++;
         }
-
         Log.d("ROLE_ID", String.valueOf(spinnerPosition));
         spinnerRole.setSelection(spinnerPosition);
       }
-
     }
-
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(R.string.action_register);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +23,9 @@ import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity
 {
@@ -71,7 +66,7 @@ public class CategoryActivity extends AppCompatActivity
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     categoryService = ClientService.createService().create(CategoryService.class);
 

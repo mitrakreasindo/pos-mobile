@@ -66,7 +66,7 @@ public class RoleFormActivity extends AppCompatActivity
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     final Bundle bundle = getIntent().getExtras();
 

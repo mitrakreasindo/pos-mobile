@@ -21,16 +21,21 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.diary.service.DiaryStockService;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -77,11 +82,13 @@ public class DiaryFormActivity extends AppCompatActivity
   private int mYear, mMonth, mDay, mHour, mMinute, mSecond;
   private Bundle bundle;
   private String barcode, name;
-  private double inStock, buyPrice, sellPrice, unit, price;
+  private double inStock, buyPrice, sellPrice;
   private String kodeMerchant;
   private DiaryStockService diaryStockService;
   private StockDiary stockDiary;
   private SharedPreferenceEditor sharedPreferenceEditor;
+  private TableProductHelper tableProductHelper;
+  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -92,8 +99,9 @@ public class DiaryFormActivity extends AppCompatActivity
 
     diaryStockService = ClientService.createService().create(DiaryStockService.class);
     sharedPreferenceEditor = new SharedPreferenceEditor();
+    tableProductHelper = new TableProductHelper(this);
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -113,6 +121,8 @@ public class DiaryFormActivity extends AppCompatActivity
       }
     });
 
+    diaryDateField.setText(dateFormat.format(new Date()));
+
     diaryDateField.setOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -131,7 +141,26 @@ public class DiaryFormActivity extends AppCompatActivity
           @Override
           public void onTimeSet(TimePicker view, int hourOfDay, int minute)
           {
-            diaryDateField.setText(diaryDateField.getText() + " " + hourOfDay + ":" + minute);
+            String hour, min;
+
+            if (String.valueOf(hourOfDay).length() == 1)
+            {
+              hour = "0" + String.valueOf(hourOfDay);
+            }
+            else
+            {
+              hour = String.valueOf(hourOfDay);
+            }
+
+            if (String.valueOf(minute).length() == 1)
+            {
+              min = "0" + String.valueOf(minute);
+            }
+            else
+            {
+              min = String.valueOf(minute);
+            }
+            diaryDateField.setText(diaryDateField.getText() + " " + hour + ":" + min);
           }
         }, mHour, mMinute, true);
 
@@ -140,7 +169,27 @@ public class DiaryFormActivity extends AppCompatActivity
           @Override
           public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
           {
-            diaryDateField.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            String month, day;
+
+            if (String.valueOf(monthOfYear + 1).length() == 1)
+            {
+              month = "0" + String.valueOf(monthOfYear + 1);
+            }
+            else
+            {
+              month = String.valueOf(monthOfYear + 1);
+            }
+
+            if (String.valueOf(dayOfMonth).length() == 1)
+            {
+              day = "0" + String.valueOf(dayOfMonth);
+            }
+            else
+            {
+              day = String.valueOf(dayOfMonth);
+            }
+
+            diaryDateField.setText(year + "-" + month + "-" + day);
             timePickerDialog.show();
           }
         }, mYear, mMonth, mDay);
@@ -154,8 +203,18 @@ public class DiaryFormActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        Log.d("COMPANY CODE : ", kodeMerchant);
-        postStockDiary();
+        if (diaryProductBarcodeField.getText().equals("Barcode") || diaryProductBarcodeField.getText().equals(""))
+        {
+          Toast.makeText(DiaryFormActivity.this, "Mohon pilih produk terlebih dahulu !!", Toast.LENGTH_SHORT).show();
+        }
+        else if (diaryUnitField.getText().length() == 0 || diaryProductPriceField.getText().length() == 0)
+        {
+          Toast.makeText(DiaryFormActivity.this, "Mohon isi unit & harga terlebih dahulu !!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+          postStockDiary();
+        }
       }
     });
 
@@ -164,7 +223,7 @@ public class DiaryFormActivity extends AppCompatActivity
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-        if (s.length() > 0)
+        if (s.length() > 0 && diaryUnitField.getText().toString().length() > 0)
         {
           formatTotalPrice();
         }
@@ -252,10 +311,6 @@ public class DiaryFormActivity extends AppCompatActivity
         buyPrice = data.getDoubleExtra("buyprice", 0);
         sellPrice = data.getDoubleExtra("sellprice", 0);
 
-        Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
-
-        Log.d("DOUBLE : ", String.valueOf(inStock));
-
         diaryProductBarcodeField.setText(barcode);
         diaryProductNameField.setText(name);
         diaryProductInstockField.setText(String.valueOf(inStock));
@@ -289,29 +344,41 @@ public class DiaryFormActivity extends AppCompatActivity
 
   private void postStockDiary()
   {
-//    final ProgressDialog progressDialog = new ProgressDialog(this);
-//
-//    progressDialog.setMessage("Please wait...");
-//    progressDialog.show();
+    try
+    {
+      Location location = new Location();
+      location.setId("0");
 
-    Location location = new Location();
-    location.setId("0");
+      Product product = new Product();
+      product.setId(tableProductHelper.getId(diaryProductBarcodeField.getText().toString()));
 
-    Product product = new Product();
-    product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
+      stockDiary = new StockDiary();
+      stockDiary.setId(UUID.randomUUID().toString());
 
-    stockDiary = new StockDiary();
-    stockDiary.setId(UUID.randomUUID().toString());
-    stockDiary.setDatenew(null);
-    stockDiary.setReason(1);
-    stockDiary.setUnits(10);
-    stockDiary.setPrice(500);
-    stockDiary.setAppuser("abcd");
-    stockDiary.setSiteguid(null);
-    stockDiary.setSflag(true);
-    stockDiary.setAttributesetinstanceId(null);
-    stockDiary.setLocation(location);
-    stockDiary.setProduct(product);
+      stockDiary.setDatenew(dateFormat.parse(diaryDateField.getText().toString()));
+      int reason = 0;
+      if (diaryProductReasonSpinner.getSelectedItem().toString().contains("+"))
+      {
+        reason = 1;
+      }
+      else if (diaryProductReasonSpinner.getSelectedItem().toString().contains("-"))
+      {
+        reason = -1;
+      }
+      stockDiary.setReason(reason);
+      stockDiary.setUnits(Double.valueOf(diaryUnitField.getText().toString()));
+      stockDiary.setPrice(Double.valueOf(diaryProductBuyPriceField.getText().toString()));
+      stockDiary.setAppuser(IDs.getLoginUser());
+      stockDiary.setSiteguid(null);
+      stockDiary.setSflag(true);
+      stockDiary.setAttributesetinstanceId(null);
+      stockDiary.setLocation(location);
+      stockDiary.setProduct(product);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
 
     Call<HashMap<Integer, String>> call = diaryStockService.postStockDiary(kodeMerchant, stockDiary);
     call.enqueue(new Callback<HashMap<Integer, String>>()
@@ -346,8 +413,6 @@ public class DiaryFormActivity extends AppCompatActivity
         Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-//    onBackPressed();
-//    progressDialog.dismiss();
   }
 
 

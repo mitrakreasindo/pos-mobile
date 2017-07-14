@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Category;
@@ -90,7 +89,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
               case 1:
                 Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
                 categoryService = ClientService.createService().create(CategoryService.class);
-                Call<HashMap<Integer, String>> call = categoryService.deleteCategory(SharedPreferenceEditor.LoadPreferences(context, ""), category.getId());
+                Call<HashMap<Integer, String>> call = categoryService.deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), category.getId());
                 call.enqueue(new Callback<HashMap<Integer, String>>()
                 {
 

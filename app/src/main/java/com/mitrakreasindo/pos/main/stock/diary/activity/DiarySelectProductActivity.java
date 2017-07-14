@@ -1,7 +1,5 @@
 package com.mitrakreasindo.pos.main.stock.diary.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -25,7 +23,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
-import com.mitrakreasindo.pos.main.stock.diary.controller.DiarySelectProductController;
+import com.mitrakreasindo.pos.main.stock.diary.controller.DiarySelectProductAdapter;
 import com.mitrakreasindo.pos.model.Product;
 
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ public class DiarySelectProductActivity extends AppCompatActivity
   @BindView(R.id.button_filter)
   Button buttonFilter;
 
-  private DiarySelectProductController diarySelectProductController;
+  private DiarySelectProductAdapter diarySelectProductAdapter;
   private TableProductHelper tableProductHelper;
 
   private static final String TAG = SalesActivity.class.getSimpleName();
@@ -97,7 +95,7 @@ public class DiarySelectProductActivity extends AppCompatActivity
     setContentView(R.layout.activity_diary_select_product);
     ButterKnife.bind(this);
 
-    diarySelectProductController = new DiarySelectProductController(this, new ArrayList<Product>());
+    diarySelectProductAdapter = new DiarySelectProductAdapter(this, new ArrayList<Product>());
 
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
@@ -105,7 +103,7 @@ public class DiarySelectProductActivity extends AppCompatActivity
     beepManager = new BeepManager(this);
 
     listSelectProduct.setHasFixedSize(true);
-    listSelectProduct.setAdapter(diarySelectProductController);
+    listSelectProduct.setAdapter(diarySelectProductAdapter);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listSelectProduct.setLayoutManager(layoutManager);
 
@@ -120,16 +118,16 @@ public class DiarySelectProductActivity extends AppCompatActivity
 
     tableProductHelper = new TableProductHelper(this);
 
-    diarySelectProductController.clear();
-    diarySelectProductController.addProduct(tableProductHelper.getData());
+    diarySelectProductAdapter.clear();
+    diarySelectProductAdapter.addProduct(tableProductHelper.getData());
 
     editFilter.addTextChangedListener(new TextWatcher()
     {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-        diarySelectProductController.clear();
-        diarySelectProductController.addProduct(tableProductHelper.getData(editFilter.getText().toString()));
+        diarySelectProductAdapter.clear();
+        diarySelectProductAdapter.addProduct(tableProductHelper.getData(editFilter.getText().toString()));
       }
 
       @Override

@@ -16,16 +16,13 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
-import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -69,7 +66,7 @@ public class CategoryFormActivity extends AppCompatActivity
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
 
     setSupportActionBar(toolbar);

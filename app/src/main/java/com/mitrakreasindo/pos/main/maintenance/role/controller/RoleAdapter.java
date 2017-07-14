@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.maintenance.role.adapter;
+package com.mitrakreasindo.pos.main.maintenance.role.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -92,7 +92,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 
                 roleService = ClientService.createService().create(RoleService.class);
                 Log.d("DELETE CATEGORY", "DELETE CATEGORY");
-                Call<List<Role>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "") , role.getId());
+                Call<List<Role>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "Company Code", "") , role.getId());
                 call.enqueue(new Callback<List<Role>>()
                 {
                   @Override

@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.adapter.UserListAdapter;
+import com.mitrakreasindo.pos.main.maintenance.user.controller.UserListAdapter;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 

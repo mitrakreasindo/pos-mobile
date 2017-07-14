@@ -58,6 +58,7 @@ public class StockFragment extends Fragment
         startActivity(new Intent(getActivity(), ProductActivity.class));
       }
     });
+
     btnDiary.setOnClickListener(new View.OnClickListener()
     {
       @Override

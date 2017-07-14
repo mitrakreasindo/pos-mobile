@@ -185,6 +185,7 @@ public class TableProductHelper
     {
       List<Product> list = new ArrayList<>();
 
+      int idIndex = cursor.getColumnIndexOrThrow("id");
       int codeIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_code));
       int nameIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_name));
       int inStockIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockunits));
@@ -193,6 +194,7 @@ public class TableProductHelper
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
+        String id = cursor.getString(idIndex);
         String code = cursor.getString(codeIndex);
         String name = cursor.getString(nameIndex);
         double inStock = cursor.getDouble(inStockIndex);
@@ -200,6 +202,7 @@ public class TableProductHelper
         double priceBuy = cursor.getDouble(priceBuyIndex);
 
         Product product = new Product();
+        product.setId(id);
         product.setCode(code);
         product.setName(name);
         product.setStockunits(inStock);
@@ -319,6 +322,22 @@ public class TableProductHelper
       context.getString(R.string.tproduct_code) + " LIKE '%" + str + "%' OR " +
         context.getString(R.string.tproduct_name) + " LIKE '%" + str + "%'",
       null, null, null, null));
+  }
+
+  public String getId (String code)
+  {
+    String id = null;
+
+    open();
+    final String QUERY = "SELECT id FROM products WHERE code =?";
+    Cursor cursor = db.rawQuery(QUERY, new String[]{code});
+
+    if (cursor.moveToFirst())
+    {
+      id = cursor.getString(cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_id)));
+      Log.e("Product ID: ", id);
+    }
+    return id;
   }
 
   private class HttpRequestTask extends AsyncTask<Void, Void, Product[]>

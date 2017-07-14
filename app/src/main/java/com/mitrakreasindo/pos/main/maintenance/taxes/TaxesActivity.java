@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,23 +16,16 @@ import android.widget.LinearLayout;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
-import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Tax;
-import com.mitrakreasindo.pos.service.CategoryService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TaxesActivity extends AppCompatActivity
 {
@@ -75,7 +67,7 @@ public class TaxesActivity extends AppCompatActivity
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     taxService = ClientService.createService().create(TaxService.class);
 

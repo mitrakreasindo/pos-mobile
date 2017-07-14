@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
@@ -32,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -88,7 +85,7 @@ public class ProductFormActivity extends AppCompatActivity
 
     productService = ClientService.createService().create(ProductService.class);
     sharedPreferenceEditor = new SharedPreferenceEditor();
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
 //    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
 

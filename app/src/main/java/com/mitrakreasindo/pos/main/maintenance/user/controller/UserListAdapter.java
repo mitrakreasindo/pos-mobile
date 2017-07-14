@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.maintenance.user.adapter;
+package com.mitrakreasindo.pos.main.maintenance.user.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,7 +19,6 @@ import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
-import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
@@ -119,7 +118,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                 break;
 
               case 1:
-                deletePeople(SharedPreferenceEditor.LoadPreferences(context, ""), people.getId());
+                deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
                 Toast.makeText(context, "User deleted!", Toast.LENGTH_LONG).show();
                 break;
             }

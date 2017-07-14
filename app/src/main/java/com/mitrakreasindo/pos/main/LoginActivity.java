@@ -104,13 +104,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
   public void onClick(View view)
   {
-    companyCode = SharedPreferenceEditor.LoadPreferences(this, "");
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
     attemptLogin();
   }
 
   public void Register(View view)
   {
-    if (SharedPreferenceEditor.SavePreferences(this, "public"))
+    if (SharedPreferenceEditor.SavePreferences(this, "Company Code", "public"))
       Toast.makeText(this, "Company Code Saved", Toast.LENGTH_SHORT).show();
     else
       Toast.makeText(this, "Company Code Not Saved", Toast.LENGTH_SHORT).show();

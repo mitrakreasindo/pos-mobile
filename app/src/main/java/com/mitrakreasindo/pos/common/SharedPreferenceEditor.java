@@ -14,18 +14,16 @@ import static android.content.Context.MODE_PRIVATE;
 public class SharedPreferenceEditor
 {
   private static String filename;
-  private static String key;
-  private static String companyCode;
+  private static String value;
 
-  public static boolean SavePreferences(Context context, String value)
+  public static boolean SavePreferences(Context context, String key, String value)
   {
     try
     {
       filename = context.getResources().getString(R.string.preference_file_key);
-      key = context.getResources().getString(R.string.company_key);
       SharedPreferences sharedPreferences = context.getSharedPreferences(filename, MODE_PRIVATE);
       SharedPreferences.Editor editor = sharedPreferences.edit();
-      editor.putString(key , value);
+      editor.putString(key, value);
       editor.commit();
       return true;
     }
@@ -36,19 +34,18 @@ public class SharedPreferenceEditor
     }
   }
 
-  public static String LoadPreferences(Context context, String defaultValue)
+  public static String LoadPreferences(Context context, String key, String defaultValue)
   {
     try
     {
       filename = context.getResources().getString(R.string.preference_file_key);
-      key = context.getResources().getString(R.string.company_key);
       SharedPreferences sharedPreferences = context.getSharedPreferences(filename , MODE_PRIVATE);
-      companyCode = sharedPreferences.getString(key, defaultValue);
+      value = sharedPreferences.getString(key, defaultValue);
     }
     catch (Exception e)
     {
       e.printStackTrace();
     }
-    return companyCode;
+    return value;
   }
 }

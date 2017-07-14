@@ -20,7 +20,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.role.adapter.RoleAdapter;
+import com.mitrakreasindo.pos.main.maintenance.role.controller.RoleAdapter;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 
@@ -81,7 +81,7 @@ public class RoleActivity extends AppCompatActivity
       }
     });
 
-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     roleService = ClientService.createService().create(RoleService.class);
     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());

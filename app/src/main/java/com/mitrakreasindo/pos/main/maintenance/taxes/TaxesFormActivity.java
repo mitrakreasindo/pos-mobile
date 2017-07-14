@@ -15,19 +15,16 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
 import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
-import com.mitrakreasindo.pos.main.stock.category.CategoryFormActivity;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
 import com.mitrakreasindo.pos.model.TaxCusCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -73,7 +70,7 @@ public class TaxesFormActivity extends AppCompatActivity
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
 
-    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "");
+    kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     bundle = getIntent().getExtras();
 
