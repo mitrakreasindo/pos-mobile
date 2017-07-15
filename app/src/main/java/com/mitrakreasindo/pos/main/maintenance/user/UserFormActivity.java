@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,6 +36,7 @@ import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +52,6 @@ import retrofit2.Response;
 /**
  * Created by lisa on 23/05/17.
  */
-
 
 public class UserFormActivity extends AppCompatActivity
 {
@@ -103,8 +105,11 @@ public class UserFormActivity extends AppCompatActivity
   private String name, pass, repass;
   private boolean visibility;
   private PasswordValidator passwordValidator;
-  private View focusView = null;
+  private View focusView;
   private UserListAdapter userListAdapter;
+  private byte[] imageInByte;
+  private Bitmap bitmap;
+  private ByteArrayOutputStream baos;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -121,10 +126,14 @@ public class UserFormActivity extends AppCompatActivity
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
-    rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this, android.R.layout.simple_spinner_item, data);
+    rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this,
+      android.R.layout.simple_spinner_dropdown_item, data);
     userListAdapter = new UserListAdapter(this, new ArrayList<People>());
     spinnerRole.setAdapter(rolesArrayAdapter);
 
+    setSupportActionBar(toolbar);
+
+    //Edit Mode
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
@@ -132,12 +141,19 @@ public class UserFormActivity extends AppCompatActivity
       String name = bundle.getString("name");
       String password = bundle.getString("password");
       String roleId = bundle.getString("role");
-
-      Log.d("ROLE", roleId);
-      Log.d("DATA NAME : ", name);
+      boolean visible = bundle.getBoolean("visible");
+      byte[] image = bundle.getByteArray("image");
 
       edittextName.setText(name);
       edittextPass.setText(password);
+      if (visible)
+      {
+        radiobuttonVisible.setChecked(true);
+      }
+      else
+      {
+        radiobuttonInvisible.setChecked(true);
+      }
 
       int spinnerPosition = 0;
 
@@ -153,12 +169,25 @@ public class UserFormActivity extends AppCompatActivity
           }
           i++;
         }
-        Log.d("ROLE_ID", String.valueOf(spinnerPosition));
         spinnerRole.setSelection(spinnerPosition);
       }
+
+      if (image != null)
+      {
+        Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        imageview.setMinimumHeight(dm.heightPixels);
+        imageview.setMinimumWidth(dm.widthPixels);
+        imageview.setImageBitmap(bm);
+      }
+
+      getSupportActionBar().setTitle("Edit User");
     }
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(R.string.action_register);
+    else
+    {
+      getSupportActionBar().setTitle("Create User");
+    }
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -230,7 +259,7 @@ public class UserFormActivity extends AppCompatActivity
       Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
   }
 
-  private boolean attemptRegister()
+  private boolean attemptCreate()
   {
     passwordValidator = new PasswordValidator();
 
@@ -283,7 +312,7 @@ public class UserFormActivity extends AppCompatActivity
 
   private boolean attemptUpdate()
   {
-    boolean flag = false;
+    boolean flag;
 
     passwordValidator = new PasswordValidator();
 
@@ -361,7 +390,20 @@ public class UserFormActivity extends AppCompatActivity
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
     people.setVisible(visibility);
-    people.setImage(null);
+
+    if (imageview.getDrawable() != null)
+    {
+      bitmap = ((BitmapDrawable) imageview.getDrawable()).getBitmap();
+      baos = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+      imageInByte = baos.toByteArray();
+    }
+    else
+    {
+      imageInByte = null;
+    }
+
+    people.setImage(imageInByte);
     people.setSiteguid(null);
     people.setSflag(true);
     people.setEmail(null);
@@ -374,7 +416,7 @@ public class UserFormActivity extends AppCompatActivity
   {
     if (bundle == null)
     {
-      if (attemptRegister())
+      if (attemptCreate())
       {
         postPeople(PrepareData());
       }

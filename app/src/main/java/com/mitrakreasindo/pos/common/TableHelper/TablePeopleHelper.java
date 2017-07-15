@@ -167,12 +167,16 @@ public class TablePeopleHelper
       int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
       int roleIndex = cursor.getColumnIndexOrThrow(KEY_ROLE);
+      int visibleIndex = cursor.getColumnIndexOrThrow(KEY_VISIBLE);
+      int imageIndex = cursor.getColumnIndexOrThrow(KEY_IMAGE);
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String id = cursor.getString(idIndex);
         String name = cursor.getString(nameIndex);
         String role = cursor.getString(roleIndex);
+        boolean visible = cursor.getInt(visibleIndex) > 0;
+        byte[] image = cursor.getBlob(imageIndex);
 
         Role r = new Role();
         r.setId(role);
@@ -181,9 +185,10 @@ public class TablePeopleHelper
         people.setId(id);
         people.setName(name);
         people.setRole(r);
+        people.setVisible(visible);
+        people.setImage(image);
         list.add(people);
       }
-
       return list;
     }
     catch (Exception e)
@@ -197,9 +202,13 @@ public class TablePeopleHelper
   {
     open();
 
-    return populatePeople(db.query(DATABASE_TABLE,
+    List<People> list = populatePeople(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE},
       KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+
+    close();
+
+    return list;
   }
 
   public void downloadData(final String kodeMerchant)

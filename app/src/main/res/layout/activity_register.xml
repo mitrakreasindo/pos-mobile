@@ -1,157 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mitrakreasindo.pos.main.RegisterActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.mitrakreasindo.pos.main.RegisterActivity">
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:gravity="center">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true" />
+            android:indeterminate="true"/>
 
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textview_name"
+        android:id="@+id/textview_business_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/person_name" />
+        android:layout_marginTop="5dp"
+        android:text="@string/business_info"/>
 
     <EditText
-        android:id="@+id/edittext_name"
-        android:layout_below="@id/textview_name"
+        android:id="@+id/edittext_business_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:inputType="textPersonName" />
+        android:layout_below="@id/textview_business_info"
+        android:layout_marginTop="5dp"
+        android:hint="@string/business_name"
+        android:inputType="textPersonName"/>
 
-    <TextView
-        android:id="@+id/textview_pass"
-        android:layout_below="@id/edittext_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/person_pass" />
-
-    <EditText
-        android:id="@+id/edittext_pass"
-        android:layout_below="@id/textview_pass"
+    <LinearLayout
+        android:id="@+id/layout_business_type_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/textview_repass"
-        android:layout_below="@id/edittext_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reinput_pass" />
-
-    <EditText
-        android:id="@+id/edittext_repass"
-        android:layout_below="@id/textview_repass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/textview_role"
-        android:layout_below="@id/edittext_repass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/person_role" />
-
-    <Spinner
-        android:id="@+id/spinner_roles"
-        android:layout_below="@id/textview_role"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:theme="@style/ThemeSpinner"
-        style="@style/Widget.AppCompat.Spinner.Underlined" />
-
-    <TextView
-        android:id="@+id/textview_visibility"
-        android:layout_below="@id/spinner_roles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/visibility" />
-
-    <RadioGroup
-        android:id="@+id/radiogroup_visibility"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_business_name"
         android:orientation="horizontal"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@+id/textview_visibility">
+        android:layout_marginTop="5dp" >
 
-            <RadioButton
-                android:id="@+id/radiobutton_visible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_visible" />
+        <Spinner
+            android:id="@+id/spinner_business_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:theme="@style/ThemeSpinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined" />
 
-            <RadioButton
-                android:id="@+id/radiobutton_invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@string/radio_invisible" />
-    </RadioGroup>
+        <Spinner
+            android:id="@+id/spinner_business_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:theme="@style/ThemeSpinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edittext_business_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_business_type_category"
+        android:layout_marginTop="5dp"
+        android:hint="@string/business_address"
+        android:inputType="text"/>
+
+    <LinearLayout
+        android:id="@+id/layout_business_city_state_zip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_business_address"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edittext_business_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/business_city"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/edittext_business_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/business_state"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/edittext_business_zip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/business_zip"
+            android:inputType="text"/>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textview_image"
-        android:layout_below="@id/radiogroup_visibility"
+        android:id="@+id/textview_owner_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/image_code" />
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/layout_business_city_state_zip"
+        android:text="@string/owner_info"/>
 
-    <Button
-        android:id="@+id/button_imageselect"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edittext_owner_first_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/textview_image"
-        android:onClick="Select"
-        android:text="@string/image_select" />
+        android:layout_below="@id/textview_owner_info"
+        android:layout_marginTop="5dp"
+        android:hint="@string/owner_first_name"
+        android:inputType="textPersonName"/>
 
-    <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@id/button_imageselect"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@+id/textview_image"/>
-
-    <Button
-        android:id="@+id/button_confirm"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edittext_owner_last_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:onClick="Confirm"
-        android:text="@string/confirm" />
+        android:layout_below="@id/edittext_owner_first_name"
+        android:layout_marginTop="5dp"
+        android:hint="@string/owner_last_name"
+        android:inputType="textPersonName"/>
 
-    <Button
-        android:id="@+id/button_cancel"
+    <EditText
+        android:id="@+id/edittext_owner_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_owner_last_name"
+        android:layout_marginTop="5dp"
+        android:hint="@string/owner_email"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/edittext_owner_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_owner_email"
+        android:layout_marginTop="5dp"
+        android:hint="@string/owner_phone"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/edittext_owner_id_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_owner_phone"
+        android:layout_marginTop="5dp"
+        android:hint="@string/owner_id"
+        android:inputType="number"/>
+
+    <TextView
+        android:id="@+id/textview_business_register_term"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:onClick="Cancel"
-        android:text="@string/cancel" />
+        android:text="@string/business_register_term"/>
+
+    <Button
+        android:id="@+id/button_create_acc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="CreateAccount"
+        android:text="@string/button_create_acc"/>
 
 </RelativeLayout>

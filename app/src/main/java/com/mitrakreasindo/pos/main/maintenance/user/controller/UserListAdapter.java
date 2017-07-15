@@ -3,7 +3,6 @@ package com.mitrakreasindo.pos.main.maintenance.user.controller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,10 +36,7 @@ import retrofit2.Response;
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>
 {
   private List<People> peoples = new ArrayList<>();
-  private Cursor cursor;
   private Context context;
-  private String kodeMerchant;
-  private LayoutInflater inflater;
   private PeopleService peopleService;
   private People user;
 
@@ -48,22 +44,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   {
     this.context = context;
     this.peoples = peoples;
-    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-  }
-
-  public UserListAdapter(Context context, Cursor cursor)
-  {
-    this.context = context;
-    this.cursor = cursor;
-    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater
-            .from(parent.getContext())
-            .inflate(R.layout.adapter_user_list, parent, false);
+      .from(parent.getContext())
+      .inflate(R.layout.adapter_user_list, parent, false);
 
     return new ViewHolder(itemView);
   }
@@ -71,8 +60,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   @Override
   public void onBindViewHolder(ViewHolder holder, int position)
   {
-//    holder.txtName.setText(cursor.getColumnIndexOrThrow("name"));
-//    holder.txtRole.setText(String.valueOf(cursor.getColumnIndexOrThrow("role")));
     user = peoples.get(position);
     final People people = peoples.get(position);
     holder.txtName.setText(people.getName());
@@ -114,6 +101,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                 intent.putExtra("name", people.getName());
                 intent.putExtra("password", people.getApppassword());
                 intent.putExtra("role", people.getRole().getId());
+                intent.putExtra("visible" , people.isVisible());
+                intent.putExtra("image", people.getImage());
                 context.startActivity(intent);
                 break;
 
@@ -136,7 +125,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     notifyDataSetChanged();
   }
 
-  public void clear(){
+  public void clear()
+  {
     peoples.clear();
     notifyDataSetChanged();
   }
@@ -153,12 +143,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     notifyDataSetChanged();
   }
 
-//  public void addUser(Cursor cursor)
-//  {
-//    this.cursor = cursor;
-//    notifyDataSetChanged();
-//  }
-
   @Override
   public int getItemCount()
   {
@@ -173,7 +157,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
   public class ViewHolder extends RecyclerView.ViewHolder
   {
-
     private TextView txtName, txtRole;
 
     public ViewHolder(View itemView)
@@ -209,9 +192,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             tablePeopleHelper.open();
             tablePeopleHelper.delete(id);
             tablePeopleHelper.close();
-
           }
-
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
       }
@@ -224,9 +205,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
 
-
     });
-
     removePeople(user);
   }
 }
