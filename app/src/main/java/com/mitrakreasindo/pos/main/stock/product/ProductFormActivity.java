@@ -2,24 +2,28 @@ package com.mitrakreasindo.pos.main.stock.product;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
-import com.mitrakreasindo.pos.main.stock.product.fragment.ProductGeneralFragment;
-import com.mitrakreasindo.pos.main.stock.product.fragment.ProductImageFragment;
-import com.mitrakreasindo.pos.main.stock.product.fragment.ProductStockFragment;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.TaxCategory;
@@ -30,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,42 +44,52 @@ import retrofit2.Response;
 public class ProductFormActivity extends AppCompatActivity
 {
 
-  //  @BindView(R.id.toolbar)
-//  Toolbar toolbar;
-//  @BindView(R.id.tabs)
-//  TabLayout tabs;
-//  @BindView(R.id.appbar)
-//  AppBarLayout appbar;
-//  @BindView(R.id.container)
-//  ViewPager container;
-//  @BindView(R.id.btn_save_product)
-//  Button btnSaveProduct;
-//  @BindView(R.id.main_content)
-//  CoordinatorLayout mainContent;
-//
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.appbar)
+  AppBarLayout appbar;
+  @BindView(R.id.main_content)
+  CoordinatorLayout mainContent;
+  @BindView(R.id.edittext_barcode)
+  EditText edittextBarcode;
+  @BindView(R.id.edittext_general_name)
+  EditText edittextGeneralName;
+  @BindView(R.id.edittext_general_shortname)
+  EditText edittextGeneralShortname;
+  @BindView(R.id.spinner_general_category)
+  Spinner spinnerGeneralCategory;
+  @BindView(R.id.edittext_general_sell_price)
+  EditText edittextGeneralSellPrice;
+  @BindView(R.id.edittext_stock_by_year)
+  EditText edittextStockByYear;
+  @BindView(R.id.edittext_stock_volume)
+  EditText edittextStockVolume;
+  @BindView(R.id.edittext_stock_pack_quantity)
+  EditText edittextStockPackQuantity;
+  @BindView(R.id.spinner_stock_of_product)
+  Spinner spinnerStockOfProduct;
+  @BindView(R.id.btn_save_product)
+  Button btnSaveProduct;
+  @BindView(R.id.switch_multi_pack)
+  Switch switchMultiPack;
+  @BindView(R.id.edittext_general_buy_price)
+  EditText edittextGeneralBuyPrice;
+
   private Product product;
+  private Category category;
   private ProductService productService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
+  private ArrayAdapter<Category> categoryArrayAdapter;
+  private List<Category> dataCategory;
+  private ArrayAdapter<Product> productArrayAdapter;
+  private List<Product> dataProduct;
   private ProductListAdapter productListAdapter;
-//
-//  private SectionsPagerAdapter mSectionsPagerAdapter;
-//
-//  private ViewPager mViewPager;
-//
-//  private ProductService productService;
-//
-//  private EditText edittextReference;
-//  private EditText edittextBarcode;
-//  private EditText edittextGeneralName;
-//  private EditText edittextGeneralShortname;
-//  private Spinner spinnerGeneralProduct;
-//  private EditText edittextGeneralBuyprice;
-//  private EditText edittextGeneralSellPrice;
+  private Bundle bundle;
 
-  private TabLayout tabLayout;
-  public ViewPager viewPager;
-  private ViewPagerAdapter viewPagerAdapter;
+  private boolean isPack = false;
+
+  private String productId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -87,104 +102,119 @@ public class ProductFormActivity extends AppCompatActivity
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-//    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
+    bundle = getIntent().getExtras();
 
-    tabLayout = (TabLayout) findViewById(R.id.tabs);
-    viewPager = (ViewPager) findViewById(R.id.container);
-    viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+    setSupportActionBar(toolbar);
 
-    viewPagerAdapter.addFragment(new ProductGeneralFragment(), "GENERAL");
-    viewPagerAdapter.addFragment(new ProductStockFragment(), "STOCK");
-    viewPagerAdapter.addFragment(new ProductImageFragment(), "IMAGE");
-    viewPager.setAdapter(viewPagerAdapter);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
 
-    tabLayout.setupWithViewPager(viewPager);
+    TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
+    dataCategory = tableCategoryHelper.getData();
+    categoryArrayAdapter = new ArrayAdapter<>(ProductFormActivity.this, android.R.layout.simple_spinner_dropdown_item, dataCategory);
+    spinnerGeneralCategory.setAdapter(categoryArrayAdapter);
 
+    TableProductHelper tableProductHelper = new TableProductHelper(this);
+    dataProduct = tableProductHelper.getData();
+    productArrayAdapter = new ArrayAdapter<>(ProductFormActivity.this, android.R.layout.simple_spinner_dropdown_item, dataProduct);
+    spinnerStockOfProduct.setAdapter(productArrayAdapter);
 
-//    if (viewPager.getCurrentItem() == 0)
-//    {
-//      ProductGeneralFragment generalFragment = (ProductGeneralFragment) viewPager.getAdapter().instantiateItem(viewPager, viewPager.getCurrentItem());
-//      generalFragment.edittextReference.setText("NICE CASE");
-//    }
-//    edittextReference = (EditText) findViewById(R.id.edittext_reference);
-//    edittextBarcode = (EditText) findViewById(R.id.edittext_barcode);
-//    edittextGeneralName = (EditText) findViewById(R.id.edittext_general_name);
-//    edittextGeneralShortname = (EditText) findViewById(R.id.edittext_general_shortname);
-//    spinnerGeneralProduct = (Spinner) findViewById(R.id.spinner_general_product);
-//    edittextGeneralBuyprice = (EditText) findViewById(R.id.edittext_general_buyprice);
-//    edittextGeneralSellPrice = (EditText) findViewById(R.id.edittext_general_sell_price);
+    if (!switchMultiPack.isChecked())
+    {
+      edittextStockPackQuantity.setVisibility(View.GONE);
+      spinnerStockOfProduct.setVisibility(View.GONE);
+    }
+    else
+    {
+      edittextStockPackQuantity.setVisibility(View.VISIBLE);
+      spinnerStockOfProduct.setVisibility(View.VISIBLE);
+      isPack = true;
+    }
 
-//    ProductStockFragment.edittextReference.setText("Tes tes Tes");
+    switchMultiPack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+    {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+      {
 
-//    setSupportActionBar(toolbar);
-//
-//    productService = ClientService.createService().create(ProductService.class);
-//
-//    toolbar.setNavigationOnClickListener(new View.OnClickListener()
-//    {
-//      @Override
-//      public void onClick(View v)
-//      {
-//        onBackPressed();
-//      }
-//    });
-//
-//    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//
-//    mViewPager = (ViewPager) findViewById(R.id.container);
-//    mViewPager.setAdapter(mSectionsPagerAdapter);
-//
-//    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//    tabLayout.setupWithViewPager(mViewPager);
-//
-//    btnSaveProduct.setOnClickListener(new View.OnClickListener()
-//    {
-//      @Override
-//      public void onClick(View v)
-//      {
-//        Toast.makeText(ProductFormActivity.this, "Test Save", Toast.LENGTH_LONG).show();
-//      }
-//    });
+        if (!switchMultiPack.isChecked())
+        {
+          edittextStockPackQuantity.setVisibility(View.GONE);
+          spinnerStockOfProduct.setVisibility(View.GONE);
+        }
+        else
+        {
+          edittextStockPackQuantity.setVisibility(View.VISIBLE);
+          spinnerStockOfProduct.setVisibility(View.VISIBLE);
+        }
+
+      }
+    });
+
+    productListAdapter = new ProductListAdapter(ProductFormActivity.this, new ArrayList<Product>());
+
+    if (bundle != null)
+    {
+      String id = bundle.getString("id");
+      String name = bundle.getString("name");
+      String barcode = bundle.getString("barcode");
+      String shortName = bundle.getString("shortName");
+      String buyPrice = bundle.getString("buyPrice");
+      String sellPrice = bundle.getString("sellPrice");
+      String stockCost = bundle.getString("stockCost");
+      String stockVolume = bundle.getString("stockVolume");
+      String categoryId = bundle.getString("category");
+      Toast.makeText(this, name, Toast.LENGTH_LONG).show();
+
+      productId = id;
+      edittextBarcode.setText(barcode);
+      edittextGeneralName.setText(name);
+      edittextGeneralShortname.setText(shortName);
+      edittextGeneralBuyPrice.setText(buyPrice);
+      edittextGeneralSellPrice.setText(sellPrice);
+      edittextStockByYear.setText(stockCost);
+      edittextStockVolume.setText(stockVolume);
+      int spinnerPosition = 0;
+      if (!categoryId.equals(null))
+      {
+        int i = 0;
+        while (i < dataCategory.size())
+        {
+          if (dataCategory.get(i).getId().equals(categoryId))
+          {
+            spinnerPosition = i;
+            break;
+          }
+          i++;
+        }
+        Log.d("ROLE_ID", String.valueOf(spinnerPosition));
+        spinnerGeneralCategory.setSelection(spinnerPosition);
+      }
+    }
+
+    btnSaveProduct.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        if (bundle != null)
+        {
+          updateProduct();
+        }
+        else
+        {
+          postProduct();
+        }
+      }
+    });
 
   }
-
-  private class ViewPagerAdapter extends FragmentPagerAdapter
-  {
-
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
-
-    public ViewPagerAdapter(FragmentManager fm)
-    {
-      super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position)
-    {
-      return mFragmentList.get(position);
-    }
-
-    @Override
-    public int getCount()
-    {
-      return mFragmentList.size();
-    }
-
-    public void addFragment(Fragment fragment, String title)
-    {
-      mFragmentList.add(fragment);
-      mFragmentTitleList.add(title);
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position)
-    {
-      return mFragmentTitleList.get(position);
-    }
-
-  }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
@@ -199,18 +229,13 @@ public class ProductFormActivity extends AppCompatActivity
 
     int id = item.getItemId();
 
-    if (id == R.id.action_settings)
+    if (id == R.id.action_confirm)
     {
       return true;
     }
 
     return super.onOptionsItemSelected(item);
   }
-
-//  public void getFromGeneral(String message) {
-//    Log.e("MESSAGE", message);
-//  }
-
 
   private void postProduct()
   {
@@ -219,23 +244,23 @@ public class ProductFormActivity extends AppCompatActivity
     progressDialog.show();
 
     Category category = new Category();
-    category.setId("000");
+    category.setId(dataCategory.get(spinnerGeneralCategory.getSelectedItemPosition()).getId());
 
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId("001");
 
     final Product product = new Product();
     product.setId(UUID.randomUUID().toString());
-    product.setName("Product Dummy");
+    product.setName(edittextGeneralName.getText().toString());
     product.setAttributes(null);
     product.setImage(null);
-    product.setReference("98979695");
-    product.setCode("98979695");
-    product.setCodetype("CODE998");
-    product.setPricebuy(20.0);
-    product.setPricesell(30.0);
-    product.setStockcost(19.0);
-    product.setStockvolume(200.0);
+    product.setReference(edittextBarcode.getText().toString());
+    product.setCode(edittextBarcode.getText().toString());
+    product.setCodetype(null);
+    product.setPricebuy(Double.valueOf(edittextGeneralBuyPrice.getText().toString()));
+    product.setPricesell(Double.valueOf(edittextGeneralSellPrice.getText().toString()));
+    product.setStockcost(Double.valueOf(edittextStockByYear.getText().toString()));
+    product.setStockvolume(Double.valueOf(edittextStockVolume.getText().toString()));
     product.setIscom(false);
     product.setIsscale(false);
     product.setIskitchen(false);
@@ -258,6 +283,7 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPackquantity(2.0);
     product.setAllproducts(false);
     product.setManagestock(false);
+    product.setAlias(edittextGeneralShortname.getText().toString());
     product.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     product.setSflag(true);
     product.setAttributesetId(null);
@@ -286,12 +312,12 @@ public class ProductFormActivity extends AppCompatActivity
           Log.e("RESPONSE ", responseMessage);
           if (responseCode == 0)
           {
-//            TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
-//            tableProductHelper.open();
-//            tableProductHelper.insert(product);
-//            tableProductHelper.close();
-//            productListAdapter.addProduct(product);
-//            productListAdapter.notifyDataSetChanged();
+            TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
+            tableProductHelper.open();
+            tableProductHelper.insert(product);
+            tableProductHelper.close();
+            productListAdapter.addProduct(product);
+            productListAdapter.notifyDataSetChanged();
           }
           Log.d(getClass().getSimpleName(), "Success Post Product !!!");
           Toast.makeText(ProductFormActivity.this, "Succesfull add product", Toast.LENGTH_SHORT).show();
@@ -317,23 +343,23 @@ public class ProductFormActivity extends AppCompatActivity
     progressDialog.show();
 
     Category category = new Category();
-    category.setId("000");
+    category.setId(dataCategory.get(spinnerGeneralCategory.getSelectedItemPosition()).getId());
 
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId("001");
 
     final Product product = new Product();
-    product.setId(UUID.randomUUID().toString());
-    product.setName("Product Dummy");
+    product.setId(productId);
+    product.setName(edittextGeneralName.getText().toString());
     product.setAttributes(null);
     product.setImage(null);
-    product.setReference("98979695");
-    product.setCode("98979695");
-    product.setCodetype("CODE998");
-    product.setPricebuy(20.0);
-    product.setPricesell(30.0);
-    product.setStockcost(19.0);
-    product.setStockvolume(200.0);
+    product.setReference(edittextBarcode.getText().toString());
+    product.setCode(edittextBarcode.getText().toString());
+    product.setCodetype(null);
+    product.setPricebuy(Double.valueOf(edittextGeneralBuyPrice.getText().toString()));
+    product.setPricesell(Double.valueOf(edittextGeneralSellPrice.getText().toString()));
+    product.setStockcost(Double.valueOf(edittextStockByYear.getText().toString()));
+    product.setStockvolume(Double.valueOf(edittextStockVolume.getText().toString()));
     product.setIscom(false);
     product.setIsscale(false);
     product.setIskitchen(false);
@@ -356,6 +382,7 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPackquantity(2.0);
     product.setAllproducts(false);
     product.setManagestock(false);
+    product.setAlias(edittextGeneralShortname.getText().toString());
     product.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     product.setSflag(true);
     product.setAttributesetId(null);
@@ -384,15 +411,13 @@ public class ProductFormActivity extends AppCompatActivity
           Log.e("RESPONSE ", responseMessage);
           if (responseCode == 0)
           {
-//            TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
-//            tableProductHelper.open();
-//            tableProductHelper.insert(product);
-//            tableProductHelper.close();
-//            productListAdapter.addProduct(product);
-//            productListAdapter.notifyDataSetChanged();
+            TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
+            tableProductHelper.open();
+            tableProductHelper.update(product);
+            tableProductHelper.close();
           }
-          Log.d(getClass().getSimpleName(), "Success Post Product !!!");
-          Toast.makeText(ProductFormActivity.this, "Succesfull add product", Toast.LENGTH_SHORT).show();
+          Log.d(getClass().getSimpleName(), "Success Update Product !!!");
+          Toast.makeText(ProductFormActivity.this, "Succesfull Update product", Toast.LENGTH_SHORT).show();
         }
 
         finish();

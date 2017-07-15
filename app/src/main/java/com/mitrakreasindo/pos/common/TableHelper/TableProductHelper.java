@@ -10,6 +10,7 @@ import android.util.Log;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -174,6 +175,107 @@ public class TableProductHelper
     return db.insert(DATABASE_TABLE, null, initialValues);
   }
 
+  public long insert(Product product)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(context.getString(R.string.tproduct_id), product.getId());
+    initialValues.put(context.getString(R.string.tproduct_reference), product.getReference());
+    initialValues.put(context.getString(R.string.tproduct_code), product.getCode());
+    initialValues.put(context.getString(R.string.tproduct_codetype), product.getCodetype());
+    initialValues.put(context.getString(R.string.tproduct_name), product.getName());
+    initialValues.put(context.getString(R.string.tproduct_pricebuy), product.getPricebuy());
+    initialValues.put(context.getString(R.string.tproduct_pricesell), product.getPricesell());
+    initialValues.put(context.getString(R.string.tproduct_category), product.getCategory().getId());
+    initialValues.put(context.getString(R.string.tproduct_taxcat), product.getTaxcat().getId());
+    initialValues.put(context.getString(R.string.tproduct_attributeset_id), product.getAttributesetId());
+    initialValues.put(context.getString(R.string.tproduct_stockcost), product.getStockcost());
+    initialValues.put(context.getString(R.string.tproduct_stockvolume), product.getStockvolume());
+    initialValues.put(context.getString(R.string.tproduct_iscom), product.getIscom());
+    initialValues.put(context.getString(R.string.tproduct_isscale), product.getIsscale());
+    initialValues.put(context.getString(R.string.tproduct_iskitchen), product.getIskitchen());
+    initialValues.put(context.getString(R.string.tproduct_printkb), product.isPrintkb());
+    initialValues.put(context.getString(R.string.tproduct_sendstatus), product.isSendstatus());
+    initialValues.put(context.getString(R.string.tproduct_isservice), product.getIsservice());
+    initialValues.put(context.getString(R.string.tproduct_display), product.getDisplay());
+    initialValues.put(context.getString(R.string.tproduct_attributes), product.getAttributes());
+    initialValues.put(context.getString(R.string.tproduct_isvprice), product.getIsvprice());
+    initialValues.put(context.getString(R.string.tproduct_isverpatrib), product.getIsverpatrib());
+    initialValues.put(context.getString(R.string.tproduct_texttip), product.getTexttip());
+    initialValues.put(context.getString(R.string.tproduct_warranty), product.isWarranty());
+    initialValues.put(context.getString(R.string.tproduct_image), product.getImage());
+    initialValues.put(context.getString(R.string.tproduct_stockunits), product.getStockunits());
+    initialValues.put(context.getString(R.string.tproduct_alias), product.getAlias());
+    initialValues.put(context.getString(R.string.tproduct_alwaysavailable), product.isAlwaysavailable());
+    initialValues.put(context.getString(R.string.tproduct_discounted), product.getDiscounted());
+    initialValues.put(context.getString(R.string.tproduct_candiscount), product.isCandiscount());
+    initialValues.put(context.getString(R.string.tproduct_iscatalog), product.getIscatalog());
+    initialValues.put(context.getString(R.string.tproduct_catorder), product.getCatorder());
+    initialValues.put(context.getString(R.string.tproduct_ispack), product.getIspack());
+    initialValues.put(context.getString(R.string.tproduct_packquantity), product.getPackquantity());
+    initialValues.put(context.getString(R.string.tproduct_packproduct), product.getPackproduct());
+    initialValues.put(context.getString(R.string.tproduct_promotionid), product.getPromotionid());
+    initialValues.put(context.getString(R.string.tproduct_allproducts), product.getAllproducts());
+    initialValues.put(context.getString(R.string.tproduct_managestock), product.getManagestock());
+    initialValues.put(context.getString(R.string.tproduct_siteguid), product.getSiteguid());
+    initialValues.put(context.getString(R.string.tproduct_sflag), product.getSflag());
+
+    return db.insert(DATABASE_TABLE, null, initialValues);
+  }
+
+  public int delete(String id)
+  {
+    return db.delete(DATABASE_TABLE, R.string.tproduct_id + "='" + id + "'", null);
+  }
+
+  public long update(Product product)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(context.getString(R.string.tproduct_id), product.getId());
+    initialValues.put(context.getString(R.string.tproduct_reference), product.getReference());
+    initialValues.put(context.getString(R.string.tproduct_code), product.getCode());
+    initialValues.put(context.getString(R.string.tproduct_codetype), product.getCodetype());
+    initialValues.put(context.getString(R.string.tproduct_name), product.getName());
+    initialValues.put(context.getString(R.string.tproduct_pricebuy), product.getPricebuy());
+    initialValues.put(context.getString(R.string.tproduct_pricesell), product.getPricesell());
+    initialValues.put(context.getString(R.string.tproduct_category), product.getCategory().getId());
+    initialValues.put(context.getString(R.string.tproduct_taxcat), product.getTaxcat().getId());
+    initialValues.put(context.getString(R.string.tproduct_attributeset_id), product.getAttributesetId());
+    initialValues.put(context.getString(R.string.tproduct_stockcost), product.getStockcost());
+    initialValues.put(context.getString(R.string.tproduct_stockvolume), product.getStockvolume());
+    initialValues.put(context.getString(R.string.tproduct_iscom), product.getIscom());
+    initialValues.put(context.getString(R.string.tproduct_isscale), product.getIsscale());
+    initialValues.put(context.getString(R.string.tproduct_iskitchen), product.getIskitchen());
+    initialValues.put(context.getString(R.string.tproduct_printkb), product.isPrintkb());
+    initialValues.put(context.getString(R.string.tproduct_sendstatus), product.isSendstatus());
+    initialValues.put(context.getString(R.string.tproduct_isservice), product.getIsservice());
+    initialValues.put(context.getString(R.string.tproduct_display), product.getDisplay());
+    initialValues.put(context.getString(R.string.tproduct_attributes), product.getAttributes());
+    initialValues.put(context.getString(R.string.tproduct_isvprice), product.getIsvprice());
+    initialValues.put(context.getString(R.string.tproduct_isverpatrib), product.getIsverpatrib());
+    initialValues.put(context.getString(R.string.tproduct_texttip), product.getTexttip());
+    initialValues.put(context.getString(R.string.tproduct_warranty), product.isWarranty());
+    initialValues.put(context.getString(R.string.tproduct_image), product.getImage());
+    initialValues.put(context.getString(R.string.tproduct_stockunits), product.getStockunits());
+    initialValues.put(context.getString(R.string.tproduct_alias), product.getAlias());
+    initialValues.put(context.getString(R.string.tproduct_alwaysavailable), product.isAlwaysavailable());
+    initialValues.put(context.getString(R.string.tproduct_discounted), product.getDiscounted());
+    initialValues.put(context.getString(R.string.tproduct_candiscount), product.isCandiscount());
+    initialValues.put(context.getString(R.string.tproduct_iscatalog), product.getIscatalog());
+    initialValues.put(context.getString(R.string.tproduct_catorder), product.getCatorder());
+    initialValues.put(context.getString(R.string.tproduct_ispack), product.getIspack());
+    initialValues.put(context.getString(R.string.tproduct_packquantity), product.getPackquantity());
+    initialValues.put(context.getString(R.string.tproduct_packproduct), product.getPackproduct());
+    initialValues.put(context.getString(R.string.tproduct_promotionid), product.getPromotionid());
+    initialValues.put(context.getString(R.string.tproduct_allproducts), product.getAllproducts());
+    initialValues.put(context.getString(R.string.tproduct_managestock), product.getManagestock());
+    initialValues.put(context.getString(R.string.tproduct_siteguid), product.getSiteguid());
+    initialValues.put(context.getString(R.string.tproduct_sflag), product.getSflag());
+
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{product.getId()});
+  }
+
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);
@@ -188,18 +290,29 @@ public class TableProductHelper
       int idIndex = cursor.getColumnIndexOrThrow("id");
       int codeIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_code));
       int nameIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_name));
+      int shortNameIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_alias));
+      int categoryIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_category));
       int inStockIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockunits));
       int priceSellIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_pricesell));
       int priceBuyIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_pricebuy));
+      int stockCostIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockcost));
+      int stockVolumeIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockvolume));
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String id = cursor.getString(idIndex);
         String code = cursor.getString(codeIndex);
         String name = cursor.getString(nameIndex);
+        String shortName = cursor.getString(shortNameIndex);
+        String category = cursor.getString(categoryIndex);
         double inStock = cursor.getDouble(inStockIndex);
         double priceSell = cursor.getDouble(priceSellIndex);
         double priceBuy = cursor.getDouble(priceBuyIndex);
+        double stockCost = cursor.getDouble(stockCostIndex);
+        double stockVolume = cursor.getDouble(stockVolumeIndex);
+
+        Category c = new Category();
+        c.setId(category);
 
         Product product = new Product();
         product.setId(id);
@@ -208,6 +321,10 @@ public class TableProductHelper
         product.setStockunits(inStock);
         product.setPricesell(priceSell);
         product.setPricebuy(priceBuy);
+        product.setCategory(c);
+        product.setAlias(shortName);
+        product.setStockcost(stockCost);
+        product.setStockvolume(stockVolume);
         list.add(product);
       }
 

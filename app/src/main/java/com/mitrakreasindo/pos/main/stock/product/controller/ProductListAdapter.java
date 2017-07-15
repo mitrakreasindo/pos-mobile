@@ -1,8 +1,12 @@
 package com.mitrakreasindo.pos.main.stock.product.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +15,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.model.Product;
+import com.mitrakreasindo.pos.service.CategoryService;
+import com.mitrakreasindo.pos.service.ProductService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by hendric on 2017-05-29.
@@ -27,6 +44,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   private List<Product> products = new ArrayList<Product>();
   private Context context;
   private LayoutInflater inflater;
+  private ProductService productService;
   private ProductActivity productActivity;
   public List<Product> list_product = new ArrayList<>();
   int counter = 0;
@@ -35,7 +53,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   {
     this.context = context;
     this.products = products;
-    productActivity = (ProductActivity) context;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -51,58 +68,143 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   @Override
   public void onBindViewHolder(final ProductListAdapter.ViewHolder holder, final int position)
   {
+    final Product product = products.get(position);
 
-//    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
     holder.productItem.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-        if (!productActivity.is_action_mode)
-        {
-//          holder.checkBox.setChecked(true);
-          notifyDataSetChanged();
-        }
-        else
-        {
-          holder.checkBox.toggle();
-          prepareSelection(holder, position);
-          Toast.makeText(context, "IF TRUE", Toast.LENGTH_LONG).show();
-          notifyDataSetChanged();
-        }
+        Intent intent = new Intent(context, ProductFormActivity.class);
+        intent.putExtra("id", product.getId());
+        intent.putExtra("barcode", product.getCode());
+        intent.putExtra("name", product.getName());
+        intent.putExtra("shortName", product.getAlias());
+        intent.putExtra("category", product.getCategory().getId());
+        intent.putExtra("buyPrice", product.getPricebuy().toString());
+        intent.putExtra("sellPrice", product.getPricebuy().toString());
+        intent.putExtra("stockCost", product.getStockcost().toString());
+        intent.putExtra("stockVolume", product.getStockvolume().toString());
+        context.startActivity(intent);
       }
     });
-
 
     holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
     {
       @Override
-      public boolean onLongClick(View v)
+      public boolean onLongClick(final View v)
       {
-        productActivity.is_action_mode = true;
-        holder.checkBox.toggle();
-        prepareSelection(holder, position);
-        productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
-        notifyDataSetChanged();
-        return true;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Options");
+        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
+        {
+          @Override
+          public void onClick(DialogInterface dialog, int which)
+          {
+            switch (which)
+            {
+
+              case 0:
+                productService = ClientService.createService().create(ProductService.class);
+
+                Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
+                Call<HashMap<Integer, String>> call = productService.deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
+                call.enqueue(new Callback<HashMap<Integer, String>>()
+                {
+
+                  private int responseCode;
+                  private String responseMessage;
+
+                  @Override
+                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+                  {
+                    final HashMap<Integer, String> data = response.body();
+                    for (int resultKey : data.keySet())
+                    {
+                      responseCode = resultKey;
+                      responseMessage = data.get(resultKey);
+                      Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+                      if (responseCode == 0)
+                      {
+                        TableProductHelper tableProductHelper = new TableProductHelper(context);
+                        tableProductHelper.open();
+                        tableProductHelper.delete(product.getId());
+                        tableProductHelper.close();
+                      }
+                      Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+                    }
+                  }
+
+                  @Override
+                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+                  {
+
+                  }
+
+
+                });
+
+                removeProduct(product);
+                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
+                break;
+            }
+          }
+        });
+        builder.show();
+        return false;
       }
     });
+//    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
+//    holder.productItem.setOnClickListener(new View.OnClickListener()
+//    {
+//      @Override
+//      public void onClick(View v)
+//      {
+//        if (!productActivity.is_action_mode)
+//        {
+////          holder.checkBox.setChecked(true);
+//          notifyDataSetChanged();
+//        }
+//        else
+//        {
+//          holder.checkBox.toggle();
+//          prepareSelection(holder, position);
+//          Toast.makeText(context, "IF TRUE", Toast.LENGTH_LONG).show();
+//          notifyDataSetChanged();
+//        }
+//      }
+//    });
 
-    final Product product = products.get(position);
+
+//    holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
+//    {
+//      @Override
+//      public boolean onLongClick(View v)
+//      {
+//        productActivity.is_action_mode = true;
+//        holder.checkBox.setChecked(true);
+//        prepareSelection(holder, position);
+//        productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
+//        notifyDataSetChanged();
+//        return true;
+//      }
+//    });
+
     holder.txtCodeProduct.setText(product.getCode());
     holder.txtSellPrice.setText("IDR " + Double.toString(product.getPricesell()));
     holder.txtNameProduct.setText(product.getName());
     holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
 
-    if (!productActivity.is_action_mode)
-    {
-      holder.checkBox.setVisibility(View.GONE);
-      holder.checkBox.setChecked(false);
-    }
-    else
-    {
-      holder.checkBox.setVisibility(View.VISIBLE);
-    }
+//    if (!productActivity.is_action_mode)
+//    {
+//      holder.checkBox.setVisibility(View.GONE);
+//      holder.checkBox.setChecked(false);
+//    }
+//    else
+//    {
+//      holder.checkBox.setVisibility(View.VISIBLE);
+//    }
 
   }
 
@@ -115,6 +217,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   public void clear()
   {
     products.clear();
+    notifyDataSetChanged();
+  }
+
+  public void removeProduct(Product product)
+  {
+    products.remove(product);
     notifyDataSetChanged();
   }
 

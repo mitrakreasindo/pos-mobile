@@ -8,6 +8,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -31,4 +32,7 @@ public interface ProductService
 
   @GET("chromis.products/{kodeMerchant}/{id}")
   Call<List<Product>> getProductById(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+
+  @DELETE("chromis.products/{kodeMerchant}/{id}")
+  Call<HashMap<Integer, String>> deleteProduct(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }

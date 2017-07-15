@@ -116,4 +116,10 @@ public class Category
   {
     this.sflag = sflag;
   }
+
+  @Override
+  public String toString(){
+
+    return name;
+  }
 }

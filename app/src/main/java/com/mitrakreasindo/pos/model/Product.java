@@ -467,4 +467,11 @@ public class Product
   {
     this.taxcat = taxcat;
   }
+
+  @Override
+  public String toString()
+  {
+    return name;
+  }
+
 }

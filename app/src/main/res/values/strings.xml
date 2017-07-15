@@ -154,5 +154,6 @@
     <string name="tax">Tax</string>
     <string name="rate">Rate</string>
     <string name="attributes">Attributes</string>
+    <string name="multi_pack">Multi Pack</string>
 
 </resources>
