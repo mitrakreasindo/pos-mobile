@@ -84,6 +84,48 @@ public class Queue
     queue6.setValue("2000");
     queues.add(queue6);
 
+    Queue queue7 = new Queue();
+    queue7.setName("product 1");
+    queue7.setQueueNumber("12345");
+    queue7.setValue("2000");
+    queues.add(queue7);
+
+    Queue queue8 = new Queue();
+    queue8.setName("product 1");
+    queue8.setQueueNumber("12345");
+    queue8.setValue("2000");
+    queues.add(queue8);
+
+    Queue queue9 = new Queue();
+    queue9.setName("product 1");
+    queue9.setQueueNumber("12345");
+    queue9.setValue("2000");
+    queues.add(queue9);
+
+    Queue queue10 = new Queue();
+    queue10.setName("product 1");
+    queue10.setQueueNumber("12345");
+    queue10.setValue("2000");
+    queues.add(queue10);
+
+    Queue queue11 = new Queue();
+    queue11.setName("product 1");
+    queue11.setQueueNumber("12345");
+    queue11.setValue("2000");
+    queues.add(queue11);
+
+    Queue queue12 = new Queue();
+    queue12.setName("product 1");
+    queue12.setQueueNumber("12345");
+    queue12.setValue("2000");
+    queues.add(queue12);
+
+    Queue queue13 = new Queue();
+    queue13.setName("product 1");
+    queue13.setQueueNumber("12345");
+    queue13.setValue("2000");
+    queues.add(queue13);
+
     return queues;
   }
 

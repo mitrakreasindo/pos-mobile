@@ -24,4 +24,9 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
     </style>
 
+    <style name="Autocomplete">
+        <item name="colorControlNormal">@color/blue</item>
+        <item name="colorControlActivated">@color/gray600</item>
+    </style>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main;
+package com.mitrakreasindo.pos.main.sales.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,17 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.main.fragment.MainFragment;
-import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.main.MainQueueListAdapter;
+import com.mitrakreasindo.pos.main.Queue;
+import com.mitrakreasindo.pos.main.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lisa on 19/06/17.
+ * Created by lisa on 17/07/17.
  */
 
-public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdapter.ViewHolder>
+public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.ViewHolder>
 {
 
   private List<Queue> queues = new ArrayList<>();
@@ -25,7 +26,7 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
   private LayoutInflater layoutInflater;
   int number = 0;
 
-  public MainQueueListAdapter(Context context, List<Queue> queues)
+  public SalesListAdapter(Context context, List<Queue> queues)
   {
     this.queues = queues;
     this.context = context;
@@ -34,15 +35,15 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
 
 
   @Override
-  public MainQueueListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+  public SalesListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
-    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_queue_list, parent, false);
+    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sales_item_list, parent, false);
 
-    return new ViewHolder(itemView);
+    return new SalesListAdapter.ViewHolder(itemView);
   }
 
   @Override
-  public void onBindViewHolder(MainQueueListAdapter.ViewHolder holder, int position)
+  public void onBindViewHolder(SalesListAdapter.ViewHolder holder, int position)
   {
     final Queue queue = queues.get(position);
     holder.txtNo.setText(String.valueOf(position+1));
@@ -64,6 +65,12 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
     notifyDataSetChanged();
   }
 
+  public void addQueue(Queue queue)
+  {
+    this.queues.add(queue);
+    notifyDataSetChanged();
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder
   {
     private TextView txtNo ,txtName, txtQueueNumber, txtValue;
@@ -76,4 +83,5 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
       txtValue = (TextView) itemView.findViewById(R.id.text_value);
     }
   }
+
 }
