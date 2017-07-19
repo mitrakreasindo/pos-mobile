@@ -297,6 +297,7 @@ public class TableProductHelper
       int priceBuyIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_pricebuy));
       int stockCostIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockcost));
       int stockVolumeIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_stockvolume));
+      int imageIndex = cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_image));
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
@@ -310,6 +311,7 @@ public class TableProductHelper
         double priceBuy = cursor.getDouble(priceBuyIndex);
         double stockCost = cursor.getDouble(stockCostIndex);
         double stockVolume = cursor.getDouble(stockVolumeIndex);
+        byte[] image = cursor.getBlob(imageIndex);
 
         Category c = new Category();
         c.setId(category);
@@ -325,6 +327,7 @@ public class TableProductHelper
         product.setAlias(shortName);
         product.setStockcost(stockCost);
         product.setStockvolume(stockVolume);
+        product.setImage(image);
         list.add(product);
       }
 

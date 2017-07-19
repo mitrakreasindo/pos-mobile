@@ -28,6 +28,6 @@ public interface TaxService
   @PUT("chromis.taxes/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Tax tax);
 
-  @DELETE("chromis.taxes/public/{id}")
-  Call<HashMap<Integer, String>> deleteTax(@Path("id") String id);
+  @DELETE("chromis.taxes/{kodeMerchant}/{id}")
+  Call<HashMap<Integer, String>> deleteTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }

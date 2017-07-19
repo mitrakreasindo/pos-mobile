@@ -38,7 +38,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   private Context context;
   private LayoutInflater inflater;
   private CategoryService categoryService;
-
+  private Category category;
 
   public CategoryListAdapter(Context context, List<Category> categories)
   {
@@ -59,10 +59,23 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   @Override
   public void onBindViewHolder(CategoryListAdapter.ViewHolder holder, int position)
   {
-
-    final Category category = categories.get(position);
+    category = categories.get(position);
     holder.txtCategory.setText(category.getName());
     Log.e("ID CAT FROM ADAPTER", category.getId());
+
+    //On Click
+    holder.itemView.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        Intent intent = new Intent(context, CategoryFormActivity.class);
+        intent.putExtra("id", category.getId());
+        intent.putExtra("name", category.getName());
+        context.startActivity(intent);
+      }
+    });
+
     //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {
@@ -71,7 +84,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
       {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Options");
-        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
+        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
         {
           @Override
           public void onClick(DialogInterface dialog, int which)
@@ -79,55 +92,18 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             switch (which)
             {
               case 0:
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, CategoryFormActivity.class);
-                intent.putExtra("id", category.getId());
-                intent.putExtra("name", category.getName());
-                context.startActivity(intent);
-                break;
-
-              case 1:
-                Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
-                categoryService = ClientService.createService().create(CategoryService.class);
-                Call<HashMap<Integer, String>> call = categoryService.deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), category.getId());
-                call.enqueue(new Callback<HashMap<Integer, String>>()
-                {
-
-                  private int responseCode;
-                  private String responseMessage;
-
-                  @Override
-                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+                new AlertDialog.Builder(context)
+                  .setTitle(context.getString(R.string.alert_dialog_delete_category))
+                  .setMessage(context.getString(R.string.alert_dialog_delete_category_message))
+                  .setIcon(android.R.drawable.ic_dialog_alert)
+                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
                   {
-                    final HashMap<Integer, String> data = response.body();
-                    for (int resultKey : data.keySet())
+                    public void onClick(DialogInterface dialog, int whichButton)
                     {
-                      responseCode = resultKey;
-                      responseMessage = data.get(resultKey);
-                      Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
-
-                      if (responseCode == 0)
-                      {
-                        TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(context);
-                        tableCategoryHelper.open();
-                        tableCategoryHelper.delete(category.getId());
-                        tableCategoryHelper.close();
-                      }
-                      Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+                      deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), category.getId());
                     }
-                  }
-
-                  @Override
-                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-                  {
-
-                  }
-
-
-                });
-
-                removeCategory(category);
-                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
+                  })
+                  .setNegativeButton(android.R.string.no, null).show();
                 break;
             }
           }
@@ -144,7 +120,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     notifyDataSetChanged();
   }
 
-  public void clear(){
+  public void clear()
+  {
     categories.clear();
     notifyDataSetChanged();
   }
@@ -185,25 +162,44 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
   }
 
-//  private void getCategories(String kodeMerchant)
-//  {
-//    final Call<List<Category>> category = categoryService.getCategoryAll(kodeMerchant);
-//    category.enqueue(new Callback<List<Category>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-//      {
-//        List<Category> categoryList = response.body();
-//        clear();
-//        addCategory(categoryList);
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Category>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//
-//  }
+  private void deleteCategory(String kodeMerchant, final String id)
+  {
+    categoryService = ClientService.createService().create(CategoryService.class);
+    Call<HashMap<Integer, String>> call = categoryService.deleteCategory(kodeMerchant, id);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
+      private int responseCode;
+      private String responseMessage;
+
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+          if (responseCode == 0)
+          {
+            TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(context);
+            tableCategoryHelper.open();
+            tableCategoryHelper.delete(id);
+            tableCategoryHelper.close();
+          }
+          Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        responseCode = -1;
+        responseMessage = "Cannot delete category. :( There is something wrong.";
+        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+      }
+    });
+    removeCategory(category);
+  }
 }

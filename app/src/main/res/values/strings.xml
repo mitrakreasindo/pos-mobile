@@ -175,4 +175,19 @@
     <string name="attributes">Attributes</string>
     <string name="multi_pack">Multi Pack</string>
 
+    <!-- Alert Confirmation Dialog Delete -->
+    <string name="alert_dialog_delete_people">Delete User</string>
+    <string name="alert_dialog_delete_people_message">Do you really want to delete this user?</string>
+    
+    <string name="alert_dialog_delete_role">Delete Role</string>
+    <string name="alert_dialog_delete_role_message">Do you really want to delete this role?</string>
+    
+    <string name="alert_dialog_delete_taxes">Delete Tax</string>
+    <string name="alert_dialog_delete_taxes_message">Do you really want to delete this tax?</string>
+    
+    <string name="alert_dialog_delete_category">Delete Category</string>
+    <string name="alert_dialog_delete_category_message">Do you really want to delete this category?</string>
+    
+    <string name="alert_dialog_delete_product">Delete Product</string>
+    <string name="alert_dialog_delete_product_message">Do you really want to delete this product?</string>
 </resources>

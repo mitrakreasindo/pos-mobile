@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.ImageHelper;
 import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -85,8 +86,8 @@ public class UserFormActivity extends AppCompatActivity
   TextView textviewImage;
   @BindView(R.id.button_imageselect)
   Button buttonImageselect;
-  @BindView(R.id.imageview)
-  ImageView imageview;
+  @BindView(R.id.imageview_image_select)
+  ImageView imageviewImageSelect;
   @BindView(R.id.button_confirm)
   Button buttonConfirm;
   @BindView(R.id.button_cancel)
@@ -174,12 +175,24 @@ public class UserFormActivity extends AppCompatActivity
 
       if (image != null)
       {
-        Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        imageview.setMinimumHeight(dm.heightPixels);
-        imageview.setMinimumWidth(dm.widthPixels);
-        imageview.setImageBitmap(bm);
+        if (image.length != 0)
+        {
+          Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+          DisplayMetrics dm = new DisplayMetrics();
+          getWindowManager().getDefaultDisplay().getMetrics(dm);
+          imageviewImageSelect.setMinimumHeight(dm.heightPixels);
+          imageviewImageSelect.setMinimumWidth(dm.widthPixels);
+          imageviewImageSelect.setImageBitmap(bm);
+          imageviewImageSelect.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+          imageviewImageSelect.setVisibility(View.INVISIBLE);
+        }
+      }
+      else
+      {
+        imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
 
       getSupportActionBar().setTitle("Edit User");
@@ -239,13 +252,15 @@ public class UserFormActivity extends AppCompatActivity
           case 0:
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
-            imageview.setImageBitmap(bitmap);
+            imageviewImageSelect.setImageBitmap(bitmap);
+            imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
 
           case 1:
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            imageview.setImageBitmap(selectedImage);
+            imageviewImageSelect.setImageBitmap(selectedImage);
+            imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
         }
       }
@@ -256,7 +271,10 @@ public class UserFormActivity extends AppCompatActivity
       }
     }
     else
+    {
+      imageviewImageSelect.setVisibility(View.INVISIBLE);
       Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+    }
   }
 
   private boolean attemptCreate()
@@ -391,18 +409,18 @@ public class UserFormActivity extends AppCompatActivity
     people.setCard(null);
     people.setVisible(visibility);
 
-    if (imageview.getDrawable() != null)
+    if (imageviewImageSelect.getVisibility() == View.VISIBLE)
     {
-      bitmap = ((BitmapDrawable) imageview.getDrawable()).getBitmap();
+      bitmap = ((BitmapDrawable) imageviewImageSelect.getDrawable()).getBitmap();
+      bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
       baos = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+      bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
       imageInByte = baos.toByteArray();
     }
     else
     {
       imageInByte = null;
     }
-
     people.setImage(imageInByte);
     people.setSiteguid(null);
     people.setSflag(true);

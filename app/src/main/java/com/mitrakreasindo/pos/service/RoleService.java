@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.service;
 
 import com.mitrakreasindo.pos.model.Role;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,12 +24,12 @@ public interface RoleService
   Call<List<Role>> getRoleAll(@Path("kodeMerchant") String kodeMerchant);
 
   @POST("chromis.roles/{kodeMerchant}/")
-  Call<List<Role>> postRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
+  Call<HashMap<Integer, String>> postRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
 
   @DELETE("chromis.roles/{kodeMerchant}/{id}")
-  Call<List<Role>> deleteRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+  Call<HashMap<Integer, String>> deleteRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
   @PUT("chromis.roles/{kodeMerchant}/")
-  Call<List<Role>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
+  Call<HashMap<Integer, String>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
 
 }

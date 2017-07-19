@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
@@ -37,7 +38,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   private Context context;
   private LayoutInflater inflater;
   private TaxService taxService;
-
+  private Tax tax;
 
   public TaxesListAdapter(Context context, List<Tax> taxes)
   {
@@ -58,9 +59,23 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   @Override
   public void onBindViewHolder(TaxesListAdapter.ViewHolder holder, int position)
   {
-
-    final Tax tax = taxes.get(position);
+    tax = taxes.get(position);
     holder.txtTax.setText(tax.getName());
+
+    //On Click
+    holder.itemView.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        Intent intent = new Intent(context, TaxesFormActivity.class);
+        intent.putExtra("id", tax.getId());
+        intent.putExtra("name", tax.getName());
+        intent.putExtra("rate", String.valueOf(tax.getRate()));
+        intent.putExtra("category", tax.getCategory().getId());
+        context.startActivity(intent);
+      }
+    });
 
     //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
@@ -70,7 +85,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
       {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Options");
-        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
+        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
         {
           @Override
           public void onClick(DialogInterface dialog, int which)
@@ -78,54 +93,19 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
             switch (which)
             {
               case 0:
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, TaxesFormActivity.class);
-                intent.putExtra("id", tax.getId());
-                intent.putExtra("name", tax.getName());
-                intent.putExtra("rate", String.valueOf(tax.getRate()));
-                intent.putExtra("category", tax.getCategory().getId());
-                context.startActivity(intent);
-                break;
-
-              case 1:
-                Toast.makeText(context, "Tax Deleted", Toast.LENGTH_LONG).show();
-                taxService = ClientService.createService().create(TaxService.class);
-                Call<HashMap<Integer, String>> call = taxService.deleteTax(tax.getId());
-                call.enqueue(new Callback<HashMap<Integer, String>>()
-                {
-
-                  private int responseCode;
-                  private String responseMessage;
-
-                  @Override
-                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+                new AlertDialog.Builder(context)
+                  .setTitle(context.getString(R.string.alert_dialog_delete_taxes))
+                  .setMessage(context.getString(R.string.alert_dialog_delete_taxes_message))
+                  .setIcon(android.R.drawable.ic_dialog_alert)
+                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
                   {
-                    final HashMap<Integer, String> data = response.body();
-                    for (int resultKey : data.keySet())
+                    public void onClick(DialogInterface dialog, int whichButton)
                     {
-                      responseCode = resultKey;
-                      responseMessage = data.get(resultKey);
-
-                      Log.e("RESPONSE ", responseMessage);
-                      if (responseCode == 0)
-                      {
-                        TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(context);
-                        tableTaxesHelper.open();
-                        tableTaxesHelper.delete(tax.getId());
-                        tableTaxesHelper.close();
-                      }
-                      Toast.makeText(context, "Succesfull delete taxes", Toast.LENGTH_SHORT).show();
+                      deleteTax(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), tax.getId());
                     }
-                  }
-                  @Override
-                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-                  {
-                  }
-                });
-
-                removeTax(tax);
-                Toast.makeText(context, "Tax deleted!", Toast.LENGTH_LONG).show();
-                break;
+                  })
+                  .setNegativeButton(android.R.string.no, null).show();
+               break;
             }
           }
         });
@@ -181,6 +161,46 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
       super(itemView);
       txtTax = (TextView) itemView.findViewById(R.id.txt_tax);
     }
+  }
+
+  private void deleteTax (String kodeMerchant, final String id)
+  {
+    taxService = ClientService.createService().create(TaxService.class);
+    Call<HashMap<Integer, String>> call = taxService.deleteTax(kodeMerchant, id);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
+      private int responseCode;
+      private String responseMessage;
+
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+
+          Log.e("RESPONSE ", responseMessage);
+          if (responseCode == 0)
+          {
+            TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(context);
+            tableTaxesHelper.open();
+            tableTaxesHelper.delete(id);
+            tableTaxesHelper.close();
+          }
+          Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+        }
+      }
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        responseCode = -1;
+        responseMessage = "Cannot delete tax. :( There is something wrong.";
+        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+      }
+    });
+    removeTax(tax);
   }
 
 }

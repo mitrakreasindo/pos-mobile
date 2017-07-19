@@ -90,7 +90,6 @@
                         android:hint="@string/buy_price"
                         android:inputType="numberDecimal"/>
 
-
                     <EditText
                         android:id="@+id/edittext_general_sell_price"
                         android:layout_width="match_parent"
@@ -98,7 +97,6 @@
                         android:layout_marginBottom="5dp"
                         android:hint="@string/sell_price"
                         android:inputType="numberDecimal"/>
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -157,8 +155,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:theme="@style/ThemeSpinner"/>
-
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -179,19 +175,31 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/image_select"/>
+                        android:text="@string/image_code"/>
 
-                    <Button
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/image_select"/>
+                        android:orientation="horizontal">
 
+                        <Button
+                            android:id="@+id/btn_select_product_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="SelectProductImage"
+                            android:text="@string/image_select"/>
+
+                        <ImageView
+                            android:id="@+id/imageview_product"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:visibility="invisible"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginStart="10dp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-
-
     </ScrollView>
 
     <LinearLayout
@@ -208,7 +216,5 @@
             android:background="@drawable/primary_button"
             android:text="@string/save"
             android:textColor="@color/white"/>
-
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>
