@@ -61,11 +61,8 @@ public class RoleFormActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
     roleService = ClientService.createService().create(RoleService.class);
-
     sharedPreferenceEditor = new SharedPreferenceEditor();
-
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     final Bundle bundle = getIntent().getExtras();
@@ -89,9 +86,7 @@ public class RoleFormActivity extends AppCompatActivity
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
-
     int id = item.getItemId();
-
     final Bundle bundle = getIntent().getExtras();
 
     if (id == R.id.action_confirm)
@@ -169,13 +164,11 @@ public class RoleFormActivity extends AppCompatActivity
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-
       }
     });
     onBackPressed();
