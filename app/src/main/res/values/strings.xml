@@ -11,6 +11,7 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
+    <string name="prompt_merchant_code">Merchant Code</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Log in</string>
@@ -19,12 +20,16 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="link_register">Not registered yet? Click here to register</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
 
     <!-- Strings related to create new user -->
-    <string name="person_name">Fullname</string>
+    <string name="person_fullname">Full Name</string>
+    <string name="person_id_type">ID Type</string>
+    <string name="person_id_number">ID Number</string>
+    <string name="person_username">Username</string>
     <string name="person_pass">Password</string>
     <string name="reinput_pass">Re-input Password</string>
     <string name="card_no">Card No</string>
@@ -45,17 +50,20 @@
     <!-- String related to create new business -->
     <string name="business_info"><b>BUSINESS INFORMATION</b></string>
     <string name="business_name">Business Name</string>
+    <string name="business_shortname">Short Name (Alias)</string>
     <string name="business_type">Business Type</string>
     <string name="business_category">Category</string>
+    <string name="business_phone">Phone</string>
     <string name="business_address">Address</string>
     <string name="business_city">City</string>
     <string name="business_state">State</string>
     <string name="business_zip">Zip</string>
     
     <string name="owner_info"><b>OWNER INFORMATION</b></string>
-    <string name="owner_first_name">First Name</string>
-    <string name="owner_last_name">Last Name</string>
-    <string name="owner_email">Email</string>
+    <string name="owner_full_name">Full Name</string>
+    <string name="owner_sex">Sex</string>
+    <string name="owner_birth_date">Birth Date</string>
+    <string name="owner_email">E-mail</string>
     <string name="owner_phone">Phone</string>
     <string name="owner_id">ID Number</string>
 
@@ -85,12 +93,17 @@
     <string name="taxes">Taxes</string>
     <string name="roles">Roles</string>
 
-    <!--spinner combobox role on register-->
-    <string-array name="spinner_roles">
-        <item>Administrator</item>
-        <item>Manager</item>
-        <item>Employee</item>
-        <item>Guest</item>
+    <!--spinner combobox owner sex on merchant registration-->
+    <string-array name="spinner_sex">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <!--spinner combobox id type on people-->
+    <string-array name="spinner_id_type">
+        <item>KTP</item>
+        <item>SIM</item>
+        <item>Paspor</item>
     </string-array>
 
     <!--Menu Stock-->

@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -39,7 +41,9 @@ import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -58,10 +62,10 @@ public class UserFormActivity extends AppCompatActivity
 {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.textview_name)
-  TextView textviewName;
-  @BindView(R.id.edittext_name)
-  EditText edittextName;
+  @BindView(R.id.textview_username)
+  TextView textviewUsername;
+  @BindView(R.id.edittext_username)
+  EditText edittextUsername;
   @BindView(R.id.textview_pass)
   TextView textviewPass;
   @BindView(R.id.edittext_password)
@@ -92,10 +96,13 @@ public class UserFormActivity extends AppCompatActivity
   Button buttonConfirm;
   @BindView(R.id.button_cancel)
   Button buttonCancel;
+  @BindView(R.id.edittext_birth_date)
+  TextView edittextBirthDate;
 
   private int RESULT_TAKE_PHOTO = 0;
   private int RESULT_PICK_GALLERY = 1;
 
+  private int mYear, mMonth, mDay;
   private Role role;
   private People people;
   private PeopleService peopleService;
@@ -119,11 +126,13 @@ public class UserFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_user_form);
     ButterKnife.bind(this);
 
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
     peopleService = ClientService.createService().create(PeopleService.class);
-
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
     radiobuttonVisible.setChecked(true);
+    edittextBirthDate.setText(df.format(c.getTime()));
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
@@ -145,7 +154,7 @@ public class UserFormActivity extends AppCompatActivity
       boolean visible = bundle.getBoolean("visible");
       byte[] image = bundle.getByteArray("image");
 
-      edittextName.setText(name);
+      edittextUsername.setText(name);
       edittextPass.setText(password);
       if (visible)
       {
@@ -194,7 +203,6 @@ public class UserFormActivity extends AppCompatActivity
       {
         imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
-
       getSupportActionBar().setTitle("Edit User");
     }
     else
@@ -215,10 +223,13 @@ public class UserFormActivity extends AppCompatActivity
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Options");
-    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
+    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener()
+    {
       @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which){
+      public void onClick(DialogInterface dialog, int which)
+      {
+        switch (which)
+        {
           case 0:
             Toast.makeText(UserFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -228,7 +239,7 @@ public class UserFormActivity extends AppCompatActivity
           case 1:
             Toast.makeText(UserFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+              MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
             break;
         }
@@ -237,8 +248,47 @@ public class UserFormActivity extends AppCompatActivity
     builder.show();
   }
 
+  public void PickDate(View view)
+  {
+    final Calendar c = Calendar.getInstance();
+    mYear = c.get(Calendar.YEAR);
+    mMonth = c.get(Calendar.MONTH);
+    mDay = c.get(Calendar.DAY_OF_MONTH);
+
+    DatePickerDialog datePickerDialog = new DatePickerDialog(UserFormActivity.this, new DatePickerDialog.OnDateSetListener()
+    {
+      @Override
+      public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+      {
+        String month, day;
+
+        if (String.valueOf(monthOfYear + 1).length() == 1)
+        {
+          month = "0" + String.valueOf(monthOfYear + 1);
+        }
+        else
+        {
+          month = String.valueOf(monthOfYear + 1);
+        }
+
+        if (String.valueOf(dayOfMonth).length() == 1)
+        {
+          day = "0" + String.valueOf(dayOfMonth);
+        }
+        else
+        {
+          day = String.valueOf(dayOfMonth);
+        }
+        edittextBirthDate.setText(year + "-" + month + "-" + day);
+      }
+    }, mYear, mMonth, mDay);
+
+    datePickerDialog.show();
+  }
+
   @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  protected void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK)
@@ -281,18 +331,18 @@ public class UserFormActivity extends AppCompatActivity
   {
     passwordValidator = new PasswordValidator();
 
-    edittextName.setError(null);
+    edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
 
-    name = edittextName.getText().toString();
+    name = edittextUsername.getText().toString();
     pass = edittextPass.getText().toString();
     repass = edittextRepass.getText().toString();
 
     if (TextUtils.isEmpty(name))
     {
-      edittextName.setError(getString(R.string.error_empty_name));
-      focusView = edittextName;
+      edittextUsername.setError(getString(R.string.error_empty_name));
+      focusView = edittextUsername;
       return false;
     }
     else if (TextUtils.isEmpty(pass))
@@ -334,18 +384,18 @@ public class UserFormActivity extends AppCompatActivity
 
     passwordValidator = new PasswordValidator();
 
-    edittextName.setError(null);
+    edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
 
-    name = edittextName.getText().toString();
+    name = edittextUsername.getText().toString();
     pass = edittextPass.getText().toString();
     repass = edittextRepass.getText().toString();
 
     if (TextUtils.isEmpty(name))
     {
-      edittextName.setError(getString(R.string.error_empty_name));
-      focusView = edittextName;
+      edittextUsername.setError(getString(R.string.error_empty_name));
+      focusView = edittextUsername;
       flag = false;
     }
     else if (!TextUtils.isEmpty(pass))
@@ -381,7 +431,7 @@ public class UserFormActivity extends AppCompatActivity
     return flag;
   }
 
-  public People PrepareData ()
+  public People PrepareData()
   {
     if (radiobuttonVisible.isChecked())
     {
@@ -404,7 +454,7 @@ public class UserFormActivity extends AppCompatActivity
     {
       people.setId(peopleId);
     }
-    people.setName(edittextName.getText().toString());
+    people.setName(edittextUsername.getText().toString());
     people.setApppassword(edittextPass.getText().toString());
     people.setCard(null);
     people.setVisible(visibility);

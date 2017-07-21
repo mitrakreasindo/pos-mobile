@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,8 +59,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
    * TODO: remove after connecting to a real authentication system.
    */
   private static final String[] DUMMY_CREDENTIALS = new String[]{
-          "foo@example.com:hello", "bar@example.com:world"
+    "foo@example.com:hello", "bar@example.com:world"
   };
+  @BindView(R.id.merchant_code)
+  EditText merchantCode;
   /**
    * Keep track of the login task to ensure we can cancel it if requested.
    */
@@ -76,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
+    ButterKnife.bind(this);
 
     // Set up the login form.
     mUsernameView = (EditText) findViewById(R.id.username);
@@ -98,23 +103,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
-    mLoginFormView = findViewById(R.id.login_form);
+    mLoginFormView = findViewById(R.id.layout_login_form);
     mProgressView = findViewById(R.id.login_progress);
+
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
+
+    if (!companyCode.equals(""))
+    {
+      merchantCode.setText(companyCode);
+    }
   }
 
   public void onClick(View view)
   {
-    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
     attemptLogin();
   }
 
   public void Register(View view)
   {
-    if (SharedPreferenceEditor.SavePreferences(this, "Company Code", "public"))
-      Toast.makeText(this, "Company Code Saved", Toast.LENGTH_SHORT).show();
-    else
-      Toast.makeText(this, "Company Code Not Saved", Toast.LENGTH_SHORT).show();
-
+    this.getSharedPreferences(this.getResources().getString(R.string.preference_file_key), MODE_PRIVATE).edit().remove("Company Code").apply();
     Intent intent = new Intent(this, RegisterActivity.class);
     startActivity(intent);
   }
@@ -142,15 +149,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     if (shouldShowRequestPermissionRationale(READ_CONTACTS))
     {
       Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-              .setAction(android.R.string.ok, new View.OnClickListener()
-              {
-                @Override
-                @TargetApi(Build.VERSION_CODES.M)
-                public void onClick(View v)
-                {
-                  requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                }
-              });
+        .setAction(android.R.string.ok, new View.OnClickListener()
+        {
+          @Override
+          @TargetApi(Build.VERSION_CODES.M)
+          public void onClick(View v)
+          {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+          }
+        });
     }
     else
     {
@@ -186,15 +193,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            return;
 
     // Reset errors.
+    merchantCode.setError(null);
     mUsernameView.setError(null);
     mPasswordView.setError(null);
 
     // Store values at the time of the login attempt.
+    String company = merchantCode.getText().toString();
     String user = mUsernameView.getText().toString();
     String password = mPasswordView.getText().toString();
 
     boolean cancel = false;
     View focusView = null;
+
+    // Check for provided companyCode
+    if (TextUtils.isEmpty(company))
+    {
+      merchantCode.setError("This field is required");
+      focusView = merchantCode;
+      cancel = true;
+    }
 
     // Check for a valid password, if the user entered one.
     if (!TextUtils.isEmpty(password) && !isPasswordValid(password))
@@ -225,6 +242,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //      mAuthTask = new UserLoginTask(email, password);
 //      mAuthTask.execute((Void) null);
 //      showProgress(true);
+      companyCode = merchantCode.getText().toString();
+      SharedPreferenceEditor.SavePreferences(LoginActivity.this, "Company Code", companyCode);
       postLogin(companyCode, user, password);
 //      Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //      intent.putExtra("USERNAME", user);
@@ -313,7 +332,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
       mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
       mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-              show ? 0 : 1).setListener(new AnimatorListenerAdapter()
+        show ? 0 : 1).setListener(new AnimatorListenerAdapter()
       {
         @Override
         public void onAnimationEnd(Animator animation)
@@ -324,7 +343,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
       mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
       mProgressView.animate().setDuration(shortAnimTime).alpha(
-              show ? 1 : 0).setListener(new AnimatorListenerAdapter()
+        show ? 1 : 0).setListener(new AnimatorListenerAdapter()
       {
         @Override
         public void onAnimationEnd(Animator animation)
@@ -346,20 +365,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
   {
     return new CursorLoader(this,
-            // Retrieve data rows for the device user's 'profile' contact.
-            Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                    ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+      // Retrieve data rows for the device user's 'profile' contact.
+      Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-            // Select only email addresses.
-            ContactsContract.Contacts.Data.MIMETYPE +
-                    " = ?", new String[]{
-            ContactsContract.CommonDataKinds.Email
-                    .CONTENT_ITEM_TYPE
+      // Select only email addresses.
+      ContactsContract.Contacts.Data.MIMETYPE +
+        " = ?", new String[]{
+      ContactsContract.CommonDataKinds.Email
+        .CONTENT_ITEM_TYPE
     },
 
-            // Show primary email addresses first. Note that there won't be
-            // a primary email address if the user hasn't specified one.
-            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+      // Show primary email addresses first. Note that there won't be
+      // a primary email address if the user hasn't specified one.
+      ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
   }
 
   @Override
@@ -386,8 +405,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
     ArrayAdapter<String> adapter =
-            new ArrayAdapter<>(LoginActivity.this,
-                    android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+      new ArrayAdapter<>(LoginActivity.this,
+        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
 //        mUsernameView.setAdapter(adapter);
   }
@@ -396,8 +415,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   private interface ProfileQuery
   {
     String[] PROJECTION = {
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+      ContactsContract.CommonDataKinds.Email.ADDRESS,
+      ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
     };
 
     int ADDRESS = 0;
@@ -473,25 +492,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       showProgress(false);
     }
   }
-
-//  private void insert(List<People> peopleList)
-//  {
-//    sqlite_obj.open();
-//    sqlite_obj.deleteAll();
-//    sqlite_obj.insert(peopleList);
-//
-//    for(int i=0; i<peopleList.size(); i++)
-//    {
-//      sqlite_obj.insert(
-//        peopleList.get(i).getId(),
-//        peopleList.get(i).getName(),
-//        peopleList.get(i).getApppassword(),
-//        peopleList.get(i).getCard(),
-//        peopleList.get(i).getRole().getId(),
-//        peopleList.get(i).isVisible(),
-//        peopleList.get(i).getImage());
-//    }
-//    sqlite_obj.close();
-//  }
 }
 

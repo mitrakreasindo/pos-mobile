@@ -39,16 +39,40 @@
         android:inputType="textPersonName"/>
 
     <LinearLayout
-        android:id="@+id/layout_business_type_category"
+        android:id="@+id/layout_business_shortname_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edittext_business_name"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edittext_business_shortname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/business_shortname"
+            android:inputType="phone"/>
+
+        <EditText
+            android:id="@+id/edittext_business_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/business_phone"
+            android:inputType="phone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_business_type_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_business_shortname_phone"
+        android:orientation="horizontal">
 
         <Spinner
             android:id="@+id/spinner_business_type"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:theme="@style/ThemeSpinner"
@@ -56,7 +80,7 @@
 
         <Spinner
             android:id="@+id/spinner_business_category"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:theme="@style/ThemeSpinner"
@@ -111,33 +135,51 @@
         android:id="@+id/textview_owner_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_below="@id/layout_business_city_state_zip"
         android:text="@string/owner_info"/>
 
     <EditText
-        android:id="@+id/edittext_owner_first_name"
+        android:id="@+id/edittext_owner_full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textview_owner_info"
         android:layout_marginTop="5dp"
-        android:hint="@string/owner_first_name"
+        android:hint="@string/owner_full_name"
         android:inputType="textPersonName"/>
 
-    <EditText
-        android:id="@+id/edittext_owner_last_name"
+    <LinearLayout
+        android:id="@+id/layout_owner_sex_birth_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edittext_owner_first_name"
+        android:layout_below="@id/edittext_owner_full_name"
         android:layout_marginTop="5dp"
-        android:hint="@string/owner_last_name"
-        android:inputType="textPersonName"/>
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner_owner_sex"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/spinner_sex"
+            android:theme="@style/ThemeSpinner"/>
+
+        <EditText
+            android:id="@+id/edittext_owner_birth_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/owner_birth_date"
+            android:inputType="date"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/edittext_owner_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edittext_owner_last_name"
+        android:layout_below="@id/layout_owner_sex_birth_date"
         android:layout_marginTop="5dp"
         android:hint="@string/owner_email"
         android:inputType="textEmailAddress"/>
@@ -150,15 +192,6 @@
         android:layout_marginTop="5dp"
         android:hint="@string/owner_phone"
         android:inputType="phone"/>
-
-    <EditText
-        android:id="@+id/edittext_owner_id_no"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edittext_owner_phone"
-        android:layout_marginTop="5dp"
-        android:hint="@string/owner_id"
-        android:inputType="number"/>
 
     <TextView
         android:id="@+id/textview_business_register_term"

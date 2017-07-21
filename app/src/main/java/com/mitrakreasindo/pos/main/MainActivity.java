@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    tablePeopleHelper.downloadData(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode);
     tableRoleHelper.downloadData(companyCode);
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);

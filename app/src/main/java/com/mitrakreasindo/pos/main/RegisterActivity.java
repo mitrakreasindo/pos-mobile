@@ -49,12 +49,12 @@ public class RegisterActivity extends AppCompatActivity
     setContentView(R.layout.activity_register);
     ButterKnife.bind(this);
 
-    this.arraySpinnerBusinessType = new String[] { "Business Type", "1", "2", "3", "4", "5" };
+    this.arraySpinnerBusinessType = new String[] { "Category", "1", "2", "3", "4", "5" };
     ArrayAdapter<String> adapterBusinessType = new ArrayAdapter<>(this,
       android.R.layout.simple_spinner_dropdown_item, arraySpinnerBusinessType);
     spinnerBusinessType.setAdapter(adapterBusinessType);
 
-    this.arraySpinnerBusinessCategory = new String[] { "Business Category", "1", "2", "3", "4", "5" };
+    this.arraySpinnerBusinessCategory = new String[] { "Sub Category", "1", "2", "3", "4", "5" };
     ArrayAdapter<String> adapterBusinessCategory = new ArrayAdapter<>(this,
       android.R.layout.simple_spinner_dropdown_item, arraySpinnerBusinessCategory);
     spinnerBusinessCategory.setAdapter(adapterBusinessCategory);

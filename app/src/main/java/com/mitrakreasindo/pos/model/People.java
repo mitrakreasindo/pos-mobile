@@ -1,5 +1,7 @@
 package com.mitrakreasindo.pos.model;
 
+import java.util.Date;
+
 /**
  * Created by lisa on 24/05/17.
  */
@@ -16,6 +18,13 @@ public class People
   private Boolean sflag;
   private String email;
   private Role role;
+  private String fullname;
+  private String personalIdType;
+  private String personalId;
+  private String npwpPribadi;
+  private String phoneNumber;
+  private String gender;
+  private Date birthdate;
 
   public String getId()
   {
@@ -115,5 +124,75 @@ public class People
   public void setRole(Role role)
   {
     this.role = role;
+  }
+
+  public String getFullname()
+  {
+    return fullname;
+  }
+
+  public void setFullname(String fullname)
+  {
+    this.fullname = fullname;
+  }
+
+  public String getPersonalIdType()
+  {
+    return personalIdType;
+  }
+
+  public void setPersonalIdType(String personalIdType)
+  {
+    this.personalIdType = personalIdType;
+  }
+
+  public String getPersonalId()
+  {
+    return personalId;
+  }
+
+  public void setPersonalId(String personalId)
+  {
+    this.personalId = personalId;
+  }
+
+  public String getNpwpPribadi()
+  {
+    return npwpPribadi;
+  }
+
+  public void setNpwpPribadi(String npwpPribadi)
+  {
+    this.npwpPribadi = npwpPribadi;
+  }
+
+  public String getPhoneNumber()
+  {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber)
+  {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public String getGender()
+  {
+    return gender;
+  }
+
+  public void setGender(String gender)
+  {
+    this.gender = gender;
+  }
+
+  public Date getBirthdate()
+  {
+    return birthdate;
+  }
+
+  public void setBirthdate(Date birthdate)
+  {
+    this.birthdate = birthdate;
   }
 }

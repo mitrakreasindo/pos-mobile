@@ -16,10 +16,10 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
+import com.mitrakreasindo.pos.service.RoleService;
 
-import java.util.List;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,7 +77,6 @@ public class RoleFormActivity extends AppCompatActivity
 
       roleField.setText(name);
     }
-
   }
 
   @Override
@@ -111,7 +110,6 @@ public class RoleFormActivity extends AppCompatActivity
 
   private void postRole()
   {
-
     Bundle bundle = getIntent().getExtras();
 
     final ProgressDialog progressDialog = new ProgressDialog(RoleFormActivity.this);
@@ -130,23 +128,22 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Role>> call = roleService.postRole(kodeMerchant, role);
-    call.enqueue(new Callback<List<Role>>()
+    Call<HashMap<Integer, String>> call = roleService.postRole(kodeMerchant, role);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       @Override
-      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
         Log.d(getClass().getSimpleName(), "Success Post Role !!!");
         onBackPressed();
       }
 
       @Override
-      public void onFailure(Call<List<Role>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
       }
     });
     onBackPressed();
-
   }
 
   private void updateRole()
@@ -166,23 +163,21 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-    Call<List<Role>> call = roleService.updateRole(kodeMerchant, role);
-    call.enqueue(new Callback<List<Role>>()
+    Call<HashMap<Integer, String>> call = roleService.updateRole(kodeMerchant, role);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       @Override
-      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
 
       }
 
       @Override
-      public void onFailure(Call<List<Role>> call, Throwable t)
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
 
       }
     });
-
     onBackPressed();
-
   }
 }

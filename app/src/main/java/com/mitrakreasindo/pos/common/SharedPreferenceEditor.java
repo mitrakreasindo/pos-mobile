@@ -24,7 +24,7 @@ public class SharedPreferenceEditor
       SharedPreferences sharedPreferences = context.getSharedPreferences(filename, MODE_PRIVATE);
       SharedPreferences.Editor editor = sharedPreferences.edit();
       editor.putString(key, value);
-      editor.commit();
+      editor.apply();
       return true;
     }
     catch (Exception e)
