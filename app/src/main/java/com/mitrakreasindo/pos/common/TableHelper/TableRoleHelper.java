@@ -123,11 +123,6 @@ public class TableRoleHelper
     return db.update(DATABASE_TABLE, initialValues, KEY_ID+" = ?", new String[]{role.getId()});
   }
 
-  public int delete(String id)
-  {
-    return db.delete(DATABASE_TABLE, KEY_ID+" = ? ", new String[]{id});
-  }
-
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);

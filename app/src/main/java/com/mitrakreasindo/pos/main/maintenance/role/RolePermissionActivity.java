@@ -232,8 +232,8 @@ public class RolePermissionActivity extends AppCompatActivity {
         try {
           Log.d("permission byte", "exist");
           String permissionXml = new String(bytePermission);
-          permission = serializer.read(Permission.class, permissionXml);
           Log.d("permission xml", permissionXml);
+          permission = serializer.read(Permission.class, permissionXml);
 
           StringWriter newxml = new StringWriter();
           serializer.write(permission, newxml);

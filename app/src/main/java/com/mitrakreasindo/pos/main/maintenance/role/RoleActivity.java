@@ -130,7 +130,6 @@ public class RoleActivity extends AppCompatActivity
 
     if (id == R.id.action_add)
     {
-//      startActivity(new Intent(this, RoleFormActivity.class));
       startActivity(new Intent(this, RolePermissionActivity.class));
     }
     return super.onOptionsItemSelected(item);

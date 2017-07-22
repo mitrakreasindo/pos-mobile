@@ -1,6 +1,5 @@
 package com.mitrakreasindo.pos.main.maintenance.role.controller;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,9 +16,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
 import com.mitrakreasindo.pos.main.maintenance.role.RolePermissionActivity;
-import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 
@@ -66,7 +63,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   public void onBindViewHolder(RoleAdapter.ViewHolder holder, int position)
   {
 
-    role = roles.get(position);
+    final Role role = roles.get(position);
     holder.txtName.setText(role.getName());
 
     //On Click
@@ -80,6 +77,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
         intent.putExtra("id", role.getId());
         intent.putExtra("name", role.getName());
         intent.putExtra("permission", role.getPermissions());
+
+        Log.d(getClass().getSimpleName()," data edit "+role.getName()+ " "+role.getPermissions());
 
         context.startActivity(intent);
       }
@@ -101,53 +100,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
             switch (which)
             {
               case 0:
-                deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role.getId());
+                deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role);
                 break;
-
-              case 1:
-                final ProgressDialog prog = new ProgressDialog(context);
-                prog.setMessage("Please wait...");
-                prog.show();
-
-                roleService = ClientService.createService().create(RoleService.class);
-                Log.d("DELETE CATEGORY", "DELETE CATEGORY");
-                Call<HashMap<Integer, String>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "Company Code", "") , role.getId());
-                call.enqueue(new Callback<HashMap<Integer, String>>()
-                {
-                  private int responseCode;
-                  private String responseMessage;
-                  @Override
-                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
-                  {
-                    final HashMap<Integer, String> data = response.body();
-                    for (int resultKey : data.keySet()) {
-                      responseCode = resultKey;
-                      responseMessage = data.get(resultKey);
-
-                      Log.e("RESPONSE ", responseMessage);
-                      if (responseCode == 0) {
-                        TableRoleHelper roleHelper = new TableRoleHelper(context);
-                        roleHelper.open();
-                        roleHelper.delete(role.getId());
-                        roleHelper.close();
-
-                        removeRole(role);
-                        prog.dismiss();
-                        Toast.makeText(context, "Role Deleted", Toast.LENGTH_LONG).show();
-                      }
-                    }
-                  }
-
-                  @Override
-                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t) {
-                    prog.dismiss();
-                    Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
-                  }
-                });
-
-
-                break;
-
             }
           }
         });
@@ -228,10 +182,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     });
   }
 
-  private void deleteRole (String kodeMerchant, final String id)
+  private void deleteRole (String kodeMerchant, final Role role)
   {
     roleService = ClientService.createService().create(RoleService.class);
-    Call<HashMap<Integer, String>> call = roleService.deleteRole(kodeMerchant, id);
+    Call<HashMap<Integer, String>> call = roleService.deleteRole(kodeMerchant, role.getId());
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -251,8 +205,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
           {
             TableRoleHelper tableRoleHelper = new TableRoleHelper(context);
             tableRoleHelper.open();
-            tableRoleHelper.delete(id);
+            tableRoleHelper.delete(role.getId());
             tableRoleHelper.close();
+
+            removeRole(role);
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
@@ -265,6 +221,6 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-    removeRole(role);
+
   }
 }
