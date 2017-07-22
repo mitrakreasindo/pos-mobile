@@ -1,29 +1,30 @@
 package com.mitrakreasindo.pos.main;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.PasswordValidator;
+import com.mitrakreasindo.pos.model.Merchant;
+import com.mitrakreasindo.pos.service.MerchantService;
 
-import java.io.InputStream;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity
 {
@@ -31,11 +32,19 @@ public class RegisterActivity extends AppCompatActivity
   Spinner spinnerBusinessType;
   @BindView(R.id.spinner_business_category)
   Spinner spinnerBusinessCategory;
+  @BindView(R.id.edittext_owner_birth_date)
+  TextView edittextOwnerBirthDate;
+  @BindView(R.id.edittext_business_name)
+  EditText edittextBusinessName;
+  @BindView(R.id.edittext_business_shortname)
+  EditText edittextBusinessShortname;
+  @BindView(R.id.edittext_owner_full_name)
+  EditText edittextOwnerFullName;
+  @BindView(R.id.edittext_owner_email)
+  EditText edittextOwnerEmail;
 
-  private int RESULT_TAKE_PHOTO = 0;
-  private int RESULT_PICK_GALLERY = 1;
-
-  private String name, pass, repass, role;
+  private int mYear, mMonth, mDay;
+  private String businessname, shortname, ownerfullname, owneremail;
   private String visibility;
   private View focusView = null;
   private PasswordValidator passwordValidator;
@@ -49,14 +58,16 @@ public class RegisterActivity extends AppCompatActivity
     setContentView(R.layout.activity_register);
     ButterKnife.bind(this);
 
-    this.arraySpinnerBusinessType = new String[] { "Category", "1", "2", "3", "4", "5" };
+    this.arraySpinnerBusinessType = new String[]{"Category", "1", "2", "3", "4", "5"};
     ArrayAdapter<String> adapterBusinessType = new ArrayAdapter<>(this,
-      android.R.layout.simple_spinner_dropdown_item, arraySpinnerBusinessType);
+      android.R.layout.simple_spinner_item, arraySpinnerBusinessType);
+    adapterBusinessType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinnerBusinessType.setAdapter(adapterBusinessType);
 
-    this.arraySpinnerBusinessCategory = new String[] { "Sub Category", "1", "2", "3", "4", "5" };
+    this.arraySpinnerBusinessCategory = new String[]{"Sub Category", "1", "2", "3", "4", "5"};
     ArrayAdapter<String> adapterBusinessCategory = new ArrayAdapter<>(this,
-      android.R.layout.simple_spinner_dropdown_item, arraySpinnerBusinessCategory);
+      android.R.layout.simple_spinner_item, arraySpinnerBusinessCategory);
+    adapterBusinessCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinnerBusinessCategory.setAdapter(adapterBusinessCategory);
   }
 
@@ -65,7 +76,6 @@ public class RegisterActivity extends AppCompatActivity
   {
     super.onResume();
     findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
-//        rdbVisible.setChecked(true);
   }
 
   public void Cancel(View view)
@@ -73,10 +83,48 @@ public class RegisterActivity extends AppCompatActivity
     finish();
   }
 
-  public void Confirm(View view)
+  public void RegisterOwnerPickDate(View view)
   {
-//    if (attemptRegister())
-//    {
+    final Calendar c = Calendar.getInstance();
+    mYear = c.get(Calendar.YEAR);
+    mMonth = c.get(Calendar.MONTH);
+    mDay = c.get(Calendar.DAY_OF_MONTH);
+
+    DatePickerDialog datePickerDialog = new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener()
+    {
+      @Override
+      public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+      {
+        String month, day;
+
+        if (String.valueOf(monthOfYear + 1).length() == 1)
+        {
+          month = "0" + String.valueOf(monthOfYear + 1);
+        }
+        else
+        {
+          month = String.valueOf(monthOfYear + 1);
+        }
+
+        if (String.valueOf(dayOfMonth).length() == 1)
+        {
+          day = "0" + String.valueOf(dayOfMonth);
+        }
+        else
+        {
+          day = String.valueOf(dayOfMonth);
+        }
+        edittextOwnerBirthDate.setText(year + "-" + month + "-" + day);
+      }
+    }, mYear, mMonth, mDay);
+
+    datePickerDialog.show();
+  }
+
+  public void CreateAccount(View view)
+  {
+    if (attemptRegister())
+    {
 //      if (rdbVisible.isChecked())
 //        visibility = "true";
 //      else
@@ -85,183 +133,97 @@ public class RegisterActivity extends AppCompatActivity
 //      findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 //      new HttpRequestTask().execute();
 //      findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-//    }
-//    else
-//      focusView.requestFocus();
+    }
+    else
+      focusView.requestFocus();
+  }
+
+  private boolean isEmailValid(String email)
+  {
+    return email.contains("@");
   }
 
   private boolean attemptRegister()
   {
-//    passwordValidator = new PasswordValidator();
-//
-//    edtName.setError(null);
-//    edtPass.setError(null);
-//    edtRepass.setError(null);
-//
-//    name = edtName.getText().toString();
-//    pass = edtPass.getText().toString();
-//    repass = edtRepass.getText().toString();
-//
-//    if (TextUtils.isEmpty(name))
-//    {
-//      edtName.setError(getString(R.string.error_empty_name));
-//      focusView = edtName;
-//      return false;
-//    }
-//    else if (TextUtils.isEmpty(pass))
-//    {
-//      edtPass.setError(getString(R.string.error_empty_pass));
-//      focusView = edtPass;
-//      return false;
-//    }
-//    else if (!passwordValidator.validate(pass))
-//    {
-//      edtPass.setError("- Password must at least 8 chars and max 10 chars \n" +
-//        "- Contains at least 1 digit (0-9)\n" +
-//        "- 1 lower case alphabet char (a-z)\n" +
-//        "- 1 upper case alphabet char (A-Z)\n" +
-//        "- 1 special char (~!@#$%^&*-+=,.?)\n" +
-//        "- No whitespace allowed");
-//      focusView = edtPass;
-//      return false;
-//    }
-//    else if (TextUtils.isEmpty(repass))
-//    {
-//      edtRepass.setError(getString(R.string.error_empty_repass));
-//      focusView = edtRepass;
-//      return false;
-//    }
-//    else if (!pass.equals(repass))
-//    {
-//      edtRepass.setError(getString(R.string.error_incorrect_reinput_password));
-//      focusView = edtRepass;
-//      return false;
-//    }
-//    else
+    passwordValidator = new PasswordValidator();
+
+    edittextBusinessName.setError(null);
+    edittextBusinessShortname.setError(null);
+    edittextOwnerFullName.setError(null);
+    edittextOwnerEmail.setError(null);
+
+    businessname = edittextBusinessName.getText().toString();
+    shortname = edittextBusinessShortname.getText().toString();
+    ownerfullname = edittextOwnerFullName.getText().toString();
+    owneremail = edittextOwnerEmail.getText().toString();
+
+    if (TextUtils.isEmpty(businessname))
+    {
+      edittextBusinessName.setError(getString(R.string.error_empty_businessname));
+      focusView = edittextBusinessName;
+      return false;
+    }
+    else if (TextUtils.isEmpty(shortname))
+    {
+      edittextBusinessShortname.setError(getString(R.string.error_empty_businessshortname));
+      focusView = edittextBusinessShortname;
+      return false;
+    }
+    else if (TextUtils.isEmpty(ownerfullname))
+    {
+      edittextOwnerFullName.setError(getString(R.string.error_empty_ownerfullname));
+      focusView = edittextOwnerFullName;
+      return false;
+    }
+    else if (TextUtils.isEmpty(owneremail))
+    {
+      edittextOwnerEmail.setError(getString(R.string.owner_email));
+      focusView = edittextOwnerEmail;
+      return false;
+    }
+    else if (isEmailValid(owneremail))
+    {
+      edittextOwnerEmail.setError(getString(R.string.error_valid_owneremail));
+      focusView = edittextOwnerEmail;
+      return false;
+    }
+    else
       return true;
   }
 
-  public void Select(View view)
+  private void postMerchant(final Merchant merchant)
   {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("Options");
-    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener()
+    MerchantService merchantService = ClientService.createService().create(MerchantService.class);
+    Call<HashMap<Integer, String>> call = merchantService.postMerchant(merchant);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
     {
-      @Override
-      public void onClick(DialogInterface dialog, int which)
-      {
-        switch (which)
-        {
-          case 0:
-            Toast.makeText(RegisterActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
-            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
-            break;
+      private int responseCode;
+      private String responseMessage;
 
-          case 1:
-            Toast.makeText(RegisterActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-              MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
-            break;
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+
+          if (responseCode == 0)
+          {
+            finish();
+          }
         }
+        Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+      }
+
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        responseCode = -1;
+        responseMessage = "Cannot register. :( There is something wrong.";
+        Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-    builder.show();
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data)
-  {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    if (resultCode == RESULT_OK)
-    {
-      try
-      {
-        final Uri imageUri = data.getData();
-
-        switch (requestCode)
-        {
-          case 0:
-            Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-//            imageView.setImageBitmap(bitmap);
-            break;
-
-          case 1:
-            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-//            imageView.setImageBitmap(selectedImage);
-            break;
-        }
-      }
-      catch (Exception e)
-      {
-        e.printStackTrace();
-        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-      }
-    }
-    else
-      Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
-  }
-
-  public class HttpRequestTask extends AsyncTask<Void, Void, String>
-  {
-    @Override
-    protected String doInBackground(Void... params)
-    {
-      try
-      {
-        Map<String, String> vars = new HashMap<>();
-        vars.put("name", name);
-        vars.put("pass", pass);
-        vars.put("card", "test_android");
-        vars.put("role", role);
-        vars.put("visible", visibility);
-
-//                HttpHeaders headers = new HttpHeaders();HttpHeaders
-//                headers.setContentType(MediaType.APPLICATION_JSON);
-
-//                final String url = "http://192.168.1.113:8080/ManualServices/resources/PeopleServices/QueryString/" +
-//                        "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
-
-        final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.people/public/" +
-          "?name={name}&apppassword={pass}&card={card}&role={role}&visible={visible}";
-//                RestTemplate restTemplate = new RestTemplate();
-//                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-//                String register = restTemplate.getForObject(url, String.class, vars);
-
-//                Register register = new Register();
-//                register.setId("9");
-//                register.setName(name);
-//                register.setApppassword(pass);
-//                register.setCard("testing");
-//                register.setRole(role);
-//                register.setVisible(visibility);
-//                register.setImage(null);
-
-//                HttpEntity<Register> entity = new HttpEntity<>(register, headers);
-        System.out.println(role);
-//                System.out.println(register);
-//                return register;
-      }
-      catch (Exception e)
-      {
-        Log.e("RegisterActivity", e.getMessage(), e);
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(String register)
-    {
-      Toast.makeText(RegisterActivity.this, "Done " + register, Toast.LENGTH_LONG);
-      finish();
-//            TextView registerText = (TextView) findViewById(R.id.id_value);
-//            TextView greetingContentText = (TextView) findViewById(R.id.content_value);
-//            registerText.setText(register.getId());
-//            greetingContentText.setText(register.getContent());
-    }
   }
 }

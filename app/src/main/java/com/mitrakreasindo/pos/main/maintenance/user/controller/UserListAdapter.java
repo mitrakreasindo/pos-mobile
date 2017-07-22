@@ -77,6 +77,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         intent.putExtra("role", people.getRole().getId());
         intent.putExtra("visible", people.isVisible());
         intent.putExtra("image", people.getImage());
+        intent.putExtra("fullname", people.getFullname());
+        intent.putExtra("birthdate", people.getBirthdate());
+        intent.putExtra("gender", people.getGender());
+        intent.putExtra("phone", people.getPhoneNumber());
         context.startActivity(intent);
       }
     });

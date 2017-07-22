@@ -98,6 +98,12 @@ public class UserFormActivity extends AppCompatActivity
   Button buttonCancel;
   @BindView(R.id.edittext_birth_date)
   TextView edittextBirthDate;
+  @BindView(R.id.edittext_fullname)
+  EditText edittextFullname;
+  @BindView(R.id.spinner_sex)
+  Spinner spinnerSex;
+  @BindView(R.id.edittext_phone)
+  EditText edittextPhone;
 
   private int RESULT_TAKE_PHOTO = 0;
   private int RESULT_PICK_GALLERY = 1;
@@ -108,16 +114,17 @@ public class UserFormActivity extends AppCompatActivity
   private PeopleService peopleService;
   private ArrayAdapter<Role> rolesArrayAdapter;
   private List<Role> data;
-  private Bundle bundle;
   private String kodeMerchant, peopleId;
   private String name, pass, repass;
   private boolean visibility;
+  private Bundle bundle;
   private PasswordValidator passwordValidator;
   private View focusView;
   private UserListAdapter userListAdapter;
   private byte[] imageInByte;
   private Bitmap bitmap;
   private ByteArrayOutputStream baos;
+  private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -127,7 +134,6 @@ public class UserFormActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     Calendar c = Calendar.getInstance();
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     peopleService = ClientService.createService().create(PeopleService.class);
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
@@ -137,26 +143,53 @@ public class UserFormActivity extends AppCompatActivity
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
     rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this,
-      android.R.layout.simple_spinner_dropdown_item, data);
+      android.R.layout.simple_spinner_item, data);
     userListAdapter = new UserListAdapter(this, new ArrayList<People>());
+    rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinnerRole.setAdapter(rolesArrayAdapter);
 
     setSupportActionBar(toolbar);
 
     //Edit Mode
     bundle = getIntent().getExtras();
+    SetupEditMode();
+
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
+  }
+
+  private void SetupEditMode()
+  {
     if (bundle != null)
     {
       peopleId = bundle.getString("id");
-      String name = bundle.getString("name");
-      String password = bundle.getString("password");
       String roleId = bundle.getString("role");
-      boolean visible = bundle.getBoolean("visible");
       byte[] image = bundle.getByteArray("image");
 
-      edittextUsername.setText(name);
-      edittextPass.setText(password);
-      if (visible)
+      edittextFullname.setText(bundle.getString("fullname"));
+      edittextBirthDate.setText(df.format(bundle.get("birthdate")));
+
+      String compareValue = bundle.getString("gender");
+      ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        R.array.spinner_sex, android.R.layout.simple_spinner_item);
+      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      spinnerSex.setAdapter(adapter);
+      if (!compareValue.equals(null))
+      {
+        int spinnerPosition = adapter.getPosition(compareValue);
+        spinnerSex.setSelection(spinnerPosition);
+      }
+
+      edittextPhone.setText(bundle.getString("phone"));
+      edittextUsername.setText(bundle.getString("name"));
+      edittextPass.setText(bundle.getString("password"));
+      if (bundle.getBoolean("visible"))
       {
         radiobuttonVisible.setChecked(true);
       }
@@ -209,14 +242,6 @@ public class UserFormActivity extends AppCompatActivity
     {
       getSupportActionBar().setTitle("Create User");
     }
-    toolbar.setNavigationOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        onBackPressed();
-      }
-    });
   }
 
   public void Select(View view)
@@ -433,50 +458,60 @@ public class UserFormActivity extends AppCompatActivity
 
   public People PrepareData()
   {
-    if (radiobuttonVisible.isChecked())
+    try
     {
-      visibility = true;
-    }
-    else if (radiobuttonInvisible.isChecked())
-    {
-      visibility = false;
-    }
+      if (radiobuttonVisible.isChecked())
+      {
+        visibility = true;
+      }
+      else if (radiobuttonInvisible.isChecked())
+      {
+        visibility = false;
+      }
 
-    role = new Role();
-    role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
+      role = new Role();
+      role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
 
-    people = new People();
-    if (bundle == null)
-    {
-      people.setId(UUID.randomUUID().toString());
-    }
-    else
-    {
-      people.setId(peopleId);
-    }
-    people.setName(edittextUsername.getText().toString());
-    people.setApppassword(edittextPass.getText().toString());
-    people.setCard(null);
-    people.setVisible(visibility);
+      people = new People();
+      if (bundle == null)
+      {
+        people.setId(UUID.randomUUID().toString());
+      }
+      else
+      {
+        people.setId(peopleId);
+      }
+      people.setName(edittextUsername.getText().toString());
+      people.setApppassword(edittextPass.getText().toString());
+      people.setCard(null);
+      people.setVisible(visibility);
 
-    if (imageviewImageSelect.getVisibility() == View.VISIBLE)
-    {
-      bitmap = ((BitmapDrawable) imageviewImageSelect.getDrawable()).getBitmap();
-      bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
-      baos = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
-      imageInByte = baos.toByteArray();
+      if (imageviewImageSelect.getVisibility() == View.VISIBLE)
+      {
+        bitmap = ((BitmapDrawable) imageviewImageSelect.getDrawable()).getBitmap();
+        bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
+        baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
+        imageInByte = baos.toByteArray();
+      }
+      else
+      {
+        imageInByte = null;
+      }
+      people.setImage(imageInByte);
+      people.setSiteguid(null);
+      people.setSflag(true);
+      people.setEmail(null);
+      people.setRole(role);
+      people.setFullname(edittextFullname.getText().toString());
+      people.setPhoneNumber(edittextPhone.getText().toString());
+      people.setBirthdate(df.parse(edittextBirthDate.getText().toString()));
+      people.setGender(spinnerSex.getSelectedItem().toString());
     }
-    else
+    catch (Exception e)
     {
-      imageInByte = null;
+      e.printStackTrace();
     }
-    people.setImage(imageInByte);
-    people.setSiteguid(null);
-    people.setSflag(true);
-    people.setEmail(null);
-    people.setRole(role);
-
     return people;
   }
 

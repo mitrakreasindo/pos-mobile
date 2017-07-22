@@ -55,27 +55,6 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/textview_sex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/owner_sex"/>
-
-                    <Spinner
-                        android:id="@+id/spinner_id_type"
-                        style="@style/Widget.AppCompat.Spinner.Underlined"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/textview_sex"
-                        android:entries="@array/spinner_sex"
-                        android:theme="@style/ThemeSpinner"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <TextView
                         android:id="@+id/textview_birth_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -90,13 +69,50 @@
                         style="@style/Widget.AppCompat.Spinner.Underlined"
                         android:onClick="PickDate"/>
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/textview_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/owner_sex"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_sex"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textview_sex"
+                        android:entries="@array/spinner_sex"
+                        android:theme="@style/ThemeSpinner"/>
+                </RelativeLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textview_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_people_id"
+                android:text="@string/owner_phone"/>
+
+            <EditText
+                android:id="@+id/edittext_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_phone"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="@drawable/ic_speaker_notes"
+                android:inputType="phone"/>
 
             <TextView
                 android:id="@+id/textview_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/layout_people_id"
+                android:layout_below="@id/edittext_phone"
                 android:text="@string/person_username"/>
 
             <EditText
