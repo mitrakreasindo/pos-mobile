@@ -11,12 +11,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
@@ -32,6 +34,10 @@ import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -40,6 +46,8 @@ public class MainActivity extends AppCompatActivity
   private String valueUser;
   private int mPrevSelectedId;
   private String companyCode;
+
+  private NavigationView navigationView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -51,8 +59,10 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
+    EventBus.getDefault().register(this);
+
     TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this, EventCode.EVENT_ROLE_GET);
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
@@ -76,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     drawer.setDrawerListener(toggle);
     toggle.syncState();
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
 
     valueUser = getIntent().getExtras().getString("USERNAME");
@@ -91,10 +101,6 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
-    List<String> list = XMLHelper.XMLReader(this, "navigation", permission);
-    ItemVisibility.hideItemNavigation(navigationView, list);
-
     MainFragment mainFragment = new MainFragment();
     getSupportFragmentManager().beginTransaction()
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
@@ -105,6 +111,16 @@ public class MainActivity extends AppCompatActivity
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
+
+//    setupNavigation();
+  }
+
+
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
   }
 
   @Override
@@ -235,4 +251,34 @@ public class MainActivity extends AppCompatActivity
     Toast.makeText(this, "Goodbye " + valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
     finish();
   }
+
+  private void setupNavigation()
+  {
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    List<String> navigationList = XMLHelper.XMLReader(this, "navigation", permission);
+    ItemVisibility.hideItemNavigation(navigationView, navigationList);
+
+    Log.d(getClass().getSimpleName(), "id login user "+IDs.getLoginUser());
+    if (permission != null) {
+      Log.d(getClass().getSimpleName(), "permission not null "+permission);
+    }
+    else
+    {
+      Log.d(getClass().getSimpleName(), "permission null");
+    }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  void onEvent(TableRoleHelper.RoleEvent event)
+  {
+    if (event.getId() == EventCode.EVENT_ROLE_GET)
+    {
+      if (event.getStatus() == TableRoleHelper.RoleEvent.COMPLATE)
+      {
+        setupNavigation();
+      }
+    }
+  }
+
 }

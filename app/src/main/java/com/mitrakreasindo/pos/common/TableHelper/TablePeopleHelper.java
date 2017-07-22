@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.People;
@@ -92,6 +93,9 @@ public class TablePeopleHelper
 
   public long insert(List<People> list)
   {
+
+    Log.d(getClass().getSimpleName(), "inserting peoples ");
+    Log.d(getClass().getSimpleName(), "peoples "+list);
     ContentValues initialValues = new ContentValues();
 
     for(int i=0; i<list.size(); i++)
@@ -236,7 +240,6 @@ public class TablePeopleHelper
       @Override
       public void onFailure(Call<List<People>> call, Throwable t)
       {
-
       }
     });
   }

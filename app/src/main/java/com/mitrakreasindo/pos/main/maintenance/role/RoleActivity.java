@@ -130,7 +130,8 @@ public class RoleActivity extends AppCompatActivity
 
     if (id == R.id.action_add)
     {
-      startActivity(new Intent(this, RoleFormActivity.class));
+//      startActivity(new Intent(this, RoleFormActivity.class));
+      startActivity(new Intent(this, RolePermissionActivity.class));
     }
     return super.onOptionsItemSelected(item);
   }
@@ -140,6 +141,9 @@ public class RoleActivity extends AppCompatActivity
   {
     super.onResume();
     Toast.makeText(this, "i'am resuming this activity", Toast.LENGTH_LONG).show();
+
+    roleAdapter.clear();
+    roleAdapter.addRole(tableRoleHelper.getData());
 //    getRole(kodeMerchant);
   }
 

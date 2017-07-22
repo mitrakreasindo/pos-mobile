@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.common;
 
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,25 +29,10 @@ public class ItemVisibility
       menuitem.add(getResId(list.get(i), R.id.class));
     }
 
-//    int menuitem[] =
-//      {
-//        R.id.nd_edit_sales,
-//        R.id.nd_customer_payment,
-//        R.id.nd_payment,
-//        R.id.nd_customer,
-//        R.id.nd_administration_sales,
-//        R.id.nd_presence_management,
-//        R.id.item_utilities,
-//        R.id.nd_tools,
-//        R.id.nd_change_password,
-//        R.id.nd_configuration,
-//        R.id.nd_printers,
-//        R.id.nd_check_in_out
-//      };
-
     for(int i=0; i<menuitem.size(); i++)
     {
       MenuItem mi = menu.findItem(menuitem.get(i));
+      if (mi == null) continue;
       mi.setVisible(false);
     }
   }
@@ -98,6 +84,8 @@ public class ItemVisibility
 //        button.add(btn_stock[i]);
 //      }
 //    }
+
+    Log.d("item visibilite", "button size "+button.size());
     for(int i=0; i<button.size(); i++)
     {
       Button btn = (Button) view.findViewById(button.get(i));

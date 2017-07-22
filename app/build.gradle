@@ -47,6 +47,12 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
+    compile ('org.simpleframework:simple-xml:2.7'){
+        exclude module: 'stax-api'
+        exclude module: 'stax'
+        exclude module: 'xpp3'
+    }
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.9'

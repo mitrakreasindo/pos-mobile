@@ -4,89 +4,89 @@
 
     <group android:checkableBehavior="single">
 
-        <item android:title="Main">
+        <item android:title="@string/nav_main">
             <menu>
                 <item
                     android:id="@+id/nd_sales"
                     android:icon="@drawable/ic_add_shopping_cart"
-                    android:title="Sales" />
+                    android:title="@string/nav_sales" />
                 <item
                     android:id="@+id/nd_edit_sales"
                     android:icon="@drawable/ic_action_cart"
-                    android:title="Edit Sales" />
+                    android:title="@string/nav_edit_sales" />
                 <item
                     android:id="@+id/nd_customer_payment"
                     android:icon="@drawable/ic_payment"
-                    android:title="Customer Payment" />
+                    android:title="@string/nav_customer_payment" />
                 <item
                     android:id="@+id/nd_payment"
                     android:icon="@drawable/ic_payment"
-                    android:title="Payment" />
+                    android:title="@string/nav_payment" />
                 <item
                     android:id="@+id/nd_close_cash"
                     android:icon="@drawable/ic_dialpad"
-                    android:title="Close Cash" />
+                    android:title="@string/nav_close_cash" />
             </menu>
         </item>
     </group>
 
-    <item android:title="Administration">
+    <item android:title="@string/nav_ad_administration">
         <menu>
             <item
                 android:id="@+id/nd_customer"
                 android:icon="@drawable/ic_contact_mail"
-                android:title="Customers" />
+                android:title="@string/nav_ad_customers" />
             <item
                 android:id="@+id/nd_stock"
                 android:icon="@drawable/ic_folder_open"
-                android:title="Stock" />
+                android:title="@string/nav_ad_stock" />
             <item
                 android:id="@+id/nd_administration_sales"
                 android:icon="@drawable/ic_assessment"
-                android:title="Sales" />
+                android:title="@string/nav_ad_sales" />
             <item
                 android:id="@+id/nd_maintenance"
                 android:icon="@drawable/ic_settings"
-                android:title="Maintenance" />
+                android:title="@string/nav_ad_maintenance" />
             <item
                 android:id="@+id/nd_presence_management"
                 android:icon="@drawable/ic_group"
-                android:title="Presence Management" />
+                android:title="@string/nav_ad_presence_management" />
         </menu>
     </item>
 
     <item
         android:id="@+id/item_utilities"
-        android:title="Utilities">
+        android:title="@string/nav_ut_utilities">
         <menu>
             <item
                 android:id="@+id/nd_tools"
                 android:icon="@drawable/ic_build"
-                android:title="Tools" />
+                android:title="@string/nav_ut_tools" />
         </menu>
     </item>
-    <item android:title="System">
+    <item android:title="@string/nav_sys_system">
         <menu>
             <item
                 android:id="@+id/nd_change_password"
                 android:icon="@drawable/ic_action_key"
-                android:title="Change Password" />
+                android:title="@string/nav_sys_change_password" />
             <item
                 android:id="@+id/nd_configuration"
                 android:icon="@drawable/ic_settings"
-                android:title="Configuration" />
+                android:title="@string/nav_sys_configuration" />
             <item
                 android:id="@+id/nd_printers"
                 android:icon="@drawable/ic_local_printshop"
-                android:title="Printers" />
+                android:title="@string/nav_sys_printers" />
             <item
                 android:id="@+id/nd_check_in_out"
                 android:icon="@drawable/ic_timer"
-                android:title="Check In/Out" />
+                android:title="@string/nav_sys_check_in_out" />
             <item
                 android:id="@+id/nd_logout"
                 android:icon="@drawable/ic_power_settings_new"
-                android:title="Log out" />
+                android:title="@string/nav_sys_log_out" />
         </menu>
     </item>
 </menu>

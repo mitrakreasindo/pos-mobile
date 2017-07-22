@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.role.controller;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,12 +15,15 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
+import com.mitrakreasindo.pos.main.maintenance.role.RolePermissionActivity;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -82,32 +86,57 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
             {
               case 0:
                 Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, RoleFormActivity.class);
+//                Intent intent = new Intent(context, RoleFormActivity.class);
+                Intent intent = new Intent(context, RolePermissionActivity.class);
                 intent.putExtra("id", role.getId());
                 intent.putExtra("name", role.getName());
+                intent.putExtra("permission", role.getPermissions());
+
                 context.startActivity(intent);
                 break;
 
               case 1:
+                final ProgressDialog prog = new ProgressDialog(context);
+                prog.setMessage("Please wait...");
+                prog.show();
 
                 roleService = ClientService.createService().create(RoleService.class);
                 Log.d("DELETE CATEGORY", "DELETE CATEGORY");
-                Call<List<Role>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "Company Code", "") , role.getId());
-                call.enqueue(new Callback<List<Role>>()
+                Call<HashMap<Integer, String>> call = roleService.deleteRole(sharedPreferenceEditor.LoadPreferences(context, "Company Code", "") , role.getId());
+                call.enqueue(new Callback<HashMap<Integer, String>>()
                 {
+                  private int responseCode;
+                  private String responseMessage;
                   @Override
-                  public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
                   {
+                    final HashMap<Integer, String> data = response.body();
+                    for (int resultKey : data.keySet()) {
+                      responseCode = resultKey;
+                      responseMessage = data.get(resultKey);
 
+                      Log.e("RESPONSE ", responseMessage);
+                      if (responseCode == 0) {
+                        TableRoleHelper roleHelper = new TableRoleHelper(context);
+                        roleHelper.open();
+                        roleHelper.delete(role.getId());
+                        roleHelper.close();
+
+                        removeRole(role);
+                        prog.dismiss();
+                        Toast.makeText(context, "Role Deleted", Toast.LENGTH_LONG).show();
+                      }
+                    }
                   }
 
                   @Override
-                  public void onFailure(Call<List<Role>> call, Throwable t)
-                  {
+                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t) {
+                    prog.dismiss();
+                    Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
                   }
                 });
-                removeRole(role);
-                Toast.makeText(context, "User Deleted", Toast.LENGTH_LONG).show();
+
+
                 break;
 
             }
@@ -157,7 +186,6 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 
   public class ViewHolder extends RecyclerView.ViewHolder
   {
-
     private TextView txtName;
 
     public ViewHolder(View itemView)

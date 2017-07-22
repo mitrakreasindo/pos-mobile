@@ -4,11 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +40,21 @@ public class TableRoleHelper
   private DatabaseHelper DBHelper;
   private SQLiteDatabase db;
   private RoleService service;
+  private int id;
 
   public TableRoleHelper(Context context)
   {
     this.context = context;
     DBHelper = new DatabaseHelper(context);
     service = ClientService.createService().create(RoleService.class);
+  }
+
+  public TableRoleHelper(Context context, int id)
+  {
+    this.context = context;
+    DBHelper = new DatabaseHelper(context);
+    service = ClientService.createService().create(RoleService.class);
+    this.id = id;
   }
 
   private class DatabaseHelper extends SQLiteAssetHelper
@@ -71,6 +83,18 @@ public class TableRoleHelper
     DBHelper.close();
   }
 
+  public long insert(Role role)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, role.getId());
+    initialValues.put(KEY_NAME, role.getName());
+    initialValues.put(KEY_PERMISSION, role.getPermissions());
+    initialValues.put(KEY_RIGHTSLEVEL, role.getRightslevel());
+
+    return db.insert(DATABASE_TABLE, null, initialValues);
+  }
+
   public long insert(List<Role> list)
   {
     ContentValues initialValues = new ContentValues();
@@ -87,6 +111,23 @@ public class TableRoleHelper
     return 0;
   }
 
+  public long update(Role role)
+  {
+    ContentValues initialValues = new ContentValues();
+
+    initialValues.put(KEY_ID, role.getId());
+    initialValues.put(KEY_NAME, role.getName());
+    initialValues.put(KEY_PERMISSION, role.getPermissions());
+    initialValues.put(KEY_RIGHTSLEVEL, role.getRightslevel());
+
+    return db.update(DATABASE_TABLE, initialValues, KEY_ID+" = ?", new String[]{role.getId()});
+  }
+
+  public int delete(String id)
+  {
+    return db.delete(DATABASE_TABLE, KEY_ID+" = ? ", new String[]{id});
+  }
+
   public int deleteAll()
   {
     return db.delete(DATABASE_TABLE, null, null);
@@ -100,15 +141,18 @@ public class TableRoleHelper
 
       int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int permissionIndex = cursor.getColumnIndexOrThrow(KEY_PERMISSION);
 
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String id = cursor.getString(idIndex);
         String name = cursor.getString(nameIndex);
+        byte[] permission = cursor.getBlob(permissionIndex);
 
         Role role = new Role();
         role.setId(id);
         role.setName(name);
+        role.setPermissions(permission);
         list.add(role);
       }
       return list;
@@ -187,6 +231,8 @@ public class TableRoleHelper
             deleteAll();
             insert(list);
             close();
+
+        EventBus.getDefault().post(new RoleEvent(id, RoleEvent.COMPLATE));
 //          }
 //        }).start();
       }
@@ -198,4 +244,27 @@ public class TableRoleHelper
       }
     });
   }
+
+  public static class RoleEvent
+  {
+    public static int COMPLATE = 200;
+    public static int ERROR = 400;
+    private int id;
+    private int status;
+
+    public RoleEvent(int id, int status)
+    {
+      this.id = id;
+      this.status = status;
+    }
+
+    public int getId() {
+      return id;
+    }
+
+    public int getStatus() {
+      return status;
+    }
+  }
+
 }

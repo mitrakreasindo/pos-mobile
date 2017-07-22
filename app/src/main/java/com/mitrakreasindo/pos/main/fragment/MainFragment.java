@@ -7,15 +7,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.mitrakreasindo.pos.common.EventCode;
+import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.ItemVisibility;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.MainQueueListAdapter;
 import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,12 +42,15 @@ public class MainFragment extends Fragment
   private MainQueueListAdapter queueListAdapter;
   private Queue queue;
   private Button menuSales, menuData, menuReceive, menuSetting, menuReport, menuExport;
+  private View view;
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
   {
-    View view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
+    view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
+
+    EventBus.getDefault().register(this);
 
     listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
     queueListAdapter = new MainQueueListAdapter(getContext(), Queue.queueData());
@@ -67,4 +80,37 @@ public class MainFragment extends Fragment
 
     return view;
   }
+
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  void onEvent(TableRoleHelper.RoleEvent event)
+  {
+    if (event.getId() == EventCode.EVENT_ROLE_GET)
+    {
+      if (event.getStatus() == TableRoleHelper.RoleEvent.COMPLATE)
+      {
+        setupMenu();
+        Log.d("fragment","main fragment setup");
+      }
+    }
+  }
+
+
+  private void setupMenu()
+  {
+    Log.d(getClass().getSimpleName(), "id login user "+IDs.getLoginUser());
+
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(getActivity());
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    List<String> buttonList = XMLHelper.XMLReader(getActivity(), "main", permission);
+
+    ItemVisibility.hideButton(view, buttonList);
+  }
+
 }
