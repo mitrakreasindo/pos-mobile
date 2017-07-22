@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
@@ -89,11 +90,11 @@ public class MainFragment extends Fragment
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  void onEvent(TableRoleHelper.RoleEvent event)
+  void onEvent(Event event)
   {
     if (event.getId() == EventCode.EVENT_ROLE_GET)
     {
-      if (event.getStatus() == TableRoleHelper.RoleEvent.COMPLATE)
+      if (event.getStatus() == Event.COMPLATE)
       {
         setupMenu();
         Log.d("fragment","main fragment setup");

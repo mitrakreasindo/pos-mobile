@@ -6,5 +6,9 @@ package com.mitrakreasindo.pos.common;
 
 public class EventCode
 {
-  public static final int EVENT_ROLE_GET = 300;
+  public static final int EVENT_PEOPLE_GET = 101;
+  public static final int EVENT_ROLE_GET = 102;
+  public static final int EVENT_CATEGORY_GET = 103;
+  public static final int EVENT_PRODUCT_GET = 104;
+  public static final int EVENT_TAXES_GET = 105;
 }

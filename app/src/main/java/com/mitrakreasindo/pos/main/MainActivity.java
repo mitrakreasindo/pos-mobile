@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity
 
   private NavigationView navigationView;
 
+  TablePeopleHelper tablePeopleHelper;
+  TableRoleHelper tableRoleHelper;
+
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -61,8 +65,8 @@ public class MainActivity extends AppCompatActivity
 
     EventBus.getDefault().register(this);
 
-    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this, EventCode.EVENT_ROLE_GET);
+    tablePeopleHelper = new TablePeopleHelper(this);
+    tableRoleHelper = new TableRoleHelper(this);
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
@@ -106,8 +110,7 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    tablePeopleHelper.downloadDataAlternate(companyCode);
-    tableRoleHelper.downloadData(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
@@ -270,15 +273,21 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  void onEvent(TableRoleHelper.RoleEvent event)
+  void onEvent(Event event)
   {
-    if (event.getId() == EventCode.EVENT_ROLE_GET)
+    switch (event.getId())
     {
-      if (event.getStatus() == TableRoleHelper.RoleEvent.COMPLATE)
-      {
-        setupNavigation();
-      }
+      case EventCode.EVENT_PEOPLE_GET:
+        if (event.getStatus() == Event.COMPLATE) {
+          tableRoleHelper.downloadData(companyCode, EventCode.EVENT_ROLE_GET);
+        }
+        break;
+      case EventCode.EVENT_ROLE_GET:
+        if (event.getStatus() == Event.COMPLATE) {
+          setupNavigation();
+        }
     }
+
   }
 
 }

@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -213,8 +213,9 @@ public class TableRoleHelper
     return permissions;
   }
 
-  public void downloadData(final String kodeMerchant)
+  public void downloadData(final String kodeMerchant, final int id)
   {
+    this.id = id;
     final Call<List<Role>> call = service.getRoleAll(kodeMerchant);
     call.enqueue(new Callback<List<Role>>()
     {
@@ -232,7 +233,7 @@ public class TableRoleHelper
             insert(list);
             close();
 
-        EventBus.getDefault().post(new RoleEvent(id, RoleEvent.COMPLATE));
+        EventBus.getDefault().post(new Event(id, Event.COMPLATE));
 //          }
 //        }).start();
       }
@@ -245,26 +246,5 @@ public class TableRoleHelper
     });
   }
 
-  public static class RoleEvent
-  {
-    public static int COMPLATE = 200;
-    public static int ERROR = 400;
-    private int id;
-    private int status;
-
-    public RoleEvent(int id, int status)
-    {
-      this.id = id;
-      this.status = status;
-    }
-
-    public int getId() {
-      return id;
-    }
-
-    public int getStatus() {
-      return status;
-    }
-  }
 
 }
