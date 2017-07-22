@@ -53,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/business_shortname"
-            android:inputType="phone"/>
+            android:maxLength="4"
+            android:inputType="text"/>
 
         <EditText
             android:id="@+id/edittext_business_phone"
@@ -73,7 +74,7 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner_business_type"
+            android:id="@+id/spinner_business_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -81,7 +82,7 @@
             style="@style/Widget.AppCompat.Spinner.Underlined" />
 
         <Spinner
-            android:id="@+id/spinner_business_category"
+            android:id="@+id/spinner_business_subcategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

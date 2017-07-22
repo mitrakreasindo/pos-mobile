@@ -6,13 +6,14 @@ package com.mitrakreasindo.pos.model;
 
 public class Merchant
 {
-
   private String code;
   private String name;
-  private String password;
   private String email;
   private String phone;
   private String address;
+  private String npwpperusahaan;
+  private boolean sflag;
+  private MerchantCategories category;
 
   public String getCode()
   {
@@ -32,16 +33,6 @@ public class Merchant
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  public String getPassword()
-  {
-    return password;
-  }
-
-  public void setPassword(String password)
-  {
-    this.password = password;
   }
 
   public String getEmail()
@@ -72,5 +63,35 @@ public class Merchant
   public void setAddress(String address)
   {
     this.address = address;
+  }
+
+  public String getNpwpperusahaan()
+  {
+    return npwpperusahaan;
+  }
+
+  public void setNpwpperusahaan(String npwpperusahaan)
+  {
+    this.npwpperusahaan = npwpperusahaan;
+  }
+
+  public boolean isSflag()
+  {
+    return sflag;
+  }
+
+  public void setSflag(boolean sflag)
+  {
+    this.sflag = sflag;
+  }
+
+  public MerchantCategories getCategory()
+  {
+    return category;
+  }
+
+  public void setCategory(MerchantCategories category)
+  {
+    this.category = category;
   }
 }

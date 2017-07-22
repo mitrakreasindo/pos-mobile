@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -13,12 +14,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Event;
+import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.model.Merchant;
+import com.mitrakreasindo.pos.model.MerchantCategories;
+import com.mitrakreasindo.pos.model.MerchantRegistration;
+import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.MerchantService;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,10 +42,10 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity
 {
-  @BindView(R.id.spinner_business_type)
-  Spinner spinnerBusinessType;
   @BindView(R.id.spinner_business_category)
   Spinner spinnerBusinessCategory;
+  @BindView(R.id.spinner_business_subcategory)
+  Spinner spinnerBusinessSubcategory;
   @BindView(R.id.edittext_owner_birth_date)
   TextView edittextOwnerBirthDate;
   @BindView(R.id.edittext_business_name)
@@ -42,14 +56,30 @@ public class RegisterActivity extends AppCompatActivity
   EditText edittextOwnerFullName;
   @BindView(R.id.edittext_owner_email)
   EditText edittextOwnerEmail;
+  @BindView(R.id.edittext_business_address)
+  EditText edittextBusinessAddress;
+  @BindView(R.id.edittext_business_city)
+  EditText edittextBusinessCity;
+  @BindView(R.id.edittext_business_state)
+  EditText edittextBusinessState;
+  @BindView(R.id.edittext_business_zip)
+  EditText edittextBusinessZip;
+  @BindView(R.id.spinner_owner_sex)
+  Spinner spinnerOwnerSex;
+  @BindView(R.id.edittext_business_phone)
+  EditText edittextBusinessPhone;
+  @BindView(R.id.edittext_owner_phone)
+  EditText edittextOwnerPhone;
 
   private int mYear, mMonth, mDay;
   private String businessname, shortname, ownerfullname, owneremail;
   private String visibility;
   private View focusView = null;
   private PasswordValidator passwordValidator;
-  private String[] arraySpinnerBusinessType;
-  private String[] arraySpinnerBusinessCategory;
+  private String[] arrayBusinessCategory;
+  private String[] arrayBusinessSubCategory;
+  private List<Integer> merchantCategoryId;
+  private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -58,17 +88,24 @@ public class RegisterActivity extends AppCompatActivity
     setContentView(R.layout.activity_register);
     ButterKnife.bind(this);
 
-    this.arraySpinnerBusinessType = new String[]{"Category", "1", "2", "3", "4", "5"};
-    ArrayAdapter<String> adapterBusinessType = new ArrayAdapter<>(this,
-      android.R.layout.simple_spinner_item, arraySpinnerBusinessType);
-    adapterBusinessType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spinnerBusinessType.setAdapter(adapterBusinessType);
+    EventBus.getDefault().register(this);
 
-    this.arraySpinnerBusinessCategory = new String[]{"Sub Category", "1", "2", "3", "4", "5"};
-    ArrayAdapter<String> adapterBusinessCategory = new ArrayAdapter<>(this,
-      android.R.layout.simple_spinner_item, arraySpinnerBusinessCategory);
-    adapterBusinessCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spinnerBusinessCategory.setAdapter(adapterBusinessCategory);
+    getMerchantCategories(EventCode.EVENT_BUSINESS_CATEGORY_GET);
+
+    spinnerBusinessCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    {
+      @Override
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+      {
+        getMerchantSubCategories(parentView.getItemAtPosition(position).toString(),
+          EventCode.EVENT_BUSINESS_SUBCATEGORY_GET);
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parentView)
+      {
+      }
+    });
   }
 
   @Override
@@ -76,6 +113,13 @@ public class RegisterActivity extends AppCompatActivity
   {
     super.onResume();
     findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
+  }
+
+  @Override
+  protected void onStop()
+  {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
   }
 
   public void Cancel(View view)
@@ -125,17 +169,48 @@ public class RegisterActivity extends AppCompatActivity
   {
     if (attemptRegister())
     {
-//      if (rdbVisible.isChecked())
-//        visibility = "true";
-//      else
-//        visibility = "false";
-//
-//      findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-//      new HttpRequestTask().execute();
-//      findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+      postMerchantRegistration(prepareRegistrationData());
     }
     else
       focusView.requestFocus();
+  }
+
+  private MerchantRegistration prepareRegistrationData()
+  {
+    Merchant merchant = new Merchant();
+    People people = new People();
+    MerchantRegistration merchantRegistration = new MerchantRegistration();
+    try
+    {
+      MerchantCategories merchantCategories = new MerchantCategories();
+      merchantCategories.setId(merchantCategoryId.get(spinnerBusinessSubcategory.getSelectedItemPosition()));
+
+      merchant.setName(edittextBusinessName.getText().toString());
+      merchant.setCode(edittextBusinessShortname.getText().toString());
+      merchant.setCategory(merchantCategories);
+      merchant.setPhone(edittextBusinessPhone.getText().toString());
+      merchant.setAddress(edittextBusinessAddress.getText().toString() + ", " +
+        edittextBusinessCity.getText().toString() + ", " +
+        edittextBusinessState.getText().toString() + ", " +
+        edittextBusinessZip.getText().toString());
+      merchant.setSflag(true);
+
+      people.setId(UUID.randomUUID().toString());
+      people.setFullname(edittextOwnerFullName.getText().toString());
+      people.setGender(spinnerOwnerSex.getSelectedItem().toString());
+      people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
+      people.setEmail(edittextOwnerEmail.getText().toString());
+      people.setPhoneNumber(edittextOwnerPhone.getText().toString());
+      people.setVisible(true);
+
+      merchantRegistration.setMerchant(merchant);
+      merchantRegistration.setPeople(people);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    return merchantRegistration;
   }
 
   private boolean isEmailValid(String email)
@@ -181,7 +256,7 @@ public class RegisterActivity extends AppCompatActivity
       focusView = edittextOwnerEmail;
       return false;
     }
-    else if (isEmailValid(owneremail))
+    else if (!isEmailValid(owneremail))
     {
       edittextOwnerEmail.setError(getString(R.string.error_valid_owneremail));
       focusView = edittextOwnerEmail;
@@ -191,10 +266,10 @@ public class RegisterActivity extends AppCompatActivity
       return true;
   }
 
-  private void postMerchant(final Merchant merchant)
+  private void postMerchantRegistration(final MerchantRegistration merchantRegistration)
   {
     MerchantService merchantService = ClientService.createService().create(MerchantService.class);
-    Call<HashMap<Integer, String>> call = merchantService.postMerchant(merchant);
+    Call<HashMap<Integer, String>> call = merchantService.postMerchantRegistration(merchantRegistration);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -225,5 +300,95 @@ public class RegisterActivity extends AppCompatActivity
         Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
+  }
+
+  private void getMerchantCategories(final int id)
+  {
+    MerchantService merchantService = ClientService.createService().create(MerchantService.class);
+    Call<List<MerchantCategories>> call = merchantService.getMerchantCategories();
+    call.enqueue(new Callback<List<MerchantCategories>>()
+    {
+      @Override
+      public void onResponse(Call<List<MerchantCategories>> call, Response<List<MerchantCategories>> response)
+      {
+        List<MerchantCategories> data = response.body();
+        List<String> category = new ArrayList<>();
+
+        for (int i = 0; i < data.size(); i++)
+        {
+          category.add(data.get(i).getName());
+        }
+        arrayBusinessCategory = new String[category.size()];
+        arrayBusinessCategory = category.toArray(arrayBusinessCategory);
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+      }
+
+      @Override
+      public void onFailure(Call<List<MerchantCategories>> call, Throwable t)
+      {
+        arrayBusinessCategory = null;
+        Toast.makeText(RegisterActivity.this, "Get category failed", Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
+
+  private void getMerchantSubCategories(String categoryName, final int id)
+  {
+    final MerchantService merchantService = ClientService.createService().create(MerchantService.class);
+    Call<List<MerchantCategories>> call = merchantService.getMerchantSubCategories(categoryName);
+    call.enqueue(new Callback<List<MerchantCategories>>()
+    {
+      @Override
+      public void onResponse(Call<List<MerchantCategories>> call, Response<List<MerchantCategories>> response)
+      {
+        List<MerchantCategories> data = response.body();
+        List<String> subcategory = new ArrayList<>();
+        merchantCategoryId = new ArrayList<>();
+
+        for (int i = 0; i < data.size(); i++)
+        {
+          subcategory.add(data.get(i).getSubcategory());
+          merchantCategoryId.add(data.get(i).getId());
+        }
+        arrayBusinessSubCategory = new String[subcategory.size()];
+        arrayBusinessSubCategory = subcategory.toArray(arrayBusinessSubCategory);
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+      }
+
+      @Override
+      public void onFailure(Call<List<MerchantCategories>> call, Throwable t)
+      {
+        arrayBusinessSubCategory = null;
+        Toast.makeText(RegisterActivity.this, "Get sub category failed", Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(Event event)
+  {
+    switch (event.getId())
+    {
+      case EventCode.EVENT_BUSINESS_CATEGORY_GET:
+        if (event.getStatus() == Event.COMPLETE)
+        {
+          ArrayAdapter<String> adapterBusinessCategory = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_item, arrayBusinessCategory);
+          adapterBusinessCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          spinnerBusinessCategory.setAdapter(adapterBusinessCategory);
+        }
+        break;
+      case EventCode.EVENT_BUSINESS_SUBCATEGORY_GET:
+        if (event.getStatus() == Event.COMPLETE)
+        {
+          ArrayAdapter<String> adapterBusinessSubCategory = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_item, arrayBusinessSubCategory);
+          adapterBusinessSubCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          spinnerBusinessSubcategory.setAdapter(adapterBusinessSubCategory);
+        }
+        break;
+    }
   }
 }
