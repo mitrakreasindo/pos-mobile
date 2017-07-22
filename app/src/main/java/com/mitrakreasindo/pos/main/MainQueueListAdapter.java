@@ -17,7 +17,7 @@ import java.util.List;
  * Created by lisa on 19/06/17.
  */
 
-public class MainQueueListAdapter  extends RecyclerView.Adapter<MainQueueListAdapter.ViewHolder>
+public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdapter.ViewHolder>
 {
 
   private List<Queue> queues = new ArrayList<>();
@@ -48,7 +48,7 @@ public class MainQueueListAdapter  extends RecyclerView.Adapter<MainQueueListAda
     holder.txtNo.setText(String.valueOf(position+1));
     holder.txtName.setText(queue.getName());
     holder.txtQueueNumber.setText(queue.getQueueNumber());
-    holder.txtValue.setText(queue.getValue());
+    holder.txtValue.setText(String.valueOf(queue.getValue()));
 
   }
 

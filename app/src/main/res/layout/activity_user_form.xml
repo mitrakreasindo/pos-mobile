@@ -27,16 +27,99 @@
             android:padding="15dp">
 
             <TextView
-                android:id="@+id/textview_name"
+                android:id="@+id/textview_fullname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/person_name"/>
+                android:text="@string/person_fullname"/>
 
             <EditText
-                android:id="@+id/edittext_name"
+                android:id="@+id/edittext_fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textview_name"
+                android:layout_below="@id/textview_fullname"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="@drawable/ic_person_pin"
+                android:inputType="textPersonName"/>
+
+            <LinearLayout
+                android:id="@+id/layout_people_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittext_fullname"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp" >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/textview_birth_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/owner_birth_date"/>
+
+                    <TextView
+                        android:id="@+id/edittext_birth_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textview_birth_date"
+                        android:layout_marginTop="2dp"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:onClick="PickDate"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/textview_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/owner_sex"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_sex"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textview_sex"
+                        android:entries="@array/spinner_sex"
+                        android:theme="@style/ThemeSpinner"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textview_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_people_id"
+                android:text="@string/owner_phone"/>
+
+            <EditText
+                android:id="@+id/edittext_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_phone"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="@drawable/ic_speaker_notes"
+                android:inputType="phone"/>
+
+            <TextView
+                android:id="@+id/textview_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittext_phone"
+                android:text="@string/person_username"/>
+
+            <EditText
+                android:id="@+id/edittext_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_username"
                 android:layout_marginBottom="5dp"
                 android:drawableStart="@drawable/ic_person_pin"
                 android:inputType="textPersonName"/>
@@ -45,7 +128,7 @@
                 android:id="@+id/textview_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edittext_name"
+                android:layout_below="@id/edittext_username"
                 android:text="@string/person_pass"/>
 
             <EditText
@@ -133,14 +216,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/textview_image"
+                android:layout_marginBottom="120dp"
                 android:onClick="Select"
                 android:text="@string/image_select"/>
 
             <ImageView
-                android:id="@+id/imageview"
+                android:id="@+id/imageview_image_select"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/textview_image"
+                android:visibility="invisible"
                 android:layout_marginBottom="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/button_imageselect"/>

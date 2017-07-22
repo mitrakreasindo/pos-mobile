@@ -21,7 +21,12 @@
         <!-- Color when pressed -->
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Default color for the dropdown arrow and line -->
-        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/gray600</item>
+    </style>
+
+    <style name="Autocomplete">
+        <item name="colorControlNormal">@color/blue</item>
+        <item name="colorControlActivated">@color/gray600</item>
     </style>
 
 </resources>

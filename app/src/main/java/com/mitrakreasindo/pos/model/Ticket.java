@@ -18,6 +18,94 @@ public class Ticket
   private Customer customer;
   private People person;
   private Receipt receipts;
-  private Collection<TicketLine> ticketlineCollection;
 
+  public String getId()
+  {
+    return id;
+  }
+
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  public int getTickettype()
+  {
+    return tickettype;
+  }
+
+  public void setTickettype(int tickettype)
+  {
+    this.tickettype = tickettype;
+  }
+
+  public int getTicketid()
+  {
+    return ticketid;
+  }
+
+  public void setTicketid(int ticketid)
+  {
+    this.ticketid = ticketid;
+  }
+
+  public int getStatus()
+  {
+    return status;
+  }
+
+  public void setStatus(int status)
+  {
+    this.status = status;
+  }
+
+  public String getSiteguid()
+  {
+    return siteguid;
+  }
+
+  public void setSiteguid(String siteguid)
+  {
+    this.siteguid = siteguid;
+  }
+
+  public Boolean getSflag()
+  {
+    return sflag;
+  }
+
+  public void setSflag(Boolean sflag)
+  {
+    this.sflag = sflag;
+  }
+
+  public Customer getCustomer()
+  {
+    return customer;
+  }
+
+  public void setCustomer(Customer customer)
+  {
+    this.customer = customer;
+  }
+
+  public People getPerson()
+  {
+    return person;
+  }
+
+  public void setPerson(People person)
+  {
+    this.person = person;
+  }
+
+  public Receipt getReceipts()
+  {
+    return receipts;
+  }
+
+  public void setReceipts(Receipt receipts)
+  {
+    this.receipts = receipts;
+  }
 }

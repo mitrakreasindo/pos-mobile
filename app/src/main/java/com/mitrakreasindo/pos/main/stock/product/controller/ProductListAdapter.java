@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,14 +16,11 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
-import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.model.Product;
-import com.mitrakreasindo.pos.service.CategoryService;
 import com.mitrakreasindo.pos.service.ProductService;
 
 import java.util.ArrayList;
@@ -47,7 +43,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   private ProductService productService;
   private ProductActivity productActivity;
   public List<Product> list_product = new ArrayList<>();
-  int counter = 0;
+  private int counter = 0;
+  private Product product;
 
   public ProductListAdapter(Context context, List<Product> products)
   {
@@ -68,7 +65,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   @Override
   public void onBindViewHolder(final ProductListAdapter.ViewHolder holder, final int position)
   {
-    final Product product = products.get(position);
+    product = products.get(position);
 
     holder.productItem.setOnClickListener(new View.OnClickListener()
     {
@@ -85,6 +82,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         intent.putExtra("sellPrice", product.getPricebuy().toString());
         intent.putExtra("stockCost", product.getStockcost().toString());
         intent.putExtra("stockVolume", product.getStockvolume().toString());
+        intent.putExtra("image", product.getImage());
         context.startActivity(intent);
       }
     });
@@ -103,50 +101,19 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
           {
             switch (which)
             {
-
               case 0:
-                productService = ClientService.createService().create(ProductService.class);
-
-                Toast.makeText(context, "Category Deleted", Toast.LENGTH_LONG).show();
-                Call<HashMap<Integer, String>> call = productService.deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
-                call.enqueue(new Callback<HashMap<Integer, String>>()
-                {
-
-                  private int responseCode;
-                  private String responseMessage;
-
-                  @Override
-                  public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+                new AlertDialog.Builder(context)
+                  .setTitle(context.getString(R.string.alert_dialog_delete_product))
+                  .setMessage(context.getString(R.string.alert_dialog_delete_product_message))
+                  .setIcon(android.R.drawable.ic_dialog_alert)
+                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
                   {
-                    final HashMap<Integer, String> data = response.body();
-                    for (int resultKey : data.keySet())
+                    public void onClick(DialogInterface dialog, int whichButton)
                     {
-                      responseCode = resultKey;
-                      responseMessage = data.get(resultKey);
-                      Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
-
-                      if (responseCode == 0)
-                      {
-                        TableProductHelper tableProductHelper = new TableProductHelper(context);
-                        tableProductHelper.open();
-                        tableProductHelper.delete(product.getId());
-                        tableProductHelper.close();
-                      }
-                      Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+                      deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
                     }
-                  }
-
-                  @Override
-                  public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-                  {
-
-                  }
-
-
-                });
-
-                removeProduct(product);
-                Toast.makeText(context, "Category deleted!", Toast.LENGTH_LONG).show();
+                  })
+                  .setNegativeButton(android.R.string.no, null).show();
                 break;
             }
           }
@@ -205,7 +172,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 //    {
 //      holder.checkBox.setVisibility(View.VISIBLE);
 //    }
-
   }
 
   public void addProduct(Product product)
@@ -261,10 +227,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
       txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
     }
-
-
   }
-
 
   public void prepareSelection(final ProductListAdapter.ViewHolder holder, int position){
 
@@ -283,9 +246,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   }
 
   public void updateCounter(int counter){
-
-
-
     if (counter == 0){
       productActivity.txtActionToolbar.setText("0 item selected");
       productActivity.is_action_mode = false;
@@ -300,7 +260,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       productActivity.txtActionToolbar.setText(counter + " item selected");
       productActivity.toolbar.getMenu().clear();
       productActivity.toolbar.inflateMenu(R.menu.menu_action_mode);
-
     }
     notifyDataSetChanged();
   }
@@ -315,9 +274,48 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     counter = 0;
     list_product.clear();
     notifyDataSetChanged();
-
   }
 
+  private void deleteProduct(String kodeMerchant, final String id)
+  {
+    productService = ClientService.createService().create(ProductService.class);
+    Call<HashMap<Integer, String>> call = productService.deleteProduct(kodeMerchant, id);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
+      private int responseCode;
+      private String responseMessage;
+
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+          if (responseCode == 0)
+          {
+            TableProductHelper tableProductHelper = new TableProductHelper(context);
+            tableProductHelper.open();
+            tableProductHelper.delete(product.getId());
+            tableProductHelper.close();
+          }
+          Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        responseCode = -1;
+        responseMessage = "Cannot delete product. :( There is something wrong.";
+        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+      }
+    });
+    removeProduct(product);
+  }
 
 //
 //  private void getCategories()

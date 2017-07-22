@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.ImageHelper;
 import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -38,7 +41,9 @@ import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -57,10 +62,10 @@ public class UserFormActivity extends AppCompatActivity
 {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.textview_name)
-  TextView textviewName;
-  @BindView(R.id.edittext_name)
-  EditText edittextName;
+  @BindView(R.id.textview_username)
+  TextView textviewUsername;
+  @BindView(R.id.edittext_username)
+  EditText edittextUsername;
   @BindView(R.id.textview_pass)
   TextView textviewPass;
   @BindView(R.id.edittext_password)
@@ -85,31 +90,41 @@ public class UserFormActivity extends AppCompatActivity
   TextView textviewImage;
   @BindView(R.id.button_imageselect)
   Button buttonImageselect;
-  @BindView(R.id.imageview)
-  ImageView imageview;
+  @BindView(R.id.imageview_image_select)
+  ImageView imageviewImageSelect;
   @BindView(R.id.button_confirm)
   Button buttonConfirm;
   @BindView(R.id.button_cancel)
   Button buttonCancel;
+  @BindView(R.id.edittext_birth_date)
+  TextView edittextBirthDate;
+  @BindView(R.id.edittext_fullname)
+  EditText edittextFullname;
+  @BindView(R.id.spinner_sex)
+  Spinner spinnerSex;
+  @BindView(R.id.edittext_phone)
+  EditText edittextPhone;
 
   private int RESULT_TAKE_PHOTO = 0;
   private int RESULT_PICK_GALLERY = 1;
 
+  private int mYear, mMonth, mDay;
   private Role role;
   private People people;
   private PeopleService peopleService;
   private ArrayAdapter<Role> rolesArrayAdapter;
   private List<Role> data;
-  private Bundle bundle;
   private String kodeMerchant, peopleId;
   private String name, pass, repass;
   private boolean visibility;
+  private Bundle bundle;
   private PasswordValidator passwordValidator;
   private View focusView;
   private UserListAdapter userListAdapter;
   private byte[] imageInByte;
   private Bitmap bitmap;
   private ByteArrayOutputStream baos;
+  private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -118,35 +133,63 @@ public class UserFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_user_form);
     ButterKnife.bind(this);
 
+    Calendar c = Calendar.getInstance();
+
     peopleService = ClientService.createService().create(PeopleService.class);
-
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
     radiobuttonVisible.setChecked(true);
+    edittextBirthDate.setText(df.format(c.getTime()));
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
     rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this,
-      android.R.layout.simple_spinner_dropdown_item, data);
+      android.R.layout.simple_spinner_item, data);
     userListAdapter = new UserListAdapter(this, new ArrayList<People>());
+    rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinnerRole.setAdapter(rolesArrayAdapter);
 
     setSupportActionBar(toolbar);
 
     //Edit Mode
     bundle = getIntent().getExtras();
+    SetupEditMode();
+
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
+  }
+
+  private void SetupEditMode()
+  {
     if (bundle != null)
     {
       peopleId = bundle.getString("id");
-      String name = bundle.getString("name");
-      String password = bundle.getString("password");
       String roleId = bundle.getString("role");
-      boolean visible = bundle.getBoolean("visible");
       byte[] image = bundle.getByteArray("image");
 
-      edittextName.setText(name);
-      edittextPass.setText(password);
-      if (visible)
+      edittextFullname.setText(bundle.getString("fullname"));
+      edittextBirthDate.setText(df.format(bundle.get("birthdate")));
+
+      String compareValue = bundle.getString("gender");
+      ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        R.array.spinner_sex, android.R.layout.simple_spinner_item);
+      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      spinnerSex.setAdapter(adapter);
+      if (!compareValue.equals(null))
+      {
+        int spinnerPosition = adapter.getPosition(compareValue);
+        spinnerSex.setSelection(spinnerPosition);
+      }
+
+      edittextPhone.setText(bundle.getString("phone"));
+      edittextUsername.setText(bundle.getString("name"));
+      edittextPass.setText(bundle.getString("password"));
+      if (bundle.getBoolean("visible"))
       {
         radiobuttonVisible.setChecked(true);
       }
@@ -174,38 +217,44 @@ public class UserFormActivity extends AppCompatActivity
 
       if (image != null)
       {
-        Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        imageview.setMinimumHeight(dm.heightPixels);
-        imageview.setMinimumWidth(dm.widthPixels);
-        imageview.setImageBitmap(bm);
+        if (image.length != 0)
+        {
+          Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+          DisplayMetrics dm = new DisplayMetrics();
+          getWindowManager().getDefaultDisplay().getMetrics(dm);
+          imageviewImageSelect.setMinimumHeight(dm.heightPixels);
+          imageviewImageSelect.setMinimumWidth(dm.widthPixels);
+          imageviewImageSelect.setImageBitmap(bm);
+          imageviewImageSelect.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+          imageviewImageSelect.setVisibility(View.INVISIBLE);
+        }
       }
-
+      else
+      {
+        imageviewImageSelect.setVisibility(View.INVISIBLE);
+      }
       getSupportActionBar().setTitle("Edit User");
     }
     else
     {
       getSupportActionBar().setTitle("Create User");
     }
-    toolbar.setNavigationOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        onBackPressed();
-      }
-    });
   }
 
   public void Select(View view)
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Options");
-    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
+    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener()
+    {
       @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which){
+      public void onClick(DialogInterface dialog, int which)
+      {
+        switch (which)
+        {
           case 0:
             Toast.makeText(UserFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -215,7 +264,7 @@ public class UserFormActivity extends AppCompatActivity
           case 1:
             Toast.makeText(UserFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+              MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
             break;
         }
@@ -224,8 +273,47 @@ public class UserFormActivity extends AppCompatActivity
     builder.show();
   }
 
+  public void PickDate(View view)
+  {
+    final Calendar c = Calendar.getInstance();
+    mYear = c.get(Calendar.YEAR);
+    mMonth = c.get(Calendar.MONTH);
+    mDay = c.get(Calendar.DAY_OF_MONTH);
+
+    DatePickerDialog datePickerDialog = new DatePickerDialog(UserFormActivity.this, new DatePickerDialog.OnDateSetListener()
+    {
+      @Override
+      public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+      {
+        String month, day;
+
+        if (String.valueOf(monthOfYear + 1).length() == 1)
+        {
+          month = "0" + String.valueOf(monthOfYear + 1);
+        }
+        else
+        {
+          month = String.valueOf(monthOfYear + 1);
+        }
+
+        if (String.valueOf(dayOfMonth).length() == 1)
+        {
+          day = "0" + String.valueOf(dayOfMonth);
+        }
+        else
+        {
+          day = String.valueOf(dayOfMonth);
+        }
+        edittextBirthDate.setText(year + "-" + month + "-" + day);
+      }
+    }, mYear, mMonth, mDay);
+
+    datePickerDialog.show();
+  }
+
   @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  protected void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (resultCode == RESULT_OK)
@@ -239,13 +327,15 @@ public class UserFormActivity extends AppCompatActivity
           case 0:
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
-            imageview.setImageBitmap(bitmap);
+            imageviewImageSelect.setImageBitmap(bitmap);
+            imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
 
           case 1:
             final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            imageview.setImageBitmap(selectedImage);
+            imageviewImageSelect.setImageBitmap(selectedImage);
+            imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
         }
       }
@@ -256,25 +346,28 @@ public class UserFormActivity extends AppCompatActivity
       }
     }
     else
+    {
+      imageviewImageSelect.setVisibility(View.INVISIBLE);
       Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+    }
   }
 
   private boolean attemptCreate()
   {
     passwordValidator = new PasswordValidator();
 
-    edittextName.setError(null);
+    edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
 
-    name = edittextName.getText().toString();
+    name = edittextUsername.getText().toString();
     pass = edittextPass.getText().toString();
     repass = edittextRepass.getText().toString();
 
     if (TextUtils.isEmpty(name))
     {
-      edittextName.setError(getString(R.string.error_empty_name));
-      focusView = edittextName;
+      edittextUsername.setError(getString(R.string.error_empty_name));
+      focusView = edittextUsername;
       return false;
     }
     else if (TextUtils.isEmpty(pass))
@@ -316,18 +409,18 @@ public class UserFormActivity extends AppCompatActivity
 
     passwordValidator = new PasswordValidator();
 
-    edittextName.setError(null);
+    edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
 
-    name = edittextName.getText().toString();
+    name = edittextUsername.getText().toString();
     pass = edittextPass.getText().toString();
     repass = edittextRepass.getText().toString();
 
     if (TextUtils.isEmpty(name))
     {
-      edittextName.setError(getString(R.string.error_empty_name));
-      focusView = edittextName;
+      edittextUsername.setError(getString(R.string.error_empty_name));
+      focusView = edittextUsername;
       flag = false;
     }
     else if (!TextUtils.isEmpty(pass))
@@ -363,52 +456,62 @@ public class UserFormActivity extends AppCompatActivity
     return flag;
   }
 
-  public People PrepareData ()
+  public People PrepareData()
   {
-    if (radiobuttonVisible.isChecked())
+    try
     {
-      visibility = true;
-    }
-    else if (radiobuttonInvisible.isChecked())
-    {
-      visibility = false;
-    }
+      if (radiobuttonVisible.isChecked())
+      {
+        visibility = true;
+      }
+      else if (radiobuttonInvisible.isChecked())
+      {
+        visibility = false;
+      }
 
-    role = new Role();
-    role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
+      role = new Role();
+      role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
 
-    people = new People();
-    if (bundle == null)
-    {
-      people.setId(UUID.randomUUID().toString());
-    }
-    else
-    {
-      people.setId(peopleId);
-    }
-    people.setName(edittextName.getText().toString());
-    people.setApppassword(edittextPass.getText().toString());
-    people.setCard(null);
-    people.setVisible(visibility);
+      people = new People();
+      if (bundle == null)
+      {
+        people.setId(UUID.randomUUID().toString());
+      }
+      else
+      {
+        people.setId(peopleId);
+      }
+      people.setName(edittextUsername.getText().toString());
+      people.setApppassword(edittextPass.getText().toString());
+      people.setCard(null);
+      people.setVisible(visibility);
 
-    if (imageview.getDrawable() != null)
-    {
-      bitmap = ((BitmapDrawable) imageview.getDrawable()).getBitmap();
-      baos = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
-      imageInByte = baos.toByteArray();
+      if (imageviewImageSelect.getVisibility() == View.VISIBLE)
+      {
+        bitmap = ((BitmapDrawable) imageviewImageSelect.getDrawable()).getBitmap();
+        bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
+        baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
+        imageInByte = baos.toByteArray();
+      }
+      else
+      {
+        imageInByte = null;
+      }
+      people.setImage(imageInByte);
+      people.setSiteguid(null);
+      people.setSflag(true);
+      people.setEmail(null);
+      people.setRole(role);
+      people.setFullname(edittextFullname.getText().toString());
+      people.setPhoneNumber(edittextPhone.getText().toString());
+      people.setBirthdate(df.parse(edittextBirthDate.getText().toString()));
+      people.setGender(spinnerSex.getSelectedItem().toString());
     }
-    else
+    catch (Exception e)
     {
-      imageInByte = null;
+      e.printStackTrace();
     }
-
-    people.setImage(imageInByte);
-    people.setSiteguid(null);
-    people.setSflag(true);
-    people.setEmail(null);
-    people.setRole(role);
-
     return people;
   }
 

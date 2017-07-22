@@ -24,8 +24,7 @@ public class People
   private String npwpPribadi;
   private String phoneNumber;
   private String gender;
-  private String birthdate;
-
+  private Date birthdate;
 
   public String getId()
   {
@@ -127,59 +126,73 @@ public class People
     this.role = role;
   }
 
-  public String getFullname() {
+  public String getFullname()
+  {
     return fullname;
   }
 
-  public void setFullname(String fullname) {
+  public void setFullname(String fullname)
+  {
     this.fullname = fullname;
   }
 
-  public String getPersonalIdType() {
+  public String getPersonalIdType()
+  {
     return personalIdType;
   }
 
-  public void setPersonalIdType(String personalIdType) {
+  public void setPersonalIdType(String personalIdType)
+  {
     this.personalIdType = personalIdType;
   }
 
-  public String getPersonalId() {
+  public String getPersonalId()
+  {
     return personalId;
   }
 
-  public void setPersonalId(String personalId) {
+  public void setPersonalId(String personalId)
+  {
     this.personalId = personalId;
   }
 
-  public String getNpwpPribadi() {
+  public String getNpwpPribadi()
+  {
     return npwpPribadi;
   }
 
-  public void setNpwpPribadi(String npwpPribadi) {
+  public void setNpwpPribadi(String npwpPribadi)
+  {
     this.npwpPribadi = npwpPribadi;
   }
 
-  public String getPhoneNumber() {
+  public String getPhoneNumber()
+  {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(String phoneNumber) {
+  public void setPhoneNumber(String phoneNumber)
+  {
     this.phoneNumber = phoneNumber;
   }
 
-  public String getGender() {
+  public String getGender()
+  {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(String gender)
+  {
     this.gender = gender;
   }
 
-  public String getBirthdate() {
+  public Date getBirthdate()
+  {
     return birthdate;
   }
 
-  public void setBirthdate(String birthdate) {
+  public void setBirthdate(Date birthdate)
+  {
     this.birthdate = birthdate;
   }
 }

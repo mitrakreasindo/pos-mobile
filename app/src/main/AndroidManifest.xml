@@ -80,7 +80,10 @@
             android:name=".stock.diary.activity.DiaryFormActivity"
             android:label="@string/add_diary">
         </activity>
-        <activity android:name=".sales.SalesActivity">
+        <activity
+            android:name=".sales.SalesActivity"
+            android:label="Sales"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity android:name=".stock.diary.activity.DiarySelectProductActivity">

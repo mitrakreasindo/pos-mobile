@@ -133,6 +133,11 @@ public class TableRoleHelper
     return db.delete(DATABASE_TABLE, null, null);
   }
 
+  public int delete(String id)
+  {
+    return db.delete(DATABASE_TABLE, KEY_ID + "= '" + id + "'", null);
+  }
+
   public List<Role> populateRole(Cursor cursor)
   {
     try

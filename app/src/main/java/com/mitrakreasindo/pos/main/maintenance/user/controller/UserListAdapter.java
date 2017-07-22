@@ -16,7 +16,6 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.user.UserDetailActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
@@ -65,21 +64,28 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     holder.txtName.setText(people.getName());
     holder.txtRole.setText(people.getEmail());
 
-//        On Click
+    //On Click
     holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-        Intent intent = new Intent(context, UserDetailActivity.class);
+        Intent intent = new Intent(context, UserFormActivity.class);
+        intent.putExtra("id", people.getId());
         intent.putExtra("name", people.getName());
-        intent.putExtra("email", people.getEmail());
+        intent.putExtra("password", people.getApppassword());
         intent.putExtra("role", people.getRole().getId());
+        intent.putExtra("visible", people.isVisible());
+        intent.putExtra("image", people.getImage());
+        intent.putExtra("fullname", people.getFullname());
+        intent.putExtra("birthdate", people.getBirthdate());
+        intent.putExtra("gender", people.getGender());
+        intent.putExtra("phone", people.getPhoneNumber());
         context.startActivity(intent);
       }
     });
 
-//        On Long Click
+    //On Long Click
     holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
     {
       @Override
@@ -87,7 +93,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Options");
-        builder.setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener()
+        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
         {
           @Override
           public void onClick(DialogInterface dialog, int which)
@@ -95,20 +101,18 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             switch (which)
             {
               case 0:
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, UserFormActivity.class);
-                intent.putExtra("id", people.getId());
-                intent.putExtra("name", people.getName());
-                intent.putExtra("password", people.getApppassword());
-                intent.putExtra("role", people.getRole().getId());
-                intent.putExtra("visible" , people.isVisible());
-                intent.putExtra("image", people.getImage());
-                context.startActivity(intent);
-                break;
-
-              case 1:
-                deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
-                Toast.makeText(context, "User deleted!", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(context)
+                  .setTitle(context.getString(R.string.alert_dialog_delete_people))
+                  .setMessage(context.getString(R.string.alert_dialog_delete_people_message))
+                  .setIcon(android.R.drawable.ic_dialog_alert)
+                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                  {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                      deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
+                    }
+                  })
+                  .setNegativeButton(android.R.string.no, null).show();
                 break;
             }
           }
@@ -204,7 +208,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         responseMessage = "Cannot delete user. :( There is something wrong.";
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
-
     });
     removePeople(user);
   }

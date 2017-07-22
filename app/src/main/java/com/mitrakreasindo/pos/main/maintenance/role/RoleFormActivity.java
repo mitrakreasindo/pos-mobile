@@ -20,7 +20,6 @@ import com.mitrakreasindo.pos.service.RoleService;
 import com.mitrakreasindo.pos.model.Role;
 
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,28 +124,27 @@ public class RoleFormActivity extends AppCompatActivity
     byte[] bytes = example.getBytes();
 
     role = new Role();
-    role.setId(UUID.randomUUID().toString());
     role.setName(roleField.getText().toString());
     role.setRightslevel(3);
     role.setPermissions(bytes);
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-//    Call<List<Role>> call = roleService.postRole(kodeMerchant, role);
-//    call.enqueue(new Callback<List<Role>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-//      {
-//        Log.d(getClass().getSimpleName(), "Success Post Role !!!");
-//        onBackPressed();
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Role>> call, Throwable t)
-//      {
-//      }
-//    });
+    Call<List<Role>> call = roleService.postRole(kodeMerchant, role);
+    call.enqueue(new Callback<List<Role>>()
+    {
+      @Override
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+      {
+        Log.d(getClass().getSimpleName(), "Success Post Role !!!");
+        onBackPressed();
+      }
+
+      @Override
+      public void onFailure(Call<List<Role>> call, Throwable t)
+      {
+      }
+    });
     onBackPressed();
 
   }
@@ -168,21 +166,21 @@ public class RoleFormActivity extends AppCompatActivity
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
 
-//    Call<List<Role>> call = roleService.updateRole(kodeMerchant, role);
-//    call.enqueue(new Callback<List<Role>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-//      {
-//
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Role>> call, Throwable t)
-//      {
-//
-//      }
-//    });
+    Call<List<Role>> call = roleService.updateRole(kodeMerchant, role);
+    call.enqueue(new Callback<List<Role>>()
+    {
+      @Override
+      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+      {
+
+      }
+
+      @Override
+      public void onFailure(Call<List<Role>> call, Throwable t)
+      {
+
+      }
+    });
 
     onBackPressed();
 

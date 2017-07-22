@@ -1,11 +1,20 @@
 package com.mitrakreasindo.pos.main.stock.product;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +23,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.ImageHelper;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
@@ -29,6 +40,8 @@ import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.TaxCategory;
 import com.mitrakreasindo.pos.service.ProductService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +56,6 @@ import retrofit2.Response;
 
 public class ProductFormActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.appbar)
@@ -74,7 +86,13 @@ public class ProductFormActivity extends AppCompatActivity
   Switch switchMultiPack;
   @BindView(R.id.edittext_general_buy_price)
   EditText edittextGeneralBuyPrice;
+  @BindView(R.id.btn_select_product_image)
+  Button btnSelectProductImage;
+  @BindView(R.id.imageview_product)
+  ImageView imageviewProduct;
 
+  private int RESULT_TAKE_PHOTO = 0;
+  private int RESULT_PICK_GALLERY = 1;
   private Product product;
   private Category category;
   private ProductService productService;
@@ -86,10 +104,11 @@ public class ProductFormActivity extends AppCompatActivity
   private List<Product> dataProduct;
   private ProductListAdapter productListAdapter;
   private Bundle bundle;
-
   private boolean isPack = false;
-
   private String productId;
+  private byte[] imageInByte;
+  private Bitmap bitmap;
+  private ByteArrayOutputStream baos;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -153,7 +172,6 @@ public class ProductFormActivity extends AppCompatActivity
           edittextStockPackQuantity.setVisibility(View.VISIBLE);
           spinnerStockOfProduct.setVisibility(View.VISIBLE);
         }
-
       }
     });
 
@@ -170,6 +188,7 @@ public class ProductFormActivity extends AppCompatActivity
       String stockCost = bundle.getString("stockCost");
       String stockVolume = bundle.getString("stockVolume");
       String categoryId = bundle.getString("category");
+      byte[] image = bundle.getByteArray("image");
       Toast.makeText(this, name, Toast.LENGTH_LONG).show();
 
       productId = id;
@@ -196,6 +215,28 @@ public class ProductFormActivity extends AppCompatActivity
         Log.d("ROLE_ID", String.valueOf(spinnerPosition));
         spinnerGeneralCategory.setSelection(spinnerPosition);
       }
+
+      if (image != null)
+      {
+        if (image.length != 0)
+        {
+          Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+          DisplayMetrics dm = new DisplayMetrics();
+          getWindowManager().getDefaultDisplay().getMetrics(dm);
+          imageviewProduct.setMinimumHeight(dm.heightPixels);
+          imageviewProduct.setMinimumWidth(dm.widthPixels);
+          imageviewProduct.setImageBitmap(bm);
+          imageviewProduct.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+          imageviewProduct.setVisibility(View.INVISIBLE);
+        }
+      }
+      else
+      {
+        imageviewProduct.setVisibility(View.INVISIBLE);
+      }
     }
 
     btnSaveProduct.setOnClickListener(new View.OnClickListener()
@@ -213,7 +254,6 @@ public class ProductFormActivity extends AppCompatActivity
         }
       }
     });
-
   }
 
   @Override
@@ -226,15 +266,79 @@ public class ProductFormActivity extends AppCompatActivity
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
-
     int id = item.getItemId();
 
     if (id == R.id.action_confirm)
     {
       return true;
     }
-
     return super.onOptionsItemSelected(item);
+  }
+
+  public void SelectProductImage(View view)
+  {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("Options");
+    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        switch (which){
+          case 0:
+            Toast.makeText(ProductFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
+            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
+            break;
+
+          case 1:
+            Toast.makeText(ProductFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
+            break;
+        }
+      }
+    });
+    builder.show();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (resultCode == RESULT_OK)
+    {
+      try
+      {
+        final Uri imageUri = data.getData();
+
+        switch (requestCode)
+        {
+          case 0:
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            imageviewProduct.setImageBitmap(bitmap);
+            imageviewProduct.setVisibility(View.VISIBLE);
+            break;
+
+          case 1:
+            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            imageviewProduct.setImageBitmap(selectedImage);
+            imageviewProduct.setVisibility(View.VISIBLE);
+            break;
+        }
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace();
+        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+      }
+    }
+    else
+    {
+      imageviewProduct.setVisibility(View.INVISIBLE);
+      Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+    }
   }
 
   private void postProduct()
@@ -253,7 +357,20 @@ public class ProductFormActivity extends AppCompatActivity
     product.setId(UUID.randomUUID().toString());
     product.setName(edittextGeneralName.getText().toString());
     product.setAttributes(null);
-    product.setImage(null);
+
+    if (imageviewProduct.getVisibility() == View.VISIBLE)
+    {
+      bitmap = ((BitmapDrawable) imageviewProduct.getDrawable()).getBitmap();
+      bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
+      baos = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
+      imageInByte = baos.toByteArray();
+    }
+    else
+    {
+      imageInByte = null;
+    }
+    product.setImage(imageInByte);
     product.setReference(edittextBarcode.getText().toString());
     product.setCode(edittextBarcode.getText().toString());
     product.setCodetype(null);
@@ -291,7 +408,6 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPackproduct(null);
     product.setPromotionid(null);
     product.setTaxcat(taxCategory);
-
 
     Call<HashMap<Integer, String>> call = productService.postProduct(kodeMerchant, product);
     call.enqueue(new Callback<HashMap<Integer, String>>()
@@ -322,9 +438,7 @@ public class ProductFormActivity extends AppCompatActivity
           Log.d(getClass().getSimpleName(), "Success Post Product !!!");
           Toast.makeText(ProductFormActivity.this, "Succesfull add product", Toast.LENGTH_SHORT).show();
         }
-
         finish();
-
       }
 
       @Override
@@ -332,8 +446,6 @@ public class ProductFormActivity extends AppCompatActivity
       {
       }
     });
-
-
   }
 
   private void updateProduct()
@@ -352,7 +464,21 @@ public class ProductFormActivity extends AppCompatActivity
     product.setId(productId);
     product.setName(edittextGeneralName.getText().toString());
     product.setAttributes(null);
-    product.setImage(null);
+
+    if (imageviewProduct.getVisibility() == View.VISIBLE)
+    {
+      bitmap = ((BitmapDrawable) imageviewProduct.getDrawable()).getBitmap();
+      bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
+      baos = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
+      imageInByte = baos.toByteArray();
+    }
+    else
+    {
+      imageInByte = null;
+    }
+
+    product.setImage(imageInByte);
     product.setReference(edittextBarcode.getText().toString());
     product.setCode(edittextBarcode.getText().toString());
     product.setCodetype(null);
@@ -391,11 +517,9 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPromotionid(null);
     product.setTaxcat(taxCategory);
 
-
     Call<HashMap<Integer, String>> call = productService.updateProduct(kodeMerchant, product.getId(), product);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
-
       private int responseCode;
       private String responseMessage;
 
@@ -419,9 +543,7 @@ public class ProductFormActivity extends AppCompatActivity
           Log.d(getClass().getSimpleName(), "Success Update Product !!!");
           Toast.makeText(ProductFormActivity.this, "Succesfull Update product", Toast.LENGTH_SHORT).show();
         }
-
         finish();
-
       }
 
       @Override
@@ -429,8 +551,5 @@ public class ProductFormActivity extends AppCompatActivity
       {
       }
     });
-
-
   }
-
 }
