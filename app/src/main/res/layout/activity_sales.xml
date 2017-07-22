@@ -34,8 +34,7 @@
                     android:drawableLeft="@drawable/ic_search"
                     android:inputType="text"
                     android:paddingLeft="7dp"
-                    android:textColor="@color/gray600"
-                    android:theme="@style/Autocomplete"/>
+                    android:textColor="@color/gray600"/>
 
             </LinearLayout>
 
@@ -51,134 +50,150 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.CardView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
-
-                <com.journeyapps.barcodescanner.DecoratedBarcodeView
-                    android:id="@+id/barcode_scanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_above="@+id/buttonsLayout"
-                    android:layout_alignParentTop="true">
-
-                    <ImageView
-                        android:id="@+id/barcodePreview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignTop="@id/buttonsLayout"/>
-
-                </com.journeyapps.barcodescanner.DecoratedBarcodeView>
-
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="70dp"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="SALE ID : "/>
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:text="DATE : "/>
+                        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                            android:id="@+id/barcode_scanner"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_above="@+id/buttonsLayout"
+                            android:layout_alignParentTop="true">
+
+                            <ImageView
+                                android:id="@+id/barcodePreview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignTop="@id/buttonsLayout"/>
+
+                        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
                     </LinearLayout>
 
 
-                </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="70dp"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5"
-                        android:text="No"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="10"
-                        android:text="Name Product"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="5dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="7"
-                        android:text="Nomor Antrian"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SALE ID : "/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:text="Nilai"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
-                </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:text="DATE : "/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/list_sales_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                            </LinearLayout>
 
-                </android.support.v7.widget.RecyclerView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorAccent"
+                            android:orientation="horizontal">
+
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="10"
+                                android:text="Name Product"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="Qty"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:text="Price"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:text="Nilai"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/list_sales_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </android.support.v7.widget.RecyclerView>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
+        </ScrollView>
 
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
@@ -203,7 +218,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/diary_product_total"
+                android:id="@+id/sales_product_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$ 0"/>
@@ -223,6 +238,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_shopping_cart_black_24dp"/>
 
             <ImageView
@@ -230,6 +248,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_save_black_24dp"/>
 
         </LinearLayout>

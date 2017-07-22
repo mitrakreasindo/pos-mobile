@@ -1,6 +1,5 @@
 package com.mitrakreasindo.pos.main.sales;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,15 +7,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
@@ -28,6 +27,11 @@ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
+import com.mitrakreasindo.pos.model.Product;
+import com.mitrakreasindo.pos.model.Sale;
+import com.mitrakreasindo.pos.model.Tax;
+import com.mitrakreasindo.pos.model.Ticket;
+import com.mitrakreasindo.pos.model.TicketLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +56,12 @@ public class SalesActivity extends AppCompatActivity
   AutoCompleteTextView edittextSearchProduct;
   @BindView(R.id.list_sales_product)
   RecyclerView listSalesProduct;
+  @BindView(R.id.sales_product_total)
+  TextView salesProductTotal;
+  @BindView(R.id.btn_sales_cart)
+  ImageView btnSalesCart;
+  @BindView(R.id.btn_sales_save)
+  ImageView btnSalesSave;
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
@@ -96,7 +106,8 @@ public class SalesActivity extends AppCompatActivity
     setContentView(R.layout.activity_sales);
     ButterKnife.bind(this);
 
-    salesListAdapter = new SalesListAdapter(this, Queue.queueData());
+    salesListAdapter = new SalesListAdapter(this, new ArrayList<TicketLine>());
+//    salesListAdapter = new SalesListAdapter(this, new ArrayList<Queue>());
     listSalesProduct.setAdapter(salesListAdapter);
     listSalesProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -116,6 +127,7 @@ public class SalesActivity extends AppCompatActivity
     });
 
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
+
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -123,36 +135,44 @@ public class SalesActivity extends AppCompatActivity
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-        Toast.makeText(SalesActivity.this, adapter.getItem(position).toString(), Toast.LENGTH_LONG).show();
+//        Product product = tableProductHelper.getData().get(position);
+        Product product = (Product) adapter.getItem(position);
+        adapter.getItem(position);
+
+        Ticket ticket = new Ticket();
+        ticket.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+
+        Tax tax = new Tax();
+        tax.setId("001");
+
+        String example = "Convert Java String";
+        byte[] bytes = example.getBytes();
+
+        TicketLine ticketLine = new TicketLine();
+        ticketLine.setProduct(product);
+        ticketLine.setAttributes(bytes);
+        ticketLine.setUnits(1);
+        ticketLine.setPrice(product.getPricesell());
+        ticketLine.setTicket(ticket);
+        ticketLine.setSflag(true);
+        ticketLine.setTaxid(tax);
+//        ticketLine.setAttributesetinstanceId();
+
+        salesListAdapter.addTicketLine(ticketLine);
+        Log.d("TICKET OPERAND", ticketLine.getProduct().toString());
+//        Toast.makeText(SalesActivity.this, adapter.getItem(position).toString(), Toast.LENGTH_LONG).show();
         edittextSearchProduct.setText("");
       }
     });
+
+    salesListAdapter.notifyDataSetChanged();
+    salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
 
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
 
     beepManager = new BeepManager(this);
   }
-
-//  @Override
-//  public boolean onCreateOptionsMenu(Menu menu)
-//  {
-//    getMenuInflater().inflate(R.menu.default_form_menu, menu);
-//
-//    return super.onCreateOptionsMenu(menu);
-//  }
-//
-//  @Override
-//  public boolean onOptionsItemSelected(MenuItem item)
-//  {
-//    int id = item.getItemId();
-//
-//    if (id == R.id.action_confirm)
-//    {
-//      Toast.makeText(this, "Oke!", Toast.LENGTH_SHORT).show();
-//    }
-//    return super.onOptionsItemSelected(item);
-//  }
 
   @Override
   protected void onResume()

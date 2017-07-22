@@ -48,7 +48,7 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
     holder.txtNo.setText(String.valueOf(position+1));
     holder.txtName.setText(queue.getName());
     holder.txtQueueNumber.setText(queue.getQueueNumber());
-    holder.txtValue.setText(queue.getValue());
+    holder.txtValue.setText(String.valueOf(queue.getValue()));
 
   }
 
