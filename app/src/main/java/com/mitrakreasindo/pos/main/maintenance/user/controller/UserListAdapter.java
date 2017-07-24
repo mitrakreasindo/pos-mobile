@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -38,11 +40,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   private Context context;
   private PeopleService peopleService;
   private People user;
+  private List<String> inactive;
 
   public UserListAdapter(Context context, List<People> peoples)
   {
     this.context = context;
     this.peoples = peoples;
+    inactive = PermissionUtil.getInactive(context, "user_action");
     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -64,63 +68,60 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     holder.txtName.setText(people.getName());
     holder.txtRole.setText(people.getEmail());
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
+    if (!inactive.contains(MenuIds.rp_mtc_usr_action_update))
     {
-      @Override
-      public void onClick(View v)
-      {
-        Intent intent = new Intent(context, UserFormActivity.class);
-        intent.putExtra("id", people.getId());
-        intent.putExtra("name", people.getName());
-        intent.putExtra("password", people.getApppassword());
-        intent.putExtra("role", people.getRole().getId());
-        intent.putExtra("visible", people.isVisible());
-        intent.putExtra("image", people.getImage());
-        intent.putExtra("fullname", people.getFullname());
-        intent.putExtra("birthdate", people.getBirthdate());
-        intent.putExtra("gender", people.getGender());
-        intent.putExtra("phone", people.getPhoneNumber());
-        context.startActivity(intent);
-      }
-    });
+      //On Click
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(context, UserFormActivity.class);
+          intent.putExtra("id", people.getId());
+          intent.putExtra("name", people.getName());
+          intent.putExtra("password", people.getApppassword());
+          intent.putExtra("role", people.getRole().getId());
+          intent.putExtra("visible", people.isVisible());
+          intent.putExtra("image", people.getImage());
+          intent.putExtra("fullname", people.getFullname());
+          intent.putExtra("birthdate", people.getBirthdate());
+          intent.putExtra("gender", people.getGender());
+          intent.putExtra("phone", people.getPhoneNumber());
+          context.startActivity(intent);
+        }
+      });
+    }
 
-    //On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+    if (!inactive.contains(MenuIds.rp_mtc_usr_action_delete))
     {
-      @Override
-      public boolean onLongClick(final View v)
-      {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
-        {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
-          {
-            switch (which)
-            {
-              case 0:
-                new AlertDialog.Builder(context)
-                  .setTitle(context.getString(R.string.alert_dialog_delete_people))
-                  .setMessage(context.getString(R.string.alert_dialog_delete_people_message))
-                  .setIcon(android.R.drawable.ic_dialog_alert)
-                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
-                  {
-                    public void onClick(DialogInterface dialog, int whichButton)
-                    {
-                      deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
-                    }
-                  })
-                  .setNegativeButton(android.R.string.no, null).show();
-                break;
+      //On Long Click
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(final View v) {
+          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+          builder.setTitle("Options");
+          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case 0:
+                  new AlertDialog.Builder(context)
+                          .setTitle(context.getString(R.string.alert_dialog_delete_people))
+                          .setMessage(context.getString(R.string.alert_dialog_delete_people_message))
+                          .setIcon(android.R.drawable.ic_dialog_alert)
+                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                              deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
+                            }
+                          })
+                          .setNegativeButton(android.R.string.no, null).show();
+                  break;
+              }
             }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+          });
+          builder.show();
+          return false;
+        }
+      });
+    }
   }
 
   public void addUser(People people)

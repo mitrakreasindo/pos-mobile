@@ -186,6 +186,30 @@ public class RolePermissionActivity extends AppCompatActivity {
   CheckBox rpCheckInOut;
   @BindView(R.id.rp_logout)
   CheckBox rpLogout;
+  @BindView(R.id.rp_mtc_rl_more)
+  Button rpMtcRlMore;
+  @BindView(R.id.rp_mtc_rl_more_layout)
+  LinearLayout rpMtcRlMoreLayout;
+  @BindView(R.id.rp_mtc_rl_insert)
+  CheckBox rpMtcRlCreate;
+  @BindView(R.id.rp_mtc_rl_update)
+  CheckBox rpMtcRlUpdate;
+  @BindView(R.id.rp_mtc_rl_delete)
+  CheckBox rpMtcRlDelete;
+  @BindView(R.id.rp_mtc_rl_layout)
+  LinearLayout rpMtcRlLayout;
+  @BindView(R.id.rp_mtc_usr_more)
+  Button rpMtcUsrMore;
+  @BindView(R.id.rp_mtc_usr_more_layout)
+  LinearLayout rpMtcUsrMoreLayout;
+  @BindView(R.id.rp_mtc_usr_insert)
+  CheckBox rpMtcUsrInsert;
+  @BindView(R.id.rp_mtc_usr_update)
+  CheckBox rpMtcUsrUpdate;
+  @BindView(R.id.rp_mtc_usr_delete)
+  CheckBox rpMtcUsrDelete;
+  @BindView(R.id.rp_mtc_usr_layout)
+  LinearLayout rpMtcUsrLayout;
   private Role role;
   private Permission permission;
   private RoleService roleService;
@@ -296,7 +320,9 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
           R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
           R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
-          R.id.rp_stk_report_labels_shelf_egde_labels
+          R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
+          R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
+          R.id.rp_mtc_usr_delete
   })
   List<CheckBox> checkBoxMenus;
 
@@ -321,15 +347,17 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
           R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
           R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
-          R.id.rp_stk_report_labels_shelf_egde_labels})
+          R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
+          R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
+          R.id.rp_mtc_usr_delete})
   void onChecked(CheckBox checkBox, boolean checked) {
     checkPermission(checkBox.getId(), checked);
   }
 
-  @BindViews({R.id.rp_mtc_more, R.id.rp_stk_more})
+  @BindViews({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more})
   List<Button> moreButtons;
 
-  @OnClick({R.id.rp_mtc_more, R.id.rp_stk_more})
+  @OnClick({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more})
   public void onMoreClick(Button button) {
     switch (button.getId()) {
       case R.id.rp_mtc_more:
@@ -337,6 +365,12 @@ public class RolePermissionActivity extends AppCompatActivity {
         break;
       case R.id.rp_stk_more:
         setVisibility(rpStkLayout);
+        break;
+      case R.id.rp_mtc_rl_more:
+        setVisibility(rpMtcRlLayout);
+        break;
+      case R.id.rp_mtc_usr_more:
+        setVisibility(rpMtcUsrLayout);
         break;
     }
 
@@ -349,12 +383,16 @@ public class RolePermissionActivity extends AppCompatActivity {
       this.permission.main.addAll(MenuIds.listMain().values());
       this.permission.maintenace.addAll(MenuIds.listMaintenance().values());
       this.permission.stock.addAll(MenuIds.listStock().values());
+      this.permission.roleAction.addAll(MenuIds.listRoleAction().values());
+      this.permission.userAction.addAll(MenuIds.listUserAction().values());
     } else {
       List<String> inActivePermission = new ArrayList<>();
       inActivePermission.addAll(this.permission.navigation);
       inActivePermission.addAll(this.permission.main);
       inActivePermission.addAll(this.permission.maintenace);
       inActivePermission.addAll(this.permission.stock);
+      inActivePermission.addAll(this.permission.roleAction);
+      inActivePermission.addAll(this.permission.userAction);
 
       // set default permission active
       setCheckAll(CHECK);
@@ -372,15 +410,31 @@ public class RolePermissionActivity extends AppCompatActivity {
     setInactive(inactive, isCheck);
   }
 
-  private void checkPermission(int checkBoxId, boolean checked) {
-    if (MenuIds.listNavigatoin().containsKey(checkBoxId)) {
+  private void checkPermission(int checkBoxId, boolean checked)
+  {
+    if (MenuIds.listNavigatoin().containsKey(checkBoxId))
+    {
       setPermission(permission.navigation, checked, MenuIds.listNavigatoin().get(checkBoxId));
-    } else if (MenuIds.listMain().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listMain().containsKey(checkBoxId))
+    {
       setPermission(permission.main, checked, MenuIds.listMain().get(checkBoxId));
-    } else if (MenuIds.listMaintenance().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listMaintenance().containsKey(checkBoxId))
+    {
       setPermission(permission.maintenace, checked, MenuIds.listMaintenance().get(checkBoxId));
-    } else if (MenuIds.listStock().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listStock().containsKey(checkBoxId))
+    {
       setPermission(permission.stock, checked, MenuIds.listStock().get(checkBoxId));
+    }
+    else if (MenuIds.listRoleAction().containsKey(checkBoxId))
+    {
+      setPermission(permission.roleAction, checked, MenuIds.listRoleAction().get(checkBoxId));
+    }
+    else if (MenuIds.listUserAction().containsKey(checkBoxId))
+    {
+      setPermission(permission.userAction, checked, MenuIds.listUserAction().get(checkBoxId));
     }
 
     setSubMenu(checkBoxId, checked);
@@ -394,8 +448,16 @@ public class RolePermissionActivity extends AppCompatActivity {
       case R.id.rp_stock:
         setVisibility(rpStkMoreLayout, rpStkLayout, checked);
         break;
+      case R.id.rp_mtc_roles:
+        setVisibility(rpMtcRlMoreLayout, rpMtcRlLayout, checked);
+        break;
+      case R.id.rp_mtc_users:
+        setVisibility(rpMtcUsrMoreLayout, rpMtcUsrLayout, checked);
+        break;
     }
   }
+
+
 
 
   private void setInactive(String inactive, boolean isCheck) {

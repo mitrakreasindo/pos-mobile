@@ -2,17 +2,20 @@ package com.mitrakreasindo.pos.common;
 
 import com.mitrakreasindo.pos.main.R;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by miftakhul on 7/21/17.
  */
 
 public class MenuIds {
+
+  public static final String rp_mtc_rl_action_insert = "rp_mtc_rl_action_insert";
+  public static final String rp_mtc_rl_action_update = "rp_mtc_rl_action_update";
+  public static final String rp_mtc_rl_action_delete = "rp_mtc_rl_action_delete";
+  public static final String rp_mtc_usr_action_insert = "rp_mtc_usr_action_insert";
+  public static final String rp_mtc_usr_action_update = "rp_mtc_usr_action_update";
+  public static final String rp_mtc_usr_action_delete = "rp_mtc_usr_action_delete";
 
   public static HashMap<Integer, String> listNavigatoin()
   {
@@ -36,6 +39,8 @@ public class MenuIds {
     return list;
   }
 
+
+  // button
   public static HashMap<Integer, String> listMain()
   {
     HashMap<Integer, String> list = new HashMap<>();
@@ -98,6 +103,28 @@ public class MenuIds {
     return list;
   }
 
+  // action bar
+  public static HashMap<Integer, String> listRoleAction()
+  {
+    HashMap<Integer, String> list = new HashMap<>();
+    list.put(R.id.rp_mtc_rl_insert, rp_mtc_rl_action_insert);
+    list.put(R.id.rp_mtc_rl_update, rp_mtc_rl_action_update);
+    list.put(R.id.rp_mtc_rl_delete, rp_mtc_rl_action_delete);
+    return list;
+  }
+
+  public static HashMap<Integer, String> listUserAction()
+  {
+    HashMap<Integer, String> list = new HashMap<>();
+    list.put(R.id.rp_mtc_usr_insert, rp_mtc_usr_action_insert);
+    list.put(R.id.rp_mtc_usr_update, rp_mtc_usr_action_update);
+    list.put(R.id.rp_mtc_usr_delete, rp_mtc_usr_action_delete);
+    return list;
+  }
+
+
+
+
   public static HashMap<Integer, String> listAllMenu()
   {
     HashMap<Integer, String> list = new HashMap<>();
@@ -105,8 +132,9 @@ public class MenuIds {
     list.putAll(listMain());
     list.putAll(listMaintenance());
     list.putAll(listStock());
+    list.putAll(listUserAction());
+    list.putAll(listRoleAction());
     return list;
   }
-
 }
 

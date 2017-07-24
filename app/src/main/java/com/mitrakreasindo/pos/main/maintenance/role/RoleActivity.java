@@ -17,12 +17,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.ItemVisibility;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.controller.RoleAdapter;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +92,8 @@ public class RoleActivity extends AppCompatActivity
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     roleService = ClientService.createService().create(RoleService.class);
+
+    tableRoleHelper = new TableRoleHelper(this);
     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());
 
     listRole.setHasFixedSize(true);
@@ -91,7 +101,6 @@ public class RoleActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listRole.setLayoutManager(layoutManager);
 
-    tableRoleHelper = new TableRoleHelper(this);
 
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());
@@ -120,6 +129,12 @@ public class RoleActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    MenuItem menuInsert = menu.findItem(R.id.action_add);
+    if (PermissionUtil.getInactive(this, "role_action").contains(MenuIds.rp_mtc_rl_action_insert))
+    {
+      menuInsert.setVisible(false);
+    }
+
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -143,6 +158,7 @@ public class RoleActivity extends AppCompatActivity
 
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());
+    roleAdapter.setPermission();
 //    getRole(kodeMerchant);
   }
 
@@ -166,6 +182,18 @@ public class RoleActivity extends AppCompatActivity
 
       }
     });
+  }
+
+  public List<String> getInactive()
+  {
+    List<String> list = new ArrayList<>();
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    if (permission != null)
+    {
+      list = XMLHelper.XMLReader(this, "role_action", permission);
+    }
+    return list;
   }
 
 }

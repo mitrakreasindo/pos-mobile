@@ -242,5 +242,8 @@
     <string name="rp_navigation">Navigation</string>
     <string name="rp_role">Role</string>
     <string name="rp_menu">Menu</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    <string name="insert">Insert</string>
 
 </resources>

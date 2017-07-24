@@ -18,13 +18,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.controller.UserListAdapter;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -127,6 +133,12 @@ public class UserActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    MenuItem menuInsert = menu.findItem(R.id.action_add);
+    if (PermissionUtil.getInactive(this, "user_action").contains(MenuIds.rp_mtc_usr_action_insert))
+    {
+      menuInsert.setVisible(false);
+    }
+
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -141,4 +153,6 @@ public class UserActivity extends AppCompatActivity
     }
     return super.onOptionsItemSelected(item);
   }
+
+
 }

@@ -26,4 +26,10 @@ public class Permission
   @ElementList(entry = "inactive", name = "stock", required = false)
   public List<String> stock = new ArrayList<>();
 
+  @ElementList(entry = "inactive", name = "user_action", required = false)
+  public List<String> userAction = new ArrayList<>();
+
+  @ElementList(entry = "inactive", name = "role_action", required = false)
+  public List<String> roleAction = new ArrayList<>();
+
 }

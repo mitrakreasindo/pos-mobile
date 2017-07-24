@@ -190,8 +190,8 @@
                         android:id="@+id/rp_stk_more_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <View
                             android:layout_width="match_parent"
@@ -215,8 +215,8 @@
                         android:id="@+id/rp_stk_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_marginLeft="32dp"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
 
@@ -229,9 +229,9 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginRight="46dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="16dp"
                             android:background="@color/colorAccent"/>
 
                         <TextView
@@ -418,8 +418,8 @@
                         android:id="@+id/rp_mtc_more_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <View
                             android:layout_width="match_parent"
@@ -443,8 +443,8 @@
                         android:id="@+id/rp_mtc_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_marginLeft="32dp"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
 
@@ -457,9 +457,9 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginRight="46dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="16dp"
                             android:background="@color/colorAccent"/>
 
                         <TextView
@@ -475,11 +475,120 @@
                             android:layout_height="wrap_content"
                             android:text="@string/users"/>
 
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_usr_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_usr_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_usr_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
                         <CheckBox
                             android:id="@+id/rp_mtc_roles"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/roles"/>
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_rl_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_rl_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_rl_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
 
                         <CheckBox
                             android:id="@+id/rp_mtc_taxes"

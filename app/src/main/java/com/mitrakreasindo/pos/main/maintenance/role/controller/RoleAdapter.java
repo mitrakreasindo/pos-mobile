@@ -13,8 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.RolePermissionActivity;
 import com.mitrakreasindo.pos.model.Role;
@@ -40,6 +43,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   private LayoutInflater inflater;
   private RoleService roleService;
   private SharedPreferenceEditor sharedPreferenceEditor;
+  private List<String> inActiveList = new ArrayList<>();
+
 
   public RoleAdapter(Context context, List<Role> roles)
   {
@@ -47,6 +52,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     this.context = context;
     this.roles = roles;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    setPermission();
   }
 
   @Override
@@ -66,49 +73,54 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     final Role role = roles.get(position);
     holder.txtName.setText(role.getName());
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
+    if (!inActiveList.contains(MenuIds.rp_mtc_rl_action_update))
     {
-      @Override
-      public void onClick(View view)
+      //On Click
+      holder.itemView.setOnClickListener(new View.OnClickListener()
       {
-        Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(context, RolePermissionActivity.class);
-        intent.putExtra("id", role.getId());
-        intent.putExtra("name", role.getName());
-        intent.putExtra("permission", role.getPermissions());
+        @Override
+        public void onClick(View view) {
+          Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
+          Intent intent = new Intent(context, RolePermissionActivity.class);
+          intent.putExtra("id", role.getId());
+          intent.putExtra("name", role.getName());
+          intent.putExtra("permission", role.getPermissions());
 
-        Log.d(getClass().getSimpleName()," data edit "+role.getName()+ " "+role.getPermissions());
+          Log.d(getClass().getSimpleName(), " data edit " + role.getName() + " " + role.getPermissions());
 
-        context.startActivity(intent);
-      }
-    });
+          context.startActivity(intent);
+        }
+      });
+    }
 
+    if (!inActiveList.contains(MenuIds.rp_mtc_rl_action_delete))
+    {
 //        On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
-    {
-      @Override
-      public boolean onLongClick(final View v)
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
       {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
+        @Override
+        public boolean onLongClick(final View v)
         {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
+          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+          builder.setTitle("Options");
+          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
           {
-            switch (which)
+            @Override
+            public void onClick(DialogInterface dialog, int which)
             {
-              case 0:
-                deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role);
-                break;
+              switch (which)
+              {
+                case 0:
+                  deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role);
+                  break;
+              }
             }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+          });
+          builder.show();
+          return false;
+        }
+      });
+    }
   }
 
   public void addRole(Role role)
@@ -223,4 +235,16 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     });
 
   }
+
+
+  public void setPermission()
+  {
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(context);
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    if (permission != null)
+    {
+      inActiveList = XMLHelper.XMLReader(context, "role_action", permission);
+    }
+  }
+
 }

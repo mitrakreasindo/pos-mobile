@@ -84,6 +84,12 @@ public class MainFragment extends Fragment
 
 
   @Override
+  public void onResume() {
+    super.onResume();
+    setupMenu();
+  }
+
+  @Override
   public void onStop() {
     super.onStop();
     EventBus.getDefault().unregister(this);
@@ -109,9 +115,12 @@ public class MainFragment extends Fragment
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(getActivity());
     byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
-    List<String> buttonList = XMLHelper.XMLReader(getActivity(), "main", permission);
+    if (permission != null)
+    {
+      List<String> buttonList = XMLHelper.XMLReader(getActivity(), "main", permission);
+      ItemVisibility.hideButton(view, buttonList);
+    }
 
-    ItemVisibility.hideButton(view, buttonList);
   }
 
 }
