@@ -233,7 +233,7 @@ public class TableRoleHelper
             insert(list);
             close();
 
-        EventBus.getDefault().post(new Event(id, Event.COMPLATE));
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
 //          }
 //        }).start();
       }

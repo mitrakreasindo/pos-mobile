@@ -14,11 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.IDs;
-import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
@@ -28,9 +26,6 @@ import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.controller.RoleAdapter;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
-
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +149,6 @@ public class RoleActivity extends AppCompatActivity
   protected void onResume()
   {
     super.onResume();
-    Toast.makeText(this, "i'am resuming this activity", Toast.LENGTH_LONG).show();
 
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());

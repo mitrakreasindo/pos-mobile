@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.MenuIds;
@@ -48,7 +49,8 @@ import retrofit2.Response;
  * Created by miftakhul on 7/18/17.
  */
 
-public class RolePermissionActivity extends AppCompatActivity {
+public class RolePermissionActivity extends AppCompatActivity
+{
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -257,15 +259,18 @@ public class RolePermissionActivity extends AppCompatActivity {
 
 
   @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState)
+  {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_permission);
     ButterKnife.bind(this);
 
     setSupportActionBar(toolbar);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
       @Override
-      public void onClick(View view) {
+      public void onClick(View view)
+      {
         onBackPressed();
       }
     });
@@ -283,13 +288,16 @@ public class RolePermissionActivity extends AppCompatActivity {
 
     final Bundle bundle = getIntent().getExtras();
 
-    if (bundle != null) {
+    if (bundle != null)
+    {
       String name = bundle.getString("name");
       String roleId = bundle.getString("id");
       byte[] bytePermission = bundle.getByteArray("permission");
 
-      if (bytePermission != null) {
-        try {
+      if (bytePermission != null)
+      {
+        try
+        {
           Log.d("permission byte", "exist");
           String permissionXml = new String(bytePermission);
           Log.d("permission xml", permissionXml);
@@ -299,10 +307,14 @@ public class RolePermissionActivity extends AppCompatActivity {
           serializer.write(permission, newxml);
           Log.d("new permission xml", newxml.toString());
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
           e.printStackTrace();
         }
-      } else {
+      }
+      else
+      {
         Log.d("permission byte", "not exist");
       }
 
@@ -312,23 +324,29 @@ public class RolePermissionActivity extends AppCompatActivity {
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
     getMenuInflater().inflate(R.menu.default_form_menu, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
     int id = item.getItemId();
 
     final Bundle bundle = getIntent().getExtras();
 
     Log.d("xml permission ", generateXmlPermission());
 
-    if (id == R.id.action_confirm) {
-      if (bundle != null) {
+    if (id == R.id.action_confirm)
+    {
+      if (bundle != null)
+      {
         updateRole();
-      } else {
+      }
+      else
+      {
         postRole();
       }
     }
@@ -336,72 +354,75 @@ public class RolePermissionActivity extends AppCompatActivity {
   }
 
   @BindViews({R.id.rp_sales, R.id.rp_edit_sales, R.id.rp_customer_payment, R.id.rp_payment,
-          R.id.rp_close_cash, R.id.rp_customer, R.id.rp_stock, R.id.rp_administration_sales,
-          R.id.rp_maintenance, R.id.rp_presence_management, R.id.rp_tools, R.id.rp_change_password,
-          R.id.rp_configuration, R.id.rp_printers, R.id.rp_check_in_out, R.id.rp_logout,
-          R.id.rp_btn_menu_sales, R.id.rp_btn_menu_data, R.id.rp_btn_menu_receive,
-          R.id.rp_btn_menu_setting, R.id.rp_btn_menu_report, R.id.rp_btn_menu_export,
-          R.id.rp_mtc_users, R.id.rp_mtc_roles, R.id.rp_mtc_taxes, R.id.rp_mtc_tax_categories,
-          R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
-          R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
-          R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
-          R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
-          R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
-          R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
-          R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
-          R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
-          R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
-          R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
-          R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
-          R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
-          R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
-          R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
-          R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
-          R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
-          R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
-          R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
-          R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
-          R.id.rp_stk_category_delete
+    R.id.rp_close_cash, R.id.rp_customer, R.id.rp_stock, R.id.rp_administration_sales,
+    R.id.rp_maintenance, R.id.rp_presence_management, R.id.rp_tools, R.id.rp_change_password,
+    R.id.rp_configuration, R.id.rp_printers, R.id.rp_check_in_out, R.id.rp_logout,
+    R.id.rp_btn_menu_sales, R.id.rp_btn_menu_data, R.id.rp_btn_menu_receive,
+    R.id.rp_btn_menu_setting, R.id.rp_btn_menu_report, R.id.rp_btn_menu_export,
+    R.id.rp_mtc_users, R.id.rp_mtc_roles, R.id.rp_mtc_taxes, R.id.rp_mtc_tax_categories,
+    R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
+    R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
+    R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
+    R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
+    R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
+    R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
+    R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
+    R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
+    R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
+    R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
+    R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
+    R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
+    R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
+    R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
+    R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
+    R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
+    R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
+    R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
+    R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
+    R.id.rp_stk_category_delete
   })
   List<CheckBox> checkBoxMenus;
 
   @OnCheckedChanged({R.id.rp_sales, R.id.rp_edit_sales, R.id.rp_customer_payment, R.id.rp_payment,
-          R.id.rp_close_cash, R.id.rp_customer, R.id.rp_stock, R.id.rp_administration_sales,
-          R.id.rp_maintenance, R.id.rp_presence_management, R.id.rp_tools, R.id.rp_change_password,
-          R.id.rp_configuration, R.id.rp_printers, R.id.rp_check_in_out, R.id.rp_logout,
-          R.id.rp_btn_menu_sales, R.id.rp_btn_menu_data, R.id.rp_btn_menu_receive,
-          R.id.rp_btn_menu_setting, R.id.rp_btn_menu_report, R.id.rp_btn_menu_export,
-          R.id.rp_mtc_users, R.id.rp_mtc_roles, R.id.rp_mtc_taxes, R.id.rp_mtc_tax_categories,
-          R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
-          R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
-          R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
-          R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
-          R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
-          R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
-          R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
-          R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
-          R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
-          R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
-          R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
-          R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
-          R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
-          R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
-          R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
-          R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
-          R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
-          R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
-          R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
-          R.id.rp_stk_category_delete})
-  void onChecked(CheckBox checkBox, boolean checked) {
+    R.id.rp_close_cash, R.id.rp_customer, R.id.rp_stock, R.id.rp_administration_sales,
+    R.id.rp_maintenance, R.id.rp_presence_management, R.id.rp_tools, R.id.rp_change_password,
+    R.id.rp_configuration, R.id.rp_printers, R.id.rp_check_in_out, R.id.rp_logout,
+    R.id.rp_btn_menu_sales, R.id.rp_btn_menu_data, R.id.rp_btn_menu_receive,
+    R.id.rp_btn_menu_setting, R.id.rp_btn_menu_report, R.id.rp_btn_menu_export,
+    R.id.rp_mtc_users, R.id.rp_mtc_roles, R.id.rp_mtc_taxes, R.id.rp_mtc_tax_categories,
+    R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
+    R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
+    R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
+    R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
+    R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
+    R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
+    R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
+    R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
+    R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
+    R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
+    R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
+    R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
+    R.id.rp_stk_report_product_catalogue_list, R.id.rp_stk_report_products,
+    R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
+    R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
+    R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
+    R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
+    R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
+    R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
+    R.id.rp_stk_category_delete})
+  void onChecked(CheckBox checkBox, boolean checked)
+  {
     checkPermission(checkBox.getId(), checked);
   }
 
   @BindViews({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_stk_product_more, R.id.rp_stk_category_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more, R.id.rp_mtc_tx_more})
   List<Button> moreButtons;
 
-  @OnClick({ R.id.rp_stk_more, R.id.rp_stk_product_more, R.id.rp_stk_category_more, R.id.rp_mtc_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more, R.id.rp_mtc_tx_more})
-  public void onMoreClick(Button button) {
-    switch (button.getId()) {
+  @OnClick({R.id.rp_stk_more, R.id.rp_stk_product_more, R.id.rp_stk_category_more, R.id.rp_mtc_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more, R.id.rp_mtc_tx_more})
+  public void onMoreClick(Button button)
+  {
+    switch (button.getId())
+    {
       case R.id.rp_mtc_more:
         setVisibility(rpMtcLayout);
         break;
@@ -427,8 +448,10 @@ public class RolePermissionActivity extends AppCompatActivity {
 
   }
 
-  private void setupDefaultPermission(Permission permission) {
-    if (permission == null) {
+  private void setupDefaultPermission(Permission permission)
+  {
+    if (permission == null)
+    {
       this.permission = new Permission();
       this.permission.navigation.addAll(MenuIds.listNavigatoin().values());
       this.permission.main.addAll(MenuIds.listMain().values());
@@ -439,7 +462,9 @@ public class RolePermissionActivity extends AppCompatActivity {
       this.permission.maintenanceRoleAction.addAll(MenuIds.listRoleAction().values());
       this.permission.maintenanceUserAction.addAll(MenuIds.listUserAction().values());
       this.permission.maintenanceTaxAction.addAll(MenuIds.listTaxAction().values());
-    } else {
+    }
+    else
+    {
       List<String> inActivePermission = new ArrayList<>();
       inActivePermission.addAll(this.permission.navigation);
       inActivePermission.addAll(this.permission.main);
@@ -454,45 +479,65 @@ public class RolePermissionActivity extends AppCompatActivity {
       // set default permission active
       setCheckAll(CHECK);
 
-      for (String inactive : inActivePermission) {
+      for (String inactive : inActivePermission)
+      {
         // set inactive permisssion
         setCheck(inactive, false);
       }
-
     }
-
   }
 
-  private void setCheck(String inactive, boolean isCheck) {
+  private void setCheck(String inactive, boolean isCheck)
+  {
     setInactive(inactive, isCheck);
   }
 
-  private void checkPermission(int checkBoxId, boolean checked) {
-    if (MenuIds.listNavigatoin().containsKey(checkBoxId)) {
+  private void checkPermission(int checkBoxId, boolean checked)
+  {
+    if (MenuIds.listNavigatoin().containsKey(checkBoxId))
+    {
       setPermission(permission.navigation, checked, MenuIds.listNavigatoin().get(checkBoxId));
-    } else if (MenuIds.listMain().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listMain().containsKey(checkBoxId))
+    {
       setPermission(permission.main, checked, MenuIds.listMain().get(checkBoxId));
-    } else if (MenuIds.listStock().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listStock().containsKey(checkBoxId))
+    {
       setPermission(permission.stock, checked, MenuIds.listStock().get(checkBoxId));
-    } else if (MenuIds.listStockProductAction().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listStockProductAction().containsKey(checkBoxId))
+    {
       setPermission(permission.stockProductAction, checked, MenuIds.listStockProductAction().get(checkBoxId));
-    } else if (MenuIds.listStockCategoryAction().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listStockCategoryAction().containsKey(checkBoxId))
+    {
       setPermission(permission.stockCategoryAction, checked, MenuIds.listStockCategoryAction().get(checkBoxId));
-    } else if (MenuIds.listMaintenance().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listMaintenance().containsKey(checkBoxId))
+    {
       setPermission(permission.maintenance, checked, MenuIds.listMaintenance().get(checkBoxId));
-    } else if (MenuIds.listRoleAction().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listRoleAction().containsKey(checkBoxId))
+    {
       setPermission(permission.maintenanceRoleAction, checked, MenuIds.listRoleAction().get(checkBoxId));
-    } else if (MenuIds.listUserAction().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listUserAction().containsKey(checkBoxId))
+    {
       setPermission(permission.maintenanceUserAction, checked, MenuIds.listUserAction().get(checkBoxId));
-    }else if (MenuIds.listTaxAction().containsKey(checkBoxId)) {
+    }
+    else if (MenuIds.listTaxAction().containsKey(checkBoxId))
+    {
       setPermission(permission.maintenanceTaxAction, checked, MenuIds.listTaxAction().get(checkBoxId));
     }
 
     setSubMenu(checkBoxId, checked);
   }
 
-  private void setSubMenu(int checkBoxId, boolean checked) {
-    switch (checkBoxId) {
+  private void setSubMenu(int checkBoxId, boolean checked)
+  {
+    switch (checkBoxId)
+    {
       case R.id.rp_maintenance:
         setVisibility(rpMtcMoreLayout, rpMtcLayout, checked);
         break;
@@ -518,17 +563,23 @@ public class RolePermissionActivity extends AppCompatActivity {
   }
 
 
-  private void setInactive(String inactive, boolean isCheck) {
+  private void setInactive(String inactive, boolean isCheck)
+  {
     Integer key = null;
-    for (Map.Entry<Integer, String> entry : MenuIds.listAllMenu().entrySet()) {
-      if (entry.getValue().equals(inactive)) {
+    for (Map.Entry<Integer, String> entry : MenuIds.listAllMenu().entrySet())
+    {
+      if (entry.getValue().equals(inactive))
+      {
         key = entry.getKey();
       }
     }
 
-    if (key != null) {
-      for (CheckBox c : checkBoxMenus) {
-        if (c.getId() == key) {
+    if (key != null)
+    {
+      for (CheckBox c : checkBoxMenus)
+      {
+        if (c.getId() == key)
+        {
           c.setChecked(isCheck);
         }
       }
@@ -536,74 +587,100 @@ public class RolePermissionActivity extends AppCompatActivity {
 
   }
 
-  private void setCheckAll(ButterKnife.Action<CheckBox> isCheck) {
+  private void setCheckAll(ButterKnife.Action<CheckBox> isCheck)
+  {
     ButterKnife.apply(checkBoxMenus, isCheck);
   }
 
-  private void setVisibility(View headLayout, View contentLayout, boolean isCheck) {
+  private void setVisibility(View headLayout, View contentLayout, boolean isCheck)
+  {
     setVisibility(headLayout, isCheck);
-    if (!isCheck) {
+    if (!isCheck)
+    {
       setVisibility(contentLayout, isCheck);
     }
   }
 
-  private void setVisibility(View view) {
-    if (view.getVisibility() == View.GONE) {
+  private void setVisibility(View view)
+  {
+    if (view.getVisibility() == View.GONE)
+    {
       view.setVisibility(View.VISIBLE);
-    } else {
+    }
+    else
+    {
       view.setVisibility(View.GONE);
     }
   }
 
-  private void setVisibility(View view, boolean isCheck) {
-    if (isCheck) {
+  private void setVisibility(View view, boolean isCheck)
+  {
+    if (isCheck)
+    {
       view.setVisibility(View.VISIBLE);
-    } else {
+    }
+    else
+    {
       view.setVisibility(View.GONE);
     }
   }
 
-  private void setPermission(List<String> inactiveList, boolean checked, String targetId) {
-    if (checked) {
-      if (inactiveList.contains(targetId)) {
+  private void setPermission(List<String> inactiveList, boolean checked, String targetId)
+  {
+    if (checked)
+    {
+      if (inactiveList.contains(targetId))
+      {
         inactiveList.remove(targetId);
       }
       Log.d(getClass().getSimpleName(), "checked");
-    } else {
-      if (!inactiveList.contains(targetId)) {
+    }
+    else
+    {
+      if (!inactiveList.contains(targetId))
+      {
         inactiveList.add(targetId);
       }
       Log.d(getClass().getSimpleName(), "not checked");
     }
   }
 
-  private String generateXmlPermission() {
+  private String generateXmlPermission()
+  {
     StringWriter xml = new StringWriter();
 
-    try {
+    try
+    {
       serializer.write(permission, xml);
       return xml.toString();
-    } catch (Exception e) {
+    }
+    catch (Exception e)
+    {
       e.printStackTrace();
     }
     return null;
   }
 
-  static final ButterKnife.Action<CheckBox> CHECK = new ButterKnife.Action<CheckBox>() {
+  static final ButterKnife.Action<CheckBox> CHECK = new ButterKnife.Action<CheckBox>()
+  {
     @Override
-    public void apply(@NonNull CheckBox checkBox, int index) {
+    public void apply(@NonNull CheckBox checkBox, int index)
+    {
       checkBox.setChecked(true);
     }
   };
 
-  static final ButterKnife.Action<CheckBox> UNCHECK = new ButterKnife.Action<CheckBox>() {
+  static final ButterKnife.Action<CheckBox> UNCHECK = new ButterKnife.Action<CheckBox>()
+  {
     @Override
-    public void apply(@NonNull CheckBox checkBox, int index) {
+    public void apply(@NonNull CheckBox checkBox, int index)
+    {
       checkBox.setChecked(false);
     }
   };
 
-  private void postRole() {
+  private void postRole()
+  {
     Bundle bundle = getIntent().getExtras();
 
     final ProgressDialog progressDialog = new ProgressDialog(RolePermissionActivity.this);
@@ -621,22 +698,25 @@ public class RolePermissionActivity extends AppCompatActivity {
     role.setSflag(true);
 
     Call<HashMap<Integer, String>> call = roleService.postRole(kodeMerchant, role);
-    call.enqueue(new Callback<HashMap<Integer, String>>() {
-
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
       private int responseCode;
       private String responseMessage;
 
       @Override
-      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response) {
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
         Log.d(getClass().getSimpleName(), "Success Post Role !!!");
 
         final HashMap<Integer, String> data = response.body();
-        for (int resultKey : data.keySet()) {
+        for (int resultKey : data.keySet())
+        {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
 
           Log.e("RESPONSE ", responseMessage);
-          if (responseCode == 0) {
+          if (responseCode == 0)
+          {
             TableRoleHelper roleHelper = new TableRoleHelper(RolePermissionActivity.this);
             roleHelper.open();
             roleHelper.insert(role);
@@ -646,18 +726,20 @@ public class RolePermissionActivity extends AppCompatActivity {
             onBackPressed();
           }
         }
+        Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
-      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t) {
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
         progressDialog.dismiss();
         onBackPressed();
       }
     });
-
   }
 
-  private void updateRole() {
+  private void updateRole()
+  {
     final ProgressDialog progressDialog = new ProgressDialog(RolePermissionActivity.this);
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
@@ -674,19 +756,23 @@ public class RolePermissionActivity extends AppCompatActivity {
     role.setSflag(true);
 
     Call<HashMap<Integer, String>> call = roleService.updateRole(kodeMerchant, id, role);
-    call.enqueue(new Callback<HashMap<Integer, String>>() {
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
       private int responseCode;
       private String responseMessage;
 
       @Override
-      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response) {
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
         final HashMap<Integer, String> data = response.body();
-        for (int resultKey : data.keySet()) {
+        for (int resultKey : data.keySet())
+        {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
 
           Log.e("RESPONSE ", responseMessage);
-          if (responseCode == 0) {
+          if (responseCode == 0)
+          {
             TableRoleHelper roleHelper = new TableRoleHelper(RolePermissionActivity.this);
             roleHelper.open();
             roleHelper.update(role);
@@ -696,15 +782,15 @@ public class RolePermissionActivity extends AppCompatActivity {
             onBackPressed();
           }
         }
+        Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
-      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t) {
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
         progressDialog.dismiss();
         onBackPressed();
       }
     });
   }
-
-
 }

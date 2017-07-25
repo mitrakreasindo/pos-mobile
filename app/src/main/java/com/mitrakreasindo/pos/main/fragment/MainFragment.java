@@ -30,8 +30,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,34 +110,35 @@ public class MainFragment extends Fragment
 
 
   @Override
-  public void onResume() {
+  public void onResume()
+  {
     super.onResume();
     setupMenu();
   }
 
   @Override
-  public void onStop() {
+  public void onStop()
+  {
     super.onStop();
     EventBus.getDefault().unregister(this);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  void onEvent(Event event)
+  public void onEvent(Event event)
   {
     if (event.getId() == EventCode.EVENT_ROLE_GET)
     {
-      if (event.getStatus() == Event.COMPLATE)
+      if (event.getStatus() == Event.COMPLETE)
       {
         setupMenu();
-        Log.d("fragment","main fragment setup");
+        Log.d("fragment", "main fragment setup");
       }
     }
   }
 
-
   private void setupMenu()
   {
-    Log.d(getClass().getSimpleName(), "id login user "+IDs.getLoginUser());
+    Log.d(getClass().getSimpleName(), "id login user " + IDs.getLoginUser());
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(getActivity());
     byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
@@ -152,7 +151,8 @@ public class MainFragment extends Fragment
   }
 
 
-  public void openUserActivity(){
+  public void openUserActivity()
+  {
 
   }
 }

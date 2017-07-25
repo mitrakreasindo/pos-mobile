@@ -37,11 +37,9 @@ import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
-import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
-import com.mitrakreasindo.pos.model.StockDiary;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,7 +48,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+  implements NavigationView.OnNavigationItemSelectedListener
 {
   private String valueUser;
   private int mPrevSelectedId;
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+      this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     drawer.setDrawerListener(toggle);
     toggle.syncState();
 
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     IDs.setLoginUser(valueUser);
     Toast.makeText(this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
     Toast.makeText(this, "Current Schema: " +
-            getIntent().getExtras().getString("COMPANY"), Toast.LENGTH_SHORT).show();
+      getIntent().getExtras().getString("COMPANY"), Toast.LENGTH_SHORT).show();
 
     View headerLayout = navigationView.getHeaderView(0);
     TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
@@ -127,9 +125,9 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-
   @Override
-  protected void onStop() {
+  protected void onStop()
+  {
     super.onStop();
     EventBus.getDefault().unregister(this);
   }
@@ -270,9 +268,10 @@ public class MainActivity extends AppCompatActivity
     List<String> navigationList = XMLHelper.XMLReader(this, "navigation", permission);
     ItemVisibility.hideItemNavigation(navigationView, navigationList);
 
-    Log.d(getClass().getSimpleName(), "id login user "+IDs.getLoginUser());
-    if (permission != null) {
-      Log.d(getClass().getSimpleName(), "permission not null "+permission);
+    Log.d(getClass().getSimpleName(), "id login user " + IDs.getLoginUser());
+    if (permission != null)
+    {
+      Log.d(getClass().getSimpleName(), "permission not null " + permission);
     }
     else
     {
@@ -281,23 +280,24 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  void onEvent(Event event)
+  public void onEvent(Event event)
   {
     switch (event.getId())
     {
       case EventCode.EVENT_PEOPLE_GET:
-        if (event.getStatus() == Event.COMPLATE) {
+        if (event.getStatus() == Event.COMPLETE)
+        {
           tableRoleHelper.downloadData(companyCode, EventCode.EVENT_ROLE_GET);
         }
         break;
       case EventCode.EVENT_ROLE_GET:
-        if (event.getStatus() == Event.COMPLATE) {
+        if (event.getStatus() == Event.COMPLETE)
+        {
           setupNavigation();
         }
     }
 
   }
-
 
   public void openUserActivity(View view)
   {

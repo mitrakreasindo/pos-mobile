@@ -329,7 +329,7 @@ public class TablePeopleHelper
       insert(list);
       close();
 
-      EventBus.getDefault().post(new Event(id, Event.COMPLATE));
+      EventBus.getDefault().post(new Event(id, Event.COMPLETE));
     }
   }
 
@@ -354,7 +354,7 @@ public class TablePeopleHelper
 //          }
 //        }).start();
 
-        EventBus.getDefault().post(new Event(id, Event.COMPLATE));
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
       }
 
       @Override

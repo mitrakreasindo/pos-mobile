@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.main;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -101,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity
   private String[] arrayBusinessSubCategory;
   private List<Integer> merchantCategoryId;
   private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+  private final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -213,7 +215,8 @@ public class RegisterActivity extends AppCompatActivity
   {
     if (attemptRegister())
     {
-      registerProgress.setVisibility(View.VISIBLE);
+      progressDialog.setMessage("Please wait...");
+      progressDialog.show();
       buttonCreateAcc.setEnabled(false);
       postMerchantRegistration(prepareRegistrationData());
     }
@@ -332,7 +335,7 @@ public class RegisterActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
-            registerProgress.setVisibility(View.GONE);
+            progressDialog.dismiss();
             buttonCreateAcc.setEnabled(true);
             finish();
           }
@@ -343,7 +346,7 @@ public class RegisterActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        registerProgress.setVisibility(View.GONE);
+        progressDialog.dismiss();
         buttonCreateAcc.setEnabled(true);
         responseCode = -1;
         responseMessage = "Cannot register. :( There is something wrong.";

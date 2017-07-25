@@ -6,7 +6,7 @@ package com.mitrakreasindo.pos.common;
 
 public class Event {
 
-  public static int COMPLATE = 200;
+  public static int COMPLETE = 200;
   public static int ERROR = 400;
   private int id;
   private int status;
