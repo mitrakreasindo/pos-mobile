@@ -1,14 +1,19 @@
 package com.mitrakreasindo.pos.main;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +75,22 @@ public class RegisterActivity extends AppCompatActivity
   EditText edittextBusinessPhone;
   @BindView(R.id.edittext_owner_phone)
   EditText edittextOwnerPhone;
+  @BindView(R.id.register_progress)
+  ProgressBar registerProgress;
+  @BindView(R.id.layout_business_shortname_phone)
+  LinearLayout layoutBusinessShortnamePhone;
+  @BindView(R.id.layout_business_type_category)
+  LinearLayout layoutBusinessTypeCategory;
+  @BindView(R.id.layout_business_city_state_zip)
+  LinearLayout layoutBusinessCityStateZip;
+  @BindView(R.id.textview_owner_info)
+  TextView textviewOwnerInfo;
+  @BindView(R.id.layout_owner_sex_birth_date)
+  LinearLayout layoutOwnerSexBirthDate;
+  @BindView(R.id.textview_business_register_term)
+  TextView textviewBusinessRegisterTerm;
+  @BindView(R.id.button_create_acc)
+  Button buttonCreateAcc;
 
   private int mYear, mMonth, mDay;
   private String businessname, shortname, ownerfullname, owneremail;
@@ -112,7 +133,6 @@ public class RegisterActivity extends AppCompatActivity
   public void onResume()
   {
     super.onResume();
-    findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
   }
 
   @Override
@@ -120,6 +140,30 @@ public class RegisterActivity extends AppCompatActivity
   {
     super.onStop();
     EventBus.getDefault().unregister(this);
+    registerProgress.setVisibility(View.GONE);
+    buttonCreateAcc.setEnabled(true);
+  }
+
+  @Override
+  public void onBackPressed()
+  {
+    new AlertDialog.Builder(this)
+      .setIcon(android.R.drawable.ic_dialog_alert)
+      .setTitle("Cancel Registration")
+      .setMessage("Are you sure back to login screen?")
+      .setPositiveButton
+        (
+          "Yes", new DialogInterface.OnClickListener()
+          {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              finish();
+            }
+          }
+        )
+      .setNegativeButton("No", null)
+      .show();
   }
 
   public void Cancel(View view)
@@ -169,6 +213,8 @@ public class RegisterActivity extends AppCompatActivity
   {
     if (attemptRegister())
     {
+      registerProgress.setVisibility(View.VISIBLE);
+      buttonCreateAcc.setEnabled(false);
       postMerchantRegistration(prepareRegistrationData());
     }
     else
@@ -286,6 +332,8 @@ public class RegisterActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
+            registerProgress.setVisibility(View.GONE);
+            buttonCreateAcc.setEnabled(true);
             finish();
           }
         }
@@ -295,6 +343,8 @@ public class RegisterActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        registerProgress.setVisibility(View.GONE);
+        buttonCreateAcc.setEnabled(true);
         responseCode = -1;
         responseMessage = "Cannot register. :( There is something wrong.";
         Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_LONG).show();
