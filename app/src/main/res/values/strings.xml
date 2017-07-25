@@ -189,6 +189,7 @@
     <string name="select">Select</string>
     <string name="price">Price</string>
     <string name="tax_form">Tax Form</string>
+    <string name="role_form">Role Form</string>
     <string name="tax">Tax</string>
     <string name="rate">Rate</string>
     <string name="attributes">Attributes</string>
@@ -197,17 +198,53 @@
     <!-- Alert Confirmation Dialog Delete -->
     <string name="alert_dialog_delete_people">Delete User</string>
     <string name="alert_dialog_delete_people_message">Do you really want to delete this user?</string>
-    
+
     <string name="alert_dialog_delete_role">Delete Role</string>
     <string name="alert_dialog_delete_role_message">Do you really want to delete this role?</string>
-    
+
     <string name="alert_dialog_delete_taxes">Delete Tax</string>
     <string name="alert_dialog_delete_taxes_message">Do you really want to delete this tax?</string>
-    
+
     <string name="alert_dialog_delete_category">Delete Category</string>
     <string name="alert_dialog_delete_category_message">Do you really want to delete this category?</string>
-    
+
     <string name="alert_dialog_delete_product">Delete Product</string>
     <string name="alert_dialog_delete_product_message">Do you really want to delete this product?</string>
+
+    <!-- navigation -->
+    <!-- main -->
+    <string name="nav_main">Main</string>
+    <string name="nav_sales">Sales</string>
+    <string name="nav_edit_sales">Edit Sales</string>
+    <string name="nav_customer_payment">Customer Payment</string>
+    <string name="nav_payment">Payment</string>
+    <string name="nav_close_cash">Close Cash</string>
+    <!-- administration -->
+    <string name="nav_ad_customers">Customers</string>
+    <string name="nav_ad_stock">Stock</string>
+    <string name="nav_ad_sales">Sales</string>
+    <string name="nav_ad_maintenance">Maintenance</string>
+    <string name="nav_ad_presence_management">Presence Management</string>
+    <string name="nav_ad_administration">Administration</string>
+    <!-- utilitas -->
+    <string name="nav_ut_utilities">Utilities</string>
+    <string name="nav_ut_tools">Tools</string>
+    <!-- system -->
+    <string name="nav_sys_system">System</string>
+    <string name="nav_sys_change_password">Change Password</string>
+    <string name="nav_sys_configuration">Configuration</string>
+    <string name="nav_sys_printers">Printers</string>
+    <string name="nav_sys_check_in_out">Check In/Out</string>
+    <string name="nav_sys_log_out">Log out</string>
+
+
+    <!-- role permission -->
+    <string name="rp_navigation">Navigation</string>
+    <string name="rp_role">Role</string>
+    <string name="rp_menu">Menu</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    <string name="insert">Insert</string>
+
     <string name="maintenance">Maintenance</string>
 </resources>

@@ -1,13 +1,12 @@
 package com.mitrakreasindo.pos.common;
 
 /**
- * Created by hendric on 2017-07-22.
+ * Created by miftakhul on 7/22/17.
  */
-
 
 public class Event {
 
-  public static int COMPLETE = 200;
+  public static int COMPLATE = 200;
   public static int ERROR = 400;
   private int id;
   private int status;

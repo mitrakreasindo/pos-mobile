@@ -11,12 +11,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.Event;
+import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
@@ -40,6 +43,10 @@ import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.model.StockDiary;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -48,6 +55,11 @@ public class MainActivity extends AppCompatActivity
   private String valueUser;
   private int mPrevSelectedId;
   private String companyCode;
+
+  private NavigationView navigationView;
+
+  TablePeopleHelper tablePeopleHelper;
+  TableRoleHelper tableRoleHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -59,8 +71,10 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(this);
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    EventBus.getDefault().register(this);
+
+    tablePeopleHelper = new TablePeopleHelper(this);
+    tableRoleHelper = new TableRoleHelper(this);
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
@@ -84,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     drawer.setDrawerListener(toggle);
     toggle.syncState();
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
 
     valueUser = getIntent().getExtras().getString("USERNAME");
@@ -99,20 +113,25 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
-    List<String> list = XMLHelper.XMLReader(this, "navigation", permission);
-    ItemVisibility.hideItemNavigation(navigationView, list);
-
     MainFragment mainFragment = new MainFragment();
     getSupportFragmentManager().beginTransaction()
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    tablePeopleHelper.downloadDataAlternate(companyCode);
-    tableRoleHelper.downloadData(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
+
+//    setupNavigation();
+  }
+
+
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
   }
 
   @Override
@@ -243,6 +262,42 @@ public class MainActivity extends AppCompatActivity
     Toast.makeText(this, "Goodbye " + valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
     finish();
   }
+
+  private void setupNavigation()
+  {
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    List<String> navigationList = XMLHelper.XMLReader(this, "navigation", permission);
+    ItemVisibility.hideItemNavigation(navigationView, navigationList);
+
+    Log.d(getClass().getSimpleName(), "id login user "+IDs.getLoginUser());
+    if (permission != null) {
+      Log.d(getClass().getSimpleName(), "permission not null "+permission);
+    }
+    else
+    {
+      Log.d(getClass().getSimpleName(), "permission null");
+    }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  void onEvent(Event event)
+  {
+    switch (event.getId())
+    {
+      case EventCode.EVENT_PEOPLE_GET:
+        if (event.getStatus() == Event.COMPLATE) {
+          tableRoleHelper.downloadData(companyCode, EventCode.EVENT_ROLE_GET);
+        }
+        break;
+      case EventCode.EVENT_ROLE_GET:
+        if (event.getStatus() == Event.COMPLATE) {
+          setupNavigation();
+        }
+    }
+
+  }
+
 
   public void openUserActivity(View view)
   {

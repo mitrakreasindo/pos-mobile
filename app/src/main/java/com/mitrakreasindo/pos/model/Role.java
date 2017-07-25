@@ -73,10 +73,16 @@ public class Role
     this.sflag = sflag;
   }
 
+//  @Override
+//  public String toString()
+//  {
+//
+//    return name;
+//  }
+
   @Override
   public String toString()
   {
-
-    return name;
+    return name+" "+permissions;
   }
 }

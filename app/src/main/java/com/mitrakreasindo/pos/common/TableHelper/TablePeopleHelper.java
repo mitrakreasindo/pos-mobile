@@ -8,12 +8,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -57,6 +59,7 @@ public class TablePeopleHelper
   private SQLiteDatabase db;
   private PeopleService service;
   private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  private int id;
 
   public TablePeopleHelper(Context context)
   {
@@ -285,8 +288,9 @@ public class TablePeopleHelper
     return list;
   }
 
-  public void downloadDataAlternate(String kodeMerchant)
+  public void downloadDataAlternate(String kodeMerchant, final int id)
   {
+    this.id = id;
     new HttpRequestTask(kodeMerchant).execute();
   }
 
@@ -324,6 +328,8 @@ public class TablePeopleHelper
       deleteAll();
       insert(list);
       close();
+
+      EventBus.getDefault().post(new Event(id, Event.COMPLATE));
     }
   }
 
@@ -347,6 +353,8 @@ public class TablePeopleHelper
             close();
 //          }
 //        }).start();
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLATE));
       }
 
       @Override

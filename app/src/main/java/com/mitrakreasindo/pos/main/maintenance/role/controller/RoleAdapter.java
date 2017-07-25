@@ -13,10 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.maintenance.role.RoleFormActivity;
+import com.mitrakreasindo.pos.main.maintenance.role.RolePermissionActivity;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 
@@ -40,7 +43,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   private LayoutInflater inflater;
   private RoleService roleService;
   private SharedPreferenceEditor sharedPreferenceEditor;
-  private Role role;
+  private List<String> inActiveList = new ArrayList<>();
+
 
   public RoleAdapter(Context context, List<Role> roles)
   {
@@ -48,6 +52,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     this.context = context;
     this.roles = roles;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    setPermission();
   }
 
   @Override
@@ -64,47 +70,57 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
   public void onBindViewHolder(RoleAdapter.ViewHolder holder, int position)
   {
 
-    role = roles.get(position);
+    final Role role = roles.get(position);
     holder.txtName.setText(role.getName());
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
+    if (!inActiveList.contains(MenuIds.rp_mtc_rl_action_update))
     {
-      @Override
-      public void onClick(View view)
+      //On Click
+      holder.itemView.setOnClickListener(new View.OnClickListener()
       {
-        Intent intent = new Intent(context, RoleFormActivity.class);
-        intent.putExtra("id", role.getId());
-        intent.putExtra("name", role.getName());
-        context.startActivity(intent);
-      }
-    });
+        @Override
+        public void onClick(View view) {
+          Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
+          Intent intent = new Intent(context, RolePermissionActivity.class);
+          intent.putExtra("id", role.getId());
+          intent.putExtra("name", role.getName());
+          intent.putExtra("permission", role.getPermissions());
 
-    //On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+          Log.d(getClass().getSimpleName(), " data edit " + role.getName() + " " + role.getPermissions());
+
+          context.startActivity(intent);
+        }
+      });
+    }
+
+    if (!inActiveList.contains(MenuIds.rp_mtc_rl_action_delete))
     {
-      @Override
-      public boolean onLongClick(final View v)
+//        On Long Click
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
       {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
+        @Override
+        public boolean onLongClick(final View v)
         {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
+          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+          builder.setTitle("Options");
+          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
           {
-            switch (which)
+            @Override
+            public void onClick(DialogInterface dialog, int which)
             {
-              case 0:
-                deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role.getId());
-                break;
+              switch (which)
+              {
+                case 0:
+                  deleteRole(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), role);
+                  break;
+              }
             }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+          });
+          builder.show();
+          return false;
+        }
+      });
+    }
   }
 
   public void addRole(Role role)
@@ -145,6 +161,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 
   public class ViewHolder extends RecyclerView.ViewHolder
   {
+
     private TextView txtName;
 
     public ViewHolder(View itemView)
@@ -177,10 +194,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     });
   }
 
-  private void deleteRole (String kodeMerchant, final String id)
+  private void deleteRole (String kodeMerchant, final Role role)
   {
     roleService = ClientService.createService().create(RoleService.class);
-    Call<HashMap<Integer, String>> call = roleService.deleteRole(kodeMerchant, id);
+    Call<HashMap<Integer, String>> call = roleService.deleteRole(kodeMerchant, role.getId());
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -200,8 +217,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
           {
             TableRoleHelper tableRoleHelper = new TableRoleHelper(context);
             tableRoleHelper.open();
-            tableRoleHelper.delete(id);
+            tableRoleHelper.delete(role.getId());
             tableRoleHelper.close();
+
+            removeRole(role);
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
@@ -214,6 +233,18 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-    removeRole(role);
+
   }
+
+
+  public void setPermission()
+  {
+    TableRoleHelper tableRoleHelper = new TableRoleHelper(context);
+    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+    if (permission != null)
+    {
+      inActiveList = XMLHelper.XMLReader(context, "maintenance_role_action", permission);
+    }
+  }
+
 }

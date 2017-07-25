@@ -29,7 +29,7 @@ public interface RoleService
   @DELETE("chromis.roles/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deleteRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
-  @PUT("chromis.roles/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
+  @PUT("chromis.roles/{kodeMerchant}/{id}")
+  Call<HashMap<Integer, String>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Role role);
 
 }

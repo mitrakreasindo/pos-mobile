@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
@@ -145,6 +147,11 @@ public class ProductActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    MenuItem menuInsert = menu.findItem(R.id.action_add);
+    if (PermissionUtil.getInactive(this, "stock_product_action").contains(MenuIds.rp_stk_product_action_insert))
+    {
+      menuInsert.setVisible(false);
+    }
     return super.onCreateOptionsMenu(menu);
   }
 

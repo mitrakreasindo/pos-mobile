@@ -1,0 +1,8 @@
+<permission>
+    <navigation class="java.util.ArrayList">
+        <inactive>nd_sales</inactive>
+        <inactive>nd_edit_sales</inactive>
+        <inactive>nd_customer_payment</inactive>
+        <inactive>nd_close_cash</inactive>
+    </navigation>
+</permission>

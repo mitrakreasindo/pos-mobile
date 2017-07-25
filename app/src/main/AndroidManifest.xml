@@ -52,9 +52,6 @@
             android:name=".maintenance.user.UserDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".maintenance.role.RoleFormActivity"
-            android:label="@string/add_role"/>
-        <activity
             android:name=".maintenance.role.RoleActivity"
             android:label="@string/roles"/>
         <activity
@@ -96,6 +93,14 @@
         <activity
             android:name=".maintenance.taxes.TaxesFormActivity"
             android:label="@string/tax_form"/>
+        <activity android:name=".maintenance.role.RolePermissionActivity"
+            android:label="@string/role_form">
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+        <!--</intent-filter>-->
+        </activity>
     </application>
 
 </manifest>

@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -119,6 +121,11 @@ public class TaxesActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu)
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
+    MenuItem menuInsert = menu.findItem(R.id.action_add);
+    if (PermissionUtil.getInactive(this, "maintenance_tax_action").contains(MenuIds.rp_mtc_tx_action_insert))
+    {
+      menuInsert.setVisible(false);
+    }
     return super.onCreateOptionsMenu(menu);
   }
 

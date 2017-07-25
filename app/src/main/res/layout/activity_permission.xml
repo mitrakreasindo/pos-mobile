@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include layout="@layout/include_toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            app:theme="@style/Theme.AppCompat.Light">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/edit_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rp_role"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/nav_main"
+                        android:textSize="28sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/rp_navigation"
+                        android:textSize="20sp"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sales"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_edit_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_edit_sales"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_customer_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_customer_payment"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_payment"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_close_cash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_close_cash"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/rp_menu"
+                        android:textSize="20sp"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sales"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/data"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_receive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/receive"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_settings"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_report"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reports"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_btn_menu_export"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/export"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/nav_ad_administration"
+                        android:textSize="28sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/rp_navigation"
+                        android:textSize="20sp"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_customer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ad_customers"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_stock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ad_stock"/>
+
+                    <LinearLayout
+                        android:id="@+id/rp_stk_more_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="16dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorAccent"/>
+
+                        <Button
+                            android:id="@+id/rp_stk_more"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                            android:backgroundTint="@color/colorAccent"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rp_stk_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_ad_stock"
+                            android:textSize="18sp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginRight="46dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/point_of_sales"
+                            android:textSize="14sp"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_products"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product"/>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_product_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_stk_product_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_product_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_product_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_location"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_auxiliary_products"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/auxiliary_products"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_categories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/categories"/>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_category_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_stk_category_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_category_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_product_attributes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_attributes"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_attributes_values"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/attributes_values"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_product_attribute_sets"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_attribute_sets"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_product_attribute_use"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_attribute_use"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_stock_diary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stock_diary"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_stock_movement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stock_movement"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_promotions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/promotions"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_pos_recipes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/recipes"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/reports"
+                            android:textSize="14sp"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_labels_barcode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labels_barcode"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_current_directory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/current_directory"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory_broken"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory_broken"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory_difference"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory_difference"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory_difference_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory_difference_detail"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory_list_detaile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory_list_detail"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_inventory_reorder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inventory_reorder"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_product_catalogue_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_catalogue_list"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_products"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/products_report"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_product_labels"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/product_labels"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_catalogue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/catalogue"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_stk_report_labels_shelf_egde_labels"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labels_shelf_egde_labels"/>
+
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/rp_administration_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ad_sales"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_maintenance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ad_maintenance"/>
+
+                    <LinearLayout
+                        android:id="@+id/rp_mtc_more_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="16dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorAccent"/>
+
+                        <Button
+                            android:id="@+id/rp_mtc_more"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                            android:backgroundTint="@color/colorAccent"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rp_mtc_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_ad_maintenance"
+                            android:textSize="18sp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginRight="46dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/point_of_sales"
+                            android:textSize="14sp"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_users"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/users"/>
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_usr_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_usr_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_usr_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_usr_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_roles"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/roles"/>
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_rl_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_rl_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_rl_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_rl_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_taxes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/taxes"/>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_tx_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_tx_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_tx_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_tax_categories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tax_categories"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_consumer_tax_categories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/consumer_tax_categories"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_resources"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/resources"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_locations"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/location"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_floors"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/floors"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_tables"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tables"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_reset_pickup_counter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reset_pickup_counter"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_release_table_locks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/release_table_locks"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/reports"
+                            android:textSize="14sp"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_report_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/users"/>
+
+                        <CheckBox
+                            android:id="@+id/rp_mtc_sales_by_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sales_by_user"/>
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/rp_presence_management"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ad_presence_management"/>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/nav_ut_utilities"
+                        android:textSize="28sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/rp_navigation"
+                        android:textSize="20sp"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_tools"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_ut_tools"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/nav_sys_system"
+                        android:textSize="28sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/rp_navigation"
+                        android:textSize="20sp"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_change_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sys_change_password"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_configuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sys_configuration"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_printers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sys_printers"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_check_in_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sys_check_in_out"/>
+
+                    <CheckBox
+                        android:id="@+id/rp_logout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nav_sys_log_out"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
