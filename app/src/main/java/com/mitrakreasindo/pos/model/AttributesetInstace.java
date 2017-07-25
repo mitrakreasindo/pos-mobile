@@ -14,7 +14,7 @@ public class AttributesetInstace
   private String siteguid;
   private Boolean sflag;
   private Attributeset attributesetId;
-  private Collection<TicketLine> ticketLinesCollection;
+  private Collection<SalesItem> ticketLinesCollection;
   private Collection<StockDiary> stockDiaryCollection;
 
   public String getId()
@@ -67,12 +67,12 @@ public class AttributesetInstace
     this.attributesetId = attributesetId;
   }
 
-  public Collection<TicketLine> getTicketLinesCollection()
+  public Collection<SalesItem> getTicketLinesCollection()
   {
     return ticketLinesCollection;
   }
 
-  public void setTicketLinesCollection(Collection<TicketLine> ticketLinesCollection)
+  public void setTicketLinesCollection(Collection<SalesItem> ticketLinesCollection)
   {
     this.ticketLinesCollection = ticketLinesCollection;
   }

@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.main.sales;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,10 +29,9 @@ import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
 import com.mitrakreasindo.pos.model.Product;
-import com.mitrakreasindo.pos.model.Sale;
+import com.mitrakreasindo.pos.model.Sales;
 import com.mitrakreasindo.pos.model.Tax;
-import com.mitrakreasindo.pos.model.Ticket;
-import com.mitrakreasindo.pos.model.TicketLine;
+import com.mitrakreasindo.pos.model.SalesItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +75,59 @@ public class SalesActivity extends AppCompatActivity
 
   private BarcodeCallback callback = new BarcodeCallback()
   {
+
     @Override
     public void barcodeResult(BarcodeResult result)
     {
-      if (result.getText() == null || result.getText().equals(lastText))
+
+      Product product = tableProductHelper.getProduct(result.getText());
+      if (product != null)
       {
+        Sales sales = new Sales();
+        sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+
+        Tax tax = new Tax();
+        tax.setId("001");
+
+        String example = "Convert Java String";
+        byte[] bytes = example.getBytes();
+
+        final SalesItem ticketLine = new SalesItem();
+        ticketLine.setProduct(product);
+        ticketLine.setAttributes(bytes);
+        ticketLine.setUnits(1);
+        ticketLine.setPrice(product.getPricesell());
+        ticketLine.setSales(sales);
+        ticketLine.setSflag(true);
+        ticketLine.setTaxid(tax);
+        Log.e("PRODUCT VALUE", product.getId().toString());
+
+        salesListAdapter.addSalesItem(ticketLine);
+        salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+      }
+      else {
+        Toast.makeText(SalesActivity.this, "Product not found!", Toast.LENGTH_LONG).show();
+      }
+
+
+      if (result.getText() != null || result.getText().equals(lastText))
+      {
+        barcodeScanner.pause();
+
+        new CountDownTimer(1000, 1000)
+        {
+
+          public void onTick(long millisUntilFinished)
+          {
+//            salesProductTotal.setText("seconds remaining: " + millisUntilFinished / 1000);
+          }
+
+          public void onFinish()
+          {
+            barcodeScanner.resume();
+          }
+        }.start();
         // Prevent duplicate scans
-        return;
       }
 
       lastText = result.getText();
@@ -91,6 +137,8 @@ public class SalesActivity extends AppCompatActivity
       //Added preview of scanned barcode
       ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
       imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+      salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+
     }
 
     @Override
@@ -106,7 +154,7 @@ public class SalesActivity extends AppCompatActivity
     setContentView(R.layout.activity_sales);
     ButterKnife.bind(this);
 
-    salesListAdapter = new SalesListAdapter(this, new ArrayList<TicketLine>());
+    salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
 //    salesListAdapter = new SalesListAdapter(this, new ArrayList<Queue>());
     listSalesProduct.setAdapter(salesListAdapter);
     listSalesProduct.setHasFixedSize(true);
@@ -139,8 +187,8 @@ public class SalesActivity extends AppCompatActivity
         Product product = (Product) adapter.getItem(position);
         adapter.getItem(position);
 
-        Ticket ticket = new Ticket();
-        ticket.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+        Sales sales = new Sales();
+        sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
 
         Tax tax = new Tax();
         tax.setId("001");
@@ -148,24 +196,25 @@ public class SalesActivity extends AppCompatActivity
         String example = "Convert Java String";
         byte[] bytes = example.getBytes();
 
-        TicketLine ticketLine = new TicketLine();
-        ticketLine.setProduct(product);
-        ticketLine.setAttributes(bytes);
-        ticketLine.setUnits(1);
-        ticketLine.setPrice(product.getPricesell());
-        ticketLine.setTicket(ticket);
-        ticketLine.setSflag(true);
-        ticketLine.setTaxid(tax);
-//        ticketLine.setAttributesetinstanceId();
+        SalesItem salesLine = new SalesItem();
+        salesLine.setProduct(product);
+        salesLine.setAttributes(bytes);
+        salesLine.setUnits(1);
+        salesLine.setPrice(product.getPricesell());
+        salesLine.setSales(sales);
+        salesLine.setSflag(true);
+        salesLine.setTaxid(tax);
 
-        salesListAdapter.addTicketLine(ticketLine);
-        Log.d("TICKET OPERAND", ticketLine.getProduct().toString());
+        salesListAdapter.addSalesItem(salesLine);
+        Log.d("TICKET OPERAND", salesLine.getProduct().toString());
 //        Toast.makeText(SalesActivity.this, adapter.getItem(position).toString(), Toast.LENGTH_LONG).show();
         edittextSearchProduct.setText("");
+        salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
       }
     });
 
     salesListAdapter.notifyDataSetChanged();
+
     salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
 
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
@@ -188,16 +237,6 @@ public class SalesActivity extends AppCompatActivity
     super.onPause();
 
     barcodeView.pause();
-  }
-
-  public void pause(View view)
-  {
-    barcodeView.pause();
-  }
-
-  public void resume(View view)
-  {
-    barcodeView.resume();
   }
 
   public void triggerScan(View view)

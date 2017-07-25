@@ -37,7 +37,6 @@ public class Customer
   private Date dob;
   private String siteguid;
   private Boolean sflag;
-  private Collection<Ticket> ticketsCollection;
   private TaxCusCategory taxcategory;
 
   public byte[] getImage()
@@ -310,15 +309,6 @@ public class Customer
     this.sflag = sflag;
   }
 
-  public Collection<Ticket> getTicketsCollection()
-  {
-    return ticketsCollection;
-  }
-
-  public void setTicketsCollection(Collection<Ticket> ticketsCollection)
-  {
-    this.ticketsCollection = ticketsCollection;
-  }
 
   public TaxCusCategory getTaxcategory()
   {

@@ -209,4 +209,5 @@
     
     <string name="alert_dialog_delete_product">Delete Product</string>
     <string name="alert_dialog_delete_product_message">Do you really want to delete this product?</string>
+    <string name="maintenance">Maintenance</string>
 </resources>

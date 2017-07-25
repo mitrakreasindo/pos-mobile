@@ -17,7 +17,7 @@ public class Receipt
   private String person;
   private String siteguid;
   private Boolean sflag;
-  private Ticket ticket;
+  private Sales sales;
   private Collection<Payment> paymentCollection;
   private ClosedCash money;
 

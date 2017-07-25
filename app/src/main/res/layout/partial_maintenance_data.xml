@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/maintenance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_users"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_group"
+                android:textAllCaps="false"
+                android:onClick="openUserActivity"
+                android:text="@string/users" />
+
+            <Button
+                android:id="@+id/btn_roles"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_group"
+                android:textAllCaps="false"
+                android:onClick="openRolesActivity"
+                android:text="@string/roles" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_taxes"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_content_paste"
+                android:textAllCaps="false"
+                android:onClick="openTaxesActivity"
+                android:text="@string/taxes" />
+
+            <Button
+                android:id="@+id/btn_tax_categories"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_content_paste"
+                android:textAllCaps="false"
+                android:text="@string/tax_categories" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_consumer_tax_categories"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_content_paste"
+                android:textAllCaps="false"
+                android:text="@string/consumer_tax_categories" />
+
+            <Button
+                android:id="@+id/btn_resources"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_settings_input_component"
+                android:textAllCaps="false"
+                android:text="@string/resources" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_locations"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_location_on"
+                android:textAllCaps="false"
+                android:text="@string/location" />
+
+            <Button
+                android:id="@+id/btn_floors"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_domain"
+                android:textAllCaps="false"
+                android:text="@string/floors" />
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_tables"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_view_list"
+                android:textAllCaps="false"
+                android:text="@string/tables" />
+
+            <Button
+                android:id="@+id/btn_reset_pickup_counter"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_home"
+                android:textAllCaps="false"
+                android:text="@string/reset_pickup_counter" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_release_table_locks"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight=".40"
+                android:drawableTop="@drawable/ic_view_list"
+                android:textAllCaps="false"
+                android:text="@string/release_table_locks" />
+
+            <LinearLayout
+                android:layout_weight=".40"
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

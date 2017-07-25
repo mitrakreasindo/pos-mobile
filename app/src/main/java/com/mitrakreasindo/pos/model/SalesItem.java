@@ -4,7 +4,7 @@ package com.mitrakreasindo.pos.model;
  * Created by lisa on 22/06/17.
  */
 
-public class TicketLine
+public class SalesItem
 {
 
   private byte[] attributes;
@@ -17,7 +17,7 @@ public class TicketLine
   private AttributesetInstace attributesetinstanceId;
   private Product product;
   private Tax taxid;
-  private Ticket ticket;
+  private Sales sales;
 
   public byte[] getAttributes()
   {
@@ -119,13 +119,13 @@ public class TicketLine
     this.taxid = taxid;
   }
 
-  public Ticket getTicket()
+  public Sales getSales()
   {
-    return ticket;
+    return sales;
   }
 
-  public void setTicket(Ticket ticket)
+  public void setSales(Sales sales)
   {
-    this.ticket = ticket;
+    this.sales = sales;
   }
 }

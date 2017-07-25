@@ -15,6 +15,8 @@ import android.widget.Button;
 import com.mitrakreasindo.pos.main.MainQueueListAdapter;
 import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
+import com.mitrakreasindo.pos.main.fragment.menu.ReportsDataFragment;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 
 import java.lang.reflect.Array;
@@ -64,7 +66,37 @@ public class MainFragment extends Fragment
       }
     });
 
+    menuData.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        MasterDataFragment masterDataFragment = new MasterDataFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+          .replace(R.id.main_content, masterDataFragment, "MasterDataFragment")
+          .addToBackStack("MasterDataFragment").commit();
+        getActivity().getSupportFragmentManager().executePendingTransactions();
+      }
+    });
+
+    menuReport.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        ReportsDataFragment reportsDataFragment = new ReportsDataFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+          .replace(R.id.main_content, reportsDataFragment, "ReportDataFragment")
+          .addToBackStack("ReportDataFragment").commit();
+        getActivity().getSupportFragmentManager().executePendingTransactions();
+      }
+    });
+
 
     return view;
+  }
+
+  public void openUserActivity(){
+
   }
 }

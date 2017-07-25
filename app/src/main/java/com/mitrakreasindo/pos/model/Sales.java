@@ -6,7 +6,7 @@ import java.util.Collection;
  * Created by lisa on 22/06/17.
  */
 
-public class Ticket
+public class Sales
 {
 
   private String id;

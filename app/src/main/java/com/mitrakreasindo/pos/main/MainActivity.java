@@ -30,7 +30,15 @@ import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
+import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
+import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesActivity;
+import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
+import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
+import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryActivity;
+import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
+import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
+import com.mitrakreasindo.pos.model.StockDiary;
 
 import java.util.List;
 
@@ -234,5 +242,35 @@ public class MainActivity extends AppCompatActivity
   {
     Toast.makeText(this, "Goodbye " + valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
     finish();
+  }
+
+  public void openUserActivity(View view)
+  {
+    startActivity(new Intent(this, UserActivity.class));
+  }
+
+  public void openRolesActivity(View view)
+  {
+    startActivity(new Intent(this, RoleActivity.class));
+  }
+
+  public void openTaxesActivity(View view)
+  {
+    startActivity(new Intent(this, TaxesActivity.class));
+  }
+
+  public void openProductsActivity(View view)
+  {
+    startActivity(new Intent(this, ProductActivity.class));
+  }
+
+  public void openCategoriesActivity(View view)
+  {
+    startActivity(new Intent(this, CategoryActivity.class));
+  }
+
+  public void openStockDiaryActivity(View view)
+  {
+    startActivity(new Intent(this, DiaryFormActivity.class));
   }
 }
