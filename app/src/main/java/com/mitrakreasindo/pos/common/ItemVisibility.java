@@ -89,7 +89,10 @@ public class ItemVisibility
     for(int i=0; i<button.size(); i++)
     {
       Button btn = (Button) view.findViewById(button.get(i));
-      btn.setVisibility(View.GONE);
+      if (btn != null)
+      {
+        btn.setVisibility(View.GONE);
+      }
     }
   }
 

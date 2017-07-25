@@ -134,7 +134,7 @@ public class UserActivity extends AppCompatActivity
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
     MenuItem menuInsert = menu.findItem(R.id.action_add);
-    if (PermissionUtil.getInactive(this, "user_action").contains(MenuIds.rp_mtc_usr_action_insert))
+    if (PermissionUtil.getInactive(this, "maintenance_user_action").contains(MenuIds.rp_mtc_usr_action_insert))
     {
       menuInsert.setVisible(false);
     }

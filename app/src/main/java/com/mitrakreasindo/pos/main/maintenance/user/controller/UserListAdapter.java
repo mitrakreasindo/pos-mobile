@@ -46,7 +46,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   {
     this.context = context;
     this.peoples = peoples;
-    inactive = PermissionUtil.getInactive(context, "user_action");
+    inactive = PermissionUtil.getInactive(context, "maintenance_user_action");
     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 

@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -39,11 +41,13 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   private LayoutInflater inflater;
   private TaxService taxService;
   private Tax tax;
+  private List<String> inactive;
 
   public TaxesListAdapter(Context context, List<Tax> taxes)
   {
     this.context = context;
     this.taxes = taxes;
+    this.inactive = PermissionUtil.getInactive(context, "maintenance_tax_action");
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -62,57 +66,54 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
     tax = taxes.get(position);
     holder.txtTax.setText(tax.getName());
 
-    //On Click
-    holder.itemView.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View view)
-      {
-        Intent intent = new Intent(context, TaxesFormActivity.class);
-        intent.putExtra("id", tax.getId());
-        intent.putExtra("name", tax.getName());
-        intent.putExtra("rate", String.valueOf(tax.getRate()));
-        intent.putExtra("category", tax.getCategory().getId());
-        context.startActivity(intent);
-      }
-    });
+    if (!inactive.contains(MenuIds.rp_mtc_tx_action_update)) {
+      //On Click
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Intent intent = new Intent(context, TaxesFormActivity.class);
+          intent.putExtra("id", tax.getId());
+          intent.putExtra("name", tax.getName());
+          intent.putExtra("rate", String.valueOf(tax.getRate()));
+          intent.putExtra("category", tax.getCategory().getId());
+          context.startActivity(intent);
+        }
+      });
+    }
 
-    //On Long Click
-    holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+    if (!inactive.contains(MenuIds.rp_mtc_tx_action_delete))
     {
-      @Override
-      public boolean onLongClick(final View v)
-      {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
-        {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
-          {
-            switch (which)
-            {
-              case 0:
-                new AlertDialog.Builder(context)
-                  .setTitle(context.getString(R.string.alert_dialog_delete_taxes))
-                  .setMessage(context.getString(R.string.alert_dialog_delete_taxes_message))
-                  .setIcon(android.R.drawable.ic_dialog_alert)
-                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
-                  {
-                    public void onClick(DialogInterface dialog, int whichButton)
-                    {
-                      deleteTax(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), tax.getId());
-                    }
-                  })
-                  .setNegativeButton(android.R.string.no, null).show();
-               break;
+      //On Long Click
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(final View v) {
+          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+          builder.setTitle("Options");
+          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case 0:
+                  new AlertDialog.Builder(context)
+                          .setTitle(context.getString(R.string.alert_dialog_delete_taxes))
+                          .setMessage(context.getString(R.string.alert_dialog_delete_taxes_message))
+                          .setIcon(android.R.drawable.ic_dialog_alert)
+                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                              deleteTax(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), tax.getId());
+                            }
+                          })
+                          .setNegativeButton(android.R.string.no, null).show();
+                  break;
+              }
             }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+          });
+
+          builder.show();
+          return false;
+        }
+      });
+    }
   }
 
   public void addTax(Tax tax)

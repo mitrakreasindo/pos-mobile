@@ -84,29 +84,29 @@ public class RolePermissionActivity extends AppCompatActivity {
   Button rpStkMore;
   @BindView(R.id.rp_stk_more_layout)
   LinearLayout rpStkMoreLayout;
-  @BindView(R.id.rp_stk_mnt_products)
+  @BindView(R.id.rp_stk_pos_products)
   CheckBox rpStkMntProducts;
-  @BindView(R.id.rp_stk_mnt_product_location)
+  @BindView(R.id.rp_stk_pos_product_location)
   CheckBox rpStkMntProductLocation;
-  @BindView(R.id.rp_stk_mnt_auxiliary_products)
+  @BindView(R.id.rp_stk_pos_auxiliary_products)
   CheckBox rpStkMntAuxiliaryProducts;
-  @BindView(R.id.rp_stk_mnt_categories)
+  @BindView(R.id.rp_stk_pos_categories)
   CheckBox rpStkMntCategories;
-  @BindView(R.id.rp_stk_mnt_product_attributes)
+  @BindView(R.id.rp_stk_pos_product_attributes)
   CheckBox rpStkMntProductAttributes;
-  @BindView(R.id.rp_stk_mnt_attributes_values)
+  @BindView(R.id.rp_stk_pos_attributes_values)
   CheckBox rpStkMntAttributesValues;
-  @BindView(R.id.rp_stk_mnt_product_attribute_sets)
+  @BindView(R.id.rp_stk_pos_product_attribute_sets)
   CheckBox rpStkMntProductAttributeSets;
-  @BindView(R.id.rp_stk_mnt_product_attribute_use)
+  @BindView(R.id.rp_stk_pos_product_attribute_use)
   CheckBox rpStkMntProductAttributeUse;
-  @BindView(R.id.rp_stk_mnt_stock_diary)
+  @BindView(R.id.rp_stk_pos_stock_diary)
   CheckBox rpStkMntStockDiary;
-  @BindView(R.id.rp_stk_mnt_stock_movement)
+  @BindView(R.id.rp_stk_pos_stock_movement)
   CheckBox rpStkMntStockMovement;
-  @BindView(R.id.rp_stk_mnt_promotions)
+  @BindView(R.id.rp_stk_pos_promotions)
   CheckBox rpStkMntPromotions;
-  @BindView(R.id.rp_stk_mnt_recipes)
+  @BindView(R.id.rp_stk_pos_recipes)
   CheckBox rpStkMntRecipes;
   @BindView(R.id.rp_stk_report_labels_barcode)
   CheckBox rpStkReportLabelsBarcode;
@@ -210,6 +210,42 @@ public class RolePermissionActivity extends AppCompatActivity {
   CheckBox rpMtcUsrDelete;
   @BindView(R.id.rp_mtc_usr_layout)
   LinearLayout rpMtcUsrLayout;
+  @BindView(R.id.rp_stk_product_more)
+  Button rpStkProductMore;
+  @BindView(R.id.rp_stk_product_more_layout)
+  LinearLayout rpStkProductMoreLayout;
+  @BindView(R.id.rp_stk_product_insert)
+  CheckBox rpStkProductInsert;
+  @BindView(R.id.rp_stk_product_update)
+  CheckBox rpStkProductUpdate;
+  @BindView(R.id.rp_stk_product_delete)
+  CheckBox rpStkProductDelete;
+  @BindView(R.id.rp_stk_product_layout)
+  LinearLayout rpStkProductLayout;
+  @BindView(R.id.rp_stk_category_more)
+  Button rpStkCategoryMore;
+  @BindView(R.id.rp_stk_category_more_layout)
+  LinearLayout rpStkCategoryMoreLayout;
+  @BindView(R.id.rp_stk_category_insert)
+  CheckBox rpStkCategoryInsert;
+  @BindView(R.id.rp_stk_category_update)
+  CheckBox rpStkCategoryUpdate;
+  @BindView(R.id.rp_stk_category_delete)
+  CheckBox rpStkCategoryDelete;
+  @BindView(R.id.rp_stk_category_layout)
+  LinearLayout rpStkCategoryLayout;
+  @BindView(R.id.rp_mtc_tx_more)
+  Button rpMtcTxMore;
+  @BindView(R.id.rp_mtc_tx_more_layout)
+  LinearLayout rpMtcTxMoreLayout;
+  @BindView(R.id.rp_mtc_tx_insert)
+  CheckBox rpMtcTxInsert;
+  @BindView(R.id.rp_mtc_tx_update)
+  CheckBox rpMtcTxUpdate;
+  @BindView(R.id.rp_mtc_tx_delete)
+  CheckBox rpMtcTxDelete;
+  @BindView(R.id.rp_mtc_tx_layout)
+  LinearLayout rpMtcTxLayout;
   private Role role;
   private Permission permission;
   private RoleService roleService;
@@ -309,12 +345,12 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
           R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
           R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
-          R.id.rp_stk_mnt_products, R.id.rp_stk_mnt_product_location,
-          R.id.rp_stk_mnt_auxiliary_products, R.id.rp_stk_mnt_categories,
-          R.id.rp_stk_mnt_product_attributes, R.id.rp_stk_mnt_attributes_values,
-          R.id.rp_stk_mnt_product_attribute_sets, R.id.rp_stk_mnt_product_attribute_use,
-          R.id.rp_stk_mnt_stock_diary, R.id.rp_stk_mnt_stock_movement, R.id.rp_stk_mnt_promotions,
-          R.id.rp_stk_mnt_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
+          R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
+          R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
+          R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
+          R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
+          R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
+          R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
           R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
           R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
           R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
@@ -322,7 +358,10 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
           R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
           R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
-          R.id.rp_mtc_usr_delete
+          R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
+          R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
+          R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
+          R.id.rp_stk_category_delete
   })
   List<CheckBox> checkBoxMenus;
 
@@ -336,12 +375,12 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_mtc_consumer_tax_categories, R.id.rp_mtc_resources, R.id.rp_mtc_locations,
           R.id.rp_mtc_floors, R.id.rp_mtc_tables, R.id.rp_mtc_reset_pickup_counter,
           R.id.rp_mtc_release_table_locks, R.id.rp_mtc_report_user, R.id.rp_mtc_sales_by_user,
-          R.id.rp_stk_mnt_products, R.id.rp_stk_mnt_product_location,
-          R.id.rp_stk_mnt_auxiliary_products, R.id.rp_stk_mnt_categories,
-          R.id.rp_stk_mnt_product_attributes, R.id.rp_stk_mnt_attributes_values,
-          R.id.rp_stk_mnt_product_attribute_sets, R.id.rp_stk_mnt_product_attribute_use,
-          R.id.rp_stk_mnt_stock_diary, R.id.rp_stk_mnt_stock_movement, R.id.rp_stk_mnt_promotions,
-          R.id.rp_stk_mnt_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
+          R.id.rp_stk_pos_products, R.id.rp_stk_pos_product_location,
+          R.id.rp_stk_pos_auxiliary_products, R.id.rp_stk_pos_categories,
+          R.id.rp_stk_pos_product_attributes, R.id.rp_stk_pos_attributes_values,
+          R.id.rp_stk_pos_product_attribute_sets, R.id.rp_stk_pos_product_attribute_use,
+          R.id.rp_stk_pos_stock_diary, R.id.rp_stk_pos_stock_movement, R.id.rp_stk_pos_promotions,
+          R.id.rp_stk_pos_recipes, R.id.rp_stk_report_labels_barcode, R.id.rp_stk_report_inventory,
           R.id.rp_stk_report_current_directory, R.id.rp_stk_report_inventory_broken,
           R.id.rp_stk_report_inventory_difference, R.id.rp_stk_report_inventory_difference_detail,
           R.id.rp_stk_report_inventory_list_detaile, R.id.rp_stk_report_inventory_reorder,
@@ -349,15 +388,18 @@ public class RolePermissionActivity extends AppCompatActivity {
           R.id.rp_stk_report_product_labels, R.id.rp_stk_report_catalogue,
           R.id.rp_stk_report_labels_shelf_egde_labels, R.id.rp_mtc_rl_insert, R.id.rp_mtc_rl_update,
           R.id.rp_mtc_rl_delete, R.id.rp_mtc_usr_insert, R.id.rp_mtc_usr_update,
-          R.id.rp_mtc_usr_delete})
+          R.id.rp_mtc_usr_delete, R.id.rp_mtc_tx_insert, R.id.rp_mtc_tx_update,
+          R.id.rp_mtc_tx_delete, R.id.rp_stk_product_insert, R.id.rp_stk_product_update,
+          R.id.rp_stk_product_delete, R.id.rp_stk_category_insert, R.id.rp_stk_category_update,
+          R.id.rp_stk_category_delete})
   void onChecked(CheckBox checkBox, boolean checked) {
     checkPermission(checkBox.getId(), checked);
   }
 
-  @BindViews({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more})
+  @BindViews({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_stk_product_more, R.id.rp_stk_category_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more, R.id.rp_mtc_tx_more})
   List<Button> moreButtons;
 
-  @OnClick({R.id.rp_mtc_more, R.id.rp_stk_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more})
+  @OnClick({ R.id.rp_stk_more, R.id.rp_stk_product_more, R.id.rp_stk_category_more, R.id.rp_mtc_more, R.id.rp_mtc_rl_more, R.id.rp_mtc_usr_more, R.id.rp_mtc_tx_more})
   public void onMoreClick(Button button) {
     switch (button.getId()) {
       case R.id.rp_mtc_more:
@@ -366,11 +408,20 @@ public class RolePermissionActivity extends AppCompatActivity {
       case R.id.rp_stk_more:
         setVisibility(rpStkLayout);
         break;
+      case R.id.rp_stk_product_more:
+        setVisibility(rpStkProductLayout);
+        break;
+      case R.id.rp_stk_category_more:
+        setVisibility(rpStkCategoryLayout);
+        break;
       case R.id.rp_mtc_rl_more:
         setVisibility(rpMtcRlLayout);
         break;
       case R.id.rp_mtc_usr_more:
         setVisibility(rpMtcUsrLayout);
+        break;
+      case R.id.rp_mtc_tx_more:
+        setVisibility(rpMtcTxLayout);
         break;
     }
 
@@ -381,18 +432,24 @@ public class RolePermissionActivity extends AppCompatActivity {
       this.permission = new Permission();
       this.permission.navigation.addAll(MenuIds.listNavigatoin().values());
       this.permission.main.addAll(MenuIds.listMain().values());
-      this.permission.maintenace.addAll(MenuIds.listMaintenance().values());
+      this.permission.maintenance.addAll(MenuIds.listMaintenance().values());
       this.permission.stock.addAll(MenuIds.listStock().values());
-      this.permission.roleAction.addAll(MenuIds.listRoleAction().values());
-      this.permission.userAction.addAll(MenuIds.listUserAction().values());
+      this.permission.stockProductAction.addAll(MenuIds.listStockProductAction().values());
+      this.permission.stockCategoryAction.addAll(MenuIds.listStockCategoryAction().values());
+      this.permission.maintenanceRoleAction.addAll(MenuIds.listRoleAction().values());
+      this.permission.maintenanceUserAction.addAll(MenuIds.listUserAction().values());
+      this.permission.maintenanceTaxAction.addAll(MenuIds.listTaxAction().values());
     } else {
       List<String> inActivePermission = new ArrayList<>();
       inActivePermission.addAll(this.permission.navigation);
       inActivePermission.addAll(this.permission.main);
-      inActivePermission.addAll(this.permission.maintenace);
       inActivePermission.addAll(this.permission.stock);
-      inActivePermission.addAll(this.permission.roleAction);
-      inActivePermission.addAll(this.permission.userAction);
+      inActivePermission.addAll(this.permission.stockProductAction);
+      inActivePermission.addAll(this.permission.stockCategoryAction);
+      inActivePermission.addAll(this.permission.maintenance);
+      inActivePermission.addAll(this.permission.maintenanceRoleAction);
+      inActivePermission.addAll(this.permission.maintenanceUserAction);
+      inActivePermission.addAll(this.permission.maintenanceTaxAction);
 
       // set default permission active
       setCheckAll(CHECK);
@@ -410,31 +467,25 @@ public class RolePermissionActivity extends AppCompatActivity {
     setInactive(inactive, isCheck);
   }
 
-  private void checkPermission(int checkBoxId, boolean checked)
-  {
-    if (MenuIds.listNavigatoin().containsKey(checkBoxId))
-    {
+  private void checkPermission(int checkBoxId, boolean checked) {
+    if (MenuIds.listNavigatoin().containsKey(checkBoxId)) {
       setPermission(permission.navigation, checked, MenuIds.listNavigatoin().get(checkBoxId));
-    }
-    else if (MenuIds.listMain().containsKey(checkBoxId))
-    {
+    } else if (MenuIds.listMain().containsKey(checkBoxId)) {
       setPermission(permission.main, checked, MenuIds.listMain().get(checkBoxId));
-    }
-    else if (MenuIds.listMaintenance().containsKey(checkBoxId))
-    {
-      setPermission(permission.maintenace, checked, MenuIds.listMaintenance().get(checkBoxId));
-    }
-    else if (MenuIds.listStock().containsKey(checkBoxId))
-    {
+    } else if (MenuIds.listStock().containsKey(checkBoxId)) {
       setPermission(permission.stock, checked, MenuIds.listStock().get(checkBoxId));
-    }
-    else if (MenuIds.listRoleAction().containsKey(checkBoxId))
-    {
-      setPermission(permission.roleAction, checked, MenuIds.listRoleAction().get(checkBoxId));
-    }
-    else if (MenuIds.listUserAction().containsKey(checkBoxId))
-    {
-      setPermission(permission.userAction, checked, MenuIds.listUserAction().get(checkBoxId));
+    } else if (MenuIds.listStockProductAction().containsKey(checkBoxId)) {
+      setPermission(permission.stockProductAction, checked, MenuIds.listStockProductAction().get(checkBoxId));
+    } else if (MenuIds.listStockCategoryAction().containsKey(checkBoxId)) {
+      setPermission(permission.stockCategoryAction, checked, MenuIds.listStockCategoryAction().get(checkBoxId));
+    } else if (MenuIds.listMaintenance().containsKey(checkBoxId)) {
+      setPermission(permission.maintenance, checked, MenuIds.listMaintenance().get(checkBoxId));
+    } else if (MenuIds.listRoleAction().containsKey(checkBoxId)) {
+      setPermission(permission.maintenanceRoleAction, checked, MenuIds.listRoleAction().get(checkBoxId));
+    } else if (MenuIds.listUserAction().containsKey(checkBoxId)) {
+      setPermission(permission.maintenanceUserAction, checked, MenuIds.listUserAction().get(checkBoxId));
+    }else if (MenuIds.listTaxAction().containsKey(checkBoxId)) {
+      setPermission(permission.maintenanceTaxAction, checked, MenuIds.listTaxAction().get(checkBoxId));
     }
 
     setSubMenu(checkBoxId, checked);
@@ -448,16 +499,23 @@ public class RolePermissionActivity extends AppCompatActivity {
       case R.id.rp_stock:
         setVisibility(rpStkMoreLayout, rpStkLayout, checked);
         break;
+      case R.id.rp_stk_pos_products:
+        setVisibility(rpStkProductMoreLayout, rpStkProductLayout, checked);
+        break;
+      case R.id.rp_stk_pos_categories:
+        setVisibility(rpStkCategoryMoreLayout, rpStkCategoryLayout, checked);
+        break;
       case R.id.rp_mtc_roles:
         setVisibility(rpMtcRlMoreLayout, rpMtcRlLayout, checked);
         break;
       case R.id.rp_mtc_users:
         setVisibility(rpMtcUsrMoreLayout, rpMtcUsrLayout, checked);
         break;
+      case R.id.rp_mtc_taxes:
+        setVisibility(rpMtcTxMoreLayout, rpMtcTxLayout, checked);
+        break;
     }
   }
-
-
 
 
   private void setInactive(String inactive, boolean isCheck) {

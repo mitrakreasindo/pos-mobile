@@ -242,73 +242,180 @@
                             android:textSize="14sp"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_products"
+                            android:id="@+id/rp_stk_pos_products"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/product"/>
 
+                        <LinearLayout
+                            android:id="@+id/rp_stk_product_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_stk_product_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_product_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_product_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_product_location"
+                            android:id="@+id/rp_stk_pos_product_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/product_location"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_auxiliary_products"
+                            android:id="@+id/rp_stk_pos_auxiliary_products"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/auxiliary_products"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_categories"
+                            android:id="@+id/rp_stk_pos_categories"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/categories"/>
 
+                        <LinearLayout
+                            android:id="@+id/rp_stk_category_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_stk_category_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_stk_category_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_stk_category_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
+
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_product_attributes"
+                            android:id="@+id/rp_stk_pos_product_attributes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/product_attributes"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_attributes_values"
+                            android:id="@+id/rp_stk_pos_attributes_values"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/attributes_values"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_product_attribute_sets"
+                            android:id="@+id/rp_stk_pos_product_attribute_sets"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/product_attribute_sets"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_product_attribute_use"
+                            android:id="@+id/rp_stk_pos_product_attribute_use"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/product_attribute_use"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_stock_diary"
+                            android:id="@+id/rp_stk_pos_stock_diary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/stock_diary"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_stock_movement"
+                            android:id="@+id/rp_stk_pos_stock_movement"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/stock_movement"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_promotions"
+                            android:id="@+id/rp_stk_pos_promotions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/promotions"/>
 
                         <CheckBox
-                            android:id="@+id/rp_stk_mnt_recipes"
+                            android:id="@+id/rp_stk_pos_recipes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/recipes"/>
@@ -595,6 +702,61 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/taxes"/>
+
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_tx_more_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorAccent"/>
+
+                            <Button
+                                android:id="@+id/rp_mtc_tx_more"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/ic_arrow_drop_down_circle_black_24dp"
+                                android:backgroundTint="@color/colorAccent"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rp_mtc_tx_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_insert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/insert"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/update"/>
+
+                            <CheckBox
+                                android:id="@+id/rp_mtc_tx_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/delete"/>
+
+                        </LinearLayout>
+
 
                         <CheckBox
                             android:id="@+id/rp_mtc_tax_categories"

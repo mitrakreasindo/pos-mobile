@@ -16,6 +16,15 @@ public class MenuIds {
   public static final String rp_mtc_usr_action_insert = "rp_mtc_usr_action_insert";
   public static final String rp_mtc_usr_action_update = "rp_mtc_usr_action_update";
   public static final String rp_mtc_usr_action_delete = "rp_mtc_usr_action_delete";
+  public static final String rp_mtc_tx_action_insert = "rp_mtc_tx_action_insert";
+  public static final String rp_mtc_tx_action_update = "rp_mtc_tx_action_update";
+  public static final String rp_mtc_tx_action_delete = "rp_mtc_tx_action_delete";
+  public static final String rp_stk_product_action_insert = "rp_stk_product_action_insert";
+  public static final String rp_stk_product_action_update = "rp_stk_prodcut_action_update";
+  public static final String rp_stk_product_action_delete = "rp_stk_prodcut_action_delete";
+  public static final String rp_stk_category_action_insert = "rp_stk_category_action_insert";
+  public static final String rp_stk_category_action_update = "rp_stk_category_action_update";
+  public static final String rp_stk_category_action_delete = "rp_stk_category_action_delete";
 
   public static HashMap<Integer, String> listNavigatoin()
   {
@@ -75,18 +84,18 @@ public class MenuIds {
   public static HashMap<Integer, String> listStock()
   {
     HashMap<Integer, String> list = new HashMap<>();
-    list.put(R.id.rp_stk_mnt_products, "btn_stok_mnt_products");
-    list.put(R.id.rp_stk_mnt_product_location, "btn_stok_mnt_product_location");
-    list.put(R.id.rp_stk_mnt_auxiliary_products, "btn_stok_mnt_auxiliary_products");
-    list.put(R.id.rp_stk_mnt_categories, "btn_stok_mnt_categories");
-    list.put(R.id.rp_stk_mnt_product_attributes, "btn_stok_mnt_product_attributes");
-    list.put(R.id.rp_stk_mnt_attributes_values, "btn_stok_mnt_attributes_values");
-    list.put(R.id.rp_stk_mnt_product_attribute_sets, "btn_stok_mnt_product_attribute_sets");
-    list.put(R.id.rp_stk_mnt_product_attribute_use, "btn_stok_mnt_product_attribute_use");
-    list.put(R.id.rp_stk_mnt_stock_diary, "btn_stok_mnt_stock_diary");
-    list.put(R.id.rp_stk_mnt_stock_movement, "btn_stok_mnt_stock_movement");
-    list.put(R.id.rp_stk_mnt_promotions, "btn_stok_mnt_promotions");
-    list.put(R.id.rp_stk_mnt_recipes, "btn_stok_mnt_recipes");
+    list.put(R.id.rp_stk_pos_products, "btn_stok_mnt_products");
+    list.put(R.id.rp_stk_pos_product_location, "btn_stok_mnt_product_location");
+    list.put(R.id.rp_stk_pos_auxiliary_products, "btn_stok_mnt_auxiliary_products");
+    list.put(R.id.rp_stk_pos_categories, "btn_stok_mnt_categories");
+    list.put(R.id.rp_stk_pos_product_attributes, "btn_stok_mnt_product_attributes");
+    list.put(R.id.rp_stk_pos_attributes_values, "btn_stok_mnt_attributes_values");
+    list.put(R.id.rp_stk_pos_product_attribute_sets, "btn_stok_mnt_product_attribute_sets");
+    list.put(R.id.rp_stk_pos_product_attribute_use, "btn_stok_mnt_product_attribute_use");
+    list.put(R.id.rp_stk_pos_stock_diary, "btn_stok_mnt_stock_diary");
+    list.put(R.id.rp_stk_pos_stock_movement, "btn_stok_mnt_stock_movement");
+    list.put(R.id.rp_stk_pos_promotions, "btn_stok_mnt_promotions");
+    list.put(R.id.rp_stk_pos_recipes, "btn_stok_mnt_recipes");
     list.put(R.id.rp_stk_report_labels_barcode, "btn_stok_report_labels_barcode");
     list.put(R.id.rp_stk_report_inventory, "btn_stok_report_inventory");
     list.put(R.id.rp_stk_report_current_directory, "btn_stok_report_current_directory");
@@ -103,7 +112,26 @@ public class MenuIds {
     return list;
   }
 
-  // action bar
+  // action
+  // stock
+  public static HashMap<Integer, String> listStockProductAction()
+  {
+    HashMap<Integer, String> list = new HashMap<>();
+    list.put(R.id.rp_stk_product_insert, rp_stk_product_action_insert);
+    list.put(R.id.rp_stk_product_update, rp_stk_product_action_update);
+    list.put(R.id.rp_stk_product_delete, rp_stk_product_action_delete);
+    return list;
+  }
+
+  public static HashMap<Integer, String> listStockCategoryAction()
+  {
+    HashMap<Integer, String> list = new HashMap<>();
+    list.put(R.id.rp_stk_category_insert, rp_stk_category_action_insert);
+    list.put(R.id.rp_stk_category_update, rp_stk_category_action_update);
+    list.put(R.id.rp_stk_category_delete, rp_stk_category_action_delete);
+    return list;
+  }
+
   public static HashMap<Integer, String> listRoleAction()
   {
     HashMap<Integer, String> list = new HashMap<>();
@@ -122,6 +150,15 @@ public class MenuIds {
     return list;
   }
 
+  public static HashMap<Integer, String> listTaxAction()
+  {
+    HashMap<Integer, String> list = new HashMap<>();
+    list.put(R.id.rp_mtc_tx_insert, rp_mtc_tx_action_insert);
+    list.put(R.id.rp_mtc_tx_update, rp_mtc_tx_action_update);
+    list.put(R.id.rp_mtc_tx_delete, rp_mtc_tx_action_delete);
+    return list;
+  }
+
 
 
 
@@ -132,8 +169,11 @@ public class MenuIds {
     list.putAll(listMain());
     list.putAll(listMaintenance());
     list.putAll(listStock());
+    list.putAll(listStockProductAction());
+    list.putAll(listStockCategoryAction());
     list.putAll(listUserAction());
     list.putAll(listRoleAction());
+    list.putAll(listTaxAction());
     return list;
   }
 }

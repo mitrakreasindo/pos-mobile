@@ -130,7 +130,7 @@ public class RoleActivity extends AppCompatActivity
   {
     getMenuInflater().inflate(R.menu.default_list_menu, menu);
     MenuItem menuInsert = menu.findItem(R.id.action_add);
-    if (PermissionUtil.getInactive(this, "role_action").contains(MenuIds.rp_mtc_rl_action_insert))
+    if (PermissionUtil.getInactive(this, "maintenance_role_action").contains(MenuIds.rp_mtc_rl_action_insert))
     {
       menuInsert.setVisible(false);
     }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -45,11 +47,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   public List<Product> list_product = new ArrayList<>();
   private int counter = 0;
   private Product product;
+  private List<String> inactive;
 
   public ProductListAdapter(Context context, List<Product> products)
   {
     this.context = context;
     this.products = products;
+    inactive = PermissionUtil.getInactive(context, "stock_product_action");
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
@@ -67,61 +71,56 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   {
     product = products.get(position);
 
-    holder.productItem.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        Intent intent = new Intent(context, ProductFormActivity.class);
-        intent.putExtra("id", product.getId());
-        intent.putExtra("barcode", product.getCode());
-        intent.putExtra("name", product.getName());
-        intent.putExtra("shortName", product.getAlias());
-        intent.putExtra("category", product.getCategory().getId());
-        intent.putExtra("buyPrice", product.getPricebuy().toString());
-        intent.putExtra("sellPrice", product.getPricebuy().toString());
-        intent.putExtra("stockCost", product.getStockcost().toString());
-        intent.putExtra("stockVolume", product.getStockvolume().toString());
-        intent.putExtra("image", product.getImage());
-        context.startActivity(intent);
-      }
-    });
+    if (!inactive.contains(MenuIds.rp_stk_product_action_update)) {
+      holder.productItem.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(context, ProductFormActivity.class);
+          intent.putExtra("id", product.getId());
+          intent.putExtra("barcode", product.getCode());
+          intent.putExtra("name", product.getName());
+          intent.putExtra("shortName", product.getAlias());
+          intent.putExtra("category", product.getCategory().getId());
+          intent.putExtra("buyPrice", product.getPricebuy().toString());
+          intent.putExtra("sellPrice", product.getPricebuy().toString());
+          intent.putExtra("stockCost", product.getStockcost().toString());
+          intent.putExtra("stockVolume", product.getStockvolume().toString());
+          intent.putExtra("image", product.getImage());
+          context.startActivity(intent);
+        }
+      });
+    }
 
-    holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
-    {
-      @Override
-      public boolean onLongClick(final View v)
-      {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Options");
-        builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
-        {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
-          {
-            switch (which)
-            {
-              case 0:
-                new AlertDialog.Builder(context)
-                  .setTitle(context.getString(R.string.alert_dialog_delete_product))
-                  .setMessage(context.getString(R.string.alert_dialog_delete_product_message))
-                  .setIcon(android.R.drawable.ic_dialog_alert)
-                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
-                  {
-                    public void onClick(DialogInterface dialog, int whichButton)
-                    {
-                      deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
-                    }
-                  })
-                  .setNegativeButton(android.R.string.no, null).show();
-                break;
+    if (!inactive.contains(MenuIds.rp_stk_product_action_delete)) {
+      holder.productItem.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(final View v) {
+          final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+          builder.setTitle("Options");
+          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case 0:
+                  new AlertDialog.Builder(context)
+                          .setTitle(context.getString(R.string.alert_dialog_delete_product))
+                          .setMessage(context.getString(R.string.alert_dialog_delete_product_message))
+                          .setIcon(android.R.drawable.ic_dialog_alert)
+                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                              deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
+                            }
+                          })
+                          .setNegativeButton(android.R.string.no, null).show();
+                  break;
+              }
             }
-          }
-        });
-        builder.show();
-        return false;
-      }
-    });
+          });
+          builder.show();
+          return false;
+        }
+      });
+    }
 //    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
 //    holder.productItem.setOnClickListener(new View.OnClickListener()
 //    {

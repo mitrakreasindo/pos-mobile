@@ -243,7 +243,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
     if (permission != null)
     {
-      inActiveList = XMLHelper.XMLReader(context, "role_action", permission);
+      inActiveList = XMLHelper.XMLReader(context, "maintenance_role_action", permission);
     }
   }
 
