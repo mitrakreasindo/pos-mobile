@@ -247,4 +247,8 @@
     <string name="insert">Insert</string>
 
     <string name="maintenance">Maintenance</string>
+    <string name="logout_question">Logout ?</string>
+    <string name="logout_question_message">Are you sure want to logout from POS++ ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

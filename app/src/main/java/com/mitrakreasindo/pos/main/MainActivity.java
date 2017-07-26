@@ -1,10 +1,11 @@
 package com.mitrakreasindo.pos.main;
 
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -116,8 +117,8 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-    tableCategoryHelper.downloadData(companyCode);
+//    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+//    tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
 
@@ -132,43 +133,52 @@ public class MainActivity extends AppCompatActivity
     EventBus.getDefault().unregister(this);
   }
 
-  @Override
-  public void onBackPressed()
+  private Fragment getCurrentFragment()
   {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    if (drawer.isDrawerOpen(GravityCompat.START))
-    {
-      drawer.closeDrawer(GravityCompat.START);
-    }
-    else
-    {
-      Fragment mainFragment = getFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
-      if (mainFragment != null && mainFragment.isVisible())
-      {
-        new AlertDialog.Builder(this)
-          .setIcon(android.R.drawable.ic_dialog_alert)
-          .setTitle("Logout from POS++")
-          .setMessage("Are you sure you want to logout?")
-          .setPositiveButton
-            (
-              "Yes", new DialogInterface.OnClickListener()
-              {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                  finish();
-                }
-              }
-            )
-          .setNegativeButton("No", null)
-          .show();
-      }
-      else
-      {
-        super.onBackPressed();
-      }
-    }
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+    Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
+    return currentFragment;
   }
+
+//  @Override
+//  public void onBackPressed()
+//  {
+//    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//    if (drawer.isDrawerOpen(GravityCompat.START))
+//    {
+//      drawer.closeDrawer(GravityCompat.START);
+//    }
+//    else
+//    {
+//      Fragment mainFragment = getFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
+//      if (mainFragment == null)
+//      {
+//        new AlertDialog.Builder(this)
+//          .setIcon(android.R.drawable.ic_dialog_alert)
+//          .setTitle("Logout from POS++")
+//          .setMessage("Are you sure you want to logout?")
+//          .setPositiveButton
+//            (
+//              "Yes", new DialogInterface.OnClickListener()
+//              {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which)
+//                {
+//                  finish();
+//                }
+//              }
+//            )
+//          .setNegativeButton("No", null)
+//          .show();
+//      }
+//      else
+//      {
+//        super.onBackPressed();
+//        Toast.makeText(this, "TEST CLOSE", Toast.LENGTH_LONG).show();
+//      }
+//    }
+//  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
@@ -328,4 +338,43 @@ public class MainActivity extends AppCompatActivity
   {
     startActivity(new Intent(this, DiaryFormActivity.class));
   }
+
+  @Override
+  public void onBackPressed()
+  {
+    Fragment fragment = getSupportFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
+    if (fragment.isVisible())
+    {
+      final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+      confirmationDialog.setTitle(R.string.logout_question);
+      confirmationDialog.setMessage(R.string.logout_question_message);
+      confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+      {
+        @Override
+        public void onClick(DialogInterface dialog, int which)
+        {
+          finish();
+        }
+      });
+
+      confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+      {
+        @Override
+        public void onClick(DialogInterface dialog, int which)
+        {
+          dialog.dismiss();
+        }
+      });
+
+      confirmationDialog.show();
+
+    }
+    else
+    {
+      super.onBackPressed();
+    }
+
+  }
+
+
 }

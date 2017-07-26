@@ -1,8 +1,10 @@
 package com.mitrakreasindo.pos.main.sales;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -248,5 +250,33 @@ public class SalesActivity extends AppCompatActivity
   public boolean onKeyDown(int keyCode, KeyEvent event)
   {
     return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+  }
+
+  @Override
+  public void onBackPressed()
+  {
+    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+    confirmationDialog.setTitle("Cancel Transaction ?");
+    confirmationDialog.setMessage("Are you sure want to cancel the transaction ?");
+    confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        finish();
+      }
+    });
+
+    confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        dialog.dismiss();
+      }
+    });
+
+    confirmationDialog.show();
+
   }
 }
