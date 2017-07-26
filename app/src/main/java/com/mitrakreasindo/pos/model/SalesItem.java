@@ -6,37 +6,67 @@ package com.mitrakreasindo.pos.model;
 
 public class SalesItem
 {
-
-  private byte[] attributes;
-  protected TicketLinePK ticketlinesPK;
+  private int id;
+  private Sales salesId;
+  private int line;
+  private Product product;
+  private AttributesetInstance attributesetinstanceId;
   private double units;
   private double price;
+  private Tax taxid;
+  private byte[] attributes;
   private Double refundqty;
   private String siteguid;
   private Boolean sflag;
-  private AttributesetInstace attributesetinstanceId;
-  private Product product;
-  private Tax taxid;
-  private Sales sales;
 
-  public byte[] getAttributes()
+  public int getId()
   {
-    return attributes;
+    return id;
   }
 
-  public void setAttributes(byte[] attributes)
+  public void setId(int id)
   {
-    this.attributes = attributes;
+    this.id = id;
   }
 
-  public TicketLinePK getTicketlinesPK()
+  public Sales getSalesId()
   {
-    return ticketlinesPK;
+    return salesId;
   }
 
-  public void setTicketlinesPK(TicketLinePK ticketlinesPK)
+  public void setSalesId(Sales salesId)
   {
-    this.ticketlinesPK = ticketlinesPK;
+    this.salesId = salesId;
+  }
+
+  public int getLine()
+  {
+    return line;
+  }
+
+  public void setLine(int line)
+  {
+    this.line = line;
+  }
+
+  public Product getProduct()
+  {
+    return product;
+  }
+
+  public void setProduct(Product product)
+  {
+    this.product = product;
+  }
+
+  public AttributesetInstance getAttributesetinstanceId()
+  {
+    return attributesetinstanceId;
+  }
+
+  public void setAttributesetinstanceId(AttributesetInstance attributesetinstanceId)
+  {
+    this.attributesetinstanceId = attributesetinstanceId;
   }
 
   public double getUnits()
@@ -57,6 +87,26 @@ public class SalesItem
   public void setPrice(double price)
   {
     this.price = price;
+  }
+
+  public Tax getTaxid()
+  {
+    return taxid;
+  }
+
+  public void setTaxid(Tax taxid)
+  {
+    this.taxid = taxid;
+  }
+
+  public byte[] getAttributes()
+  {
+    return attributes;
+  }
+
+  public void setAttributes(byte[] attributes)
+  {
+    this.attributes = attributes;
   }
 
   public Double getRefundqty()
@@ -87,45 +137,5 @@ public class SalesItem
   public void setSflag(Boolean sflag)
   {
     this.sflag = sflag;
-  }
-
-  public AttributesetInstace getAttributesetinstanceId()
-  {
-    return attributesetinstanceId;
-  }
-
-  public void setAttributesetinstanceId(AttributesetInstace attributesetinstanceId)
-  {
-    this.attributesetinstanceId = attributesetinstanceId;
-  }
-
-  public Product getProduct()
-  {
-    return product;
-  }
-
-  public void setProduct(Product product)
-  {
-    this.product = product;
-  }
-
-  public Tax getTaxid()
-  {
-    return taxid;
-  }
-
-  public void setTaxid(Tax taxid)
-  {
-    this.taxid = taxid;
-  }
-
-  public Sales getSales()
-  {
-    return sales;
-  }
-
-  public void setSales(Sales sales)
-  {
-    this.sales = sales;
   }
 }

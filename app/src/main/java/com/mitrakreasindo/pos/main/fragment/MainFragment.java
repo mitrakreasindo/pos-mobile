@@ -103,11 +103,8 @@ public class MainFragment extends Fragment
         getActivity().getSupportFragmentManager().executePendingTransactions();
       }
     });
-
-
     return view;
   }
-
 
   @Override
   public void onResume()

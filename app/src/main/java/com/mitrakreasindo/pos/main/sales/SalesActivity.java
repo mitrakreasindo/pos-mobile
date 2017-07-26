@@ -97,7 +97,7 @@ public class SalesActivity extends AppCompatActivity
         ticketLine.setAttributes(bytes);
         ticketLine.setUnits(1);
         ticketLine.setPrice(product.getPricesell());
-        ticketLine.setSales(sales);
+        ticketLine.setSalesId(sales);
         ticketLine.setSflag(true);
         ticketLine.setTaxid(tax);
         Log.e("PRODUCT VALUE", product.getId().toString());
@@ -201,7 +201,7 @@ public class SalesActivity extends AppCompatActivity
         salesLine.setAttributes(bytes);
         salesLine.setUnits(1);
         salesLine.setPrice(product.getPricesell());
-        salesLine.setSales(sales);
+        salesLine.setSalesId(sales);
         salesLine.setSflag(true);
         salesLine.setTaxid(tax);
 

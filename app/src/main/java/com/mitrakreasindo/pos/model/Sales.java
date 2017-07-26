@@ -1,7 +1,5 @@
 package com.mitrakreasindo.pos.model;
 
-import java.util.Collection;
-
 /**
  * Created by lisa on 22/06/17.
  */
@@ -10,14 +8,14 @@ public class Sales
 {
 
   private String id;
-  private int tickettype;
-  private int ticketid;
+  private int salesnum;
+  private int salestype;
   private int status;
   private String siteguid;
   private Boolean sflag;
   private Customer customer;
   private People person;
-  private Receipt receipts;
+  private Receipt receipt;
 
   public String getId()
   {
@@ -27,26 +25,6 @@ public class Sales
   public void setId(String id)
   {
     this.id = id;
-  }
-
-  public int getTickettype()
-  {
-    return tickettype;
-  }
-
-  public void setTickettype(int tickettype)
-  {
-    this.tickettype = tickettype;
-  }
-
-  public int getTicketid()
-  {
-    return ticketid;
-  }
-
-  public void setTicketid(int ticketid)
-  {
-    this.ticketid = ticketid;
   }
 
   public int getStatus()
@@ -99,13 +77,33 @@ public class Sales
     this.person = person;
   }
 
-  public Receipt getReceipts()
+  public int getSalesnum()
   {
-    return receipts;
+    return salesnum;
   }
 
-  public void setReceipts(Receipt receipts)
+  public void setSalesnum(int salesnum)
   {
-    this.receipts = receipts;
+    this.salesnum = salesnum;
+  }
+
+  public int getSalestype()
+  {
+    return salestype;
+  }
+
+  public void setSalestype(int salestype)
+  {
+    this.salestype = salestype;
+  }
+
+  public Receipt getReceipt()
+  {
+    return receipt;
+  }
+
+  public void setReceipt(Receipt receipt)
+  {
+    this.receipt = receipt;
   }
 }
