@@ -54,18 +54,18 @@
     <string name="business_type">Business Type</string>
     <string name="business_category">Category</string>
     <string name="business_subcategory">Sub Category</string>
-    <string name="business_phone">Phone</string>
+    <string name="business_phone">Phone Number</string>
     <string name="business_address">Address</string>
     <string name="business_city">City</string>
     <string name="business_state">State</string>
-    <string name="business_zip">Zip</string>
+    <string name="business_zip">Zip Code</string>
     
     <string name="owner_info"><b>OWNER INFORMATION</b></string>
     <string name="owner_full_name">Full Name</string>
     <string name="owner_sex">Gender</string>
     <string name="owner_birth_date">Birth Date</string>
-    <string name="owner_email">E-mail</string>
-    <string name="owner_phone">Phone</string>
+    <string name="owner_email">E-mail Address</string>
+    <string name="owner_phone">Handphone Number</string>
     <string name="owner_id">ID Number</string>
 
     <string name="business_register_term">By continuing, I AGREE to\n *<b>Business Agreement</b> and\n *<b>Privacy Policy</b></string>

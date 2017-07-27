@@ -102,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity
   private String[] arrayBusinessSubCategory;
   private List<Integer> merchantCategoryId;
   private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-  private final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -112,8 +112,9 @@ public class RegisterActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     EventBus.getDefault().register(this);
-
     getMerchantCategories(EventCode.EVENT_BUSINESS_CATEGORY_GET);
+
+    progressDialog = new ProgressDialog(this);
 
     spinnerBusinessCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
     {

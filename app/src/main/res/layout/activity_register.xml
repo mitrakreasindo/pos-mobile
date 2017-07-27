@@ -117,7 +117,7 @@
 
         <EditText
             android:id="@+id/edittext_business_city"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/business_city"
@@ -125,7 +125,7 @@
 
         <EditText
             android:id="@+id/edittext_business_state"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/business_state"
@@ -133,11 +133,11 @@
 
         <EditText
             android:id="@+id/edittext_business_zip"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/business_zip"
-            android:inputType="text"/>
+            android:inputType="number"/>
 
     </LinearLayout>
 
