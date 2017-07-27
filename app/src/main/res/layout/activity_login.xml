@@ -20,18 +20,21 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <ScrollView
-        android:id="@+id/layout_scroll_login"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+    <!--<ScrollView-->
+        <!--android:id="@+id/layout_scroll_login"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout_editor_absoluteX="8dp"-->
+        <!--tools:layout_editor_absoluteY="8dp"-->
+        <!--android:paddingTop="16dp"-->
+        <!--android:layout_weight="1">-->
 
         <LinearLayout
             android:id="@+id/layout_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -43,7 +46,7 @@
                     android:id="@+id/merchant_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
+                    android:inputType="text"
                     android:hint="@string/prompt_merchant_code"
                     android:maxLines="1"/>
             </android.support.design.widget.TextInputLayout>
@@ -103,18 +106,27 @@
                 android:textSize="16sp"
                 android:onClick="Register"/>
 
-            <!--<Button-->
-                <!--android:id="@+id/register_button"-->
-                <!--style="?android:textAppearanceSmall"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="24dp"-->
-                <!--android:layout_marginBottom="24dp"-->
-                <!--android:padding="12dp"-->
-                <!--android:onClick="Register"-->
-                <!--android:text="@string/action_register"-->
-                <!--android:textStyle="bold" />-->
-
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/langselection"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/languages"
+            android:theme="@style/ThemeSpinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined" />
+    </LinearLayout>
 </LinearLayout>

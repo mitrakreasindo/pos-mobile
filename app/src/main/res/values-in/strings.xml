@@ -9,6 +9,13 @@
     <string name="content_value">[content]</string>
     <string name="action_refresh">Muat Ulang</string>
     <string name="title_activity_login">Masuk</string>
+    <string name="langselection">Bahasa: </string>
+    <string-array name="languages">
+        <item>Ganti Bahasa</item>
+        <item>Indonesia</item>
+        <item>Inggris</item>
+    </string-array>
+
 
     <!-- Strings related to login -->
     <string name="prompt_merchant_code">Kode Bisnis</string>
@@ -247,4 +254,8 @@
     <string name="insert">Insert</string>
 
     <string name="maintenance">Maintenance</string>
+    <string name="logout_question">Keluar ?</string>
+    <string name="logout_question_message">Apakah anda yakin ingin keluar dari POS++ ?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 </resources>

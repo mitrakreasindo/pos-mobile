@@ -8,6 +8,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,12 +20,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +40,7 @@ import com.mitrakreasindo.pos.service.LoginService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   };
   @BindView(R.id.merchant_code)
   EditText merchantCode;
+  @BindView(R.id.spinner_language)
+  Spinner spinnerLanguage;
   /**
    * Keep track of the login task to ensure we can cancel it if requested.
    */
@@ -81,6 +89,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
+
+    //Setup spinner
+    spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    {
+      @Override
+      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+      {
+        if (i == 1)
+        {
+          setLocale("in");
+        }
+        else if (i == 2)
+        {
+          setLocale("en");
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> adapterView)
+      {
+      }
+    });
 
     // Set up the login form.
     mUsernameView = (EditText) findViewById(R.id.username);
@@ -254,6 +284,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       mUsernameView.setText("");
       mPasswordView.setText("");
     }
+  }
+
+  public void setLocale(String lang)
+  {
+    Locale myLocale = new Locale(lang);
+    Resources res = getResources();
+    DisplayMetrics dm = res.getDisplayMetrics();
+    Configuration conf = res.getConfiguration();
+    conf.locale = myLocale;
+    res.updateConfiguration(conf, dm);
+    Intent refresh = new Intent(this, LoginActivity.class);
+    finish();
+    startActivity(refresh);
   }
 
   private void postLogin(final String kodeMerchant, final String username, String password)
