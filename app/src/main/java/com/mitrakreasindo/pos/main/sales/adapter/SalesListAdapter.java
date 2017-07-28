@@ -193,6 +193,7 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       totalPrice += salesItems.get(i).getProduct().getPricesell() * salesItems.get(i).getUnits();
     }
     Log.e("TICKET SIZE", String.valueOf(salesItems.size()));
+
     return totalPrice;
   }
 

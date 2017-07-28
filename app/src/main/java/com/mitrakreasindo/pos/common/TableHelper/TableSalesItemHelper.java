@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.Sales;
+import com.mitrakreasindo.pos.model.SalesItem;
 import com.mitrakreasindo.pos.service.CategoryService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -14,33 +15,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lisa on 26/07/17.
+ * Created by lisa on 27/07/17.
  */
 
-public class TableSalesHelper
+public class TableSalesItemHelper
 {
+
   private static final String DATABASE_NAME = "chromispos.db";
   private static final int DATABASE_VERSION = 1;
-  private static final String DATABASE_TABLE = "sales";
+  private static final String DATABASE_TABLE = "sales_items";
   private static final String TAG = "DBAdapter";
 
   private static final String KEY_ID = "id";
-  private static final String SALES_NUM = "salesnum";
-  private static final String SALES_TYPE = "salestype";
-  private static final String PERSON = "person";
-  private static final String CUSTOMER = "customer";
-  private static final String STATUS = "status";
-  private static final String RECEIPT = "receipt";
+  private static final String SALES_ID = "salesId";
+  private static final String LINE = "line";
+  private static final String PRODUCT = "product";
+  private static final String UNITS = "units";
+  private static final String PRICE = "price";
+  private static final String TAX_ID = "taxid";
+  private static final String REFUND_QTY = "refundqty";
 
   private final Context context;
-  private TableSalesHelper.DatabaseHelper DBHelper;
+  private TableSalesItemHelper.DatabaseHelper DBHelper;
   private SQLiteDatabase db;
   private CategoryService service;
 
-  public TableSalesHelper(Context context)
+  public TableSalesItemHelper(Context context)
   {
     this.context = context;
-    DBHelper = new TableSalesHelper.DatabaseHelper(context);
+    DBHelper = new TableSalesItemHelper.DatabaseHelper(context);
     service = ClientService.createService().create(CategoryService.class);
   }
 
@@ -52,7 +55,7 @@ public class TableSalesHelper
     }
   }
 
-  public TableSalesHelper open()
+  public TableSalesItemHelper open()
   {
     try
     {
@@ -70,53 +73,57 @@ public class TableSalesHelper
     DBHelper.close();
   }
 
-  public long insert(List<Sales> list)
+//  public long insert(List<SalesItem> list)
+//  {
+//    ContentValues initialValues = new ContentValues();
+//
+//    for(int i=0; i<list.size(); i++)
+//    {
+//      initialValues.put(KEY_ID, list.get(i).getId());
+//      initialValues.put(SALES_NUM, list.get(i).getSalesnum());
+//      initialValues.put(SALES_TYPE, list.get(i).getSalestype());
+//      initialValues.put(PERSON, list.get(i).getPerson().getId());
+//      initialValues.put(CUSTOMER, list.get(i).getCustomer().getId());
+//      initialValues.put(STATUS, list.get(i).getStatus());
+//
+//      db.insert(DATABASE_TABLE, null, initialValues);
+//    }
+//    return 0;
+//  }
+
+  public long insertSalesItem(SalesItem salesItem)
   {
     ContentValues initialValues = new ContentValues();
 
-    for(int i=0; i<list.size(); i++)
-    {
-      initialValues.put(KEY_ID, list.get(i).getId());
-      initialValues.put(SALES_NUM, list.get(i).getSalesnum());
-      initialValues.put(SALES_TYPE, list.get(i).getSalestype());
-      initialValues.put(PERSON, list.get(i).getPerson().getId());
-      initialValues.put(CUSTOMER, list.get(i).getCustomer().getId());
-      initialValues.put(STATUS, list.get(i).getStatus());
-
-      db.insert(DATABASE_TABLE, null, initialValues);
-    }
-    return 0;
-  }
-
-  public long insertSales(Sales sales)
-  {
-    ContentValues initialValues = new ContentValues();
-
-    initialValues.put(KEY_ID, sales.getId());
-    initialValues.put(SALES_NUM, sales.getSalesnum());
-    initialValues.put(SALES_TYPE, sales.getSalestype());
-    initialValues.put(PERSON, sales.getPerson().getId());
-    initialValues.put(CUSTOMER, sales.getCustomer().getId());
-    initialValues.put(STATUS, sales.getStatus());
+//    initialValues.put(KEY_ID, salesItem.getId());
+    initialValues.put(SALES_ID, salesItem.getSalesId().getId());
+    initialValues.put(LINE, salesItem.getLine());
+    initialValues.put(PRODUCT, salesItem.getProduct().getId());
+    initialValues.put(UNITS, salesItem.getUnits());
+    initialValues.put(PRICE, salesItem.getPrice());
+    initialValues.put(TAX_ID, salesItem.getTaxid().getId());
+    initialValues.put(REFUND_QTY, salesItem.getRefundqty());
 
     return db.insert(DATABASE_TABLE, null, initialValues);
   }
 
-  public long update(Sales sales)
+  public long updateSalesItem(SalesItem salesItem)
   {
     ContentValues initialValues = new ContentValues();
 
-    initialValues.put(KEY_ID, sales.getId());
-    initialValues.put(SALES_NUM, sales.getSalesnum());
-    initialValues.put(SALES_TYPE, sales.getSalestype());
-    initialValues.put(PERSON, sales.getPerson().getId());
-    initialValues.put(CUSTOMER, sales.getCustomer().getId());
-    initialValues.put(STATUS, sales.getStatus());
+    initialValues.put(KEY_ID, salesItem.getId());
+    initialValues.put(SALES_ID, salesItem.getSalesId().getId());
+    initialValues.put(LINE, salesItem.getLine());
+    initialValues.put(PRODUCT, salesItem.getProduct().getId());
+    initialValues.put(UNITS, salesItem.getUnits());
+    initialValues.put(PRICE, salesItem.getPrice());
+    initialValues.put(TAX_ID, salesItem.getTaxid().getId());
+    initialValues.put(REFUND_QTY, salesItem.getRefundqty());
 
-    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {sales.getId()});
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {String.valueOf(salesItem.getId())});
   }
 
-  public List<Sales> populateSales(Cursor cursor)
+  public List<Sales> populateSalesItem(Cursor cursor)
   {
     try
     {
@@ -153,12 +160,12 @@ public class TableSalesHelper
     return db.delete(DATABASE_TABLE, KEY_ID + "='" + id + "'", null);
   }
 
-  public Cursor getAllData()
-  {
-    return db.query(DATABASE_TABLE,
-      new String[]{KEY_ID, SALES_NUM, SALES_TYPE, PERSON, CUSTOMER, STATUS},
-      null, null, null, null, null);
-  }
+//  public Cursor getAllData()
+//  {
+//    return db.query(DATABASE_TABLE,
+//      new String[]{KEY_ID, SALES_NUM, SALES_TYPE, PERSON, CUSTOMER, STATUS},
+//      null, null, null, null, null);
+//  }
 
   public List<Sales> getData()
   {

@@ -27,16 +27,23 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
-import com.mitrakreasindo.pos.main.Queue;
+import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
+import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
+import com.mitrakreasindo.pos.model.Customer;
+import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Product;
+import com.mitrakreasindo.pos.model.Receipt;
 import com.mitrakreasindo.pos.model.Sales;
-import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.SalesItem;
+import com.mitrakreasindo.pos.model.Tax;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,20 +67,21 @@ public class SalesActivity extends AppCompatActivity
   RecyclerView listSalesProduct;
   @BindView(R.id.sales_product_total)
   TextView salesProductTotal;
-  @BindView(R.id.btn_sales_cart)
-  ImageView btnSalesCart;
   @BindView(R.id.btn_sales_save)
   ImageView btnSalesSave;
+  @BindView(R.id.btn_sales_checkout)
+  ImageView btnSalesCheckout;
+
+
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
 
-  private Queue queue;
   private SalesListAdapter salesListAdapter;
 
-  String[] languages = {"Hello ", "Hi", "Hey", "He-yah", "What's up?"};
-
   private TableProductHelper tableProductHelper;
+
+  private Sales sales;
 
   private BarcodeCallback callback = new BarcodeCallback()
   {
@@ -83,31 +91,39 @@ public class SalesActivity extends AppCompatActivity
     {
 
       Product product = tableProductHelper.getProduct(result.getText());
+
+//      Sales sales = new Sales();
+//      sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+
+      Tax tax = new Tax();
+      tax.setId("001");
+
+      String example = "Convert Java String";
+      byte[] bytes = example.getBytes();
+
+      final SalesItem salesItem = new SalesItem();
+      salesItem.setProduct(product);
+      salesItem.setAttributes(bytes);
+      salesItem.setUnits(1);
+      salesItem.setPrice(product.getPricesell());
+      salesItem.setSalesId(sales);
+      salesItem.setSflag(true);
+      salesItem.setTaxid(tax);
+      Log.e("PRODUCT VALUE", product.getId());
+
       if (product != null)
       {
-        Sales sales = new Sales();
-        sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
+        tableSalesItemHelper.open();
+        tableSalesItemHelper.insertSalesItem(salesItem);
+        tableSalesItemHelper.close();
 
-        Tax tax = new Tax();
-        tax.setId("001");
-
-        String example = "Convert Java String";
-        byte[] bytes = example.getBytes();
-
-        final SalesItem ticketLine = new SalesItem();
-        ticketLine.setProduct(product);
-        ticketLine.setAttributes(bytes);
-        ticketLine.setUnits(1);
-        ticketLine.setPrice(product.getPricesell());
-        ticketLine.setSalesId(sales);
-        ticketLine.setSflag(true);
-        ticketLine.setTaxid(tax);
-        Log.e("PRODUCT VALUE", product.getId().toString());
-
-        salesListAdapter.addSalesItem(ticketLine);
+        salesListAdapter.addSalesItem(salesItem);
         salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+
       }
-      else {
+      else
+      {
         Toast.makeText(SalesActivity.this, "Product not found!", Toast.LENGTH_LONG).show();
       }
 
@@ -157,14 +173,12 @@ public class SalesActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
-//    salesListAdapter = new SalesListAdapter(this, new ArrayList<Queue>());
+
     listSalesProduct.setAdapter(salesListAdapter);
     listSalesProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listSalesProduct.setLayoutManager(layoutManager);
     listSalesProduct.setItemAnimator(new DefaultItemAnimator());
-
-    tableProductHelper = new TableProductHelper(this);
 
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
@@ -176,21 +190,59 @@ public class SalesActivity extends AppCompatActivity
       }
     });
 
+    Customer customer = new Customer();
+    customer.setId(null);
+
+    People people = new People();
+    people.setId("1111111");
+
+    Receipt receipt = new Receipt();
+    receipt.setId(null);
+
+    sales = new Sales();
+    sales.setId(UUID.randomUUID().toString());
+    sales.setSalesnum(1);
+    sales.setSalestype(1);
+    sales.setStatus(1);
+    sales.setSiteguid(UUID.randomUUID().toString());
+    sales.setSflag(true);
+    sales.setCustomer(customer);
+    sales.setPerson(people);
+    sales.setReceipt(receipt);
+
+    btnSalesSave.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+
+        TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
+        tableSalesHelper.open();
+        tableSalesHelper.insertSales(sales);
+        tableSalesHelper.close();
+
+        Toast.makeText(SalesActivity.this, "Success", Toast.LENGTH_LONG).show();
+
+        finish();
+
+      }
+    });
+
+    tableProductHelper = new TableProductHelper(this);
+
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
 
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()
     {
+
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-//        Product product = tableProductHelper.getData().get(position);
+
         Product product = (Product) adapter.getItem(position);
         adapter.getItem(position);
-
-        Sales sales = new Sales();
-        sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
 
         Tax tax = new Tax();
         tax.setId("001");
@@ -198,31 +250,40 @@ public class SalesActivity extends AppCompatActivity
         String example = "Convert Java String";
         byte[] bytes = example.getBytes();
 
-        SalesItem salesLine = new SalesItem();
-        salesLine.setProduct(product);
-        salesLine.setAttributes(bytes);
-        salesLine.setUnits(1);
-        salesLine.setPrice(product.getPricesell());
-        salesLine.setSalesId(sales);
-        salesLine.setSflag(true);
-        salesLine.setTaxid(tax);
+        SalesItem salesItem = new SalesItem();
+        salesItem.setProduct(product);
+        salesItem.setAttributes(bytes);
+        salesItem.setUnits(1);
+        salesItem.setPrice(product.getPricesell());
+        salesItem.setSalesId(sales);
+        salesItem.setSflag(true);
+        salesItem.setTaxid(tax);
 
-        salesListAdapter.addSalesItem(salesLine);
-        Log.d("TICKET OPERAND", salesLine.getProduct().toString());
-//        Toast.makeText(SalesActivity.this, adapter.getItem(position).toString(), Toast.LENGTH_LONG).show();
+        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
+        tableSalesItemHelper.open();
+        tableSalesItemHelper.insertSalesItem(salesItem);
+        tableSalesItemHelper.close();
+
+        salesListAdapter.addSalesItem(salesItem);
         edittextSearchProduct.setText("");
         salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+
       }
+
     });
 
     salesListAdapter.notifyDataSetChanged();
 
-    salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+    salesProductTotal.setText(decimalFormat
+      .format(salesListAdapter.grandTotal()));
+
+//    salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
 
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
-
     beepManager = new BeepManager(this);
+
   }
 
   @Override

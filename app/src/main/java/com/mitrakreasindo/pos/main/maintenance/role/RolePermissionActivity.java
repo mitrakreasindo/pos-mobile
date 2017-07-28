@@ -563,6 +563,8 @@ public class RolePermissionActivity extends AppCompatActivity
   }
 
 
+//  -------------------------------
+
   private void setInactive(String inactive, boolean isCheck)
   {
     Integer key = null;
