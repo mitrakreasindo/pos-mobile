@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -95,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity
 
   private int mYear, mMonth, mDay;
   private String businessname, shortname, ownerfullname, owneremail;
-  private String visibility;
   private View focusView = null;
   private PasswordValidator passwordValidator;
   private String[] arrayBusinessCategory;
@@ -103,6 +103,7 @@ public class RegisterActivity extends AppCompatActivity
   private List<Integer> merchantCategoryId;
   private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private ProgressDialog progressDialog;
+  private Locale current;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -112,6 +113,8 @@ public class RegisterActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     EventBus.getDefault().register(this);
+    current = getResources().getConfiguration().locale;
+
     getMerchantCategories(EventCode.EVENT_BUSINESS_CATEGORY_GET);
 
     progressDialog = new ProgressDialog(this);
@@ -151,12 +154,12 @@ public class RegisterActivity extends AppCompatActivity
   public void onBackPressed()
   {
     new AlertDialog.Builder(this)
-      .setIcon(android.R.drawable.ic_dialog_alert)
-      .setTitle("Cancel Registration")
-      .setMessage("Are you sure back to login screen?")
+      .setIcon(android.R.drawable.ic_dialog_info)
+      .setTitle(R.string.register_question)
+      .setMessage(R.string.register_question_message)
       .setPositiveButton
         (
-          "Yes", new DialogInterface.OnClickListener()
+          R.string.yes, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
@@ -165,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity
             }
           }
         )
-      .setNegativeButton("No", null)
+      .setNegativeButton(R.string.no, null)
       .show();
   }
 
@@ -216,7 +219,7 @@ public class RegisterActivity extends AppCompatActivity
   {
     if (attemptRegister())
     {
-      progressDialog.setMessage("Please wait...");
+      progressDialog.setMessage(this.getString(R.string.progress_message));
       progressDialog.show();
       buttonCreateAcc.setEnabled(false);
       postMerchantRegistration(prepareRegistrationData());
@@ -350,7 +353,7 @@ public class RegisterActivity extends AppCompatActivity
         progressDialog.dismiss();
         buttonCreateAcc.setEnabled(true);
         responseCode = -1;
-        responseMessage = "Cannot register. :( There is something wrong.";
+        responseMessage = RegisterActivity.this.getString(R.string.error_post_register);
         Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
@@ -368,10 +371,27 @@ public class RegisterActivity extends AppCompatActivity
         List<MerchantCategories> data = response.body();
         List<String> category = new ArrayList<>();
 
-        for (int i = 0; i < data.size(); i++)
+        if (current.getISO3Language().equals(Locale.ENGLISH.getISO3Language()))
         {
-          category.add(data.get(i).getName());
+          for (int i = 0; i < data.size(); i++)
+          {
+            if (data.get(i).getId() <= 100)
+            {
+              category.add(data.get(i).getName());
+            }
+          }
         }
+        else
+        {
+          for (int i = 0; i < data.size(); i++)
+          {
+            if (data.get(i).getId() > 100)
+            {
+              category.add(data.get(i).getName());
+            }
+          }
+        }
+
         arrayBusinessCategory = new String[category.size()];
         arrayBusinessCategory = category.toArray(arrayBusinessCategory);
 
@@ -382,7 +402,7 @@ public class RegisterActivity extends AppCompatActivity
       public void onFailure(Call<List<MerchantCategories>> call, Throwable t)
       {
         arrayBusinessCategory = null;
-        Toast.makeText(RegisterActivity.this, "Get category failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(RegisterActivity.this, R.string.error_get_category, Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -400,11 +420,29 @@ public class RegisterActivity extends AppCompatActivity
         List<String> subcategory = new ArrayList<>();
         merchantCategoryId = new ArrayList<>();
 
-        for (int i = 0; i < data.size(); i++)
+        if (current.getISO3Language().equals(Locale.ENGLISH.getISO3Language()))
         {
-          subcategory.add(data.get(i).getSubcategory());
-          merchantCategoryId.add(data.get(i).getId());
+          for (int i = 0; i < data.size(); i++)
+          {
+            if (data.get(i).getId() <= 100)
+            {
+              subcategory.add(data.get(i).getSubcategory());
+              merchantCategoryId.add(data.get(i).getId());
+            }
+          }
         }
+        else
+        {
+          for (int i = 0; i < data.size(); i++)
+          {
+            if (data.get(i).getId() > 100)
+            {
+              subcategory.add(data.get(i).getSubcategory());
+              merchantCategoryId.add(data.get(i).getId());
+            }
+          }
+        }
+
         arrayBusinessSubCategory = new String[subcategory.size()];
         arrayBusinessSubCategory = subcategory.toArray(arrayBusinessSubCategory);
 
@@ -415,7 +453,7 @@ public class RegisterActivity extends AppCompatActivity
       public void onFailure(Call<List<MerchantCategories>> call, Throwable t)
       {
         arrayBusinessSubCategory = null;
-        Toast.makeText(RegisterActivity.this, "Get sub category failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(RegisterActivity.this, R.string.error_get_subcategory, Toast.LENGTH_SHORT).show();
       }
     });
   }

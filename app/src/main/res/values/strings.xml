@@ -243,7 +243,6 @@
     <string name="nav_sys_check_in_out">Check In/Out</string>
     <string name="nav_sys_log_out">Log out</string>
 
-
     <!-- role permission -->
     <string name="rp_navigation">Navigation</string>
     <string name="rp_role">Role</string>
@@ -255,6 +254,13 @@
     <string name="maintenance">Maintenance</string>
     <string name="logout_question">Logout ?</string>
     <string name="logout_question_message">Are you sure want to logout from POS++ ?</string>
+    <string name="register_question">Cancel Registration</string>
+    <string name="register_question_message">Are you sure back to login screen?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <string name="progress_message">Please wait</string>
+    <string name="error_post_register">Cannot register. There is something wrong.</string>
+    <string name="error_get_category">Get category failed</string>
+    <string name="error_get_subcategory">Get subcategory failed</string>
 </resources>
