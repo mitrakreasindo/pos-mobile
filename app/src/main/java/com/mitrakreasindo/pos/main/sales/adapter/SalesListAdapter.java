@@ -188,12 +188,14 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
   {
     notifyDataSetChanged();
     double totalPrice = 0;
+
     for (int i = 0; i < salesItems.size(); i++)
     {
       totalPrice += salesItems.get(i).getProduct().getPricesell() * salesItems.get(i).getUnits();
     }
     Log.e("TICKET SIZE", String.valueOf(salesItems.size()));
-
+//    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+//    String value = decimalFormat.format(totalPrice);
     return totalPrice;
   }
 

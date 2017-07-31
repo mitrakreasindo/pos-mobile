@@ -26,22 +26,34 @@ import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.model.Customer;
+import com.mitrakreasindo.pos.model.Location;
+import com.mitrakreasindo.pos.model.Payment;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Receipt;
 import com.mitrakreasindo.pos.model.Sales;
 import com.mitrakreasindo.pos.model.SalesItem;
+import com.mitrakreasindo.pos.model.SalesPack;
+import com.mitrakreasindo.pos.model.StockDiary;
 import com.mitrakreasindo.pos.model.Tax;
+import com.mitrakreasindo.pos.model.TaxLine;
+import com.mitrakreasindo.pos.model.Viewpayments;
+import com.mitrakreasindo.pos.model.Viewreceipts;
+import com.mitrakreasindo.pos.model.Viewsales;
+import com.mitrakreasindo.pos.model.Viewsalesitems;
+import com.mitrakreasindo.pos.model.Viewstockdiary;
+import com.mitrakreasindo.pos.model.Viewtaxlines;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,6 +85,12 @@ public class SalesActivity extends AppCompatActivity
   ImageView btnSalesCheckout;
 
 
+  private final String siteguid = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
+  private DecimalFormat decimalFormat;
+
+  String example = "Convert Java String";
+  byte[] bytes = example.getBytes();
+
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
@@ -82,26 +100,44 @@ public class SalesActivity extends AppCompatActivity
   private TableProductHelper tableProductHelper;
 
   private Sales sales;
+  private Product product;
+  private SalesPack salesPack;
+  private Receipt receipt;
+  private SalesItem salesItem;
+  private Payment payment;
+  private StockDiary stockDiary;
+  private TaxLine taxLine;
+
+  private Viewsales viewsales;
+  private Viewsalesitems viewsalesitem;
+  private Viewreceipts viewreceipt;
+  private Viewpayments viewpayment;
+  private Viewstockdiary viewstockdiary;
+  private Viewtaxlines viewtaxline;
+
+  private List<Viewsalesitems> viewsalesitems = new ArrayList<>();
+  private List<Viewpayments> viewpayments = new ArrayList<>();
+  private List<Viewstockdiary> viewstockdiaries = new ArrayList<>();
+  private List<Viewtaxlines> viewtaxlines = new ArrayList<>();
+
+
 
   private BarcodeCallback callback = new BarcodeCallback()
   {
-
     @Override
     public void barcodeResult(BarcodeResult result)
     {
 
-      Product product = tableProductHelper.getProduct(result.getText());
+      product = tableProductHelper.getProduct(result.getText());
 
 //      Sales sales = new Sales();
 //      sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
+      data();
 
       Tax tax = new Tax();
       tax.setId("001");
 
-      String example = "Convert Java String";
-      byte[] bytes = example.getBytes();
-
-      final SalesItem salesItem = new SalesItem();
+      salesItem = new SalesItem();
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
       salesItem.setUnits(1);
@@ -109,7 +145,6 @@ public class SalesActivity extends AppCompatActivity
       salesItem.setSalesId(sales);
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
-      Log.e("PRODUCT VALUE", product.getId());
 
       if (product != null)
       {
@@ -119,7 +154,7 @@ public class SalesActivity extends AppCompatActivity
         tableSalesItemHelper.close();
 
         salesListAdapter.addSalesItem(salesItem);
-        salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+        salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
       }
       else
@@ -155,7 +190,7 @@ public class SalesActivity extends AppCompatActivity
       //Added preview of scanned barcode
       ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
       imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
-      salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+      salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
     }
 
@@ -190,36 +225,25 @@ public class SalesActivity extends AppCompatActivity
       }
     });
 
-    Customer customer = new Customer();
-    customer.setId(null);
-
-    People people = new People();
-    people.setId("1111111");
-
-    Receipt receipt = new Receipt();
-    receipt.setId(null);
-
-    sales = new Sales();
-    sales.setId(UUID.randomUUID().toString());
-    sales.setSalesnum(1);
-    sales.setSalestype(1);
-    sales.setStatus(1);
-    sales.setSiteguid(UUID.randomUUID().toString());
-    sales.setSflag(true);
-    sales.setCustomer(customer);
-    sales.setPerson(people);
-    sales.setReceipt(receipt);
-
     btnSalesSave.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
+        salesPack = new SalesPack();
+        salesPack.setSales(viewsales);
+        salesPack.setReceipts(viewreceipt);
+        salesPack.setSalesItems(viewsalesitems);
+        salesPack.setPayments(viewpayments);
+        salesPack.setStockdiary(viewstockdiaries);
+        salesPack.setTaxlines(viewtaxlines);
 
-        TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
-        tableSalesHelper.open();
-        tableSalesHelper.insertSales(sales);
-        tableSalesHelper.close();
+        Log.d(getClass().getSimpleName(), viewpayments.toArray().toString());
+
+//        TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
+//        tableSalesHelper.open();
+//        tableSalesHelper.insertSales(sales);
+//        tableSalesHelper.close();
 
         Toast.makeText(SalesActivity.this, "Success", Toast.LENGTH_LONG).show();
 
@@ -241,7 +265,7 @@ public class SalesActivity extends AppCompatActivity
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
 
-        Product product = (Product) adapter.getItem(position);
+        product = (Product) adapter.getItem(position);
         adapter.getItem(position);
 
         Tax tax = new Tax();
@@ -250,14 +274,16 @@ public class SalesActivity extends AppCompatActivity
         String example = "Convert Java String";
         byte[] bytes = example.getBytes();
 
-        SalesItem salesItem = new SalesItem();
-        salesItem.setProduct(product);
-        salesItem.setAttributes(bytes);
-        salesItem.setUnits(1);
-        salesItem.setPrice(product.getPricesell());
-        salesItem.setSalesId(sales);
-        salesItem.setSflag(true);
-        salesItem.setTaxid(tax);
+        data();
+
+//        salesItem = new SalesItem();
+//        salesItem.setProduct(product);
+//        salesItem.setAttributes(bytes);
+//        salesItem.setUnits(1);
+//        salesItem.setPrice(product.getPricesell());
+//        salesItem.setSalesId(sales);
+//        salesItem.setSflag(true);
+//        salesItem.setTaxid(tax);
 
         TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
         tableSalesItemHelper.open();
@@ -266,7 +292,7 @@ public class SalesActivity extends AppCompatActivity
 
         salesListAdapter.addSalesItem(salesItem);
         edittextSearchProduct.setText("");
-        salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+        salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
       }
 
@@ -274,17 +300,18 @@ public class SalesActivity extends AppCompatActivity
 
     salesListAdapter.notifyDataSetChanged();
 
-    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
-    salesProductTotal.setText(decimalFormat
-      .format(salesListAdapter.grandTotal()));
+    decimalFormat = new DecimalFormat("###,###.###");
+//    String value = decimalFormat.format(salesListAdapter.grandTotal());
 
-//    salesProductTotal.setText(String.valueOf(salesListAdapter.grandTotal()));
+    salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
     beepManager = new BeepManager(this);
 
   }
+
+
 
   @Override
   protected void onResume()
@@ -338,6 +365,165 @@ public class SalesActivity extends AppCompatActivity
     });
 
     confirmationDialog.show();
+
+  }
+
+  public void data()
+  {
+
+    Customer customer = new Customer();
+    customer.setId(null);
+
+    People people = new People();
+    people.setId("1111111");
+
+    Location location = new Location();
+    location.setId(UUID.randomUUID().toString());
+
+    Tax tax = new Tax();
+    tax.setId("001");
+
+    receipt = new Receipt();
+    receipt.setId(UUID.randomUUID().toString());
+    receipt.setAttributes(null);
+    receipt.setSales(sales);
+    receipt.setDatenew(new Date());
+    receipt.setPerson("test");
+    receipt.setSiteguid(siteguid);
+    receipt.setSflag(true);
+
+    sales = new Sales();
+    sales.setId(UUID.randomUUID().toString());
+    sales.setSalesnum(1);
+    sales.setSalestype(1);
+    sales.setStatus(1);
+    sales.setSiteguid(UUID.randomUUID().toString());
+    sales.setSflag(true);
+    sales.setCustomer(customer);
+    sales.setPerson(people);
+    sales.setReceipt(receipt);
+
+    salesItem = new SalesItem();
+    salesItem.setProduct(product);
+    salesItem.setAttributes(bytes);
+    salesItem.setUnits(1);
+    salesItem.setPrice(product.getPricesell());
+    salesItem.setSalesId(sales);
+    salesItem.setSflag(true);
+    salesItem.setTaxid(tax);
+
+    payment = new Payment();
+    payment.setId(UUID.randomUUID().toString());
+    payment.setPayment("cash");
+    payment.setTotal(20000);
+    payment.setTransid("tesssssss");
+    payment.setNotes("test notes");
+    payment.setTendered(20000);
+    payment.setCardname("CardName");
+    payment.setReturnmsg(null);
+    payment.setSiteguid(siteguid);
+    payment.setSflag(true);
+    payment.setReceipt(receipt);
+
+    taxLine = new TaxLine();
+    taxLine.setId(UUID.randomUUID().toString());
+    taxLine.setBase(1000);
+    taxLine.setAmount(100);
+    taxLine.setSiteguid(siteguid);
+    taxLine.setSflag(true);
+    taxLine.setReceipt(receipt);
+    taxLine.setTaxid(tax);
+
+    stockDiary = new StockDiary();
+    stockDiary.setId(UUID.randomUUID().toString());
+    stockDiary.setReason(0);
+    stockDiary.setUnits(1);
+    stockDiary.setPrice(salesItem.getProduct().getPricesell());
+    stockDiary.setAppuser(IDs.getLoginUser());
+    stockDiary.setSiteguid(siteguid);
+    stockDiary.setSflag(true);
+    stockDiary.setAttributesetinstanceId(null);
+    stockDiary.setLocation(location);
+    stockDiary.setProduct(salesItem.getProduct());
+
+    viewtaxline = new Viewtaxlines();
+    viewtaxline.setId(taxLine.getId());
+    viewtaxline.setReceipt(taxLine.getReceipt().getId());
+    viewtaxline.setTaxid(taxLine.getTaxid().getId());
+    viewtaxline.setBase(taxLine.getBase());
+    viewtaxline.setAmount(taxLine.getAmount());
+    viewtaxline.setSiteguid(taxLine.getSiteguid());
+    viewtaxline.setSflag(taxLine.getSflag());
+    viewtaxline.setTaxName(null);
+    viewtaxlines.add(viewtaxline);
+
+    viewsales = new Viewsales();
+    viewsales.setId(sales.getId());
+    viewsales.setSalesnum(sales.getSalesnum());
+    viewsales.setPerson("0");
+    viewsales.setCustomer(null);
+    viewsales.setSalestype(sales.getSalestype());
+    viewsales.setStatus(viewsales.getStatus());
+    viewsales.setSiteguid(sales.getSiteguid());
+    viewsales.setSflag(sales.getSflag());
+    viewsales.setCustomerName(null);
+    viewsales.setPersonName(null);
+    viewsales.setDatenew("2017-07-26 06:00:18");
+
+    viewsalesitem = new Viewsalesitems();
+    viewsalesitem.setSalesId(sales.getId());
+    viewsalesitem.setLine(salesItem.getLine());
+    viewsalesitem.setProduct(salesItem.getProduct().getId());
+    viewsalesitem.setAttributesetinstanceId(null);
+    viewsalesitem.setUnits(salesItem.getUnits());
+    viewsalesitem.setPrice(salesItem.getPrice());
+    viewsalesitem.setTaxid(salesItem.getTaxid().getId());
+    viewsalesitem.setAttributes(null);
+    viewsalesitem.setRefundqty(salesItem.getRefundqty());
+    viewsalesitem.setSiteguid(salesItem.getSiteguid());
+    viewsalesitem.setSflag(sales.getSflag());
+    viewsalesitem.setProductName(null);
+    viewsalesitem.setTaxName(null);
+    viewsalesitem.setRate(null);
+    viewsalesitems.add(viewsalesitem);
+
+    viewreceipt = new Viewreceipts();
+    viewreceipt.setId(receipt.getId());
+    viewreceipt.setMoney(UUID.randomUUID().toString());
+    viewreceipt.setDatenew(new Date().toString());
+    viewreceipt.setPerson(receipt.getPerson());
+    viewreceipt.setAttributes(null);
+    viewreceipt.setSiteguid(siteguid);
+    viewreceipt.setSflag(true);
+    viewreceipt.setHost("");
+
+    viewpayment = new Viewpayments();
+    viewpayment.setId(payment.getId());
+    viewpayment.setReceipt(payment.getReceipt().getId());
+    viewpayment.setPayment(payment.getPayment());
+    viewpayment.setTotal(payment.getTotal());
+    viewpayment.setTransid(payment.getTransid());
+    viewpayment.setNotes(payment.getNotes());
+    viewpayment.setTendered(payment.getTendered());
+    viewpayment.setCardname(payment.getCardname());
+    viewpayment.setReturnmsg(payment.getReturnmsg());
+    viewpayment.setSiteguid(payment.getSiteguid());
+    viewpayment.setSflag(payment.getSflag());
+    viewpayment.setDatenew(new Date().toString());
+    viewpayments.add(viewpayment);
+
+    viewstockdiary = new Viewstockdiary();
+    viewstockdiary.setId(stockDiary.getId());
+    viewstockdiary.setDatenew(new Date().toString());
+    viewstockdiary.setReason(stockDiary.getReason());
+    viewstockdiary.setUnits(stockDiary.getUnits());
+    viewstockdiary.setPrice(stockDiary.getPrice());
+    viewstockdiary.setAppuser(stockDiary.getAppuser());
+    viewstockdiary.setSiteguid(siteguid);
+    viewstockdiary.setSflag(true);
+    viewstockdiary.setAttributesetinstanceId(null);
+    viewstockdiary.setLocation(stockDiary.getLocation().getId());
+    viewstockdiaries.add(viewstockdiary);
 
   }
 }
