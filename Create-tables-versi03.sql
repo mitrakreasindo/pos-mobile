@@ -1,11 +1,11 @@
-﻿-- In schema Step02; several constraints are removed
+﻿-- In schema Step03; several constraints are removed
 -- Several tables are already ignored in this version
 -- Two tables are named Tickets and TicketLines
--- Bernaridho. 2017-07-25.
+-- Bernaridho. 2017-07-26.
 
 --CREATE TYPE timestamp FROM DateTime ;
 
-CREATE TABLE "Step02".Breaks 
+CREATE TABLE "Step03".Breaks 
 (
   "Id" varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
@@ -16,7 +16,7 @@ CREATE TABLE "Step02".Breaks
 );
 
 
-CREATE TABLE "Step02".Categories 
+CREATE TABLE "Step03".Product_Categories 
 (
   CatOrder integer,
   CatShowName boolean DEFAULT true NOT NULL, -- boolean
@@ -31,7 +31,7 @@ CREATE TABLE "Step02".Categories
 );
 
 
-CREATE TABLE "Step02".ClosedCash 
+CREATE TABLE "Step03".Closed_Cashes 
 (
   DateEnd timestamp,
   DateStart timestamp NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE "Step02".ClosedCash
 );
 
 
-CREATE TABLE "Step02".CSVImport 
+CREATE TABLE "Step03".CSV_imports 
 (
   Category varchar(255),
   Code varchar(255),
@@ -60,7 +60,7 @@ CREATE TABLE "Step02".CSVImport
 );
 
 
-CREATE TABLE "Step02".Customers 
+CREATE TABLE "Step03".Consumers 
 (
   Address varchar(255),
   Address2 varchar(255),
@@ -93,7 +93,7 @@ CREATE TABLE "Step02".Customers
 );
 
 
-CREATE TABLE "Step02".DrawerOpened 
+CREATE TABLE "Step03".Drawer_Openings 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255),
@@ -104,7 +104,7 @@ CREATE TABLE "Step02".DrawerOpened
 );
 
 
-CREATE TABLE "Step02".Leaves 
+CREATE TABLE "Step03".Leaves 
 (
   EndDate timestamp NOT NULL,
   Id varchar(255) NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE "Step02".Leaves
 );
 
 
-CREATE TABLE "Step02".LineRemoved 
+CREATE TABLE "Step03".Removed_Items 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255),
@@ -131,7 +131,7 @@ CREATE TABLE "Step02".LineRemoved
 );
 
 
-CREATE TABLE "Step02".Locations 
+CREATE TABLE "Step03".Locations 
 (
   Address varchar(255),
   Id varchar(255) NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE "Step02".Locations
 );
 
 
-CREATE TABLE "Step02".Merchants 
+CREATE TABLE "Step03".Merchants 
 (
   Address text NOT NULL,
   Code varchar(8) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE "Step02".Merchants
 );
 
 
-CREATE TABLE "Step02".Orders 
+CREATE TABLE "Step03".Purchase_orders 
 (
   Attributes varchar(255),
   Auxiliary integer,
@@ -167,7 +167,7 @@ CREATE TABLE "Step02".Orders
 );
 
 
-CREATE TABLE "Step02".Payments 
+CREATE TABLE "Step03".Payments 
 (
   CardName varchar(255),
   Id varchar(255) NOT NULL,
@@ -183,7 +183,7 @@ CREATE TABLE "Step02".Payments
 );
 
 
-CREATE TABLE "Step02".People 
+CREATE TABLE "Step03".Persons 
 (
   AppPassword varchar(255),
   Card varchar(255),
@@ -198,7 +198,7 @@ CREATE TABLE "Step02".People
 );
 
 
-CREATE TABLE "Step02".Places 
+CREATE TABLE "Step03".Places 
 (
   Customer varchar(255),
   floor varchar(255), -- NOT NULL
@@ -216,7 +216,7 @@ CREATE TABLE "Step02".Places
 );
 
 
-CREATE TABLE "Step02".Products 
+CREATE TABLE "Step03".Products 
 (
   Alias varchar(50),
   AllProducts boolean DEFAULT false, -- boolean
@@ -261,7 +261,7 @@ CREATE TABLE "Step02".Products
 );
 
 
-CREATE TABLE "Step02".Products_com 
+CREATE TABLE "Step03".Product_coms 
 (
   Id varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
@@ -271,7 +271,7 @@ CREATE TABLE "Step02".Products_com
 );
 
 
-CREATE TABLE "Step02".Products_kit 
+CREATE TABLE "Step03".Product_kits 
 (
   Id varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
@@ -282,7 +282,7 @@ CREATE TABLE "Step02".Products_kit
 );
 
 
-CREATE TABLE "Step02".Promotions 
+CREATE TABLE "Step03".Promotions 
 (
   AllProducts boolean DEFAULT false, -- boolean
   Criteria ByteA,
@@ -295,7 +295,7 @@ CREATE TABLE "Step02".Promotions
 );
 
 
-CREATE TABLE "Step02".Receipts 
+CREATE TABLE "Step03".Receipts 
 (
   Attributes ByteA,
   DateNew timestamp NOT NULL,
@@ -307,7 +307,7 @@ CREATE TABLE "Step02".Receipts
 );
 
  
-CREATE TABLE "Step02".Roles 
+CREATE TABLE "Step03".Roles 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
@@ -318,7 +318,7 @@ CREATE TABLE "Step02".Roles
 );
 
 
-CREATE TABLE "Step02".Shift_Breaks 
+CREATE TABLE "Step03".Shift_Breaks 
 (
   BreakId varchar(255) NOT NULL,
   EndTime timestamp,
@@ -330,7 +330,7 @@ CREATE TABLE "Step02".Shift_Breaks
 );
 
 
-CREATE TABLE "Step02".Shifts 
+CREATE TABLE "Step03".Shifts 
 (
   EndShift timestamp,
   Id varchar(255) NOT NULL,
@@ -341,7 +341,7 @@ CREATE TABLE "Step02".Shifts
 );
 
 
-CREATE TABLE "Step02".StockChanges 
+CREATE TABLE "Step03".Stock_Changes 
 (
   BLObValue ByteA,
   Changes_processed integer,
@@ -359,7 +359,7 @@ CREATE TABLE "Step02".StockChanges
 );
 
 
-CREATE TABLE "Step02".StockCurrent 
+CREATE TABLE "Step03".Stock_Currents 
 (
   AttributeSetInstance_Id varchar(255),
   Location varchar(255) NOT NULL,
@@ -370,7 +370,7 @@ CREATE TABLE "Step02".StockCurrent
 );
 
 
-CREATE TABLE "Step02".StockDiary 
+CREATE TABLE "Step03".Stock_Diaries 
 (
   AppUser varchar(255),
   AttributeSetInstance_Id varchar(255),
@@ -386,7 +386,7 @@ CREATE TABLE "Step02".StockDiary
 );
 
 
-CREATE TABLE "Step02".StockLevel 
+CREATE TABLE "Step03".Stock_Levels 
 (
   Id varchar(255) NOT NULL,
   Location varchar(255) NOT NULL,
@@ -398,7 +398,7 @@ CREATE TABLE "Step02".StockLevel
 );
 
 
-CREATE TABLE "Step02".TaxCategories 
+CREATE TABLE "Step03".Tax_Categories 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
@@ -407,7 +407,7 @@ CREATE TABLE "Step02".TaxCategories
 );
 
 
-CREATE TABLE "Step02".Taxes 
+CREATE TABLE "Step03".Taxes 
 (
   Category varchar(255) NOT NULL,
   CustCategory varchar(255),
@@ -422,7 +422,7 @@ CREATE TABLE "Step02".Taxes
 );
 
 
-CREATE TABLE "Step02".TaxLines 
+CREATE TABLE "Step03".Tax_Items 
 (
   Amount float(52) DEFAULT 0 NOT NULL,
   Base float(52) DEFAULT 0 NOT NULL,
@@ -434,7 +434,7 @@ CREATE TABLE "Step02".TaxLines
 );
 
 
-CREATE TABLE "Step02".ThirdParties 
+CREATE TABLE "Step03".Third_Parties 
 (
   Address varchar(255),
   CIF varchar(255) NOT NULL,
@@ -454,7 +454,7 @@ CREATE TABLE "Step02".ThirdParties
 );
 
 
-CREATE TABLE "Step02".Sales 
+CREATE TABLE "Step03".Sales 
 (
   Customer varchar(255),
   Id varchar(255) NOT NULL,
@@ -467,7 +467,7 @@ CREATE TABLE "Step02".Sales
 );
 
 
-CREATE TABLE "Step02".Sales_items 
+CREATE TABLE "Step03".Sales_items 
 (
   Attributes ByteA,
   AttributeSetInstance_Id varchar(255),
@@ -483,7 +483,7 @@ CREATE TABLE "Step02".Sales_items
 );
 
 
-CREATE TABLE "Step02".Vouchers 
+CREATE TABLE "Step03".Vouchers 
 (
   RedeemDate timestamp,
   RedeemTicketId varchar(50),

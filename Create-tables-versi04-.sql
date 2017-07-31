@@ -1,37 +1,19 @@
-﻿-- In schema Step02; several constraints are removed
+-- In schema Step04; several constraints are removed
 -- Several tables are already ignored in this version
 -- Two tables are named Tickets and TicketLines
--- Bernaridho. 2017-07-25.
+-- Bernaridho. 2017-07-26.
 
 --CREATE TYPE timestamp FROM DateTime ;
 
-CREATE TABLE "Step02".Breaks 
+CREATE TABLE "Step04".Breaks 
 (
   "Id" varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
-  Notes varchar(255),
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
-  Visible boolean DEFAULT true NOT NULL -- boolean
+  Notes varchar(255)
 );
 
 
-CREATE TABLE "Step02".Categories 
-(
-  CatOrder integer,
-  CatShowName boolean DEFAULT true NOT NULL, -- boolean
-  Colour varchar(50),
-  Id varchar(255) NOT NULL,
-  Image ByteA,
-  Name varchar(255), -- NOT NULL
-  ParentId varchar(255),
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
-  TextTip varchar(255) DEFAULT NULL
-);
-
-
-CREATE TABLE "Step02".ClosedCash 
+CREATE TABLE "Step04".Closed_Cashes 
 (
   DateEnd timestamp,
   DateStart timestamp NOT NULL,
@@ -39,12 +21,11 @@ CREATE TABLE "Step02".ClosedCash
   HostSequence integer NOT NULL,
   Money varchar(255) NOT NULL,
   NoSales integer DEFAULT 0 NOT NULL,
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".CSVImport 
+CREATE TABLE "Step04".CSV_imports 
 (
   Category varchar(255),
   Code varchar(255),
@@ -60,7 +41,7 @@ CREATE TABLE "Step02".CSVImport
 );
 
 
-CREATE TABLE "Step02".Customers 
+CREATE TABLE "Step04".Consumers 
 (
   Address varchar(255),
   Address2 varchar(255),
@@ -86,25 +67,23 @@ CREATE TABLE "Step02".Customers
   Region varchar(255),
   SearchKey varchar(255), -- NOT NULL
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   TaxCategory varchar(255),
   TaxId varchar(255),
   Visible boolean DEFAULT true -- boolean NOT NULL
 );
 
 
-CREATE TABLE "Step02".DrawerOpened 
+CREATE TABLE "Step04".Drawer_Openings 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255),
   OpenDate timestamp default current_timestamp,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   TicketId varchar(255)
 );
 
 
-CREATE TABLE "Step02".Leaves 
+CREATE TABLE "Step04".Leaves 
 (
   EndDate timestamp NOT NULL,
   Id varchar(255) NOT NULL,
@@ -112,12 +91,11 @@ CREATE TABLE "Step02".Leaves
   Notes varchar(255),
   PplId varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   StartDate timestamp NOT NULL
 );
 
 
-CREATE TABLE "Step02".LineRemoved 
+CREATE TABLE "Step04".Removed_Items 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255),
@@ -125,23 +103,21 @@ CREATE TABLE "Step02".LineRemoved
   ProductName varchar(255),
   RemovedDate timestamp default current_timestamp NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   TicketId varchar(255),
   Units float(52) NOT NULL
 );
 
 
-CREATE TABLE "Step02".Locations 
+CREATE TABLE "Step04".Locations 
 (
   Address varchar(255),
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
-  SFlag boolean DEFAULT true, -- boolean 
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".Merchants 
+CREATE TABLE "Step04".Merchants 
 (
   Address text NOT NULL,
   Code varchar(8) NOT NULL,
@@ -151,9 +127,8 @@ CREATE TABLE "Step02".Merchants
 );
 
 
-CREATE TABLE "Step02".Orders 
+CREATE TABLE "Step04".Purchase_orders 
 (
-  Attributes varchar(255),
   Auxiliary integer,
   Details varchar(255),
   DisplayId integer,
@@ -167,7 +142,7 @@ CREATE TABLE "Step02".Orders
 );
 
 
-CREATE TABLE "Step02".Payments 
+CREATE TABLE "Step04".Payments 
 (
   CardName varchar(255),
   Id varchar(255) NOT NULL,
@@ -176,14 +151,13 @@ CREATE TABLE "Step02".Payments
   Receipt varchar(255) NOT NULL,
   ReturnMsg ByteA,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   Tendered float(52) DEFAULT 0 NOT NULL,
   Total float(52) NOT NULL,
   TransId varchar(255)
 );
 
 
-CREATE TABLE "Step02".People 
+CREATE TABLE "Step04".Persons 
 (
   AppPassword varchar(255),
   Card varchar(255),
@@ -193,12 +167,11 @@ CREATE TABLE "Step02".People
   Name varchar(255),
   Role varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean 
-  SiteGUId varchar(50), -- NOT NULL
   Visible boolean -- boolean NOT NULL
 );
 
 
-CREATE TABLE "Step02".Places 
+CREATE TABLE "Step04".Places 
 (
   Customer varchar(255),
   floor varchar(255), -- NOT NULL
@@ -207,7 +180,6 @@ CREATE TABLE "Step02".Places
   Name varchar(255), -- NOT NULL
   OpenedBy varchar(50),
   SFlag boolean DEFAULT true, -- boolean 
-  SiteGUId varchar(50), -- NOT NULL
   TableMoved boolean DEFAULT false , -- boolean NOT NULL 
   TicketId varchar(255),
   waiter varchar(255),
@@ -216,13 +188,23 @@ CREATE TABLE "Step02".Places
 );
 
 
-CREATE TABLE "Step02".Products 
+CREATE TABLE "Step04".Product_Categories 
+(
+  CatOrder integer,
+  CatShowName boolean DEFAULT true NOT NULL, -- boolean
+  Colour varchar(50),
+  Id varchar(255) NOT NULL,
+  Image ByteA,
+  Name varchar(255), -- NOT NULL
+  ParentId varchar(255)
+);
+
+
+CREATE TABLE "Step04".Products 
 (
   Alias varchar(50),
   AllProducts boolean DEFAULT false, -- boolean
   AlwaysAvailable boolean DEFAULT false NOT NULL, -- boolean 
-  Attributes ByteA,
-  AttributeSet_id varchar(255),
   CanDiscount boolean DEFAULT true NOT NULL, -- boolean
   Category varchar(255) NOT NULL,
   CatOrder integer,
@@ -251,7 +233,6 @@ CREATE TABLE "Step02".Products
   Reference varchar(255) NOT NULL,
   SendStatus boolean DEFAULT false NOT NULL, -- boolean
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   StockCost float(52),
   StockUnits float(52) DEFAULT 0 NOT NULL,
   StockVolume float(52),
@@ -261,28 +242,26 @@ CREATE TABLE "Step02".Products
 );
 
 
-CREATE TABLE "Step02".Products_com 
+CREATE TABLE "Step04".Product_coms 
 (
   Id varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
   Product2 varchar(255) NOT NULL,
-  SFlag boolean DEFAULT true, -- boolean 
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".Products_kit 
+CREATE TABLE "Step04".Product_kits 
 (
   Id varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
   Product_kit varchar(255) NOT NULL,
   Quantity float(52) NOT NULL,
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".Promotions 
+CREATE TABLE "Step04".Promotions 
 (
   AllProducts boolean DEFAULT false, -- boolean
   Criteria ByteA,
@@ -290,58 +269,52 @@ CREATE TABLE "Step02".Promotions
   IsEnabled boolean DEFAULT true, -- boolean
   Name varchar(255), -- NOT NULL
   Script ByteA NOT NULL,
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".Receipts 
+CREATE TABLE "Step04".Receipts 
 (
-  Attributes ByteA,
   DateNew timestamp NOT NULL,
   Id varchar(255) NOT NULL,
   Money varchar(255) NOT NULL,
   Person varchar(255),
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
  
-CREATE TABLE "Step02".Roles 
+CREATE TABLE "Step04".Roles 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
   Permissions ByteA,
   RightsLevel integer DEFAULT 4 NOT NULL,
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".Shift_Breaks 
+CREATE TABLE "Step04".Shift_Breaks 
 (
   BreakId varchar(255) NOT NULL,
   EndTime timestamp,
   Id varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
   ShiftId varchar(255) NOT NULL,
-  SiteGUId varchar(50), -- NOT NULL
   StartTime timestamp NOT NULL
 );
 
 
-CREATE TABLE "Step02".Shifts 
+CREATE TABLE "Step04".Shifts 
 (
   EndShift timestamp,
   Id varchar(255) NOT NULL,
   PplId varchar(255),
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   StartShift timestamp NOT NULL
 );
 
 
-CREATE TABLE "Step02".StockChanges 
+CREATE TABLE "Step04".Stock_Changes 
 (
   BLObValue ByteA,
   Changes_processed integer,
@@ -352,28 +325,25 @@ CREATE TABLE "Step02".StockChanges
   Location varchar(255),
   ProductId varchar(255),
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   TextValue varchar(255),
   UploadTime timestamp default current_timestamp,
   UserName varchar(50)
 );
 
 
-CREATE TABLE "Step02".StockCurrent 
+CREATE TABLE "Step04".Stock_Currents 
 (
   AttributeSetInstance_Id varchar(255),
   Location varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   units float(52) DEFAULT 0 NOT NULL
 );
 
 
-CREATE TABLE "Step02".StockDiary 
+CREATE TABLE "Step04".Stock_Diaries 
 (
   AppUser varchar(255),
-  AttributeSetInstance_Id varchar(255),
   DateNew timestamp NOT NULL,
   Id varchar(255) NOT NULL,
   Location varchar(255) NOT NULL,
@@ -381,33 +351,30 @@ CREATE TABLE "Step02".StockDiary
   Product varchar(255) NOT NULL,
   reason integer NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   units float(52) NOT NULL
 );
 
 
-CREATE TABLE "Step02".StockLevel 
+CREATE TABLE "Step04".Stock_Levels 
 (
   Id varchar(255) NOT NULL,
   Location varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   StockMaximum float(52) NOT NULL,
   StockSecurity float(52) NOT NULL
 );
 
 
-CREATE TABLE "Step02".TaxCategories 
+CREATE TABLE "Step04".Tax_Categories 
 (
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
-  SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true -- boolean
 );
 
 
-CREATE TABLE "Step02".Taxes 
+CREATE TABLE "Step04".Taxes 
 (
   Category varchar(255) NOT NULL,
   CustCategory varchar(255),
@@ -417,24 +384,22 @@ CREATE TABLE "Step02".Taxes
   Rate float(52) DEFAULT 0 NOT NULL,
   RateCascade boolean DEFAULT false NOT NULL, -- boolean  
   RateOrder integer,
-  SFlag boolean DEFAULT true, -- boolean  
-  SiteGUId varchar(50) -- NOT NULL
+  SFlag boolean DEFAULT true
 );
 
 
-CREATE TABLE "Step02".TaxLines 
+CREATE TABLE "Step04".Tax_Items 
 (
   Amount float(52) DEFAULT 0 NOT NULL,
   Base float(52) DEFAULT 0 NOT NULL,
   Id varchar(255) NOT NULL,
   Receipt varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
-  SiteGUId varchar(50), -- NOT NULL
   TaxId varchar(255) NOT NULL
 );
 
 
-CREATE TABLE "Step02".ThirdParties 
+CREATE TABLE "Step04".Third_Parties 
 (
   Address varchar(255),
   CIF varchar(255) NOT NULL,
@@ -449,46 +414,40 @@ CREATE TABLE "Step02".ThirdParties
   PayRule varchar(255),
   PhoneNumber varchar(255),
   SFlag boolean DEFAULT true, -- boolean  
-  SiteGUId varchar(50), -- NOT NULL
   webpage varchar(255)
 );
 
 
-CREATE TABLE "Step02".Sales 
+CREATE TABLE "Step04".Sales 
 (
   Customer varchar(255),
   Id varchar(255) NOT NULL,
   Person varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean  
-  SiteGUId varchar(50), -- NOT NULL
   Status integer DEFAULT 0 NOT NULL,
   TicketId integer NOT NULL,
   TicketType integer NOT NULL
 );
 
 
-CREATE TABLE "Step02".Sales_items 
+CREATE TABLE "Step04".Sales_items 
 (
-  Attributes ByteA,
-  AttributeSetInstance_Id varchar(255),
   Line integer NOT NULL,
   Price float(52) NOT NULL,
   Product varchar(255),
   RefundQty float(52) DEFAULT 0,
   SFlag boolean DEFAULT true, -- boolean  
-  SiteGUId varchar(50), -- NOT NULL
   TaxId varchar(255) NOT NULL,
   Ticket varchar(255) NOT NULL,
   units float(52) NOT NULL
 );
 
 
-CREATE TABLE "Step02".Vouchers 
+CREATE TABLE "Step04".Vouchers 
 (
   RedeemDate timestamp,
   RedeemTicketId varchar(50),
   SFlag boolean DEFAULT true, -- boolean  
-  SiteGUId varchar(50), -- NOT NULL
   SoldDate timestamp default current_timestamp,
   SoldTicketId varchar(50),
   Voucher varchar(50) NOT NULL

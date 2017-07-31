@@ -51,10 +51,10 @@ CREATE TABLE "Step01A".CSVImport
   CSVError varchar(255),
   Id varchar(255) NOT NULL,
   Name varchar(255),
-  PreviousBuy float(53),
-  PreviousSell float(53),
-  PriceBuy float(53),
-  PriceSell float(53),
+  PreviousBuy float(52),
+  PreviousSell float(52),
+  PriceBuy float(52),
+  PriceSell float(52),
   Reference varchar(255),
   RowNumber varchar(255)
 );
@@ -68,8 +68,8 @@ CREATE TABLE "Step01A".Customers
   City varchar(255),
   Country varchar(255),
   CurDate timestamp,
-  CurDebt float(53) DEFAULT 0,
-  Discount float(53) DEFAULT 0,
+  CurDebt float(52) DEFAULT 0,
+  Discount float(52) DEFAULT 0,
   DOB timestamp,
   Email varchar(255),
   Fax varchar(255),
@@ -77,7 +77,7 @@ CREATE TABLE "Step01A".Customers
   Id varchar(255) NOT NULL,
   Image ByteA,
   LastName varchar(255),
-  MaxDebt float(53) DEFAULT 0, -- NOT NULL
+  MaxDebt float(52) DEFAULT 0, -- NOT NULL
   Name varchar(255) DEFAULT ' ' NOT NULL, -- fill value of this column with
   Notes varchar(255),
   Phone varchar(255),
@@ -127,7 +127,7 @@ CREATE TABLE "Step01A".LineRemoved
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
   TicketId varchar(255),
-  Units float(53) NOT NULL
+  Units float(52) NOT NULL
 );
 
 
@@ -177,8 +177,8 @@ CREATE TABLE "Step01A".Payments
   ReturnMsg ByteA,
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
-  Tendered float(53) DEFAULT 0 NOT NULL,
-  Total float(53) NOT NULL,
+  Tendered float(52) DEFAULT 0 NOT NULL,
+  Total float(52) NOT NULL,
   TransId varchar(255)
 );
 
@@ -243,18 +243,18 @@ CREATE TABLE "Step01A".Products
   ManageStock boolean DEFAULT true, -- boolean
   Name varchar(255) NOT NULL,
   PackProduct varchar(255),
-  PackQuantity float(53),
-  PriceBuy float(53) DEFAULT 0 NOT NULL,
-  PriceSell float(53) DEFAULT 0 NOT NULL,
+  PackQuantity float(52),
+  PriceBuy float(52) DEFAULT 0 NOT NULL,
+  PriceSell float(52) DEFAULT 0 NOT NULL,
   PrintKb boolean DEFAULT false NOT NULL, -- boolean
   PromotionId varchar(50),
   Reference varchar(255) NOT NULL,
   SendStatus boolean DEFAULT false NOT NULL, -- boolean
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
-  StockCost float(53),
-  StockUnits float(53) DEFAULT 0 NOT NULL,
-  StockVolume float(53),
+  StockCost float(52),
+  StockUnits float(52) DEFAULT 0 NOT NULL,
+  StockVolume float(52),
   TaxCat varchar(255) NOT NULL,
   TextTip varchar(255),
   warranty boolean DEFAULT false NOT NULL -- boolean
@@ -276,7 +276,7 @@ CREATE TABLE "Step01A".Products_kit
   Id varchar(255) NOT NULL,
   Product varchar(255) NOT NULL,
   Product_kit varchar(255) NOT NULL,
-  Quantity float(53) NOT NULL,
+  Quantity float(52) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50) -- NOT NULL
 );
@@ -366,7 +366,7 @@ CREATE TABLE "Step01A".StockCurrent
   Product varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
-  units float(53) DEFAULT 0 NOT NULL
+  units float(52) DEFAULT 0 NOT NULL
 );
 
 
@@ -377,12 +377,12 @@ CREATE TABLE "Step01A".StockDiary
   DateNew timestamp NOT NULL,
   Id varchar(255) NOT NULL,
   Location varchar(255) NOT NULL,
-  Price float(53) NOT NULL,
+  Price float(52) NOT NULL,
   Product varchar(255) NOT NULL,
   reason integer NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
-  units float(53) NOT NULL
+  units float(52) NOT NULL
 );
 
 
@@ -393,8 +393,8 @@ CREATE TABLE "Step01A".StockLevel
   Product varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
   SiteGUId varchar(50), -- NOT NULL
-  StockMaximum float(53) NOT NULL,
-  StockSecurity float(53) NOT NULL
+  StockMaximum float(52) NOT NULL,
+  StockSecurity float(52) NOT NULL
 );
 
 
@@ -414,7 +414,7 @@ CREATE TABLE "Step01A".Taxes
   Id varchar(255) NOT NULL,
   Name varchar(255), -- NOT NULL
   ParentId varchar(255),
-  Rate float(53) DEFAULT 0 NOT NULL,
+  Rate float(52) DEFAULT 0 NOT NULL,
   RateCascade boolean DEFAULT false NOT NULL, -- boolean  
   RateOrder integer,
   SFlag boolean DEFAULT true, -- boolean  
@@ -424,8 +424,8 @@ CREATE TABLE "Step01A".Taxes
 
 CREATE TABLE "Step01A".TaxLines 
 (
-  Amount float(53) DEFAULT 0 NOT NULL,
-  Base float(53) DEFAULT 0 NOT NULL,
+  Amount float(52) DEFAULT 0 NOT NULL,
+  Base float(52) DEFAULT 0 NOT NULL,
   Id varchar(255) NOT NULL,
   Receipt varchar(255) NOT NULL,
   SFlag boolean DEFAULT true, -- boolean
@@ -472,14 +472,14 @@ CREATE TABLE "Step01A".TicketLines
   Attributes ByteA,
   AttributeSetInstance_Id varchar(255),
   Line integer NOT NULL,
-  Price float(53) NOT NULL,
+  Price float(52) NOT NULL,
   Product varchar(255),
-  RefundQty float(53) DEFAULT 0,
+  RefundQty float(52) DEFAULT 0,
   SFlag boolean DEFAULT true, -- boolean  
   SiteGUId varchar(50), -- NOT NULL
   TaxId varchar(255) NOT NULL,
   Ticket varchar(255) NOT NULL,
-  units float(53) NOT NULL
+  units float(52) NOT NULL
 );
 
 
