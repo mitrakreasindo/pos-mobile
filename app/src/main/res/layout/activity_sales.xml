@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <include layout="@layout/include_toolbar"/>
-
+        <include layout="@layout/vertical_divider"/>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

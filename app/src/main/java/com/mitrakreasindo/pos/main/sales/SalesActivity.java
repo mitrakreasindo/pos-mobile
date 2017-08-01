@@ -31,7 +31,6 @@ import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.model.Customer;
 import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.model.Product;
@@ -222,8 +221,9 @@ public class SalesActivity extends AppCompatActivity
         tableSalesHelper.close();
 
         Toast.makeText(SalesActivity.this, "Success", Toast.LENGTH_LONG).show();
-
+        
         finish();
+        
 
       }
     });

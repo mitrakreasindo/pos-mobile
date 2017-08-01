@@ -109,7 +109,10 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
     this.salesItems.addAll(salesItems);
     notifyDataSetChanged();
   }
-
+  public List<SalesItem> getAllTickets()
+  {
+    return salesItems;
+  }
   public void addSalesItem(SalesItem salesItem)
   {
 

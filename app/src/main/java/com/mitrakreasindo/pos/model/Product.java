@@ -1,10 +1,13 @@
 package com.mitrakreasindo.pos.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by hendric on 2017-05-29.
  */
 
-public class Product
+public class Product implements Parcelable
 {
   private String id;
   private String reference;
@@ -46,7 +49,45 @@ public class Product
   private Boolean managestock;
   private String siteguid;
   private Boolean sflag;
-
+  
+  public Product()
+  {
+    
+  }
+  protected Product(Parcel in)
+  {
+    id = in.readString();
+    reference = in.readString();
+    code = in.readString();
+    codetype = in.readString();
+    name = in.readString();
+    attributesetId = in.readString();
+    display = in.readString();
+    attributes = in.createByteArray();
+    texttip = in.readString();
+    image = in.createByteArray();
+    alias = in.readString();
+    discounted = in.readString();
+    packproduct = in.readString();
+    promotionid = in.readString();
+    siteguid = in.readString();
+  }
+  
+  public static final Creator<Product> CREATOR = new Creator<Product>()
+  {
+    @Override
+    public Product createFromParcel(Parcel in)
+    {
+      return new Product(in);
+    }
+    
+    @Override
+    public Product[] newArray(int size)
+    {
+      return new Product[size];
+    }
+  };
+  
   public String getId()
   {
     if (id == null)
@@ -473,5 +514,31 @@ public class Product
   {
     return name;
   }
-
+  
+  @Override
+  public int describeContents()
+  {
+    return 0;
+  }
+  
+  @Override
+  public void writeToParcel(Parcel dest, int flags)
+  {
+  
+    dest.writeString(id);
+    dest.writeString(reference);
+    dest.writeString(code);
+    dest.writeString(codetype);
+    dest.writeString(name);
+    dest.writeString(attributesetId);
+    dest.writeString(display);
+    dest.writeByteArray(attributes);
+    dest.writeString(texttip);
+    dest.writeByteArray(image);
+    dest.writeString(alias);
+    dest.writeString(discounted);
+    dest.writeString(packproduct);
+    dest.writeString(promotionid);
+    dest.writeString(siteguid);
+  }
 }

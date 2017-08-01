@@ -1,0 +1,1583 @@
+Index: app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Wireless_Activity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Wireless_Activity.java	(revision )
++++ app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Wireless_Activity.java	(revision )
+@@ -0,0 +1,436 @@
++package com.mitrakreasindo.pos.common.Wireless;
++
++import android.annotation.SuppressLint;
++import android.app.Activity;
++import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothDevice;
++import android.content.Intent;
++import android.os.Bundle;
++import android.os.Handler;
++import android.os.Message;
++import android.util.Log;
++import android.view.View;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import com.mitrakreasindo.pos.main.R;
++
++import java.io.UnsupportedEncodingException;
++import java.text.SimpleDateFormat;
++import java.util.Date;
++
++public class Wireless_Activity extends Activity implements View.OnClickListener
++{
++/******************************************************************************************************/
++	// Debugging
++	private static final String TAG = "Wireless_Activity";
++	private static final boolean DEBUG = true;
++  public static int x = 0;
++  public static int y = 0;
++  public static int z = 0;
++/******************************************************************************************************/
++	// Message types sent from the BluetoothService Handler
++	public static final int MESSAGE_STATE_CHANGE = 1;
++	public static final int MESSAGE_READ = 2;
++	public static final int MESSAGE_WRITE = 3;
++	public static final int MESSAGE_DEVICE_NAME = 4;
++	public static final int MESSAGE_TOAST = 5;
++	public static final int MESSAGE_CONNECTION_LOST = 6;
++	public static final int MESSAGE_UNABLE_CONNECT = 7;
++/*******************************************************************************************************/
++	// Key names received from the BluetoothService Handler
++	public static final String DEVICE_NAME = "device_name";
++	public static final String TOAST = "toast";
++
++	// Intent request codes
++	private static final int REQUEST_CONNECT_DEVICE = 1;
++	private static final int REQUEST_ENABLE_BT = 2;
++	private static final int REQUEST_CHOSE_BMP = 3;
++/*********************************************************************************/
++	private TextView mTitle;
++	EditText editText;
++	ImageView imageViewPicture;
++	private Button sendButton = null;
++	private Button testButton = null;
++	private Button printbmpButton = null;
++	private Button btnScanButton = null;
++	private Button btnClose = null;
++	private Button btn_BMP = null;
++	private Button btn_ChoseCommand = null;
++	private Button btn_prtsma = null;
++	private Button btn_prttableButton = null;
++	private Button btn_prtcodeButton = null;
++	private Button btn_scqrcode = null;
++	private Button btn_camer = null;
++
++/******************************************************************************************************/
++	// Name of the connected device
++	private String mConnectedDeviceName = null;
++	// Local Bluetooth adapter
++	private BluetoothAdapter mBluetoothAdapter = null;
++	// Member object for the services
++	private BluetoothService mService = null;
++	
++/***************************   指                 令****************************************************************/
++/******************************************************************************************************/
++	@Override
++	public void onCreate(Bundle savedInstanceState) {
++		super.onCreate(savedInstanceState);
++		if (DEBUG)
++			Log.e(TAG, "+++ ON CREATE +++");
++
++		// Set up the window layout
++		setContentView(R.layout.wireless);
++
++		// Set up the custom title
++		/*mTitle = (TextView) findViewById(R.id.title_left_text);
++		mTitle.setText(R.string.app_title);
++		mTitle = (TextView) findViewById(R.id.title_right_text);
++*/
++		// Get local Bluetooth adapter
++		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
++
++		// If the adapter is null, then Bluetooth is not supported
++		if (mBluetoothAdapter == null) {
++			Toast.makeText(this, "Bluetooth is not available",
++					Toast.LENGTH_LONG).show();
++			finish();
++		}
++	}
++
++	@Override
++	public void onStart() {
++		super.onStart();
++		
++		// If Bluetooth is not on, request that it be enabled.
++		// setupChat() will then be called during onActivityResult
++		if (!mBluetoothAdapter.isEnabled()) {
++			Intent enableIntent = new Intent(
++					BluetoothAdapter.ACTION_REQUEST_ENABLE);
++			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
++			// Otherwise, setup the session
++		} else {
++			if (mService == null)
++				KeyListenerInit();//监听
++		}
++	}
++	@Override
++	public synchronized void onResume() {
++		super.onResume();
++		
++		if (mService != null) {
++			
++			if (mService.getState() == BluetoothService.STATE_NONE) {
++				// Start the Bluetooth services
++				mService.start();
++			}
++		}
++	}
++
++	@Override
++	public synchronized void onPause() {
++		super.onPause();
++		if (DEBUG)
++			Log.e(TAG, "- ON PAUSE -");
++	}
++
++	@Override
++	public void onStop() {
++		super.onStop();
++		if (DEBUG)
++			Log.e(TAG, "-- ON STOP --");
++	}
++
++	@Override
++	public void onDestroy() {
++		super.onDestroy();
++		// Stop the Bluetooth services
++		if (mService != null)
++			mService.stop();
++		if (DEBUG)
++			Log.e(TAG, "--- ON DESTROY ---");
++	}
++
++/*****************************************************************************************************/
++	private void KeyListenerInit() {
++
++    btnScanButton = (Button)findViewById(R.id.button_scan);
++    btnScanButton.setOnClickListener(this);
++
++    imageViewPicture = (ImageView) findViewById(R.id.imageViewPictureUSB);
++    imageViewPicture.setOnClickListener(this);
++
++    btnClose = (Button)findViewById(R.id.btn_close);
++    btnClose.setOnClickListener(this);
++
++    btn_prtsma = (Button)findViewById(R.id.btn_prtsma);
++    btn_prtsma.setOnClickListener(this);
++
++    btnClose.setEnabled(false);
++    btn_prtsma.setEnabled(false);
++		
++		mService = new BluetoothService(this, mHandler);
++	}
++  @Override
++	public void onClick(View v) {
++		// TODO Auto-generated method stub
++		switch (v.getId()) {
++		case R.id.button_scan:{
++			Intent serverIntent = new Intent(Wireless_Activity.this, DeviceListActivity.class);
++			startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
++			break;
++		}
++		case R.id.btn_close:{
++      mService.stop();
++			btn_prtsma.setEnabled(false);
++			btnClose.setEnabled(false);
++			btnScanButton.setEnabled(true);
++			btnScanButton.setText(getText(R.string.connect));
++			break;
++		}
++		case R.id.btn_prtsma:
++    {
++      SendDataByte(Command.ESC_Init);
++      SendDataByte(Command.LF);
++      Print_Ex();
++      break;
++    }
++		default:
++			break;
++		}
++	}
++
++/*****************************************************************************************************/
++	/*
++	 * SendDataString
++	 */
++	private void SendDataString(String data) {
++		
++		if (mService.getState() != BluetoothService.STATE_CONNECTED) {
++			Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
++					.show();
++			return;
++		}
++		if (data.length() > 0) {				
++			try {
++				mService.write(data.getBytes("GBK"));
++			} catch (UnsupportedEncodingException e) {
++				// TODO Auto-generated catch block
++				e.printStackTrace();
++			}
++		}
++	}
++	
++	/*
++	 *SendDataByte
++	 */
++	private void SendDataByte(byte[] data) {
++		
++		if (mService.getState() != BluetoothService.STATE_CONNECTED) {
++			Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
++					.show();
++			return;
++		}			
++		mService.write(data);
++	}
++
++	/****************************************************************************************************/
++	@SuppressLint("HandlerLeak")
++	private final Handler mHandler = new Handler() {
++		@Override
++		public void handleMessage(Message msg) {
++			switch (msg.what) {
++			case MESSAGE_STATE_CHANGE:
++				if (DEBUG)
++					Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
++				switch (msg.arg1) {
++				case BluetoothService.STATE_CONNECTED:
++					/*mTitle.setText(R.string.title_connected_to);
++					mTitle.append(mConnectedDeviceName);*/
++					btnScanButton.setText(getText(R.string.Connecting));
++					btnScanButton.setEnabled(false);
++					imageViewPicture.setEnabled(true);
++					btnClose.setEnabled(true);
++					btn_prtsma.setEnabled(true);
++					break;
++				case BluetoothService.STATE_CONNECTING:
++				/*	mTitle.setText(R.string.title_connecting);*/
++					break;
++				case BluetoothService.STATE_LISTEN:
++				case BluetoothService.STATE_NONE:
++					/*mTitle.setText(R.string.title_not_connected);*/
++					break;
++				}
++				break;
++			case MESSAGE_WRITE:
++				
++				break;
++			case MESSAGE_READ:
++				
++				break;
++			case MESSAGE_DEVICE_NAME:
++				// save the connected device's name
++				mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
++				Toast.makeText(getApplicationContext(),
++						"Connected to " + mConnectedDeviceName,
++						Toast.LENGTH_SHORT).show();
++				break;
++			case MESSAGE_TOAST:
++				Toast.makeText(getApplicationContext(),
++						msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
++						.show();
++				break;
++			case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
++                Toast.makeText(getApplicationContext(), "Device connection was lost",
++                               Toast.LENGTH_SHORT).show();
++                editText.setEnabled(false);
++				imageViewPicture.setEnabled(false);
++				btnClose.setEnabled(false);
++				btn_prtsma.setEnabled(false);
++                break;
++            case MESSAGE_UNABLE_CONNECT:     //无法连接设备
++            	Toast.makeText(getApplicationContext(), "Unable to connect device",
++                        Toast.LENGTH_SHORT).show();
++            	break;
++			}
++		}
++	};
++
++	@Override
++	public void onActivityResult(int requestCode, int resultCode, Intent data) {
++		if (DEBUG)
++			Log.d(TAG, "onActivityResult " + resultCode);
++		switch (requestCode) {
++		case REQUEST_CONNECT_DEVICE:{
++				// When DeviceListActivity returns with a device to connect
++				if (resultCode == Activity.RESULT_OK) {
++					// Get the device MAC address
++					String address = data.getExtras().getString(
++							DeviceListActivity.EXTRA_DEVICE_ADDRESS);
++					// Get the BLuetoothDevice object
++					if (BluetoothAdapter.checkBluetoothAddress(address)) {
++						BluetoothDevice device = mBluetoothAdapter
++								.getRemoteDevice(address);
++						// Attempt to connect to the device
++						mService.connect(device);
++					}
++				}
++				break;
++			}
++			case REQUEST_ENABLE_BT:{
++				// When the request to enable Bluetooth returns
++				if (resultCode == Activity.RESULT_OK) {
++					// Bluetooth is now enabled, so set up a session
++					KeyListenerInit();
++				} else {
++					// User did not enable Bluetooth or an error occured
++					Log.d(TAG, "BT not enabled");
++					Toast.makeText(this, R.string.bt_not_enabled_leaving,
++							Toast.LENGTH_SHORT).show();
++					finish();
++				}
++				break;
++			}
++		}
++	}
++  public static WirelessAdapter printer;
++	@SuppressLint("SimpleDateFormat")
++	private void Print_Ex(){
++    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss ");
++    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
++    String str = formatter.format(curDate);
++    String date = str;
++    try {
++      SendDataByte(Command.ESC_Init);
++      SendDataByte(Command.ESC_Three);
++      Command.ESC_ExclamationMark[2] = 0x00;
++      SendDataByte(Command.ESC_ExclamationMark);
++
++      /*Command.ESC_Align[2] = 0x01;
++      SendDataByte(Command.ESC_Align);
++      SendDataByte("PT. MITRA KREASINDO\n".getBytes("GBK"));
++
++      Command.ESC_Align[2] = 0x01;
++      SendDataByte(Command.ESC_Align);
++      SendDataByte("Jl. Balikpapan No.31 Petojo Gambir, Jakarta Pusat 10160\nPHONE: +622129607000\n\n".getBytes("GBK"));
++
++      Command.ESC_Align[2] = 0x00;
++      SendDataByte(Command.ESC_Align);
++      SendDataString((date)+"\n================================\n");*/
++
++      Command.ESC_Relative[2] = 1;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("Roti rfgregr%-3s","","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)150;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("20%-3s","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)190;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("1000%-10s","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)(255);
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("2000%-2s\n","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = 1;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("Roti%-3s","","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)150;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("2%-3s","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)190;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("10000%-2s","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)(255);
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("20000%-2s\n","").getBytes("GBK"));
++
++      Command.ESC_Align[2] = 0x00;
++      SendDataByte(Command.ESC_Align);
++      SendDataByte("--------------------------------\n".getBytes("GBK"));
++
++      Command.ESC_Align[2] = 0x00;
++      SendDataByte(Command.ESC_Align);
++      Command.ESC_Relative[2] = 1;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("TOTAL:%-3s","","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)(255);
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("100000%-1s\n","","").getBytes("GBK"));
++
++      Command.ESC_Align[2] = 0x00;
++      SendDataByte(Command.ESC_Align);
++      Command.ESC_Relative[2] = 1;
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("CASH :%-3s","","").getBytes("GBK"));
++
++      Command.ESC_Relative[2] = (byte)(255);
++      SendDataByte(Command.ESC_Relative);
++      SendDataByte(String.format("100000000%-1s","","").getBytes("GBK"));
++      Command.ESC_Align[2] = 0x00;
++      SendDataByte(Command.ESC_Align);
++      SendDataByte("\n--------------------------------".getBytes("GBK"));
++
++      /*Command.ESC_Align[2] = 0x01;
++      SendDataByte(Command.ESC_Align);
++      Command.GS_ExclamationMark[2] = 0x00;
++      SendDataByte(Command.GS_ExclamationMark);
++      SendDataByte("\nTERIMA KASIH DAN SELAMAT BELANJA KEMBALI\n".getBytes("GBK"));*/
++
++				} catch (UnsupportedEncodingException e)
++        {
++          // TODO Auto-generated catch block
++          e.printStackTrace();
++        }
++				}
++
++}
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ build.gradle	(revision )
+@@ -8,6 +8,7 @@
+         classpath 'com.android.tools.build:gradle:2.3.3'
+ //        Butter Knife
+         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
++
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+     }
+Index: app/src/main/java/com/mitrakreasindo/pos/common/Wireless/BluetoothService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/Wireless/BluetoothService.java	(revision )
++++ app/src/main/java/com/mitrakreasindo/pos/common/Wireless/BluetoothService.java	(revision )
+@@ -0,0 +1,495 @@
++
++package com.mitrakreasindo.pos.common.Wireless;
++
++import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothDevice;
++import android.bluetooth.BluetoothServerSocket;
++import android.bluetooth.BluetoothSocket;
++import android.content.Context;
++import android.os.Bundle;
++import android.os.Handler;
++import android.os.Message;
++import android.util.Log;
++
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.OutputStream;
++import java.util.UUID;
++
++/**
++ * This class does all the work for setting up and managing Bluetooth
++ * connections with other devices. It has a thread that listens for
++ * incoming connections, a thread for connecting with a device, and a
++ * thread for performing data transmissions when connected.
++ */
++public class BluetoothService {
++    // Debugging
++    private static final String TAG = "BluetoothService";
++    private static final boolean DEBUG = true;
++
++    // Name for the SDP record when creating server socket
++    private static final String NAME = "ZJPrinter";
++    //UUID must be this
++    // Unique UUID for this application
++    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
++
++    // Member fields
++    private BluetoothAdapter mAdapter;
++    private Handler mHandler;
++    private AcceptThread mAcceptThread;
++    private ConnectThread mConnectThread;
++    private ConnectedThread mConnectedThread;
++    private int mState;
++
++    // Constants that indicate the current connection state
++    public static final int STATE_NONE = 0;       // we're doing nothing
++    public static final int STATE_LISTEN = 1;     // now listening for incoming connections
++    public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
++    public static final int STATE_CONNECTED = 3;  // now connected to a remote device
++
++    public static String ErrorMessage = "No_Error_Message";
++    /**
++     * Constructor. Prepares a new BTPrinter session.
++     * @param context  The UI Activity Context
++     * @param handler  A Handler to send messages back to the UI Activity
++     */
++    public BluetoothService(Context context, Handler handler) {
++        mAdapter = BluetoothAdapter.getDefaultAdapter();
++        mState = STATE_NONE;
++        mHandler = handler;
++    }
++    
++
++    /**
++     * Set the current state of the connection
++     * @param state  An integer defining the current connection state
++     */
++    private synchronized void setState(int state) {
++        if (DEBUG) Log.d(TAG, "setState() " + mState + " -> " + state);
++        mState = state;
++
++        // Give the new state to the Handler so the UI Activity can update
++        mHandler.obtainMessage(Wireless_Activity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
++    }
++
++    /**
++     * Return the current connection state. */
++    public synchronized int getState() {
++        return mState;
++    }
++
++    /**
++     * Start the service. Specifically start AcceptThread to begin a
++     * session in listening (server) mode. Called by the Activity onResume() */
++    public synchronized void start() {
++        if (DEBUG) Log.d(TAG, "start");
++
++        // Cancel any thread attempting to make a connection
++        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
++
++        // Cancel any thread currently running a connection
++        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
++
++        // Start the thread to listen on a BluetoothServerSocket
++        if (mAcceptThread == null) {
++            mAcceptThread = new AcceptThread();
++            mAcceptThread.start();
++        }
++        setState(STATE_LISTEN);
++    }
++
++    /**
++     * Start the ConnectThread to initiate a connection to a remote device.
++     * @param device  The BluetoothDevice to connect
++     */
++    public synchronized void connect(BluetoothDevice device) {
++        if (DEBUG) Log.d(TAG, "connect to: " + device);
++
++        // Cancel any thread attempting to make a connection
++        if (mState == STATE_CONNECTING) {
++            if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
++        }
++
++        // Cancel any thread currently running a connection
++        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
++
++        // Start the thread to connect with the given device
++        mConnectThread = new ConnectThread(device);
++        mConnectThread.start();
++        setState(STATE_CONNECTING);
++    }
++
++    /**
++     * Start the ConnectedThread to begin managing a Bluetooth connection
++     * @param socket  The BluetoothSocket on which the connection was made
++     * @param device  The BluetoothDevice that has been connected
++     */
++    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
++        if (DEBUG) Log.d(TAG, "connected");
++
++        // Cancel the thread that completed the connection
++        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
++
++        // Cancel any thread currently running a connection
++        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
++
++        // Cancel the accept thread because we only want to connect to one device
++        if (mAcceptThread != null) {mAcceptThread.cancel(); mAcceptThread = null;}
++
++        // Start the thread to manage the connection and perform transmissions
++        mConnectedThread = new ConnectedThread(socket);
++        mConnectedThread.start();
++
++        // Send the name of the connected device back to the UI Activity
++        Message msg = mHandler.obtainMessage(Wireless_Activity.MESSAGE_DEVICE_NAME);
++        Bundle bundle = new Bundle();
++        bundle.putString(Wireless_Activity.DEVICE_NAME, device.getName());
++        msg.setData(bundle);
++        mHandler.sendMessage(msg);
++
++        setState(STATE_CONNECTED);
++    }
++
++    /**
++     * Stop all threads
++     */
++    public synchronized void stop() {
++        if (DEBUG) Log.d(TAG, "stop");
++        setState(STATE_NONE);
++        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
++        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
++        if (mAcceptThread != null) {mAcceptThread.cancel(); mAcceptThread = null;}
++    }
++
++    /**
++     * Write to the ConnectedThread in an unsynchronized manner
++     * @param out The bytes to write
++     * @see ConnectedThread#write(byte[])
++     */
++    public void write(byte[] out) {
++        // Create temporary object
++        ConnectedThread r;
++        // Synchronize a copy of the ConnectedThread
++        synchronized (this) {
++            if (mState != STATE_CONNECTED) return;
++            r = mConnectedThread;
++        }
++        r.write(out);
++    }
++
++    /**
++     * Indicate that the connection attempt failed and notify the UI Activity.
++     */
++    private void connectionFailed() {
++        setState(STATE_LISTEN);
++        
++        // Send a failure message back to the Activity
++        Message msg = mHandler.obtainMessage(Wireless_Activity.MESSAGE_TOAST);
++        Bundle bundle = new Bundle();
++        bundle.putString(Wireless_Activity.TOAST, "Unable to connect device");
++        msg.setData(bundle);
++        mHandler.sendMessage(msg);
++    }
++
++    /**
++     * Indicate that the connection was lost and notify the UI Activity.
++     */
++    private void connectionLost() {
++        //setState(STATE_LISTEN);
++ 
++        // Send a failure message back to the Activity
++        Message msg = mHandler.obtainMessage(Wireless_Activity.MESSAGE_TOAST);
++        Bundle bundle = new Bundle();
++        bundle.putString(Wireless_Activity.TOAST, "Device connection was lost");
++        msg.setData(bundle);
++        mHandler.sendMessage(msg);
++    }
++
++    /**
++     * This thread runs while listening for incoming connections. It behaves
++     * like a server-side client. It runs until a connection is accepted
++     * (or until cancelled).
++     */
++    private class AcceptThread extends Thread
++    {
++        // The local server socket
++        private final BluetoothServerSocket mmServerSocket;
++
++        public AcceptThread() {
++            BluetoothServerSocket tmp = null;
++
++            // Create a new listening server socket
++            try {
++                tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
++            } catch (IOException e) {
++                Log.e(TAG, "listen() failed", e);
++            }
++            mmServerSocket = tmp;
++        }
++
++        @Override
++		public void run() {
++            if (DEBUG) Log.d(TAG, "BEGIN mAcceptThread" + this);
++            setName("AcceptThread");
++            BluetoothSocket socket = null;
++
++            // Listen to the server socket if we're not connected
++            while (mState != STATE_CONNECTED) {
++                try {
++                    // This is a blocking call and will only return on a
++                    // successful connection or an exception
++                    socket = mmServerSocket.accept();
++                } catch (IOException e) {
++                    Log.e(TAG, "accept() failed", e);
++                    break;
++                }
++
++                // If a connection was accepted
++                if (socket != null) {
++                    synchronized (BluetoothService.this) {
++                        switch (mState) {
++                        case STATE_LISTEN:
++                        case STATE_CONNECTING:
++                            // Situation normal. Start the connected thread.
++                            connected(socket, socket.getRemoteDevice());
++                            break;
++                        case STATE_NONE:
++                        case STATE_CONNECTED:
++                            // Either not ready or already connected. Terminate new socket.
++                            try {
++                                socket.close();
++                            } catch (IOException e) {
++                                Log.e(TAG, "Could not close unwanted socket", e);
++                            }
++                            break;
++                        }
++                    }
++                }
++            }
++            if (DEBUG) Log.i(TAG, "END mAcceptThread");
++        }
++
++        public void cancel() {
++            if (DEBUG) Log.d(TAG, "cancel " + this);
++            try {
++                mmServerSocket.close();
++            } catch (IOException e) {
++                Log.e(TAG, "close() of server failed", e);
++            }
++        }
++    }
++
++
++    /**
++     * This thread runs while attempting to make an outgoing connection
++     * with a device. It runs straight through; the connection either
++     * succeeds or fails.
++     */
++    private class ConnectThread extends Thread
++    {
++        private final BluetoothSocket mmSocket;
++        private final BluetoothDevice mmDevice;
++
++        public ConnectThread(BluetoothDevice device) {
++            mmDevice = device;
++            BluetoothSocket tmp = null;
++
++            // Get a BluetoothSocket for a connection with the
++            // given BluetoothDevice
++            try {
++                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
++            } catch (IOException e) {
++                Log.e(TAG, "create() failed", e);
++            }
++            mmSocket = tmp;
++        }
++
++        @Override
++		public void run() {
++            Log.i(TAG, "BEGIN mConnectThread");
++            setName("ConnectThread");
++
++            // Always cancel discovery because it will slow down a connection
++            mAdapter.cancelDiscovery();
++
++            // Make a connection to the BluetoothSocket
++            try {
++                // This is a blocking call and will only return on a
++                // successful connection or an exception
++                mmSocket.connect();
++            } catch (IOException e) {
++                connectionFailed();
++                // Close the socket
++                try {
++                    mmSocket.close();
++                } catch (IOException e2) {
++                    Log.e(TAG, "unable to close() socket during connection failure", e2);
++                }
++                // Start the service over to restart listening mode
++                BluetoothService.this.start();
++                return;
++            }
++
++            // Reset the ConnectThread because we're done
++            synchronized (BluetoothService.this) {
++                mConnectThread = null;
++            }
++
++            // Start the connected thread
++            connected(mmSocket, mmDevice);
++        }
++
++        public void cancel() {
++            try {
++                mmSocket.close();
++            } catch (IOException e) {
++                Log.e(TAG, "close() of connect socket failed", e);
++            }
++        }
++    }
++
++    /**
++     * This thread runs during a connection with a remote device.
++     * It handles all incoming and outgoing transmissions.
++     */
++    private class ConnectedThread extends Thread
++    {
++        private final BluetoothSocket mmSocket;
++        private final InputStream mmInStream;
++        private final OutputStream mmOutStream;
++
++        public ConnectedThread(BluetoothSocket socket) {
++            Log.d(TAG, "create ConnectedThread");
++            mmSocket = socket;
++            InputStream tmpIn = null;
++            OutputStream tmpOut = null;
++
++            // Get the BluetoothSocket input and output streams
++            try {
++                tmpIn = socket.getInputStream();
++                tmpOut = socket.getOutputStream();
++            } catch (IOException e) {
++                Log.e(TAG, "temp sockets not created", e);
++            }
++
++            mmInStream = tmpIn;
++            mmOutStream = tmpOut;
++        }
++
++        @Override
++		public void run() {
++            Log.i(TAG, "BEGIN mConnectedThread");
++            int bytes;
++
++            // Keep listening to the InputStream while connected
++            while (true) {
++                try {
++                	byte[] buffer = new byte[256];
++                    // Read from the InputStream
++                    bytes = mmInStream.read(buffer);
++                    if(bytes>0)
++                    {
++	                    // Send the obtained bytes to the UI Activity
++	                    mHandler.obtainMessage(Wireless_Activity.MESSAGE_READ, bytes, -1, buffer)
++	                            .sendToTarget();
++                    }
++                    else
++                    {
++                        Log.e(TAG, "disconnected");
++                        connectionLost();
++                        
++                        //add by chongqing jinou
++                        if(mState != STATE_NONE)
++                        {
++                            Log.e(TAG, "disconnected");
++                       	// Start the service over to restart listening mode
++                        	BluetoothService.this.start();
++                        }
++                        break;
++                    }
++                } catch (IOException e) {
++                    Log.e(TAG, "disconnected", e);
++                    connectionLost();
++                    
++                    //add by chongqing jinou
++                    if(mState != STATE_NONE)
++                    {
++                    	// Start the service over to restart listening mode
++                    	BluetoothService.this.start();
++                    }
++                    break;
++                }
++            }
++        }
++
++        /**
++         * Write to the connected OutStream.
++         * @param buffer  The bytes to write
++         */
++        public void write(byte[] buffer) {
++            try {
++                mmOutStream.write(buffer);
++                mmOutStream.flush();//清空缓存
++               /* if (buffer.length > 3000) //
++                {
++                  byte[] readata = new byte[1];
++                  SPPReadTimeout(readata, 1, 5000);
++                }*/
++                Log.i("BTPWRITE", new String(buffer,"GBK"));
++                // Share the sent message back to the UI Activity
++                mHandler.obtainMessage(Wireless_Activity.MESSAGE_WRITE, -1, -1, buffer)
++                        .sendToTarget();
++            } catch (IOException e) {
++                Log.e(TAG, "Exception during write", e);
++            }
++        }
++
++        /*
++        //
++        private boolean SPPReadTimeout(byte[] Data, int DataLen, int Timeout){
++          for (int i = 0; i < Timeout / 5; i++)
++          {
++            try
++            {
++              if (mmInStream.available() >= DataLen)
++              {
++                try
++                {
++                	mmInStream.read(Data, 0, DataLen);
++                  return true;
++                }
++                catch (IOException e)
++                {
++                  ErrorMessage = "读取蓝牙数据失败";
++                  return false;
++                }
++              }
++            }
++            catch (IOException e)
++            {
++              ErrorMessage = "读取蓝牙数据失败";
++              return false;
++            }
++            try
++            {
++              Thread.sleep(5L);
++            }
++            catch (InterruptedException e)
++            {
++              ErrorMessage = "读取蓝牙数据失败";
++              return false;
++            }
++          }
++          ErrorMessage = "蓝牙读数据超时";
++          return false;
++        }
++        */
++        public void cancel() {
++            try {
++                mmSocket.close();
++            } catch (IOException e) {
++                Log.e(TAG, "close() of connect socket failed", e);
++            }
++        }
++    }
++}
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/src/main/res/values/strings.xml	(revision )
+@@ -11,7 +11,6 @@
+     <string name="title_activity_login">Sign in</string>
+ 
+     <!-- Strings related to login -->
+-    <string name="prompt_merchant_code">Merchant Code</string>
+     <string name="prompt_username">Username</string>
+     <string name="prompt_password">Password</string>
+     <string name="action_sign_in">Log in</string>
+@@ -20,16 +19,12 @@
+     <string name="error_invalid_password">This password is too short</string>
+     <string name="error_incorrect_password">This password is incorrect</string>
+     <string name="error_field_required">This field is required</string>
+-    <string name="link_register">Not registered yet? Click here to register</string>
+     <string name="permission_rationale">"Contacts permissions are needed for providing email
+         completions."
+     </string>
+ 
+     <!-- Strings related to create new user -->
+-    <string name="person_fullname">Full Name</string>
+-    <string name="person_id_type">ID Type</string>
+-    <string name="person_id_number">ID Number</string>
+-    <string name="person_username">Username</string>
++    <string name="person_name">Fullname</string>
+     <string name="person_pass">Password</string>
+     <string name="reinput_pass">Re-input Password</string>
+     <string name="card_no">Card No</string>
+@@ -50,20 +45,17 @@
+     <!-- String related to create new business -->
+     <string name="business_info"><b>BUSINESS INFORMATION</b></string>
+     <string name="business_name">Business Name</string>
+-    <string name="business_shortname">Short Name (Alias)</string>
+     <string name="business_type">Business Type</string>
+     <string name="business_category">Category</string>
+-    <string name="business_phone">Phone</string>
+     <string name="business_address">Address</string>
+     <string name="business_city">City</string>
+     <string name="business_state">State</string>
+     <string name="business_zip">Zip</string>
+     
+     <string name="owner_info"><b>OWNER INFORMATION</b></string>
+-    <string name="owner_full_name">Full Name</string>
+-    <string name="owner_sex">Sex</string>
+-    <string name="owner_birth_date">Birth Date</string>
+-    <string name="owner_email">E-mail</string>
++    <string name="owner_first_name">First Name</string>
++    <string name="owner_last_name">Last Name</string>
++    <string name="owner_email">Email</string>
+     <string name="owner_phone">Phone</string>
+     <string name="owner_id">ID Number</string>
+ 
+@@ -93,19 +85,14 @@
+     <string name="taxes">Taxes</string>
+     <string name="roles">Roles</string>
+ 
+-    <!--spinner combobox owner sex on merchant registration-->
+-    <string-array name="spinner_sex">
+-        <item>Male</item>
+-        <item>Female</item>
++    <!--spinner combobox role on register-->
++    <string-array name="spinner_roles">
++        <item>Administrator</item>
++        <item>Manager</item>
++        <item>Employee</item>
++        <item>Guest</item>
+     </string-array>
+ 
+-    <!--spinner combobox id type on people-->
+-    <string-array name="spinner_id_type">
+-        <item>KTP</item>
+-        <item>SIM</item>
+-        <item>Paspor</item>
+-    </string-array>
+-
+     <!--Menu Stock-->
+     <!--Maintenance-->
+     <string name="products">Products</string>
+@@ -188,19 +175,4 @@
+     <string name="attributes">Attributes</string>
+     <string name="multi_pack">Multi Pack</string>
+ 
+-    <!-- Alert Confirmation Dialog Delete -->
+-    <string name="alert_dialog_delete_people">Delete User</string>
+-    <string name="alert_dialog_delete_people_message">Do you really want to delete this user?</string>
+-    
+-    <string name="alert_dialog_delete_role">Delete Role</string>
+-    <string name="alert_dialog_delete_role_message">Do you really want to delete this role?</string>
+-    
+-    <string name="alert_dialog_delete_taxes">Delete Tax</string>
+-    <string name="alert_dialog_delete_taxes_message">Do you really want to delete this tax?</string>
+-    
+-    <string name="alert_dialog_delete_category">Delete Category</string>
+-    <string name="alert_dialog_delete_category_message">Do you really want to delete this category?</string>
+-    
+-    <string name="alert_dialog_delete_product">Delete Product</string>
+-    <string name="alert_dialog_delete_product_message">Do you really want to delete this product?</string>
+ </resources>
+Index: app/src/main/java/com/mitrakreasindo/pos/main/fragment/MainFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/fragment/MainFragment.java	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/src/main/java/com/mitrakreasindo/pos/main/fragment/MainFragment.java	(revision )
+@@ -12,14 +12,13 @@
+ import android.view.ViewGroup;
+ import android.widget.Button;
+ 
++import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
+ import com.mitrakreasindo.pos.main.MainQueueListAdapter;
+ import com.mitrakreasindo.pos.main.Queue;
+ import com.mitrakreasindo.pos.main.R;
+ import com.mitrakreasindo.pos.main.sales.SalesActivity;
+ 
+-import java.lang.reflect.Array;
+-import java.util.ArrayList;
+-import java.util.List;
++/*import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;*/
+ 
+ /**
+  * Created by lisa on 15/06/17.
+@@ -63,7 +62,14 @@
+         startActivity(new Intent(getActivity(), SalesActivity.class));
+       }
+     });
+-
++    menuReport.setOnClickListener(new View.OnClickListener()
++    {
++      @Override
++      public void onClick(View v)
++      {
++        startActivity(new Intent(getActivity(), Wireless_Activity.class));
++      }
++    });
+ 
+     return view;
+   }
+Index: app/src/main/java/com/mitrakreasindo/pos/common/Wireless/DeviceListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/Wireless/DeviceListActivity.java	(revision )
++++ app/src/main/java/com/mitrakreasindo/pos/common/Wireless/DeviceListActivity.java	(revision )
+@@ -0,0 +1,199 @@
++
++package com.mitrakreasindo.pos.common.Wireless;
++
++import android.app.Activity;
++import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothDevice;
++import android.content.BroadcastReceiver;
++import android.content.Context;
++import android.content.Intent;
++import android.content.IntentFilter;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.view.View.OnClickListener;
++import android.view.Window;
++import android.widget.AdapterView;
++import android.widget.AdapterView.OnItemClickListener;
++import android.widget.ArrayAdapter;
++import android.widget.Button;
++import android.widget.ListView;
++import android.widget.TextView;
++
++import com.mitrakreasindo.pos.main.R;
++
++import java.util.Set;
++
++
++/**
++ * This Activity appears as a dialog. It lists any paired devices and
++ * devices detected in the area after discovery. When a device is chosen
++ * by the user, the MAC address of the device is sent back to the parent
++ * Activity in the result Intent.
++ */
++public class DeviceListActivity extends Activity
++{
++    // Debugging
++    private static final String TAG = "DeviceListActivity";
++    private static final boolean DEBUG = true;
++
++    // Return Intent extra
++    public static String EXTRA_DEVICE_ADDRESS = "device_address";
++
++    // Member fields
++    private BluetoothAdapter mBtAdapter;
++    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
++    private ArrayAdapter<String> mNewDevicesArrayAdapter;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++
++        // Setup the window
++        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
++        setContentView(R.layout.device_list);
++
++        // Set result CANCELED incase the user backs out
++        setResult(Activity.RESULT_CANCELED);
++
++        // Initialize the button to perform device discovery
++        Button scanButton = (Button) findViewById(R.id.button_scan);
++        scanButton.setOnClickListener(new OnClickListener() {
++            @Override
++			public void onClick(View v) {
++                doDiscovery();
++                v.setVisibility(View.GONE);
++            }
++        });
++
++        // Initialize array adapters. One for already paired devices and
++        // one for newly discovered devices
++        mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
++        mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
++
++        // Find and set up the ListView for paired devices
++        ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
++        pairedListView.setAdapter(mPairedDevicesArrayAdapter);
++        pairedListView.setOnItemClickListener(mDeviceClickListener);
++
++        // Find and set up the ListView for newly discovered devices
++        ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
++        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
++        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
++
++        // Register for broadcasts when a device is discovered
++        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
++        this.registerReceiver(mReceiver, filter);
++
++        // Register for broadcasts when discovery has finished
++        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
++        this.registerReceiver(mReceiver, filter);
++
++        // Get the local Bluetooth adapter
++        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
++
++        // Get a set of currently paired devices
++        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
++
++        // If there are paired devices, add each one to the ArrayAdapter
++        if (pairedDevices.size() > 0) {
++            findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
++            for (BluetoothDevice device : pairedDevices) {
++                mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
++            }
++        } else {
++            String noDevices = getResources().getText(R.string.none_paired).toString();
++            mPairedDevicesArrayAdapter.add(noDevices);
++        }
++    }
++
++    @Override
++    protected void onDestroy() {
++        super.onDestroy();
++
++        // Make sure we're not doing discovery anymore
++        if (mBtAdapter != null) {
++            mBtAdapter.cancelDiscovery();
++        }
++
++        // Unregister broadcast listeners
++        this.unregisterReceiver(mReceiver);
++    }
++
++    /**
++     * Start device discover with the BluetoothAdapter
++     */
++    private void doDiscovery() {
++        if (DEBUG) Log.d(TAG, "doDiscovery()");
++
++        // Indicate scanning in the title
++        setProgressBarIndeterminateVisibility(true);
++        setTitle(R.string.scanning);
++
++        // Turn on sub-title for new devices
++        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
++
++        // If we're already discovering, stop it
++        if (mBtAdapter.isDiscovering()) {
++            mBtAdapter.cancelDiscovery();
++        }
++
++        mNewDevicesArrayAdapter.clear();//20160617
++      //  mPairedDevicesArrayAdapter.clear();//20160617
++        // Request discover from BluetoothAdapter
++        mBtAdapter.startDiscovery();
++    }
++
++    // The on-click listener for all devices in the ListViews
++    private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
++        @Override
++		public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
++            // Cancel discovery because it's costly and we're about to connect
++            mBtAdapter.cancelDiscovery();
++
++            // Get the device MAC address, which is the last 17 chars in the View
++            String info = ((TextView) v).getText().toString();
++            String noDevices = getResources().getText(R.string.none_paired).toString();
++            String noNewDevice = getResources().getText(R.string.none_found).toString();
++            Log.i("tag", info);
++            
++            if (! info.equals(noDevices) && ! info.equals(noNewDevice)) {
++				String address = info.substring(info.length() - 17);
++				// Create the result Intent and include the MAC address
++				Intent intent = new Intent();
++				intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
++				// Set result and finish this Activity
++				setResult(Activity.RESULT_OK, intent);
++				finish();
++			}
++        }
++    };
++
++    // The BroadcastReceiver that listens for discovered devices and
++    // changes the title when discovery is finished
++    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
++        @Override
++        public void onReceive(Context context, Intent intent) {
++            String action = intent.getAction();
++
++            // When discovery finds a device
++            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
++                // Get the BluetoothDevice object from the Intent
++                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
++                // If it's already paired, skip it, because it's been listed already
++                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
++                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
++                }
++            // When discovery is finished, change the Activity title
++            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
++                setProgressBarIndeterminateVisibility(false);
++                setTitle(R.string.select_device);
++                if (mNewDevicesArrayAdapter.getCount() == 0) {
++                    String noDevices = getResources().getText(R.string.none_found).toString();
++                    mNewDevicesArrayAdapter.add(noDevices);
++                }
++            }
++        }
++    };
++
++}
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/build.gradle	(revision )
+@@ -11,7 +11,9 @@
+         versionName "1.0"
+         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+     }
+-
++    defaultConfig {
++        multiDexEnabled true
++    }
+     buildTypes {
+         release {
+             minifyEnabled false
+@@ -38,7 +40,6 @@
+ }
+ 
+ dependencies {
+-    compile fileTree(dir: 'libs', include: ['*.jar'])
+     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+         exclude group: 'com.android.support', module: 'support-annotations'
+     })
+@@ -55,6 +56,9 @@
+     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
++    compile 'com.android.support:multidex:1.0.1'
++    compile 'com.google.zxing:core:3.2.1'
+     testCompile 'junit:junit:4.12'
+     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
++    compile files('libs/btsdk.jar')
+ }
+Index: app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/src/main/java/com/mitrakreasindo/pos/main/MainActivity.java	(revision )
+@@ -156,7 +156,7 @@
+ //    public boolean onCreateOptionsMenu(Menu menu)
+ //    {
+ //        // Inflate the menu; this adds items to the action bar if it is present.
+-//        getMenuInflater().inflate(R.menu.main, menu);
++//        getMenuInflater().inflate(R.menu.wireless, menu);
+ //        return true;
+ //    }
+ 
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/src/main/AndroidManifest.xml	(revision )
+@@ -1,8 +1,16 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+           package="com.mitrakreasindo.pos.main"
+-          android:installLocation="preferExternal">
++    android:installLocation="preferExternal">
+ 
++    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
++    <uses-permission android:name="android.permission.BLUETOOTH" />
++    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
++    <uses-permission android:name="android.permission.CAMERA" />
++    <uses-permission android:name="android.permission.RECORD_AUDIO" />
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
++
+     <uses-permission android:name="android.permission.INTERNET"/>
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+ 
+@@ -96,6 +104,13 @@
+         <activity
+             android:name=".maintenance.taxes.TaxesFormActivity"
+             android:label="@string/tax_form"/>
++
++        <activity
++        android:name="com.mitrakreasindo.pos.common.Wireless.DeviceListActivity"
++        android:label="@string/select_device" />
++
++        <activity
++        android:name="com.mitrakreasindo.pos.common.Wireless.Wireless_Activity"/>
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Command.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Command.java	(revision )
++++ app/src/main/java/com/mitrakreasindo/pos/common/Wireless/Command.java	(revision )
+@@ -0,0 +1,154 @@
++package com.mitrakreasindo.pos.common.Wireless;
++
++public class Command {
++  private static final byte ESC = 0x1B;
++  private static final byte FS = 0x1C;
++  private static final byte GS = 0x1D;
++  private static final byte US = 0x1F;
++  private static final byte DLE = 0x10;
++  private static final byte DC4 = 0x14;
++  private static final byte DC1 = 0x11;
++  private static final byte SP = 0x20;
++  private static final byte NL = 0x0A;
++  private static final byte FF = 0x0C;
++  public static final byte PIECE = (byte) 0xFF;
++  public static final byte NUL = (byte) 0x00;
++
++  //打印机初始化
++  public static byte[] ESC_Init = new byte[] {ESC, '@' };
++
++  /**
++   * 打印命令
++   */
++  //打印并换行 Cetak dan feed line
++  public static byte[] LF = new byte[] {NL};
++
++  //打印并走纸 Cetak dan Kertas
++  public static byte[] ESC_J = new byte[] {ESC, 'J', 0x00 };
++  public static byte[] ESC_d = new byte[] {ESC, 'd', 0x00 };
++
++  //打印自检页
++  public static byte[] US_vt_eot = new byte[] {US, DC1, 0x04 };
++
++  //蜂鸣指令
++  public static byte[] ESC_B_m_n = new byte[] {ESC, 'B', 0x00, 0x00 };
++
++  //切刀指令
++  public static byte[] GS_V_n = new byte[] {GS, 'V', 0x00 };
++  public static byte[] GS_V_m_n = new byte[] {GS, 'V', 'B', 0x00 };
++  public static byte[] GS_i = new byte[] {ESC, 'i' };
++  public static byte[] GS_m = new byte[] {ESC, 'm' };
++
++  /**
++   * 字符设置命令
++   */
++  //设置字符右间距 Mengatur jarak karakter sisi kanan
++  public static byte[] ESC_SP = new byte[] {ESC, SP, 0x00 };
++
++  //设置字符打印字体格式 Set karakter pencetakan font format
++  public static byte[] ESC_ExclamationMark = new byte[] {ESC, '!', 0x00 };
++
++  //设置字体倍高倍宽
++  public static byte[] GS_ExclamationMark = new byte[] {GS, '!', 0x00 };
++
++  //设置反显打印
++  public static byte[] GS_B = new byte[] {GS, 'B', 0x00 };
++
++  //取消/选择90度旋转打印
++  public static byte[] ESC_V = new byte[] {ESC, 'V', 0x00 };
++
++  //选择字体字型(主要是ASCII码)
++  public static byte[] ESC_M = new byte[] {ESC, 'M', 0x00 };
++
++  //选择/取消加粗指令
++  public static byte[] ESC_G = new byte[] {ESC, 'G', 0x00 };
++  public static byte[] ESC_E = new byte[] {ESC, 'E', 0x00 };
++
++  //选择/取消倒置打印模式
++  public static byte[] ESC_LeftBrace = new byte[] {ESC, '{', 0x00 };
++
++  //设置下划线点高度(字符)
++  public static byte[] ESC_Minus = new byte[] {ESC, 45, 0x00 };
++
++  //字符模式
++  public static byte[] FS_dot = new byte[] {FS, 46 };
++
++  //汉字模式
++  public static byte[] FS_and = new byte[] {FS, '&' };
++
++  //设置汉字打印模式 pengaturan mode cetak Kanji
++  public static byte[] FS_ExclamationMark = new byte[] {FS, '!', 0x00 };
++
++  //设置下划线点高度(汉字)
++  public static byte[] FS_Minus = new byte[] {FS, 45, 0x00 };
++
++  //设置汉字左右间距 Karakter Spasi dibuang sekitar
++  public static byte[] FS_S = new byte[] {FS, 'S', 0x00, 0x00 };
++
++  //选择字符代码页
++  public static byte[] ESC_t = new byte[] {ESC, 't', 0x00 };
++
++  /**
++   * 格式设置指令
++   */
++  //设置默认行间距
++  public static byte[] ESC_Two = new byte[] {ESC, 50};
++
++  //设置行间距
++  public static byte[] ESC_Three = new byte[] {ESC, 51, 0x00 };
++
++  //设置对齐模式
++  public static byte[] ESC_Align = new byte[] {ESC, 'a', 0x00 };
++
++  //设置左边距
++  public static byte[] GS_LeftSp = new byte[] {GS, 'L', 0x00 , 0x00 };
++
++  //设置绝对打印位置
++  //将当前位置设置到距离行首（nL + nH x 256）处。
++  //如果设置位置在指定打印区域外，该命令被忽略
++  public static byte[] ESC_Relative = new byte[] {ESC, '$', 0x00, 0x00 };
++
++  //设置相对打印位置
++  public static byte[] ESC_Absolute = new byte[] {ESC, 92, 0x00, 0x00 };
++
++  //设置打印区域宽度
++  public static byte[] GS_W = new byte[] {GS, 'W', 0x00, 0x00 };
++
++  /**
++   * 状态指令
++   */
++  //实时状态传送指令 Real-time instruksi transfer Status
++  public static byte[] DLE_eot = new byte[] {DLE, 0x04, 0x00 };
++
++  //实时弹钱箱指令 Real-time petunjuk box bermain kas
++  public static byte[] DLE_DC4 = new byte[] {DLE, DC4, 0x00, 0x00, 0x00 };
++
++  //标准弹钱箱指令
++  public static byte[] ESC_p = new byte[] {ESC, 'F', 0x00, 0x00, 0x00 };
++
++  /**
++   * 条码设置指令
++   */
++  //选择HRI打印方式
++  public static byte[] GS_H = new byte[] {GS, 'H', 0x00 };
++
++  //设置条码高度 code tinggi set bar
++  public static byte[] GS_h = new byte[] {GS, 'h', (byte) 0xa2 };
++
++  //设置条码宽度 bar lebar pengaturan
++  public static byte[] GS_w = new byte[] {GS, 'w', 0x00 };
++
++  //设置HRI字符字体字型 pengaturan font huruf karakter HRI
++  public static byte[] GS_f = new byte[] {GS, 'f', 0x00 };
++
++  //条码左偏移指令 Barcode instruksi meninggalkan pergeseran
++  public static byte[] GS_x = new byte[] {GS, 'x', 0x00 };
++
++  //打印条码指令
++  public static byte[] GS_k = new byte[] {GS, 'k', 'A', FF };
++
++  //二维码相关指令 Dua-dimensi kode instruksi terkait
++  public static byte[] GS_k_m_v_r_nL_nH = new byte[] { ESC, 'Z', 0x03, 0x03, 0x08, 0x00, 0x00 };
++
++
++}
+Index: app/src/main/java/com/mitrakreasindo/pos/common/RestVariable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/mitrakreasindo/pos/common/RestVariable.java	(revision 660507e9e231942a200802539bd53bc9922ce328)
++++ app/src/main/java/com/mitrakreasindo/pos/common/RestVariable.java	(revision )
+@@ -6,7 +6,7 @@
+ 
+ public class RestVariable
+ {
+-    public static final String SERVER_URL = "http://192.168.1.113:8080/MKChromisServices/webresources/";
++    public static final String SERVER_URL = "http://192.168.1.113:8080/MKChromisServices/webresources/";//192.168.1.113
+     public static final String URL_GET_PRODUCT = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.products/{kodeMerchant}/";
+     public static final String URL_GET_PEOPLE = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.people/{kodeMerchant}/";
+     public static final String URL_GET_TAX = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.taxes/public/";

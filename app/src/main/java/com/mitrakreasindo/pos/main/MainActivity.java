@@ -29,6 +29,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
+import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity
 //    public boolean onCreateOptionsMenu(Menu menu)
 //    {
 //        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.wireless, menu);
 //        return true;
 //    }
 
@@ -254,6 +255,11 @@ public class MainActivity extends AppCompatActivity
         .addToBackStack("SALES_FRAGMENT").commit();
       getSupportFragmentManager().executePendingTransactions();
     }
+    else if (id == R.id.nd_printers)
+    {
+      Toast.makeText(this, "Print", Toast.LENGTH_LONG).show();
+      startActivity(new Intent(this, Wireless_Activity.class));
+    }
     else if (id == R.id.nd_customer_payment)
     {
       Toast.makeText(this, "Product", Toast.LENGTH_LONG).show();
@@ -306,7 +312,6 @@ public class MainActivity extends AppCompatActivity
           setupNavigation();
         }
     }
-
   }
 
   public void openUserActivity(View view)
