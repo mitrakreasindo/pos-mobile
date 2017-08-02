@@ -93,30 +93,39 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     if (!inactive.contains(MenuIds.rp_mtc_usr_action_delete))
     {
       //On Long Click
-      holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+      {
         @Override
-        public boolean onLongClick(final View v) {
+        public boolean onLongClick(final View v)
+        {
           final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-          builder.setTitle("Options");
-          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              switch (which) {
-                case 0:
-                  new AlertDialog.Builder(context)
-                          .setTitle(context.getString(R.string.alert_dialog_delete_people))
-                          .setMessage(context.getString(R.string.alert_dialog_delete_people_message))
-                          .setIcon(android.R.drawable.ic_dialog_alert)
-                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                              deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), people.getId());
-                            }
-                          })
-                          .setNegativeButton(android.R.string.no, null).show();
-                  break;
+          builder.setTitle(R.string.adapter_options_dialog);
+          builder.setItems(new String[]{context.getString(R.string.adapter_options_delete)},
+            new DialogInterface.OnClickListener()
+            {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+                switch (which)
+                {
+                  case 0:
+                    new AlertDialog.Builder(context)
+                      .setTitle(context.getString(R.string.alert_dialog_delete_people))
+                      .setMessage(context.getString(R.string.alert_dialog_delete_people_message))
+                      .setIcon(android.R.drawable.ic_dialog_alert)
+                      .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                      {
+                        public void onClick(DialogInterface dialog, int whichButton)
+                        {
+                          deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""),
+                            people.getId());
+                        }
+                      })
+                      .setNegativeButton(android.R.string.no, null).show();
+                    break;
+                }
               }
-            }
-          });
+            });
           builder.show();
           return false;
         }
@@ -206,7 +215,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot delete user. :( There is something wrong.";
+        responseMessage = context.getString(R.string.error_webservice);
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });

@@ -15,7 +15,6 @@ import com.mitrakreasindo.pos.main.R;
 
 public class ReportsDataFragment extends Fragment
 {
-
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)

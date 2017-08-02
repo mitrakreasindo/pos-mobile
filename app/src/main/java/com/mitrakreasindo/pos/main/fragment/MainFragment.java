@@ -146,11 +146,4 @@ public class MainFragment extends Fragment
     }
 
   }
-
-
-  public void openUserActivity()
-  {
-
-  }
-
 }

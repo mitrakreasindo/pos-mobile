@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 
 public class DiaryActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.list_diary)
@@ -41,8 +40,6 @@ public class DiaryActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
-
   }
 
   @Override
@@ -59,7 +56,6 @@ public class DiaryActivity extends AppCompatActivity
     {
       startActivity(new Intent(this, DiaryFormActivity.class));
     }
-
     return super.onOptionsItemSelected(item);
   }
 }

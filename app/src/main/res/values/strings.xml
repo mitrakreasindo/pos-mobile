@@ -8,13 +8,16 @@
     <string name="content_label">The Content is</string>
     <string name="content_value">[content]</string>
     <string name="action_refresh">Refresh</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Log in</string>
     <string name="langselection">Language: </string>
     <string-array name="languages">
         <item>Change language</item>
         <item>Indonesian</item>
         <item>English</item>
     </string-array>
+
+    <string name="error_webservice">There is something wrong. Please contact administrator.</string>
+    <string name="error_general">There is something wrong</string>
 
     <!-- Strings related to login -->
     <string name="prompt_merchant_code">Merchant Code</string>
@@ -28,8 +31,9 @@
     <string name="error_field_required">This field is required</string>
     <string name="link_register">Not registered yet? Click here to register</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+        completions."</string>
+    <string name="login_message">Hello, %1$s!\nWelcome to POS++</string>
+    <string name="logout_message">Goodbye, %1$s!\nSee you again soon</string>
 
     <!-- Strings related to create new user -->
     <string name="person_fullname">Full Name</string>
@@ -47,7 +51,7 @@
     <string name="image_select">Select</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="title_activity_main">POS Main Menu</string>
+    <string name="title_activity_main">POS++ Main Menu</string>
     <string name="error_incorrect_reinput_password">Password is not match</string>
     <string name="error_empty_name">Name required</string>
     <string name="error_empty_pass">Password required</string>
@@ -81,6 +85,14 @@
     <string name="error_empty_ownerfullname">Full name required</string>
     <string name="error_empty_owneremail">Email required</string>
     <string name="error_valid_owneremail">Email not valid</string>
+    <string name="error_password_invalid">
+        - Password must at least 8 chars and max 10 chars\n
+        - Contains at least 1 digit (0-9)\n
+        - 1 lower case alphabet char (a-z)\n
+        - 1 upper case alphabet char (A-Z)\n
+        - 1 special char (~!@#$%^*-+=,.?)\n
+        - No whitespace allowed
+    </string>
 
     <!-- Navigation Menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -202,6 +214,9 @@
     <string name="multi_pack">Multi Pack</string>
 
     <!-- Alert Confirmation Dialog Delete -->
+    <string name="adapter_options_dialog">Option</string>
+    <string name="adapter_options_delete">Delete</string>
+
     <string name="alert_dialog_delete_people">Delete User</string>
     <string name="alert_dialog_delete_people_message">Do you really want to delete this user?</string>
 
@@ -263,4 +278,19 @@
     <string name="error_post_register">Cannot register. There is something wrong.</string>
     <string name="error_get_category">Get category failed</string>
     <string name="error_get_subcategory">Get subcategory failed</string>
+
+    <string name="action_bar_userform_create">Create User</string>
+    <string name="action_bar_userform_edit">Edit User</string>
+    <string name="dialog_pick_image_title">Pick Image Options</string>
+    <string name="dialog_pick_image_camera">Take a Photo (Camera)</string>
+    <string name="dialog_pick_image_gallery">Pick from Gallery</string>
+
+    <string name="stock_diary_error_submit_product">Please select the product first !</string>
+    <string name="stock_diary_error_submit_price_unit_not_filled">Please fill unit &amp; price first !</string>
+
+    <string-array name="spinner_reason_stock_diary">
+        <item>Stock In (+)</item>
+        <item>Stock Out (-)</item>
+    </string-array>
+
 </resources>

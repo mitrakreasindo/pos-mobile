@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
   public void Register(View view)
   {
-    this.getSharedPreferences(this.getResources().getString(R.string.preference_file_key), MODE_PRIVATE).edit().remove("Company Code").apply();
+    this.getSharedPreferences(this.getString(R.string.preference_file_key), MODE_PRIVATE).edit().remove("Company Code").apply();
     Intent intent = new Intent(this, RegisterActivity.class);
     startActivity(intent);
   }
@@ -324,17 +324,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
           if (responseCode == 0)
           {
+            String[] parts = responseMessage.split(";");
+            String companyName = parts[0];
+            String fullname = parts[1];
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
-            intent.putExtra("COMPANY", kodeMerchant);
+            intent.putExtra("FULLNAME", fullname);
+            intent.putExtra("COMPANYNAME", companyName);
             startActivity(intent);
           }
           else
           {
             mUsernameView.requestFocus();
+            Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
           }
         }
-        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override

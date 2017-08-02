@@ -33,7 +33,6 @@ import retrofit2.Response;
 
 public class CategoryFormActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.appbar)
@@ -43,13 +42,9 @@ public class CategoryFormActivity extends AppCompatActivity
   @BindView(R.id.category_field)
   EditText categoryField;
 
-//  private Category category;
   private CategoryService categoryService;
-
   private CategoryListAdapter categoryListAdapter;
-
   private Bundle bundle;
-
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant, name, categoryId;
 
@@ -61,13 +56,9 @@ public class CategoryFormActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     categoryService = ClientService.createService().create(CategoryService.class);
-
     categoryListAdapter = new CategoryListAdapter(this, new ArrayList<Category>());
-
     sharedPreferenceEditor = new SharedPreferenceEditor();
-
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
 
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
@@ -80,14 +71,12 @@ public class CategoryFormActivity extends AppCompatActivity
     });
 
     bundle = getIntent().getExtras();
-
     if (bundle != null)
     {
       categoryId = bundle.getString("id");
       name = bundle.getString("name");
       categoryField.setText(name);
     }
-
   }
 
   @Override
@@ -106,14 +95,11 @@ public class CategoryFormActivity extends AppCompatActivity
       if (bundle != null)
       {
         updateCategory();
-        Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
       }
       else
       {
         postCategory();
-        Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
       }
-
     }
     return super.onOptionsItemSelected(item);
   }
@@ -121,10 +107,8 @@ public class CategoryFormActivity extends AppCompatActivity
   private void postCategory()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
     progressDialog.show();
-    Log.d(getClass().getSimpleName(), "Post Role !!!");
-    Log.d(getClass().getSimpleName(), categoryField.getText().toString());
 
     Category parentCategory = new Category();
     parentCategory.setId(null);
@@ -141,18 +125,15 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     category.setSflag(true);
 
-
     Call<HashMap<Integer, String>> call = categoryService.postCategory(kodeMerchant, category);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
-
       private int responseCode;
       private String responseMessage;
 
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
-
         final HashMap<Integer, String> data = response.body();
         for (int resultKey : data.keySet())
         {
@@ -169,28 +150,25 @@ public class CategoryFormActivity extends AppCompatActivity
 
             categoryListAdapter.addCategory(category);
             categoryListAdapter.notifyDataSetChanged();
+            finish();
           }
-          Log.d(getClass().getSimpleName(), "Success Post Category !!!");
-          Toast.makeText(CategoryFormActivity.this, "Succesfull add category", Toast.LENGTH_SHORT).show();
         }
-
-        finish();
-
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        responseCode = -1;
+        responseMessage = getString(R.string.error_webservice);
+        Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-
-
   }
 
   private void updateCategory()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
     progressDialog.show();
 
     Category parentCategory = new Category();
@@ -223,9 +201,8 @@ public class CategoryFormActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
-          Log.e("RESPONSE CODE", String.valueOf(responseCode));
-          Log.e("RESPONSE ", responseMessage);
 
+          Log.e("RESPONSE ", responseMessage);
           if (responseCode == 0)
           {
             Log.e("CATEGORY ID ", category.getId());
@@ -234,18 +211,17 @@ public class CategoryFormActivity extends AppCompatActivity
             tableCategoryHelper.update(category);
             tableCategoryHelper.close();
 
-
+            finish();
           }
-          Toast.makeText(CategoryFormActivity.this, "Succesfull update category", Toast.LENGTH_SHORT).show();
+          Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot update category. :( There is something wrong.";
+        responseMessage = getString(R.string.error_webservice);
         Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });

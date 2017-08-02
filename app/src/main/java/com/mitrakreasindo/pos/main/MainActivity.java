@@ -51,7 +51,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener
 {
-  private String valueUser;
+  private String valueUser, valueFullname, valueCompanyName;
   private int mPrevSelectedId;
   private String companyCode;
 
@@ -78,19 +78,6 @@ public class MainActivity extends AppCompatActivity
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
 
-//    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//    fab.setOnClickListener(new View.OnClickListener()
-//    {
-//      @Override
-//      public void onClick(View view)
-//      {
-//        startActivity(new Intent(MainActivity.this, RoleActivity.class));
-////                Logout();
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//      }
-//    });
-
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
       this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -101,14 +88,16 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     valueUser = getIntent().getExtras().getString("USERNAME");
+    valueFullname = getIntent().getExtras().getString("FULLNAME");
+    valueCompanyName = getIntent().getExtras().getString("COMPANYNAME");
     IDs.setLoginUser(valueUser);
-    Toast.makeText(this, "Welcome " + valueUser, Toast.LENGTH_SHORT).show();
-    Toast.makeText(this, "Current Schema: " +
-      getIntent().getExtras().getString("COMPANY"), Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
 
     View headerLayout = navigationView.getHeaderView(0);
     TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
-    textViewUser.setText(valueUser);
+    textViewUser.setText(valueFullname);
+    TextView textViewCompany = (TextView) headerLayout.findViewById(R.id.textViewUserDesc);
+    textViewCompany.setText(valueCompanyName);
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
@@ -121,8 +110,6 @@ public class MainActivity extends AppCompatActivity
 //    tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
-
-//    setupNavigation();
   }
 
 
@@ -140,45 +127,6 @@ public class MainActivity extends AppCompatActivity
     Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
     return currentFragment;
   }
-
-//  @Override
-//  public void onBackPressed()
-//  {
-//    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//    if (drawer.isDrawerOpen(GravityCompat.START))
-//    {
-//      drawer.closeDrawer(GravityCompat.START);
-//    }
-//    else
-//    {
-//      Fragment mainFragment = getFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
-//      if (mainFragment == null)
-//      {
-//        new AlertDialog.Builder(this)
-//          .setIcon(android.R.drawable.ic_dialog_alert)
-//          .setTitle("Logout from POS++")
-//          .setMessage("Are you sure you want to logout?")
-//          .setPositiveButton
-//            (
-//              "Yes", new DialogInterface.OnClickListener()
-//              {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which)
-//                {
-//                  finish();
-//                }
-//              }
-//            )
-//          .setNegativeButton("No", null)
-//          .show();
-//      }
-//      else
-//      {
-//        super.onBackPressed();
-//        Toast.makeText(this, "TEST CLOSE", Toast.LENGTH_LONG).show();
-//      }
-//    }
-//  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
@@ -206,8 +154,7 @@ public class MainActivity extends AppCompatActivity
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_logout)
     {
-      Toast.makeText(this, "Goodbye " + valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
-      finish();
+      Logout();
     }
 
     return super.onOptionsItemSelected(item);
@@ -226,7 +173,6 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_maintenance)
     {
-      Toast.makeText(this, "Maintenance", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Maintenance");
       MaintenanceFragment maintenanceFragment = new MaintenanceFragment();
       getSupportFragmentManager().beginTransaction()
@@ -236,7 +182,6 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_stock)
     {
-      Toast.makeText(this, "Stock", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Stock");
       StockFragment stockFragment = new StockFragment();
       getSupportFragmentManager().beginTransaction()
@@ -246,7 +191,6 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_sales)
     {
-      Toast.makeText(this, "Sales", Toast.LENGTH_LONG).show();
       getSupportActionBar().setTitle("Sales");
       SalesFragment salesFragment = new SalesFragment();
       getSupportFragmentManager().beginTransaction()
@@ -256,7 +200,6 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_customer_payment)
     {
-      Toast.makeText(this, "Product", Toast.LENGTH_LONG).show();
       startActivity(new Intent(this, ProductFormActivity.class));
     }
 
@@ -267,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 
   private void Logout()
   {
-    Toast.makeText(this, "Goodbye " + valueUser + ". See you next time :)", Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, getString(R.string.logout_message, valueFullname), Toast.LENGTH_SHORT).show();
     finish();
   }
 
@@ -306,7 +249,6 @@ public class MainActivity extends AppCompatActivity
           setupNavigation();
         }
     }
-
   }
 
   public void openUserActivity(View view)
@@ -353,7 +295,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(DialogInterface dialog, int which)
         {
-          finish();
+          Logout();
         }
       });
 
@@ -365,16 +307,11 @@ public class MainActivity extends AppCompatActivity
           dialog.dismiss();
         }
       });
-
       confirmationDialog.show();
-
     }
     else
     {
       super.onBackPressed();
     }
-
   }
-
-
 }

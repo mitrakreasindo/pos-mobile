@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,11 +32,9 @@ import com.mitrakreasindo.pos.model.StockDiary;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -205,11 +202,11 @@ public class DiaryFormActivity extends AppCompatActivity
       {
         if (diaryProductBarcodeField.getText().equals("Barcode") || diaryProductBarcodeField.getText().equals(""))
         {
-          Toast.makeText(DiaryFormActivity.this, "Mohon pilih produk terlebih dahulu !!", Toast.LENGTH_SHORT).show();
+          Toast.makeText(DiaryFormActivity.this, R.string.stock_diary_error_submit_product, Toast.LENGTH_SHORT).show();
         }
         else if (diaryUnitField.getText().length() == 0 || diaryProductPriceField.getText().length() == 0)
         {
-          Toast.makeText(DiaryFormActivity.this, "Mohon isi unit & harga terlebih dahulu !!", Toast.LENGTH_SHORT).show();
+          Toast.makeText(DiaryFormActivity.this, R.string.stock_diary_error_submit_price_unit_not_filled, Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -285,16 +282,16 @@ public class DiaryFormActivity extends AppCompatActivity
       }
     });
 
-    //Spinner Items
-    List<String> spinnerArray =  new ArrayList<>();
-    spinnerArray.add("Stock In (+)");
-    spinnerArray.add("Stock Out (-)");
-
-    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-      this, android.R.layout.simple_spinner_item, spinnerArray);
-
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    diaryProductReasonSpinner.setAdapter(adapter);
+//    //Spinner Items
+//    List<String> spinnerArray =  new ArrayList<>();
+//    spinnerArray.add("Stock In (+)");
+//    spinnerArray.add("Stock Out (-)");
+//
+//    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+//      this, android.R.layout.simple_spinner_item, spinnerArray);
+//
+//    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    diaryProductReasonSpinner.setAdapter(adapter);
   }
 
   @Override
@@ -324,7 +321,6 @@ public class DiaryFormActivity extends AppCompatActivity
   protected void onResume()
   {
     super.onResume();
-//    Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
   }
 
   private void formatTotalPrice()
@@ -409,114 +405,9 @@ public class DiaryFormActivity extends AppCompatActivity
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot create stock diary. :( There is something wrong.";
+        responseMessage = getString(R.string.error_webservice);
         Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }
-
-
-//  @Override
-//  public boolean onCreateOptionsMenu(Menu menu)
-//  {
-//    getMenuInflater().inflate(R.menu.default_form_menu, menu);
-//    return super.onCreateOptionsMenu(menu);
-//  }
-//
-//  @Override
-//  public boolean onOptionsItemSelected(MenuItem item)
-//  {
-//    if (item.getItemId() == R.id.action_confirm)
-//    {
-//
-//    }
-//    return super.onOptionsItemSelected(item);
-//  }
-//
-//
-//  public void postStockDiary()
-//  {
-//    new HttpRequestTask().execute();
-//  }
-//
-//  private class HttpRequestTask extends AsyncTask<Object, Object, StockDiary>
-//  {
-//    private String kodeMerchant;
-//    private StockDiary stockDiary;
-//
-//    public HttpRequestTask(){
-////      this.kodeMerchant = kodeMerchant;
-//    }
-//
-//    @Override
-//    protected void onPreExecute()
-//    {
-//
-//      Location location = new Location();
-//      location.setId("0");
-//
-//      Product product = new Product();
-//      product.setId("ebbb2f8e-9283-4ca4-81cd-116313330b69");
-//
-//      stockDiary = new StockDiary();
-//      stockDiary.setId(UUID.randomUUID().toString());
-//      stockDiary.setReason(1);
-//      stockDiary.setUnits(118);
-//      stockDiary.setPrice(400);
-//      stockDiary.setAppuser("a");
-//      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//      stockDiary.setSflag(true);
-//      stockDiary.setAttributesetInstanceId(null);
-//      stockDiary.setLocation(location);
-//      stockDiary.setProduct(product);
-//
-//    }
-//
-//    @Override
-//    protected StockDiary doInBackground(Object... params)
-//    {
-//
-//      try
-//      {
-//        final String url = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.stockdiary/public/";
-////        final String url = RestVariable.SERVER_URL + "chromis.stockdiary/public/";
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
-//        requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON.toString());
-////        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-////        requestHeaders.setAccept((List<MediaType>) MediaType.APPLICATION_JSON);
-//
-//        String json = restTemplate.getForObject(url, String.class);
-//        Map<Integer,String> map = new HashMap<Integer, String>();
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        HttpEntity<StockDiary> request = new HttpEntity<StockDiary>(stockDiary, requestHeaders);
-//
-//        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-//        map = mapper.readValue( json,new TypeReference<HashMap<Integer,String>>(){});
-//        ResponseEntity<StockDiary> responseEntity = restTemplate.postForEntity(url, request, StockDiary.class);
-//
-////        StockDiary result = restTemplate.postForObject(url, request, StockDiary.class);
-//
-////        Log.d("RESULT : ", responseEntity.toString());
-////        return responseEntity.getBody();
-////        System.out.print();
-//      }
-//      catch (Exception e)
-//      {
-//        e.printStackTrace();
-//        Log.e("TableProductHelper", e.getMessage(), e);
-//      }
-//      return null;
-//    }
-//
-//    @Override
-//    protected void onPostExecute(StockDiary list)
-//    {
-//      Toast.makeText(DiaryFormActivity.this, "Stock Diary Created!", Toast.LENGTH_LONG).show();
-//    }
-//  }
-
 }

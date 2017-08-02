@@ -391,7 +391,6 @@ public class RegisterActivity extends AppCompatActivity
             }
           }
         }
-
         arrayBusinessCategory = new String[category.size()];
         arrayBusinessCategory = category.toArray(arrayBusinessCategory);
 
@@ -442,7 +441,6 @@ public class RegisterActivity extends AppCompatActivity
             }
           }
         }
-
         arrayBusinessSubCategory = new String[subcategory.size()];
         arrayBusinessSubCategory = subcategory.toArray(arrayBusinessSubCategory);
 

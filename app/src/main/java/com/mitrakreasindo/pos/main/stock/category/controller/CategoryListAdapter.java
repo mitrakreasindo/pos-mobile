@@ -65,13 +65,15 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   {
     category = categories.get(position);
     holder.txtCategory.setText(category.getName());
-    Log.e("ID CAT FROM ADAPTER", category.getId());
 
-    if (!inactive.contains(MenuIds.rp_stk_category_action_update)) {
+    if (!inactive.contains(MenuIds.rp_stk_category_action_update))
+    {
       //On Click
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
+      holder.itemView.setOnClickListener(new View.OnClickListener()
+      {
         @Override
-        public void onClick(View view) {
+        public void onClick(View view)
+        {
           Intent intent = new Intent(context, CategoryFormActivity.class);
           intent.putExtra("id", category.getId());
           intent.putExtra("name", category.getName());
@@ -83,30 +85,39 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     if (!inactive.contains(MenuIds.rp_stk_category_action_delete))
     {
       //On Long Click
-      holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+      {
         @Override
-        public boolean onLongClick(final View v) {
+        public boolean onLongClick(final View v)
+        {
           final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-          builder.setTitle("Options");
-          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              switch (which) {
-                case 0:
-                  new AlertDialog.Builder(context)
-                          .setTitle(context.getString(R.string.alert_dialog_delete_category))
-                          .setMessage(context.getString(R.string.alert_dialog_delete_category_message))
-                          .setIcon(android.R.drawable.ic_dialog_alert)
-                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                              deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), category.getId());
-                            }
-                          })
-                          .setNegativeButton(android.R.string.no, null).show();
-                  break;
+          builder.setTitle(R.string.adapter_options_dialog);
+          builder.setItems(new String[]{context.getString(R.string.adapter_options_delete)},
+            new DialogInterface.OnClickListener()
+            {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+                switch (which)
+                {
+                  case 0:
+                    new AlertDialog.Builder(context)
+                      .setTitle(context.getString(R.string.alert_dialog_delete_category))
+                      .setMessage(context.getString(R.string.alert_dialog_delete_category_message))
+                      .setIcon(android.R.drawable.ic_dialog_alert)
+                      .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                      {
+                        public void onClick(DialogInterface dialog, int whichButton)
+                        {
+                          deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""),
+                            category.getId());
+                        }
+                      })
+                      .setNegativeButton(android.R.string.no, null).show();
+                    break;
+                }
               }
-            }
-          });
+            });
           builder.show();
           return false;
         }
@@ -196,7 +207,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot delete category. :( There is something wrong.";
+        responseMessage = context.getString(R.string.error_webservice);
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
