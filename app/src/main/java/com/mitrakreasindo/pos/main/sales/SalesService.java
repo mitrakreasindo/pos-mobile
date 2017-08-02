@@ -1,0 +1,24 @@
+package com.mitrakreasindo.pos.main.sales;
+
+import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.Sales;
+import com.mitrakreasindo.pos.model.SalesPack;
+
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+
+/**
+ * Created by lisa on 31/07/17.
+ */
+
+public interface SalesService
+{
+
+  @POST("chromis.sales/{kodeMerchant}/")
+  Call<HashMap<Integer, String>> postSales(@Path("kodeMerchant") String kodeMerchant, @Body SalesPack salesPack);
+
+}

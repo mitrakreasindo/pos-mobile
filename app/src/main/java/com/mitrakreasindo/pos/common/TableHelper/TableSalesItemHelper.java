@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Sales;
 import com.mitrakreasindo.pos.model.SalesItem;
 import com.mitrakreasindo.pos.service.CategoryService;
@@ -39,6 +41,8 @@ public class TableSalesItemHelper
   private TableSalesItemHelper.DatabaseHelper DBHelper;
   private SQLiteDatabase db;
   private CategoryService service;
+
+  private TableProductHelper tableProductHelper;
 
   public TableSalesItemHelper(Context context)
   {
@@ -91,20 +95,34 @@ public class TableSalesItemHelper
 //    return 0;
 //  }
 
-  public long insertSalesItem(SalesItem salesItem)
+  public long insertSalesItem(List<SalesItem> salesItems)
   {
     ContentValues initialValues = new ContentValues();
+    for (int position = 0; position < salesItems.size(); position++)
+    {
+      initialValues.put(SALES_ID, salesItems.get(position).getSalesId().getId());
+      initialValues.put(LINE, salesItems.get(position).getLine());
+      initialValues.put(PRODUCT, salesItems.get(position).getProduct().getId());
+      initialValues.put(UNITS, salesItems.get(position).getUnits());
+      initialValues.put(PRICE, salesItems.get(position).getPrice());
+      initialValues.put(TAX_ID, salesItems.get(position).getTaxid().getId());
+      initialValues.put(REFUND_QTY, salesItems.get(position).getRefundqty());
+      db.insert(DATABASE_TABLE, null, initialValues);
+    }
 
-//    initialValues.put(KEY_ID, salesItem.getId());
-    initialValues.put(SALES_ID, salesItem.getSalesId().getId());
-    initialValues.put(LINE, salesItem.getLine());
-    initialValues.put(PRODUCT, salesItem.getProduct().getId());
-    initialValues.put(UNITS, salesItem.getUnits());
-    initialValues.put(PRICE, salesItem.getPrice());
-    initialValues.put(TAX_ID, salesItem.getTaxid().getId());
-    initialValues.put(REFUND_QTY, salesItem.getRefundqty());
+//    return db.insert(DATABASE_TABLE, null, initialValues);
+    return 0;
+  }
 
-    return db.insert(DATABASE_TABLE, null, initialValues);
+  public long deleteSalesItem(List<SalesItem> salesItems)
+  {
+    ContentValues initialValues = new ContentValues();
+    for (int position = 0; position < salesItems.size(); position++)
+    {
+      db.delete(DATABASE_TABLE, SALES_ID + "='" + salesItems.get(position).getSalesId().getId() + "'", null);
+    }
+
+    return 0;
   }
 
   public long updateSalesItem(SalesItem salesItem)
@@ -120,25 +138,45 @@ public class TableSalesItemHelper
     initialValues.put(TAX_ID, salesItem.getTaxid().getId());
     initialValues.put(REFUND_QTY, salesItem.getRefundqty());
 
-    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {String.valueOf(salesItem.getId())});
+    return db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{String.valueOf(salesItem.getId())});
   }
 
-  public List<Sales> populateSalesItem(Cursor cursor)
+
+  public List<SalesItem> populateSalesItem(Cursor cursor)
   {
     try
     {
-      List<Sales> list = new ArrayList<>();
+      List<SalesItem> list = new ArrayList<>();
 
-//      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int salesIdIndex = cursor.getColumnIndexOrThrow(SALES_ID);
       int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
+      int productIndex = cursor.getColumnIndexOrThrow(PRODUCT);
+      int unitIndex = cursor.getColumnIndexOrThrow(UNITS);
+
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
-//        String name = cursor.getString(nameIndex);
-        String id = cursor.getString(idIndex);
+        String salesId = cursor.getString(salesIdIndex);
+        String productId = cursor.getString(productIndex);
+        int id = cursor.getInt(idIndex);
+        int unit = cursor.getInt(unitIndex);
+
+        tableProductHelper = new TableProductHelper(context);
+        tableProductHelper.getProductModule(productId);
+
+        Product product = tableProductHelper.getProductModule(productId);
+
+//        Product product = new Product();
+//        product.setId(productId);
 
         Sales sales = new Sales();
-        sales.setId(id);
-        list.add(sales);
+        sales.setId(salesId);
+
+        SalesItem salesItem = new SalesItem();
+        salesItem.setId(id);
+        salesItem.setSalesId(sales);
+        salesItem.setUnits(unit);
+        salesItem.setProduct(product);
+        list.add(salesItem);
       }
 
       return list;
@@ -167,6 +205,14 @@ public class TableSalesItemHelper
 //      null, null, null, null, null);
 //  }
 
+  public List<SalesItem> getSalesItems(String saleId)
+  {
+    open();
+
+    return populateSalesItem(db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, SALES_ID, LINE, PRODUCT, UNITS, PRICE, TAX_ID, REFUND_QTY},
+      SALES_ID + " = '" + saleId + "'", null, null, null, null));
+  }
 //  public List<Sales> getData()
 //  {
 //    open();
@@ -179,6 +225,10 @@ public class TableSalesItemHelper
 //  public List<Sales> getData(String name)
 //  {
 //    open();
+
+//  public List<Sales> getData(String name)
+//  {
+//    open();
 //    return populateCategory(db.query(DATABASE_TABLE,
 //      new String[] {KEY_ID, SALES_NUM, SALES_TYPE, PERSON, CUSTOMER, STATUS},
 //      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
@@ -187,7 +237,7 @@ public class TableSalesItemHelper
 
 //  public void downloadData(String kodeMerchant)
 //  {
-//    final Call<List<Category>> call = service.getCategoryAll(kodeMerchant);
+//    final Call<List<SalesItem>> call = service.getCategoryAll(kodeMerchant);
 //    call.enqueue(new Callback<List<Category>>()
 //    {
 //      @Override

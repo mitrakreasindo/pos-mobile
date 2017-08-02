@@ -25,10 +25,11 @@ import java.util.List;
 public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.ViewHolder>
 {
 
-  private List<SalesItem> salesItems = new ArrayList<>();
+  public List<SalesItem> salesItems = new ArrayList<>();
   private Context context;
   private LayoutInflater layoutInflater;
   private double number;
+  DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
   public SalesListAdapter(Context context, List<SalesItem> salesItems)
   {
@@ -54,11 +55,10 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
     final SalesItem salesItem = salesItems.get(position);
     holder.txtName.setText(salesItem.getProduct().getName());
     holder.txtQty.setText(String.valueOf((int) salesItem.getUnits()));
-    holder.txtPrice.setText(String.valueOf(salesItem.getProduct().getPricesell()));
-
-    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+    holder.txtPrice.setText(decimalFormat.format(salesItem.getProduct().getPricesell()));
+//    double price = salesItem.getProduct().getPricesell();
     holder.txtSubTotal.setText(decimalFormat.format(
-      Double.parseDouble(holder.txtPrice.getText().toString()) *
+      salesItem.getProduct().getPricesell() *
         Double.parseDouble(holder.txtQty.getText().toString())));
     holder.txtQty.addTextChangedListener(new TextWatcher()
     {
@@ -72,9 +72,8 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       {
         if (charSequence.length() > 0 && holder.txtQty.getText().toString().length() > 0)
         {
-          DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
           holder.txtSubTotal.setText(decimalFormat.format(
-            Double.parseDouble(holder.txtPrice.getText().toString()) *
+            salesItem.getProduct().getPricesell() *
               Double.parseDouble(holder.txtQty.getText().toString())));
 
           salesItem.setUnits(Double.parseDouble(charSequence.toString()));
@@ -194,8 +193,6 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       totalPrice += salesItems.get(i).getProduct().getPricesell() * salesItems.get(i).getUnits();
     }
     Log.e("TICKET SIZE", String.valueOf(salesItems.size()));
-//    DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
-//    String value = decimalFormat.format(totalPrice);
     return totalPrice;
   }
 

@@ -84,6 +84,12 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity
+            android:name=".sales.payment.PaymentActivity"
+            android:label="Payment"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <activity android:name=".stock.diary.activity.DiarySelectProductActivity">
         </activity>
 

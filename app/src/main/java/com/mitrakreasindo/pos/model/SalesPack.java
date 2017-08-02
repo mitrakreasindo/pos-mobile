@@ -1,5 +1,8 @@
 package com.mitrakreasindo.pos.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,10 +14,10 @@ public class SalesPack
 
   private Viewsales sales;
   private Viewreceipts receipts;
-  private List<Viewsalesitems> salesItems;
-  private List<Viewpayments> payments;
-  private List<Viewstockdiary> stockdiary;
-  private List<Viewtaxlines> taxlines;
+  private Collection<Viewsalesitems> salesItems;
+  private Collection<Viewpayments> payments;
+  private Collection<Viewstockdiary> stockdiary;
+  private Collection<Viewtaxlines> taxlines;
 
   public Viewsales getSales()
   {
@@ -36,42 +39,42 @@ public class SalesPack
     this.receipts = receipts;
   }
 
-  public List<Viewsalesitems> getSalesItems()
+  public Collection<Viewsalesitems> getSalesItems()
   {
     return salesItems;
   }
 
-  public void setSalesItems(List<Viewsalesitems> salesItems)
+  public void setSalesItems(Collection<Viewsalesitems> salesItems)
   {
     this.salesItems = salesItems;
   }
 
-  public List<Viewpayments> getPayments()
+  public Collection<Viewpayments> getPayments()
   {
     return payments;
   }
 
-  public void setPayments(List<Viewpayments> payments)
+  public void setPayments(Collection<Viewpayments> payments)
   {
     this.payments = payments;
   }
 
-  public List<Viewstockdiary> getStockdiary()
+  public Collection<Viewstockdiary> getStockdiary()
   {
     return stockdiary;
   }
 
-  public void setStockdiary(List<Viewstockdiary> stockdiary)
+  public void setStockdiary(Collection<Viewstockdiary> stockdiary)
   {
     this.stockdiary = stockdiary;
   }
 
-  public List<Viewtaxlines> getTaxlines()
+  public Collection<Viewtaxlines> getTaxlines()
   {
     return taxlines;
   }
 
-  public void setTaxlines(List<Viewtaxlines> taxlines)
+  public void setTaxlines(Collection<Viewtaxlines> taxlines)
   {
     this.taxlines = taxlines;
   }

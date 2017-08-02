@@ -28,6 +28,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
+    TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(this);
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
