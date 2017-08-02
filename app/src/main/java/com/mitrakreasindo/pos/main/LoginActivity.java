@@ -328,6 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             intent.putExtra("COMPANYNAME", parts[1]);
             intent.putExtra("COMPANYADDRESS", parts[2]);
             intent.putExtra("COMPANYPHONE", parts[3]);
+            intent.putExtra("CLOSECASH_ID", parts[4]);
 
             progressDialog.dismiss();
             startActivity(intent);
@@ -346,7 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       {
         progressDialog.dismiss();
         responseCode = -1;
-        responseMessage = "Cannot login. :( There is something wrong.";
+        responseMessage = getString(R.string.error_webservice);
         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
