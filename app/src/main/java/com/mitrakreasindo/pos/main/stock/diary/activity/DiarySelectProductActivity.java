@@ -38,8 +38,6 @@ import butterknife.ButterKnife;
 
 public class DiarySelectProductActivity extends AppCompatActivity
 {
-
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.appbar)
@@ -151,16 +149,12 @@ public class DiarySelectProductActivity extends AppCompatActivity
         editFilter.setText("");
       }
     });
-
-
-
   }
 
   @Override
   protected void onResume()
   {
     super.onResume();
-
     barcodeView.resume();
   }
 
@@ -168,7 +162,6 @@ public class DiarySelectProductActivity extends AppCompatActivity
   protected void onPause()
   {
     super.onPause();
-
     barcodeView.pause();
   }
 
@@ -192,5 +185,4 @@ public class DiarySelectProductActivity extends AppCompatActivity
   {
     return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
   }
-
 }

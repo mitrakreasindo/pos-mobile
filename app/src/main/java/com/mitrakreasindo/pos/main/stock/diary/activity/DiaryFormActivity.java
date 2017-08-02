@@ -24,7 +24,7 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.diary.service.DiaryStockService;
+import com.mitrakreasindo.pos.service.DiaryStockService;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;

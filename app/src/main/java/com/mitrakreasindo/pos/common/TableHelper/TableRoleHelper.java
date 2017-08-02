@@ -174,34 +174,34 @@ public class TableRoleHelper
   public List<Role> getData()
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
             new String[] {"CAST(id AS INTEGER)", KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            null, null, null, null, "1");
+            null, null, null, null, "1"));
     close();
 
-    return populateRole(cursor);
+    return list;
   }
 
   public List<Role> getDataByName(String name)
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
             new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null);
+            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
     close();
 
-    return populateRole(cursor);
+    return list;
   }
 
   public List<Role> getDataById(String id)
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-      KEY_ID + " LIKE '%"+id+"%'", null, null, null, null);
+      KEY_ID + " LIKE '%"+id+"%'", null, null, null, null));
     close();
 
-    return populateRole(cursor);
+    return list;
   }
 
   public byte[] getPermission (String name)
@@ -211,12 +211,12 @@ public class TableRoleHelper
     open();
     final String QUERY = "SELECT r.permissions FROM people p JOIN roles r ON p.role = r.id WHERE p.name =?";
     Cursor cursor = db.rawQuery(QUERY, new String[]{name});
-    close();
 
     if (cursor.moveToFirst())
     {
       permissions = cursor.getBlob(cursor.getColumnIndexOrThrow(KEY_PERMISSION));
     }
+    close();
     return permissions;
   }
 

@@ -174,21 +174,21 @@ public class TableCategoryHelper
   public List<Category> getData()
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Category> list = populateCategory(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-      null, null, null, null, null);
+      null, null, null, null, null));
     close();
-    return populateCategory(cursor);
+    return list;
   }
 
   public List<Category> getData(String name)
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Category> list = populateCategory(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null);
+      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
     close();
-    return populateCategory(cursor);
+    return list;
   }
 
   public void downloadData(String kodeMerchant)

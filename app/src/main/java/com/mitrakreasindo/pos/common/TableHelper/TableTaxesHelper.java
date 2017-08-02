@@ -193,23 +193,23 @@ public class TableTaxesHelper
   public List<Tax> getData()
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Tax> list = populateTax(db.query(DATABASE_TABLE,
       new String[]{KEY_ID, KEY_NAME, KEY_CATEGORY, KEY_CUSTCATEGORY, KEY_PARENTID, KEY_RATE, KEY_RATECASCADE, KEY_RATEORDER},
-      null, null, null, null, null);
+      null, null, null, null, null));
     close();
 
-    return populateTax(cursor);
+    return list;
   }
 
   public List<Tax> getData(String name)
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Tax> list = populateTax(db.query(DATABASE_TABLE,
       new String[]{KEY_ID, KEY_NAME, KEY_CATEGORY, KEY_CUSTCATEGORY, KEY_PARENTID, KEY_RATE, KEY_RATECASCADE, KEY_RATEORDER},
-      KEY_NAME + " LIKE '%" + name + "%'", null, null, null, null);
+      KEY_NAME + " LIKE '%" + name + "%'", null, null, null, null));
     close();
 
-    return populateTax(cursor);
+    return list;
   }
 
   private class HttpRequestTask extends AsyncTask<Void, Void, Tax[]>

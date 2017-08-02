@@ -65,7 +65,7 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
     });
 
     holder.txtCodeProduct.setText(product.getCode());
-    holder.txtSellPrice.setText("IDR " + Double.toString(product.getPricesell()));
+    holder.txtSellPrice.setText(Double.toString(product.getPricesell()));
     holder.txtNameProduct.setText(product.getName());
     holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
     holder.checkBox.setVisibility(View.GONE);

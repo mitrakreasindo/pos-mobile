@@ -396,7 +396,7 @@ public class TableProductHelper
   public List<Product> getData()
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Product> list = populateProducts(db.query(DATABASE_TABLE,
       new String[]
         {
           context.getString(R.string.tproduct_id),
@@ -440,16 +440,16 @@ public class TableProductHelper
           context.getString(R.string.tproduct_siteguid),
           context.getString(R.string.tproduct_sflag)
         },
-      null, null, null, null, null);
+      null, null, null, null, null));
     close();
 
-    return populateProducts(cursor);
+    return list;
   }
 
   public List<Product> getData(String str)
   {
     open();
-    Cursor cursor = db.query(DATABASE_TABLE,
+    List<Product> list = populateProducts(db.query(DATABASE_TABLE,
       new String[]
         {
           context.getString(R.string.tproduct_id),
@@ -495,10 +495,10 @@ public class TableProductHelper
         },
       context.getString(R.string.tproduct_code) + " LIKE '%" + str + "%' OR " +
         context.getString(R.string.tproduct_name) + " LIKE '%" + str + "%'",
-      null, null, null, null);
+      null, null, null, null));
     close();
 
-    return populateProducts(cursor);
+    return list;
   }
 
   public Product getProduct(String code)
@@ -550,7 +550,6 @@ public class TableProductHelper
         },
       context.getString(R.string.tproduct_code) + " = '" + code + "'",
       null, null, null, null);
-    close();
 
     if (cursor.moveToFirst())
       return populateProduct(cursor);
@@ -623,12 +622,13 @@ public class TableProductHelper
     open();
     final String QUERY = "SELECT id FROM products WHERE code =?";
     Cursor cursor = db.rawQuery(QUERY, new String[]{code});
-    close();
     if (cursor.moveToFirst())
     {
       id = cursor.getString(cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_id)));
       Log.e("Product ID: ", id);
     }
+    close();
+
     return id;
   }
 
