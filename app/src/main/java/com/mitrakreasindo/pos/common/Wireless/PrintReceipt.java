@@ -95,7 +95,7 @@ public class PrintReceipt
             {
               ProductName = name.substring(0, 14);
             }
-            if(Integer.toString(Qty).length()<=4)
+            /*if(Integer.toString(Qty).length()<=4)
             {
               Quantity = Qty;
             }
@@ -119,8 +119,8 @@ public class PrintReceipt
             }
             else
             {
-              TotalHarga = Integer.parseInt(Integer.toString(Total).substring(0,10));
-            }
+              TotalHarga = Integer.parseInt(Integer.toString(Total).substring(0,9));
+            }*/
             
             Command.ESC_Relative[2] = 0x79;
             Command.ESC_Relative[3] = 0x00;
@@ -132,18 +132,18 @@ public class PrintReceipt
       
             Command.ESC_Relative[2] = (byte) 140;
             SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context,String.format("%4s" , decimalFormat.format(Quantity)).replace(' ',' ').getBytes("GBK"));
+            SendDataByte(context,String.format("%4s" , decimalFormat.format(Qty)).replace(' ',' ').getBytes("GBK"));
       
             Command.ESC_Relative[2] = (byte) 190;
             SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context,String.format("%10s" ,decimalFormat.format(Harga)).replace(' ',' ') .getBytes("GBK"));
+            SendDataByte(context,String.format("%10s" ,decimalFormat.format(Prize)).replace(' ',' ') .getBytes("GBK"));
       
             Command.ESC_Relative[2] = 0x79;
             Command.ESC_Relative[2] = 0x79;
             Command.ESC_Relative[2] = 0x25;
             Command.ESC_Relative[3] = 0x01;
             SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context,String.format("%11s", decimalFormat.format(TotalHarga) + "\n").replace(' ',' ').getBytes("GBK"));
+            SendDataByte(context,String.format("%11s", decimalFormat.format(Total) + "\n").replace(' ',' ').getBytes("GBK"));
           }
       Command.ESC_Align[2] = 0x00;
       SendDataByte(context, Command.ESC_Align);
@@ -174,7 +174,7 @@ public class PrintReceipt
       Command.ESC_Relative[2] = 0x25;
       Command.ESC_Relative[3] = 0x01;
       SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%11s","900000\n").replace(' ',' ').getBytes("GBK"));
+      SendDataByte(context,String.format("%11s",decimalFormat.format(900000)+"\n").replace(' ',' ').getBytes("GBK"));
     
       Command.ESC_Relative[2] = 0x79;
       Command.ESC_Relative[3] = 0x00;
@@ -188,7 +188,7 @@ public class PrintReceipt
       Command.ESC_Relative[2] = 0x25;
       Command.ESC_Relative[3] = 0x01;
       SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%11s","9000000\n").replace(' ',' ').getBytes("GBK"));
+      SendDataByte(context,String.format("%11s",decimalFormat.format(9000000)+"\n").replace(' ',' ').getBytes("GBK"));
     
       Command.ESC_Align[2] = 0x01;
       SendDataByte(context, Command.ESC_Align);

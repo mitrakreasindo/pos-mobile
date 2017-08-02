@@ -98,6 +98,36 @@ public void onCreate(Bundle savedInstanceState) {
       Toast.LENGTH_LONG).show();
     finish();
   }
+  
+  if(mService!=null)
+  {
+    if (mService.getState() == BluetoothService.STATE_CONNECTED)
+    {
+      KeyListenerDis();
+      btnScanButton.setEnabled(false);
+      btnClose.setEnabled(true);
+      
+      btnClose.setOnClickListener(new View.OnClickListener()
+      {
+        @Override
+        public void onClick(View v)
+        {
+          mService.stop();
+          KeyListenerInit();
+          Toast.makeText(getApplicationContext(),"disconnected",Toast.LENGTH_SHORT).show();
+        }
+      });
+      // Start the Bluetooth services
+      Toast.makeText(this, "Bluetooth is Connected",
+        Toast.LENGTH_SHORT).show();
+      return;
+    }
+    else if (mService.getState() != BluetoothService.STATE_CONNECTED)
+    {
+      KeyListenerInit();
+      return;
+    }
+  }
 }
   
   @Override
@@ -116,31 +146,18 @@ public void onCreate(Bundle savedInstanceState) {
     else
     {
       if (mService == null)
-      KeyListenerInit();//监听
-      /*else if (mService != null)
-          if (mService.getState() == BluetoothService.STATE_CONNECTED)
-          {
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT)
-              .show();
-          }*/
+      {
+        Toast.makeText(this, "mService Null",
+          Toast.LENGTH_SHORT).show();
+        KeyListenerInit();
+      }
     }
   }
   @Override
   public synchronized void onResume() {
     super.onResume();
-    
     if (DEBUG)
       Log.e(TAG, "- ON RESUME -");
-    
-    if(mService!=null)
-    {
-      if (mService.getState() == BluetoothService.STATE_NONE)
-      {
-        // Start the Bluetooth services
-        mService.start();
-        KeyListenerInit();
-      }
-    }
     
   }
   
@@ -176,8 +193,7 @@ public void onCreate(Bundle savedInstanceState) {
     btnClose = (Button)findViewById(R.id.btn_close);
     btnClose.setOnClickListener(this);
     
-    btnClose.setEnabled(true);
-    
+    /*mService = new BluetoothService(this, mHandler);*/
   }
   private void KeyListenerInit() {
     

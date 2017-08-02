@@ -29,6 +29,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
+import com.mitrakreasindo.pos.common.Wireless.PrintReceipt;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
 import com.mitrakreasindo.pos.model.Customer;
@@ -209,6 +210,14 @@ public class SalesActivity extends AppCompatActivity
     sales.setPerson(people);
     sales.setReceipt(receipt);
 
+    btnSalesCheckout.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        PrintReceipt.printReceipt(SalesActivity.this,salesListAdapter.getAllTickets());
+      }
+    });
     btnSalesSave.setOnClickListener(new View.OnClickListener()
     {
       @Override
