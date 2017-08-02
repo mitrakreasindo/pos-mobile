@@ -221,11 +221,12 @@ public class TablePeopleHelper
   public List<People> getData()
   {
     open();
-
-    return populatePeople(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
         KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
-      null, null, null, null, null));
+      null, null, null, null, null);
+    close();
+    return populatePeople(cursor);
   }
 
   public List<People> populatePeople(Cursor cursor)
@@ -277,15 +278,12 @@ public class TablePeopleHelper
   public List<People> getData(String name)
   {
     open();
-
-    List<People> list = populatePeople(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
         KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
-      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
-
+      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null);
     close();
-
-    return list;
+    return populatePeople(cursor);
   }
 
   public void downloadDataAlternate(String kodeMerchant, final int id)
@@ -342,17 +340,10 @@ public class TablePeopleHelper
       public void onResponse(Call<List<People>> call, Response<List<People>> response)
       {
         final List<People> list = response.body();
-//        new Thread(new Runnable()
-//        {
-//          @Override
-//          public void run()
-//          {
-            open();
-            deleteAll();
-            insert(list);
-            close();
-//          }
-//        }).start();
+        open();
+        deleteAll();
+        insert(list);
+        close();
 
         EventBus.getDefault().post(new Event(id, Event.COMPLETE));
       }

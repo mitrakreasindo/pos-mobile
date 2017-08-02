@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.model.People;
 import com.mitrakreasindo.pos.service.CategoryService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -175,19 +174,21 @@ public class TableCategoryHelper
   public List<Category> getData()
   {
     open();
-
-    return populateCategory(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-      null, null, null, null, null));
+      null, null, null, null, null);
+    close();
+    return populateCategory(cursor);
   }
 
   public List<Category> getData(String name)
   {
     open();
-
-    return populateCategory(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
-      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null);
+    close();
+    return populateCategory(cursor);
   }
 
   public void downloadData(String kodeMerchant)
@@ -199,17 +200,10 @@ public class TableCategoryHelper
       public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
       {
         final List<Category> list = response.body();
-//        new Thread(new Runnable()
-//        {
-//          @Override
-//          public void run()
-//          {
-            open();
-            deleteAll();
-            insert(list);
-            close();
-//          }
-//        }).start();
+        open();
+        deleteAll();
+        insert(list);
+        close();
       }
 
       @Override

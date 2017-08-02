@@ -174,28 +174,34 @@ public class TableRoleHelper
   public List<Role> getData()
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
             new String[] {"CAST(id AS INTEGER)", KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            null, null, null, null, "1"));
+            null, null, null, null, "1");
+    close();
+
+    return populateRole(cursor);
   }
 
   public List<Role> getDataByName(String name)
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
             new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+            KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null);
+    close();
+
+    return populateRole(cursor);
   }
 
   public List<Role> getDataById(String id)
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-      KEY_ID + " LIKE '%"+id+"%'", null, null, null, null));
+      KEY_ID + " LIKE '%"+id+"%'", null, null, null, null);
+    close();
+
+    return populateRole(cursor);
   }
 
   public byte[] getPermission (String name)
@@ -205,6 +211,7 @@ public class TableRoleHelper
     open();
     final String QUERY = "SELECT r.permissions FROM people p JOIN roles r ON p.role = r.id WHERE p.name =?";
     Cursor cursor = db.rawQuery(QUERY, new String[]{name});
+    close();
 
     if (cursor.moveToFirst())
     {
@@ -223,19 +230,12 @@ public class TableRoleHelper
       public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         final List<Role> list = response.body();
-//        new Thread(new Runnable()
-//        {
-//          @Override
-//          public void run()
-//          {
-            open();
-            deleteAll();
-            insert(list);
-            close();
+        open();
+        deleteAll();
+        insert(list);
+        close();
 
         EventBus.getDefault().post(new Event(id, Event.COMPLETE));
-//          }
-//        }).start();
       }
 
       @Override
@@ -245,6 +245,4 @@ public class TableRoleHelper
       }
     });
   }
-
-
 }

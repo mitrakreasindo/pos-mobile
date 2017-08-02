@@ -330,7 +330,6 @@ public class TableProductHelper
         product.setImage(image);
         list.add(product);
       }
-
       return list;
     }
     catch (Exception e)
@@ -385,8 +384,6 @@ public class TableProductHelper
         product.setStockvolume(stockVolume);
         product.setImage(image);
 
-
-
       return product;
     }
     catch (Exception e)
@@ -399,8 +396,7 @@ public class TableProductHelper
   public List<Product> getData()
   {
     open();
-
-    return populateProducts(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[]
         {
           context.getString(R.string.tproduct_id),
@@ -444,14 +440,16 @@ public class TableProductHelper
           context.getString(R.string.tproduct_siteguid),
           context.getString(R.string.tproduct_sflag)
         },
-      null, null, null, null, null));
+      null, null, null, null, null);
+    close();
+
+    return populateProducts(cursor);
   }
 
   public List<Product> getData(String str)
   {
     open();
-
-    return populateProducts(db.query(DATABASE_TABLE,
+    Cursor cursor = db.query(DATABASE_TABLE,
       new String[]
         {
           context.getString(R.string.tproduct_id),
@@ -497,63 +495,65 @@ public class TableProductHelper
         },
       context.getString(R.string.tproduct_code) + " LIKE '%" + str + "%' OR " +
         context.getString(R.string.tproduct_name) + " LIKE '%" + str + "%'",
-      null, null, null, null));
+      null, null, null, null);
+    close();
+
+    return populateProducts(cursor);
   }
 
   public Product getProduct(String code)
   {
     open();
-
-      Cursor cursor = db.query(DATABASE_TABLE,
-        new String[]
-          {
-            context.getString(R.string.tproduct_id),
-            context.getString(R.string.tproduct_reference),
-            context.getString(R.string.tproduct_code),
-            context.getString(R.string.tproduct_codetype),
-            context.getString(R.string.tproduct_name),
-            context.getString(R.string.tproduct_pricebuy),
-            context.getString(R.string.tproduct_pricesell),
-            context.getString(R.string.tproduct_category),
-            context.getString(R.string.tproduct_taxcat),
-            context.getString(R.string.tproduct_attributeset_id),
-            context.getString(R.string.tproduct_stockcost),
-            context.getString(R.string.tproduct_stockvolume),
-            context.getString(R.string.tproduct_iscom),
-            context.getString(R.string.tproduct_isscale),
-            context.getString(R.string.tproduct_iskitchen),
-            context.getString(R.string.tproduct_printkb),
-            context.getString(R.string.tproduct_sendstatus),
-            context.getString(R.string.tproduct_isservice),
-            context.getString(R.string.tproduct_display),
-            context.getString(R.string.tproduct_attributes),
-            context.getString(R.string.tproduct_isvprice),
-            context.getString(R.string.tproduct_isverpatrib),
-            context.getString(R.string.tproduct_texttip),
-            context.getString(R.string.tproduct_warranty),
-            context.getString(R.string.tproduct_image),
-            context.getString(R.string.tproduct_stockunits),
-            context.getString(R.string.tproduct_alias),
-            context.getString(R.string.tproduct_alwaysavailable),
-            context.getString(R.string.tproduct_discounted),
-            context.getString(R.string.tproduct_candiscount),
-            context.getString(R.string.tproduct_iscatalog),
-            context.getString(R.string.tproduct_catorder),
-            context.getString(R.string.tproduct_ispack),
-            context.getString(R.string.tproduct_packquantity),
-            context.getString(R.string.tproduct_packproduct),
-            context.getString(R.string.tproduct_promotionid),
-            context.getString(R.string.tproduct_allproducts),
-            context.getString(R.string.tproduct_managestock),
-            context.getString(R.string.tproduct_siteguid),
-            context.getString(R.string.tproduct_sflag)
-          },
-        context.getString(R.string.tproduct_code) + " = '" + code + "'",
-        null, null, null, null);
+    Cursor cursor = db.query(DATABASE_TABLE,
+      new String[]
+        {
+          context.getString(R.string.tproduct_id),
+          context.getString(R.string.tproduct_reference),
+          context.getString(R.string.tproduct_code),
+          context.getString(R.string.tproduct_codetype),
+          context.getString(R.string.tproduct_name),
+          context.getString(R.string.tproduct_pricebuy),
+          context.getString(R.string.tproduct_pricesell),
+          context.getString(R.string.tproduct_category),
+          context.getString(R.string.tproduct_taxcat),
+          context.getString(R.string.tproduct_attributeset_id),
+          context.getString(R.string.tproduct_stockcost),
+          context.getString(R.string.tproduct_stockvolume),
+          context.getString(R.string.tproduct_iscom),
+          context.getString(R.string.tproduct_isscale),
+          context.getString(R.string.tproduct_iskitchen),
+          context.getString(R.string.tproduct_printkb),
+          context.getString(R.string.tproduct_sendstatus),
+          context.getString(R.string.tproduct_isservice),
+          context.getString(R.string.tproduct_display),
+          context.getString(R.string.tproduct_attributes),
+          context.getString(R.string.tproduct_isvprice),
+          context.getString(R.string.tproduct_isverpatrib),
+          context.getString(R.string.tproduct_texttip),
+          context.getString(R.string.tproduct_warranty),
+          context.getString(R.string.tproduct_image),
+          context.getString(R.string.tproduct_stockunits),
+          context.getString(R.string.tproduct_alias),
+          context.getString(R.string.tproduct_alwaysavailable),
+          context.getString(R.string.tproduct_discounted),
+          context.getString(R.string.tproduct_candiscount),
+          context.getString(R.string.tproduct_iscatalog),
+          context.getString(R.string.tproduct_catorder),
+          context.getString(R.string.tproduct_ispack),
+          context.getString(R.string.tproduct_packquantity),
+          context.getString(R.string.tproduct_packproduct),
+          context.getString(R.string.tproduct_promotionid),
+          context.getString(R.string.tproduct_allproducts),
+          context.getString(R.string.tproduct_managestock),
+          context.getString(R.string.tproduct_siteguid),
+          context.getString(R.string.tproduct_sflag)
+        },
+      context.getString(R.string.tproduct_code) + " = '" + code + "'",
+      null, null, null, null);
+    close();
 
     if (cursor.moveToFirst())
       return populateProduct(cursor);
-
     else
       return null;
   }
@@ -565,7 +565,7 @@ public class TableProductHelper
     open();
     final String QUERY = "SELECT id FROM products WHERE code =?";
     Cursor cursor = db.rawQuery(QUERY, new String[]{code});
-
+    close();
     if (cursor.moveToFirst())
     {
       id = cursor.getString(cursor.getColumnIndexOrThrow(context.getString(R.string.tproduct_id)));
@@ -625,17 +625,10 @@ public class TableProductHelper
       public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
       {
         final List<Product> list = response.body();
-//        new Thread(new Runnable()
-//        {
-//          @Override
-//          public void run()
-//          {
         open();
         deleteAll();
         insert(list);
         close();
-//          }
-//        }).start();
       }
 
       @Override

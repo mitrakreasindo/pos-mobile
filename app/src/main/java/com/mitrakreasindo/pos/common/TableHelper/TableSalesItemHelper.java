@@ -167,25 +167,23 @@ public class TableSalesItemHelper
 //      null, null, null, null, null);
 //  }
 
-  public List<Sales> getData()
-  {
-    open();
-
+//  public List<Sales> getData()
+//  {
+//    open();
 //    return populateSales(db.query(DATABASE_TABLE,
 //      new String[] {KEY_ID, SALES_NUM, SALES_TYPE, PERSON, CUSTOMER, STATUS},
 //      null, null, null, null, null));
-    return null;
-  }
+//    return null;
+//  }
 
-  public List<Sales> getData(String name)
-  {
-    open();
-
+//  public List<Sales> getData(String name)
+//  {
+//    open();
 //    return populateCategory(db.query(DATABASE_TABLE,
 //      new String[] {KEY_ID, SALES_NUM, SALES_TYPE, PERSON, CUSTOMER, STATUS},
 //      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
-    return null;
-  }
+//    return null;
+//  }
 
 //  public void downloadData(String kodeMerchant)
 //  {
