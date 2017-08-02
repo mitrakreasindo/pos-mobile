@@ -343,6 +343,8 @@ public class RegisterActivity extends AppCompatActivity
             buttonCreateAcc.setEnabled(true);
             finish();
           }
+          else
+            progressDialog.dismiss();
         }
         Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }

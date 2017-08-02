@@ -51,8 +51,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener
 {
-  private String valueUser, valueFullname, valueCompanyName;
-  private int mPrevSelectedId;
+  private String valueUser, valueFullname, valueCompanyName, valueCompanyAddress, valueCompanyPhone;
   private String companyCode;
 
   private NavigationView navigationView;
@@ -90,7 +89,14 @@ public class MainActivity extends AppCompatActivity
     valueUser = getIntent().getExtras().getString("USERNAME");
     valueFullname = getIntent().getExtras().getString("FULLNAME");
     valueCompanyName = getIntent().getExtras().getString("COMPANYNAME");
+    valueCompanyAddress = getIntent().getExtras().getString("COMPANYADDRESS");
+    valueCompanyPhone = getIntent().getExtras().getString("COMPANYPHONE");
+
     IDs.setLoginUser(valueUser);
+    IDs.setLoginCompanyName(valueCompanyName);
+    IDs.setLoginCompanyAddress(valueCompanyAddress);
+    IDs.setLoginCompanyPhone(valueCompanyPhone);
+    
     Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
 
     View headerLayout = navigationView.getHeaderView(0);
