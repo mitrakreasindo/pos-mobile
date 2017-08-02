@@ -120,11 +120,9 @@ public class ProductFormActivity extends AppCompatActivity
     productService = ClientService.createService().create(ProductService.class);
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
     bundle = getIntent().getExtras();
 
     setSupportActionBar(toolbar);
-
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -161,7 +159,6 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
       {
-
         if (!switchMultiPack.isChecked())
         {
           edittextStockPackQuantity.setVisibility(View.GONE);
@@ -278,26 +275,28 @@ public class ProductFormActivity extends AppCompatActivity
   public void SelectProductImage(View view)
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("Options");
-    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which){
-          case 0:
-            Toast.makeText(ProductFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
-            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
-            break;
+    builder.setTitle(R.string.dialog_pick_image_title);
+    builder.setItems(new String[]{getString(R.string.dialog_pick_image_camera), getString(R.string.dialog_pick_image_gallery)},
+      new DialogInterface.OnClickListener()
+      {
+        @Override
+        public void onClick(DialogInterface dialog, int which)
+        {
+          switch (which)
+          {
+            case 0:
+              Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+              startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
+              break;
 
-          case 1:
-            Toast.makeText(ProductFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
-            break;
+            case 1:
+              Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+              startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
+              break;
+          }
         }
-      }
-    });
+      });
     builder.show();
   }
 
@@ -331,20 +330,19 @@ public class ProductFormActivity extends AppCompatActivity
       catch (Exception e)
       {
         e.printStackTrace();
-        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.error_general, Toast.LENGTH_LONG).show();
       }
     }
     else
     {
       imageviewProduct.setVisibility(View.INVISIBLE);
-      Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
     }
   }
 
   private void postProduct()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
     progressDialog.show();
 
     Category category = new Category();
@@ -384,13 +382,13 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPrintkb(false);
     product.setSendstatus(false);
     product.setIsservice(false);
-    product.setDisplay("<html>Tes");
+    product.setDisplay("");
     product.setIsvprice(false);
     product.setIsverpatrib(false);
-    product.setTexttip("tessss");
+    product.setTexttip("");
     product.setWarranty(false);
     product.setStockunits(30.0);
-    product.setAlias("tessssss");
+    product.setAlias("");
     product.setAlwaysavailable(false);
     product.setDiscounted("no");
     product.setCandiscount(false);
@@ -412,7 +410,6 @@ public class ProductFormActivity extends AppCompatActivity
     Call<HashMap<Integer, String>> call = productService.postProduct(kodeMerchant, product);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
-
       private int responseCode;
       private String responseMessage;
 
@@ -434,9 +431,10 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.close();
             productListAdapter.addProduct(product);
             productListAdapter.notifyDataSetChanged();
+
+            progressDialog.dismiss();
           }
-          Log.d(getClass().getSimpleName(), "Success Post Product !!!");
-          Toast.makeText(ProductFormActivity.this, "Succesfull add product", Toast.LENGTH_SHORT).show();
+          Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
         finish();
       }
@@ -444,6 +442,10 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        progressDialog.dismiss();
+        responseCode = -1;
+        responseMessage = getString(R.string.error_webservice);
+        Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }
@@ -492,13 +494,13 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPrintkb(false);
     product.setSendstatus(false);
     product.setIsservice(false);
-    product.setDisplay("<html>Tes");
+    product.setDisplay("");
     product.setIsvprice(false);
     product.setIsverpatrib(false);
-    product.setTexttip("tessss");
+    product.setTexttip("");
     product.setWarranty(false);
     product.setStockunits(30.0);
-    product.setAlias("tessssss");
+    product.setAlias("");
     product.setAlwaysavailable(false);
     product.setDiscounted("no");
     product.setCandiscount(false);
@@ -539,9 +541,10 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.open();
             tableProductHelper.update(product);
             tableProductHelper.close();
+
+            progressDialog.dismiss();
           }
-          Log.d(getClass().getSimpleName(), "Success Update Product !!!");
-          Toast.makeText(ProductFormActivity.this, "Succesfull Update product", Toast.LENGTH_SHORT).show();
+          Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
         finish();
       }
@@ -549,6 +552,10 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        progressDialog.dismiss();
+        responseCode = -1;
+        responseMessage = getString(R.string.error_webservice);
+        Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,28 +16,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
 import com.mitrakreasindo.pos.model.Product;
-import com.mitrakreasindo.pos.service.ProductService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ProductActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar_layout)
   public Toolbar toolbar;
   @BindView(R.id.list_product)
@@ -52,11 +44,8 @@ public class ProductActivity extends AppCompatActivity
   @BindView(R.id.button_filter)
   Button btnClearFilter;
 
-  private ProductService productService;
   private ProductListAdapter productListAdapter;
   private TableProductHelper tableProductHelper;
-
-//  private SharedPreferenceEditor sharedPreferenceEditor;
   public boolean is_action_mode = false;
 
   @Override
@@ -65,9 +54,6 @@ public class ProductActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_product);
     ButterKnife.bind(this);
-
-    productService = ClientService.createService().create(ProductService.class);
-    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
 
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
@@ -87,6 +73,7 @@ public class ProductActivity extends AppCompatActivity
         txtFilter.setText("");
       }
     });
+    productListAdapter = new ProductListAdapter(this, new ArrayList<Product>());
 
     listProduct.setHasFixedSize(true);
     listProduct.setAdapter(productListAdapter);
@@ -112,11 +99,9 @@ public class ProductActivity extends AppCompatActivity
     }
 
     tableProductHelper = new TableProductHelper(this);
-
     productListAdapter.clear();
     productListAdapter.addProduct(tableProductHelper.getData());
 
-//    getProducts();
     txtFilter.addTextChangedListener(new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -132,8 +117,6 @@ public class ProductActivity extends AppCompatActivity
       {
       }
     });
-
-
   }
 
   @Override
@@ -166,31 +149,8 @@ public class ProductActivity extends AppCompatActivity
     }
     else if (id == R.id.menu_delete)
     {
-//      productListAdapter.updateCounter(productListAdapter.list_product);
       productListAdapter.deleteMultipleProduct();
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  private void getProducts(String kodeMerchant)
-  {
-    final Call<List<Product>> listCall = productService.getProductAll(kodeMerchant);
-    listCall.enqueue(new Callback<List<Product>>()
-    {
-      @Override
-      public void onResponse(Call<List<Product>> call, Response<List<Product>> response)
-      {
-        List<Product> productList = response.body();
-        Log.d("DATA :: ", productList.toString());
-        productListAdapter.clear();
-        productListAdapter.addProduct(productList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Product>> call, Throwable t)
-      {
-
-      }
-    });
   }
 }

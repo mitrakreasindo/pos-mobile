@@ -96,8 +96,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         @Override
         public boolean onLongClick(final View v) {
           final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-          builder.setTitle("Options");
-          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
+          builder.setTitle(R.string.adapter_options_dialog);
+          builder.setItems(new String[]{context.getString(R.string.adapter_options_delete)}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
               switch (which) {
@@ -309,7 +309,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot delete product. :( There is something wrong.";
+        responseMessage = context.getString(R.string.error_webservice);
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });

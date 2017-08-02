@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -21,6 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -82,6 +84,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   private EditText mPasswordView;
   private View mProgressView;
   private View mLoginFormView;
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -142,6 +145,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
       merchantCode.setText(companyCode);
     }
+    progressDialog = new ProgressDialog(this);
   }
 
   public void onClick(View view)
@@ -151,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
   public void Register(View view)
   {
-    this.getSharedPreferences(this.getResources().getString(R.string.preference_file_key), MODE_PRIVATE).edit().remove("Company Code").apply();
+    this.getSharedPreferences(this.getString(R.string.preference_file_key), MODE_PRIVATE).edit().remove("Company Code").apply();
     Intent intent = new Intent(this, RegisterActivity.class);
     startActivity(intent);
   }
@@ -269,18 +273,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
-//      mAuthTask = new UserLoginTask(email, password);
-//      mAuthTask.execute((Void) null);
-//      showProgress(true);
+      progressDialog.setMessage(this.getString(R.string.progress_message));
+      progressDialog.show();
+
       companyCode = merchantCode.getText().toString();
       SharedPreferenceEditor.SavePreferences(LoginActivity.this, "Company Code", companyCode);
       postLogin(companyCode, user, password);
-//      Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//      intent.putExtra("USERNAME", user);
-//      intent.putExtra("COMPANY", companyCode);
-//      startActivity(intent);
 
-//      showProgress(false);
       mUsernameView.setText("");
       mPasswordView.setText("");
     }
@@ -303,10 +302,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     final LoginService loginService = ClientService.createService().create(LoginService.class);
 
-//    final ProgressDialog progressDialog = new ProgressDialog(this);
-//    progressDialog.setMessage("Please wait...");
-//    progressDialog.show();
-
     Call<HashMap<Integer, String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
@@ -321,31 +316,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
+          Log.d("RESPONSE FROM LOGIN", responseMessage);
 
           if (responseCode == 0)
           {
+            String[] parts = responseMessage.split(";");
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
-            intent.putExtra("COMPANY", kodeMerchant);
+            intent.putExtra("FULLNAME", parts[0]);
+            intent.putExtra("COMPANYNAME", parts[1]);
+            intent.putExtra("COMPANYADDRESS", parts[2]);
+            intent.putExtra("COMPANYPHONE", parts[3]);
+
+            progressDialog.dismiss();
             startActivity(intent);
           }
           else
           {
+            progressDialog.dismiss();
             mUsernameView.requestFocus();
+            Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
           }
         }
-        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        progressDialog.dismiss();
         responseCode = -1;
         responseMessage = "Cannot login. :( There is something wrong.";
         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-//    progressDialog.hide();
   }
 
   private boolean isEmailValid(String email)

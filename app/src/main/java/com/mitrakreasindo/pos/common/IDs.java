@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class IDs
 {
-  private static String loginUser;
+  private static String loginUser, loginCompanyName, loginCompanyAddress, loginCompanyPhone;
 
   public static String getLoginUser()
   {
@@ -21,6 +21,36 @@ public class IDs
   public static void setLoginUser(String loginUser)
   {
     IDs.loginUser = loginUser;
+  }
+
+  public static String getLoginCompanyName()
+  {
+    return loginCompanyName;
+  }
+
+  public static void setLoginCompanyName(String loginCompanyName)
+  {
+    IDs.loginCompanyName = loginCompanyName;
+  }
+
+  public static String getLoginCompanyAddress()
+  {
+    return loginCompanyAddress;
+  }
+
+  public static void setLoginCompanyAddress(String loginCompanyAddress)
+  {
+    IDs.loginCompanyAddress = loginCompanyAddress;
+  }
+
+  public static String getLoginCompanyPhone()
+  {
+    return loginCompanyPhone;
+  }
+
+  public static void setLoginCompanyPhone(String loginCompanyPhone)
+  {
+    IDs.loginCompanyPhone = loginCompanyPhone;
   }
 
   public static String generateTransactionID()

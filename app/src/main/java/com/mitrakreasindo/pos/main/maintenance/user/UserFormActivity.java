@@ -236,19 +236,23 @@ public class UserFormActivity extends AppCompatActivity
       {
         imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
-      getSupportActionBar().setTitle("Edit User");
+      getSupportActionBar().setTitle(R.string.action_bar_userform_edit);
     }
     else
     {
-      getSupportActionBar().setTitle("Create User");
+      getSupportActionBar().setTitle(R.string.action_bar_userform_create);
     }
   }
 
   public void Select(View view)
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("Options");
-    builder.setItems(new String[]{"Take a Photo", "Pick from Gallery"}, new DialogInterface.OnClickListener()
+    builder.setTitle(R.string.dialog_pick_image_title);
+    builder.setItems(new String[]
+      {
+        getString(R.string.dialog_pick_image_camera),
+        getString(R.string.dialog_pick_image_gallery)
+      }, new DialogInterface.OnClickListener()
     {
       @Override
       public void onClick(DialogInterface dialog, int which)
@@ -256,13 +260,15 @@ public class UserFormActivity extends AppCompatActivity
         switch (which)
         {
           case 0:
-            Toast.makeText(UserFormActivity.this, "Take a photo", Toast.LENGTH_LONG).show();
+            Toast.makeText(UserFormActivity.this, getString(R.string.dialog_pick_image_camera),
+              Toast.LENGTH_LONG).show();
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
             break;
 
           case 1:
-            Toast.makeText(UserFormActivity.this, "Pick from Gallery", Toast.LENGTH_LONG).show();
+            Toast.makeText(UserFormActivity.this, getString(R.string.dialog_pick_image_gallery),
+              Toast.LENGTH_LONG).show();
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
               MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
@@ -342,13 +348,12 @@ public class UserFormActivity extends AppCompatActivity
       catch (Exception e)
       {
         e.printStackTrace();
-        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.error_general, Toast.LENGTH_LONG).show();
       }
     }
     else
     {
       imageviewImageSelect.setVisibility(View.INVISIBLE);
-      Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
     }
   }
 
@@ -378,12 +383,7 @@ public class UserFormActivity extends AppCompatActivity
     }
     else if (!passwordValidator.validate(pass))
     {
-      edittextPass.setError("- Password must at least 8 chars and max 10 chars \n" +
-        "- Contains at least 1 digit (0-9)\n" +
-        "- 1 lower case alphabet char (a-z)\n" +
-        "- 1 upper case alphabet char (A-Z)\n" +
-        "- 1 special char (~!@#$%^&*-+=,.?)\n" +
-        "- No whitespace allowed");
+      edittextPass.setError(getString(R.string.error_password_invalid));
       focusView = edittextPass;
       return false;
     }
@@ -427,12 +427,7 @@ public class UserFormActivity extends AppCompatActivity
     {
       if (!passwordValidator.validate(pass))
       {
-        edittextPass.setError("- Password must at least 8 chars and max 10 chars \n" +
-          "- Contains at least 1 digit (0-9)\n" +
-          "- 1 lower case alphabet char (a-z)\n" +
-          "- 1 upper case alphabet char (A-Z)\n" +
-          "- 1 special char (~!@#$%^&*-+=,.?)\n" +
-          "- No whitespace allowed");
+        edittextPass.setError(getString(R.string.error_password_invalid));
         focusView = edittextPass;
         flag = false;
       }
@@ -575,7 +570,7 @@ public class UserFormActivity extends AppCompatActivity
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot create new user. :( There is something wrong.";
+        responseMessage = getString(R.string.error_webservice);
         Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
@@ -615,7 +610,7 @@ public class UserFormActivity extends AppCompatActivity
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot update user. :( There is something wrong.";
+        responseMessage = getString(R.string.error_webservice);
         Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });

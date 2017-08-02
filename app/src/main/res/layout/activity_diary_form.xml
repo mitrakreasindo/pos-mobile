@@ -257,6 +257,7 @@
                         style="@style/Widget.AppCompat.Spinner.Underlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:entries="@array/spinner_reason_stock_diary"
                         android:theme="@style/ThemeSpinner">
 
                     </Spinner>

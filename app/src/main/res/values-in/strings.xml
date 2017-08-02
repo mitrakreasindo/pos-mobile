@@ -16,6 +16,8 @@
         <item>Inggris</item>
     </string-array>
 
+    <string name="error_webservice">Terdapat kesalahan sistem. Silahkan hubungi administrator.</string>
+    <string name="error_general">Terdapat kesalahan aplikasi</string>
 
     <!-- Strings related to login -->
     <string name="prompt_merchant_code">Kode Bisnis</string>
@@ -29,8 +31,9 @@
     <string name="error_field_required">Data harus diisi</string>
     <string name="link_register">Belum terdaftar? Klik disini untuk mendaftar</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+        completions."</string>
+    <string name="login_message">Halo, %1$s!\nSelamat datang di POS++</string>
+    <string name="logout_message">Selamat tinggal, %1$s!\nSampai bertemu lagi.</string>
 
     <!-- Strings related to create new user -->
     <string name="person_fullname">Nama Lengkap</string>
@@ -48,7 +51,7 @@
     <string name="image_select">Pilih</string>
     <string name="confirm">Simpan</string>
     <string name="cancel">Batal</string>
-    <string name="title_activity_main">POS Menu Utama</string>
+    <string name="title_activity_main">Menu Utama POS++</string>
     <string name="error_incorrect_reinput_password">Kata sandi tidak valid</string>
     <string name="error_empty_name">Nama harus diisi</string>
     <string name="error_empty_pass">Kata sandi harus diisi</string>
@@ -82,6 +85,14 @@
     <string name="error_empty_ownerfullname">Nama Lengkap harus diisi</string>
     <string name="error_empty_owneremail">E-mail harus diisi</string>
     <string name="error_valid_owneremail">E-mail tidak valid</string>
+    <string name="error_password_invalid">
+        - Panjang minimum 8 dan maksimum 10
+        - Harus berisi minimal 1 digit
+        - Minimal 1 huruf besar
+        - Minimal 1 huruf kecil
+        - Minimal 1 karakter khusus
+        - Tanpa spasi
+    </string>
 
     <!-- Navigation Menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -203,6 +214,9 @@
     <string name="multi_pack">Multi Pack</string>
 
     <!-- Alert Confirmation Dialog Delete -->
+    <string name="adapter_options_dialog">Opsi</string>
+    <string name="adapter_options_delete">Hapus</string>
+
     <string name="alert_dialog_delete_people">Hapus Pengguna</string>
     <string name="alert_dialog_delete_people_message">Apakah anda yakin ingin menghapus pengguna ini?</string>
 
@@ -225,7 +239,7 @@
     <string name="nav_edit_sales">Ubah Penjualan</string>
     <string name="nav_customer_payment">Pembayaran Pelanggan</string>
     <string name="nav_payment">Pembayaran</string>
-    <string name="nav_close_cash">Close Cash</string>
+    <string name="nav_close_cash">Tutup Kas</string>
     <!-- administration -->
     <string name="nav_ad_customers">Pelanggan</string>
     <string name="nav_ad_stock">Stok</string>
@@ -244,7 +258,6 @@
     <string name="nav_sys_check_in_out">Check In/Out</string>
     <string name="nav_sys_log_out">Keluar</string>
 
-
     <!-- role permission -->
     <string name="rp_navigation">Navigasi</string>
     <string name="rp_role">Jabatan</string>
@@ -256,6 +269,26 @@
     <string name="maintenance">Maintenance</string>
     <string name="logout_question">Keluar ?</string>
     <string name="logout_question_message">Apakah anda yakin ingin keluar dari POS++ ?</string>
+    <string name="register_question">Keluar Registrasi</string>
+    <string name="register_question_message">Apakah anda yakin ingin keluar dari halaman registrasi?</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
+
+    <string name="progress_message">Harap tunggu</string>
+    <string name="error_post_register">Gagal mendaftar. Terdapat kesalahan jaringan.</string>
+    <string name="error_get_category">Pengambilan category gagal</string>
+    <string name="error_get_subcategory">Pengambilan subcategory gagal</string>
+
+    <string name="action_bar_userform_create">Tambah Pengguna</string>
+    <string name="action_bar_userform_edit">Edit Pengguna</string>
+    <string name="dialog_pick_image_title">Opsi Pilih Gambar</string>
+    <string name="dialog_pick_image_camera">Ambil Foto (Kamera)</string>
+    <string name="dialog_pick_image_gallery">Pilih dari Galeri</string>
+    <string name="stock_diary_error_submit_product">Mohon pilih produk terlebih dahulu !</string>
+    <string name="stock_diary_error_submit_price_unit_not_filled">Mohon isi unit &amp; harga terlebih dahulu !</string>
+
+    <string-array name="spinner_reason_stock_diary">
+        <item>Stok Masuk (+)</item>
+        <item>Stok Keluar (-)</item>
+    </string-array>
 </resources>

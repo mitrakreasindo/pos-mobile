@@ -17,7 +17,6 @@ public class Sales
   private People person;
   private Receipt receipt;
 
-
   public String getId()
   {
     return id;

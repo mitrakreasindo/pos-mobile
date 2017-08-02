@@ -42,6 +42,14 @@
             android:layout_weight="6"
             android:textAlignment="center"/>
 
+        <ImageView
+            android:id="@+id/sales_btn_delete_item"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"/>
+
     </LinearLayout>
 
     <include layout="@layout/product_divider" />
