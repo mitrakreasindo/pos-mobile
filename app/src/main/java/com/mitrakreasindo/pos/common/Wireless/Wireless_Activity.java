@@ -203,6 +203,7 @@ public void onCreate(Bundle savedInstanceState) {
     btnClose = (Button)findViewById(R.id.btn_close);
     btnClose.setOnClickListener(this);
     
+    btnScanButton.setEnabled(true);
     btnClose.setEnabled(false);
     mService = new BluetoothService(this, mHandler);
   }
