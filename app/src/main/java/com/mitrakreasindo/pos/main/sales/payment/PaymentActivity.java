@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -110,6 +111,7 @@ public class PaymentActivity extends AppCompatActivity
       }
     });
 
+    edittextPaymentMoney.setText("0");
     edittextPaymentMoney.addTextChangedListener(new TextWatcher()
     {
       @Override
@@ -118,7 +120,15 @@ public class PaymentActivity extends AppCompatActivity
         if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
         {
 
-//          edittextPaymentMoney.setText(decimalFormat.format(Double.parseDouble(edittextPaymentMoney.getText().toString())));
+          if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
+          {
+
+          }
+          else
+          {
+            edittextPaymentMoney.setText("0");
+          }
+
         }
         else
         {
@@ -145,23 +155,29 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-
-        final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-        confirmationDialog.setTitle("Change money");
-        confirmationDialog.setMessage(decimalFormat.format(
-          Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
-        ));
-        confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+        if (paymentProductListAdapter.grandTotal() <= Double.parseDouble(edittextPaymentMoney.getText().toString()))
         {
-          @Override
-          public void onClick(DialogInterface dialog, int which)
+          final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+          confirmationDialog.setTitle("Change money");
+          confirmationDialog.setMessage(decimalFormat.format(
+            Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+          ));
+          confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
           {
-            SalesActivity.sActivity.finish();
-            finish();
-          }
-        });
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              SalesActivity.sActivity.finish();
+              finish();
+            }
+          });
 
-        confirmationDialog.show();
+          confirmationDialog.show();
+        }
+        else
+        {
+          Toast.makeText(PaymentActivity.this, "Money is not enough", Toast.LENGTH_LONG).show();
+        }
 
       }
     });

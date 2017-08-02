@@ -138,14 +138,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total ($) :"
+                android:text="Total (Rp) :"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/sales_payment_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 0"/>
+                android:text="Rp 0"/>
 
 
         </LinearLayout>
