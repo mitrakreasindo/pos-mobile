@@ -337,6 +337,8 @@ public class SalesActivity extends AppCompatActivity
           tableSalesItemHelper.open();
           tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
+
+          finish();
         }
 //        salesPack = new SalesPack();
 //        salesPack.setSales(viewsales);
