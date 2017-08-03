@@ -16,25 +16,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
-import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.role.controller.RoleAdapter;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by error on 17/05/17.
@@ -61,7 +55,6 @@ public class RoleActivity extends AppCompatActivity
   protected void onCreate(@Nullable Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
-
     setContentView(R.layout.activity_role);
     ButterKnife.bind(this);
 
@@ -83,11 +76,8 @@ public class RoleActivity extends AppCompatActivity
         txtFilter.setText("");
       }
     });
-
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
     roleService = ClientService.createService().create(RoleService.class);
-
     tableRoleHelper = new TableRoleHelper(this);
     roleAdapter = new RoleAdapter(this, new ArrayList<Role>());
 
@@ -95,8 +85,6 @@ public class RoleActivity extends AppCompatActivity
     listRole.setAdapter(roleAdapter);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listRole.setLayoutManager(layoutManager);
-
-
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());
 
@@ -117,7 +105,6 @@ public class RoleActivity extends AppCompatActivity
       {
       }
     });
-
   }
 
   @Override
@@ -153,41 +140,39 @@ public class RoleActivity extends AppCompatActivity
     roleAdapter.clear();
     roleAdapter.addRole(tableRoleHelper.getData());
     roleAdapter.setPermission();
-//    getRole(kodeMerchant);
   }
 
-  private void getRole(String kodeMerchant)
-  {
+//  private void getRole(String kodeMerchant)
+//  {
+//
+//    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
+//    role.enqueue(new Callback<List<Role>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
+//      {
+//        List<Role> rolesList = response.body();
+//        roleAdapter.clear();
+//        roleAdapter.addRole(rolesList);
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<Role>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//  }
 
-    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
-    role.enqueue(new Callback<List<Role>>()
-    {
-      @Override
-      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-      {
-        List<Role> rolesList = response.body();
-        roleAdapter.clear();
-        roleAdapter.addRole(rolesList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Role>> call, Throwable t)
-      {
-
-      }
-    });
-  }
-
-  public List<String> getInactive()
-  {
-    List<String> list = new ArrayList<>();
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
-    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
-    if (permission != null)
-    {
-      list = XMLHelper.XMLReader(this, "role_action", permission);
-    }
-    return list;
-  }
-
+//  public List<String> getInactive()
+//  {
+//    List<String> list = new ArrayList<>();
+//    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+//    byte[] permission = tableRoleHelper.getPermission(IDs.getLoginUser());
+//    if (permission != null)
+//    {
+//      list = XMLHelper.XMLReader(this, "role_action", permission);
+//    }
+//    return list;
+//  }
 }

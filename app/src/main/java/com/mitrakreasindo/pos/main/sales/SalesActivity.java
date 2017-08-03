@@ -1,7 +1,6 @@
 package com.mitrakreasindo.pos.main.sales;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,20 +55,17 @@ import com.mitrakreasindo.pos.model.Viewsales;
 import com.mitrakreasindo.pos.model.Viewsalesitems;
 import com.mitrakreasindo.pos.model.Viewstockdiary;
 import com.mitrakreasindo.pos.model.Viewtaxlines;
+import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class SalesActivity extends AppCompatActivity
@@ -162,10 +157,10 @@ public class SalesActivity extends AppCompatActivity
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
 
-      viewtaxlines.add(viewtaxline);
-      viewsalesitems.add(viewsalesitem);
-      viewpayments.add(viewpayment);
-      viewstockdiaries.add(viewstockdiary);
+//      viewtaxlines.add(viewtaxline);
+//      viewsalesitems.add(viewsalesitem);
+//      viewpayments.add(viewpayment);
+//      viewstockdiaries.add(viewstockdiary);
 
       if (product != null)
       {
@@ -236,11 +231,20 @@ public class SalesActivity extends AppCompatActivity
 
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
 
-    ClosedCash closedCash = new ClosedCash();
+    final ClosedCash closedCash = new ClosedCash();
     if (IDs.getLoginCloseCashID().equals(""))
       closedCash.setMoney(UUID.randomUUID().toString());
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
+
+    Tax tax = new Tax();
+    tax.setId("001");
+
+    people = new People();
+    people.setId("1111111");
+
+    customer = new Customer();
+    customer.setId(null);
 
     receipt = new Receipt();
     receipt.setId(UUID.randomUUID().toString());
@@ -257,7 +261,7 @@ public class SalesActivity extends AppCompatActivity
     sales.setSalesnum(1);
     sales.setSalestype(1);
     sales.setStatus(1);
-    sales.setSiteguid(UUID.randomUUID().toString());
+    sales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     sales.setSflag(true);
     sales.setCustomer(customer);
     sales.setPerson(people);
@@ -298,9 +302,10 @@ public class SalesActivity extends AppCompatActivity
 
           Intent intent = new Intent(SalesActivity.this, PaymentActivity.class);
           intent.putExtra("salesid", sales.getId());
+//          intent.putExtra("salesid", sales.getId());
+
           startActivity(intent);
         }
-
 
 
       }
@@ -311,15 +316,34 @@ public class SalesActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        salesPack = new SalesPack();
-        salesPack.setSales(viewsales);
-        salesPack.setReceipts(viewreceipt);
-        salesPack.setSalesItems(viewsalesitems);
-        salesPack.setPayments(viewpayments);
-        salesPack.setStockdiary(viewstockdiaries);
-        salesPack.setTaxlines(viewtaxlines);
 
-        postSales();
+        if (salesListAdapter.salesItems.size() == 0)
+        {
+          Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+          TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
+          tableSalesHelper.open();
+          tableSalesHelper.insertSales(sales);
+          tableSalesHelper.close();
+
+          TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
+          tableSalesItemHelper.open();
+          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
+          tableSalesItemHelper.close();
+
+          finish();
+        }
+//        salesPack = new SalesPack();
+//        salesPack.setSales(viewsales);
+//        salesPack.setReceipts(viewreceipt);
+//        salesPack.setSalesItems(viewsalesitems);
+//        salesPack.setPayments(viewpayments);
+//        salesPack.setStockdiary(viewstockdiaries);
+//        salesPack.setTaxlines(viewtaxlines);
+
+//        postSales();
 
 //        for (Viewpayments lpayment : viewpayments)
 //        {
@@ -357,9 +381,6 @@ public class SalesActivity extends AppCompatActivity
         Tax tax = new Tax();
         tax.setId("001");
 
-        String example = "Convert Java String";
-        byte[] bytes = example.getBytes();
-
         data();
 
         salesItem = new SalesItem();
@@ -372,10 +393,10 @@ public class SalesActivity extends AppCompatActivity
         salesItem.setSflag(true);
         salesItem.setTaxid(tax);
 
-        viewtaxlines.add(viewtaxline);
-        viewsalesitems.add(viewsalesitem);
-        viewpayments.add(viewpayment);
-        viewstockdiaries.add(viewstockdiary);
+//        viewtaxlines.add(viewtaxline);
+//        viewsalesitems.add(viewsalesitem);
+//        viewpayments.add(viewpayment);
+//        viewstockdiaries.add(viewstockdiary);
 
 //        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
 //        tableSalesItemHelper.open();
@@ -463,12 +484,6 @@ public class SalesActivity extends AppCompatActivity
 
   public void data()
   {
-
-    customer = new Customer();
-    customer.setId(null);
-
-    people = new People();
-    people.setId("1111111");
 
     Location location = new Location();
     location.setId(UUID.randomUUID().toString());
@@ -626,43 +641,43 @@ public class SalesActivity extends AppCompatActivity
 
   }
 
-  public void postSales()
-  {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage("Loading");
-    progressDialog.show();
-
-    Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
-    saveSales.enqueue(new Callback<HashMap<Integer, String>>()
-    {
-
-      private int responseCode;
-      private String responseMessage;
-
-      @Override
-      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
-      {
-        final HashMap<Integer, String> data = response.body();
-        for (int resultKey : data.keySet())
-        {
-          responseCode = resultKey;
-          responseMessage = data.get(resultKey);
-
-          if (responseCode == 0)
-          {
-            progressDialog.dismiss();
-            Toast.makeText(SalesActivity.this, "success", Toast.LENGTH_LONG).show();
-          }
-        }
-      }
-
-      @Override
-      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-      {
-
-      }
-    });
-  }
+//  public void postSales()
+//  {
+//    final ProgressDialog progressDialog = new ProgressDialog(this);
+//    progressDialog.setCancelable(false);
+//    progressDialog.setMessage("Loading");
+//    progressDialog.show();
+//
+//    Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
+//    saveSales.enqueue(new Callback<HashMap<Integer, String>>()
+//    {
+//
+//      private int responseCode;
+//      private String responseMessage;
+//
+//      @Override
+//      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+//      {
+//        final HashMap<Integer, String> data = response.body();
+//        for (int resultKey : data.keySet())
+//        {
+//          responseCode = resultKey;
+//          responseMessage = data.get(resultKey);
+//
+//          if (responseCode == 0)
+//          {
+//            progressDialog.dismiss();
+//            Toast.makeText(SalesActivity.this, "success", Toast.LENGTH_LONG).show();
+//          }
+//        }
+//      }
+//
+//      @Override
+//      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+//      {
+//
+//      }
+//    });
+//  }
 
 }

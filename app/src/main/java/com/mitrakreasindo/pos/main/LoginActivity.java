@@ -274,6 +274,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
       progressDialog.setMessage(this.getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
       progressDialog.show();
 
       companyCode = merchantCode.getText().toString();

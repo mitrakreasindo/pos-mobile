@@ -343,6 +343,7 @@ public class ProductFormActivity extends AppCompatActivity
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     Category category = new Category();
@@ -453,7 +454,8 @@ public class ProductFormActivity extends AppCompatActivity
   private void updateProduct()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     Category category = new Category();

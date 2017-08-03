@@ -686,7 +686,8 @@ public class RolePermissionActivity extends AppCompatActivity
     Bundle bundle = getIntent().getExtras();
 
     final ProgressDialog progressDialog = new ProgressDialog(RolePermissionActivity.this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
     Log.d(getClass().getSimpleName(), "Post Role !!!");
     Log.d(getClass().getSimpleName(), editRole.getText().toString());
@@ -743,7 +744,8 @@ public class RolePermissionActivity extends AppCompatActivity
   private void updateRole()
   {
     final ProgressDialog progressDialog = new ProgressDialog(RolePermissionActivity.this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     Bundle bundle = getIntent().getExtras();

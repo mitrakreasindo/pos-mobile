@@ -37,14 +37,12 @@ import retrofit2.Response;
 
 public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
 {
-
   private List<Role> roles = new ArrayList<Role>();
   private Context context;
   private LayoutInflater inflater;
   private RoleService roleService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private List<String> inActiveList = new ArrayList<>();
-
 
   public RoleAdapter(Context context, List<Role> roles)
   {
@@ -171,29 +169,6 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
     }
   }
 
-  private void getRole(String kodeMerchant)
-  {
-
-    final Call<List<Role>> role = roleService.getRoleAll(kodeMerchant);
-    role.enqueue(new Callback<List<Role>>()
-    {
-      @Override
-      public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
-      {
-        clear();
-        List<Role> rolesList = response.body();
-
-        addRole(rolesList);
-      }
-
-      @Override
-      public void onFailure(Call<List<Role>> call, Throwable t)
-      {
-
-      }
-    });
-  }
-
   private void deleteRole (String kodeMerchant, final Role role)
   {
     roleService = ClientService.createService().create(RoleService.class);
@@ -229,13 +204,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
         responseCode = -1;
-        responseMessage = "Cannot delete role. :( There is something wrong.";
+        responseMessage = context.getString(R.string.error_webservice);
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-
   }
-
 
   public void setPermission()
   {
@@ -246,5 +219,4 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
       inActiveList = XMLHelper.XMLReader(context, "maintenance_role_action", permission);
     }
   }
-
 }

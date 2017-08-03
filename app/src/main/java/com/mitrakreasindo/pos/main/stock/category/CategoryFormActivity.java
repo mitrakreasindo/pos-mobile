@@ -108,6 +108,7 @@ public class CategoryFormActivity extends AppCompatActivity
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     Category parentCategory = new Category();
@@ -169,6 +170,7 @@ public class CategoryFormActivity extends AppCompatActivity
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     Category parentCategory = new Category();
