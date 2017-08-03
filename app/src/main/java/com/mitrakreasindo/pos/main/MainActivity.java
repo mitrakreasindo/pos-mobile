@@ -1,5 +1,7 @@
 package com.mitrakreasindo.pos.main;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity
   private String companyCode, valueCloseCashID;
 
   private NavigationView navigationView;
-
+  private BluetoothAdapter mBluetoothAdapter = null;
+  BluetoothServerSocket mmServerSocket;
   TablePeopleHelper tablePeopleHelper;
   TableRoleHelper tableRoleHelper;
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
-
+    
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -122,8 +125,7 @@ public class MainActivity extends AppCompatActivity
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
   }
-
-
+  
   @Override
   protected void onStop()
   {
@@ -330,4 +332,5 @@ public class MainActivity extends AppCompatActivity
       super.onBackPressed();
     }
   }
+  
 }

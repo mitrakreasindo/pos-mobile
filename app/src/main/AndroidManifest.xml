@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name="com.mitrakreasindo.pos.common.Wireless.BluetoothService"></service>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -111,7 +112,7 @@
         <activity
           android:name="com.mitrakreasindo.pos.common.Wireless.DeviceListActivity"
           android:label="@string/select_device"
-          android:theme="@android:style/Theme.Dialog"
+          android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"
           android:configChanges="orientation|keyboardHidden" />
 
         <activity

@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.common.Wireless;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
@@ -73,6 +74,7 @@ public class Wireless_Activity extends Activity implements View.OnClickListener
 	private Button btn_camer = null;
   private SalesListAdapter salesListAdapter;
   private Print print;
+  private ProgressDialog progressDialog;
 
 /******************************************************************************************************/
 	// Name of the connected device
@@ -86,6 +88,7 @@ public class Wireless_Activity extends Activity implements View.OnClickListener
 	@Override
 public void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
+    progressDialog 	= new ProgressDialog(this);
   if (DEBUG)
     Log.e(TAG, "+++ ON CREATE +++");
     setContentView(R.layout.wireless);
@@ -103,6 +106,8 @@ public void onCreate(Bundle savedInstanceState) {
   {
     if (mService.getState() == BluetoothService.STATE_CONNECTED)
     {
+      Toast.makeText(this, "Bluetooth is Connected",
+        Toast.LENGTH_SHORT).show();
       KeyListenerDis();
       btnScanButton.setEnabled(false);
       btnClose.setEnabled(true);
@@ -112,14 +117,23 @@ public void onCreate(Bundle savedInstanceState) {
         @Override
         public void onClick(View v)
         {
-          mService.stop();
-          KeyListenerInit();
-          Toast.makeText(getApplicationContext(),"disconnected",Toast.LENGTH_SHORT).show();
+          if (!mBluetoothAdapter.isEnabled())
+          {
+            Intent enableIntent = new Intent(
+              BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+          }
+          else
+          {
+            mService.stop();
+            KeyListenerInit();
+          }
+          
         }
       });
       // Start the Bluetooth services
-      Toast.makeText(this, "Bluetooth is Connected",
-        Toast.LENGTH_SHORT).show();
+      
       return;
     }
     else if (mService.getState() != BluetoothService.STATE_CONNECTED)
@@ -158,7 +172,13 @@ public void onCreate(Bundle savedInstanceState) {
     super.onResume();
     if (DEBUG)
       Log.e(TAG, "- ON RESUME -");
+    if (mService != null) {
     
+      if (mService.getState() == BluetoothService.STATE_NONE) {
+        // Start the Bluetooth services
+        mService.start();
+      }
+    }
   }
   
   @Override
@@ -181,7 +201,6 @@ public void onCreate(Bundle savedInstanceState) {
     // Stop the Bluetooth services
       if (DEBUG)
         Log.e(TAG, "--- ON DESTROY ---");
-    
   }
   
   /*****************************************************************************************************/
@@ -212,17 +231,36 @@ public void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
     switch (v.getId()) {
       case R.id.button_scan:{
-        Intent serverIntent = new Intent(Wireless_Activity.this, DeviceListActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-        break;
+        if (!mBluetoothAdapter.isEnabled())
+        {
+          Intent enableIntent = new Intent(
+            BluetoothAdapter.ACTION_REQUEST_ENABLE);
+          startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+        else
+        {
+          Intent serverIntent = new Intent(Wireless_Activity.this, DeviceListActivity.class);
+          startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+          break;
+        }
       }
       case R.id.btn_close:{
         /*unbindService(mConnection);*/
-        mService.stop();
-        btnClose.setEnabled(false);
-        btnScanButton.setEnabled(true);
-        btnScanButton.setText(getText(R.string.connect));
-        break;
+        if (!mBluetoothAdapter.isEnabled())
+        {
+          Intent enableIntent = new Intent(
+            BluetoothAdapter.ACTION_REQUEST_ENABLE);
+          startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+          // Otherwise, setup the session
+        }
+        else
+        {
+          mService.stop();
+          btnClose.setEnabled(false);
+          btnScanButton.setEnabled(true);
+          btnScanButton.setText(getText(R.string.connect));
+          break;
+        }
       }
       /*case R.id.btn_prtsma:
       {
@@ -290,9 +328,13 @@ public void onCreate(Bundle savedInstanceState) {
              /* btn_prtsma.setEnabled(true);*/
               break;
             case BluetoothService.STATE_CONNECTING:
+              progressDialog.setMessage(getApplicationContext().getString(R.string.connecting_message));
+              progressDialog.setCancelable(true);
+              progressDialog.show();
 				/*	mTitle.setText(R.string.title_connecting);*/
               break;
             case BluetoothService.STATE_LISTEN:
+              
             case BluetoothService.STATE_NONE:
 					/*mTitle.setText(R.string.title_not_connected);*/
               break;
@@ -310,11 +352,14 @@ public void onCreate(Bundle savedInstanceState) {
           Toast.makeText(getApplicationContext(),
             "Connected to " + mConnectedDeviceName,
             Toast.LENGTH_SHORT).show();
+          progressDialog.dismiss();
+          finish();
           break;
         case MESSAGE_TOAST:
           Toast.makeText(getApplicationContext(),
             msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
             .show();
+          progressDialog.dismiss();
           break;
         case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
           Toast.makeText(getApplicationContext(), "Device connection was lost",
@@ -322,9 +367,11 @@ public void onCreate(Bundle savedInstanceState) {
          /* editText.setEnabled(false);*/
           /*imageViewPicture.setEnabled(false);*/
           btnClose.setEnabled(false);
+          
           /*btn_prtsma.setEnabled(false);*/
           break;
         case MESSAGE_UNABLE_CONNECT:     //无法连接设备
+          progressDialog.dismiss();
           Toast.makeText(getApplicationContext(), "Unable to connect device",
             Toast.LENGTH_SHORT).show();
           break;
@@ -359,7 +406,9 @@ public void onCreate(Bundle savedInstanceState) {
         // When the request to enable Bluetooth returns
         if (resultCode == Activity.RESULT_OK) {
           // Bluetooth is now enabled, so set up a session
+          btnClose = (Button)findViewById(R.id.btn_close);
           btnClose.setEnabled(false);
+          KeyListenerInit();
         } else {
           // User did not enable Bluetooth or an error occured
           Log.d(TAG, "BT not enabled");

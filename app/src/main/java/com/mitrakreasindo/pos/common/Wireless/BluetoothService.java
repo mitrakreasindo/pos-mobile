@@ -1,6 +1,7 @@
 
 package com.mitrakreasindo.pos.common.Wireless;
 
+import android.app.Application;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -15,6 +16,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +29,8 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothService extends Service {
+public class BluetoothService extends Service
+{
     // Debugging
     private static final String TAG = "BluetoothService";
     private static final boolean DEBUG = true;
@@ -228,6 +231,12 @@ public class BluetoothService extends Service {
         bundle.putString(Wireless_Activity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+    
+      /*  Intent i = getBaseContext().getPackageManager()
+          .getLaunchIntentForPackage(getBaseContext().getPackageName() );
+    
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK );
+        startActivity(i);*/
     }
   
     
@@ -239,7 +248,7 @@ public class BluetoothService extends Service {
     private class AcceptThread extends Thread
     {
         // The local server socket
-        private final BluetoothServerSocket mmServerSocket;
+        private BluetoothServerSocket mmServerSocket;
 
         public AcceptThread() {
             BluetoothServerSocket tmp = null;
@@ -261,10 +270,15 @@ public class BluetoothService extends Service {
 
             // Listen to the server socket if we're not connected
             while (mState != STATE_CONNECTED) {
-                try {
-                    // This is a blocking call and will only return on a
-                    // successful connection or an exception
+                try
+                {
+                  // This is a blocking call and will only return on a
+                  // successful connection or an exception
+                  if (mmServerSocket != null)
+                  {
                     socket = mmServerSocket.accept();
+                  }
+                    
                 } catch (IOException e) {
                     Log.e(TAG, "accept() failed", e);
                     break;
@@ -336,8 +350,9 @@ public class BluetoothService extends Service {
             setName("ConnectThread");
 
             // Always cancel discovery because it will slow down a connection
-            mAdapter.cancelDiscovery();
-
+          
+          mAdapter.cancelDiscovery();
+          mAdapter.startDiscovery();
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a
@@ -470,9 +485,8 @@ public class BluetoothService extends Service {
             }
         }
 
-        /*
         //
-        private boolean SPPReadTimeout(byte[] Data, int DataLen, int Timeout){
+        /*private boolean SPPReadTimeout(byte[] Data, int DataLen, int Timeout){
           for (int i = 0; i < Timeout / 5; i++)
           {
             try
@@ -486,14 +500,14 @@ public class BluetoothService extends Service {
                 }
                 catch (IOException e)
                 {
-                  ErrorMessage = "读取蓝牙数据失败";
+                  ErrorMessage = "Kegagalan Membaca Data Bluetooth ";
                   return false;
                 }
               }
             }
             catch (IOException e)
             {
-              ErrorMessage = "读取蓝牙数据失败";
+              ErrorMessage = "Kegagalan Membaca Data Bluetooth ";
               return false;
             }
             try
@@ -502,14 +516,13 @@ public class BluetoothService extends Service {
             }
             catch (InterruptedException e)
             {
-              ErrorMessage = "读取蓝牙数据失败";
+              ErrorMessage = "Kegagalan Membaca Data Bluetooth ";
               return false;
             }
           }
-          ErrorMessage = "蓝牙读数据超时";
+          ErrorMessage = "Kegagalan Membaca Data Bluetooth";
           return false;
-        }
-        */
+        }*/
         public void cancel() {
             try {
                 mmSocket.close();

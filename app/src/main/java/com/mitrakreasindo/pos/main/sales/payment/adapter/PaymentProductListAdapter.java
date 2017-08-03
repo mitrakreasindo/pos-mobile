@@ -2,8 +2,6 @@ package com.mitrakreasindo.pos.main.sales.payment.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
-import com.mitrakreasindo.pos.model.Payment;
 import com.mitrakreasindo.pos.model.SalesItem;
 
 import java.text.DecimalFormat;
@@ -47,7 +43,10 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
       .inflate(R.layout.adapter_sales_item_list, parent, false);
     return new ViewHolder(itemView);
   }
-
+  public List<SalesItem> getAllTickets()
+  {
+    return salesItems;
+  }
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position)
   {

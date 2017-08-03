@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.model.SalesItem;
 
@@ -25,7 +26,7 @@ import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.mService;
 public class PrintReceipt
 {
   @SuppressLint("SimpleDateFormat")
-  public static void printReceipt(Context context, List<SalesItem> ticketLinelist)
+  public static void printReceipt(Context context, List<SalesItem> ticketLinelist, IDs iDs, int grandTotal,int Cash)
   {
     if (mService == null) {
       Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT)
@@ -60,16 +61,16 @@ public class PrintReceipt
           Command.ESC_ExclamationMark[2] = 0x01;
           SendDataByte(context, Command.ESC_ExclamationMark);
     
-      /*Command.ESC_Align[2] = 0x01;
+      Command.ESC_Align[2] = 0x01;
       SendDataByte(context,Command.ESC_Align);
-      SendDataByte(context,"PT. MITRA KREASINDO\n".getBytes("GBK"));
+      SendDataByte(context,String.format(IDs.getLoginCompanyName().toUpperCase()+"\n").getBytes("GBK"));
     
       Command.ESC_Align[2] = 0x01;
       SendDataByte(context,Command.ESC_Align);
-      SendDataByte(context,"Jl. Balikpapan No.31 Petojo Gambir, Jakarta Pusat 10160\nPHONE: +622129607000\n\n".getBytes("GBK"));
+      SendDataByte(context,String.format(IDs.getLoginCompanyAddress()+"\n"+ "PHONE:" +IDs.getLoginCompanyPhone()+"\n\n").getBytes("GBK"));
       Command.ESC_Align[2] = 0x00;
       SendDataByte(context,Command.ESC_Align);
-      SendDataString(context,(date) + "\n==========================================\n");*/
+      SendDataString(context,(date) + "\n==========================================\n");
     
           for(int i=0;i<ticketLinelist.size();i++)
           {
@@ -79,7 +80,7 @@ public class PrintReceipt
             String name = tiket.getProduct().getName();
             int Qty = (int) tiket.getUnits();
             Log.d("Jlh product: ", Double.toString(tiket.getUnits()));
-            int Prize =  (int) tiket.getPrice();
+            int Prize =  tiket.getProduct().getPricesell().intValue();
             int Total = Prize * Qty;
             
             String ProductName;
@@ -160,7 +161,7 @@ public class PrintReceipt
       Command.ESC_Relative[2] = 0x25;
       Command.ESC_Relative[3] = 0x01;
       SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%11s",decimalFormat.format(90000000)+"\n").replace(' ',' ').getBytes("GBK"));
+      SendDataByte(context,String.format("%11s",decimalFormat.format(grandTotal)+"\n").replace(' ',' ').getBytes("GBK"));
     
       Command.ESC_Relative[2] = 0x79;
       Command.ESC_Relative[3] = 0x00;
@@ -174,7 +175,7 @@ public class PrintReceipt
       Command.ESC_Relative[2] = 0x25;
       Command.ESC_Relative[3] = 0x01;
       SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%11s",decimalFormat.format(900000)+"\n").replace(' ',' ').getBytes("GBK"));
+      SendDataByte(context,String.format("%11s",decimalFormat.format(Cash)+"\n").replace(' ',' ').getBytes("GBK"));
     
       Command.ESC_Relative[2] = 0x79;
       Command.ESC_Relative[3] = 0x00;
@@ -188,7 +189,7 @@ public class PrintReceipt
       Command.ESC_Relative[2] = 0x25;
       Command.ESC_Relative[3] = 0x01;
       SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%11s",decimalFormat.format(9000000)+"\n").replace(' ',' ').getBytes("GBK"));
+      SendDataByte(context,String.format("%11s",decimalFormat.format(Cash-grandTotal)+"\n"). replace(' ',' ').getBytes("GBK"));
     
       Command.ESC_Align[2] = 0x01;
       SendDataByte(context, Command.ESC_Align);
