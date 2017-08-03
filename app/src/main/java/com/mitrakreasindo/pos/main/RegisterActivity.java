@@ -220,7 +220,9 @@ public class RegisterActivity extends AppCompatActivity
     if (attemptRegister())
     {
       progressDialog.setMessage(this.getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
       progressDialog.show();
+
       buttonCreateAcc.setEnabled(false);
       postMerchantRegistration(prepareRegistrationData());
     }

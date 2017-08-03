@@ -1,7 +1,5 @@
 package com.mitrakreasindo.pos.main.sales.payment;
 
-import android.app.LauncherActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,8 +25,6 @@ import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
-import com.mitrakreasindo.pos.main.sales.SalesService;
-import com.mitrakreasindo.pos.main.sales.adapter.SalesListAdapter;
 import com.mitrakreasindo.pos.main.sales.payment.adapter.PaymentProductListAdapter;
 import com.mitrakreasindo.pos.model.ClosedCash;
 import com.mitrakreasindo.pos.model.Customer;
@@ -49,8 +45,8 @@ import com.mitrakreasindo.pos.model.Viewsales;
 import com.mitrakreasindo.pos.model.Viewsalesitems;
 import com.mitrakreasindo.pos.model.Viewstockdiary;
 import com.mitrakreasindo.pos.model.Viewtaxlines;
+import com.mitrakreasindo.pos.service.SalesService;
 
-import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;

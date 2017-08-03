@@ -1,7 +1,6 @@
 package com.mitrakreasindo.pos.main.sales;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,20 +55,17 @@ import com.mitrakreasindo.pos.model.Viewsales;
 import com.mitrakreasindo.pos.model.Viewsalesitems;
 import com.mitrakreasindo.pos.model.Viewstockdiary;
 import com.mitrakreasindo.pos.model.Viewtaxlines;
+import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class SalesActivity extends AppCompatActivity

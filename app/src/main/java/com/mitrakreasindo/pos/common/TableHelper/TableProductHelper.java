@@ -559,8 +559,9 @@ public class TableProductHelper
 
   public Product getProductModule(String id)
   {
-    open();
+    Product product;
 
+    open();
     Cursor cursor = db.query(DATABASE_TABLE,
       new String[]
         {
@@ -609,10 +610,11 @@ public class TableProductHelper
       null, null, null, null);
 
     if (cursor.moveToFirst())
-      return populateProduct(cursor);
-
+      product = populateProduct(cursor);
     else
-      return null;
+      product = null;
+
+    return product;
   }
 
   public String getId (String code)

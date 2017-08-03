@@ -1,7 +1,5 @@
-package com.mitrakreasindo.pos.main.sales;
+package com.mitrakreasindo.pos.service;
 
-import com.mitrakreasindo.pos.model.Category;
-import com.mitrakreasindo.pos.model.Sales;
 import com.mitrakreasindo.pos.model.SalesPack;
 
 import java.util.HashMap;

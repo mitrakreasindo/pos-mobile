@@ -121,7 +121,8 @@ public class TaxesFormActivity extends AppCompatActivity
   private void postCategory()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     TaxCategory taxCategory = new TaxCategory();
@@ -186,7 +187,8 @@ public class TaxesFormActivity extends AppCompatActivity
   {
 
     final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage("Please wait...");
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
     progressDialog.show();
 
     String id = bundle.getString("id");
