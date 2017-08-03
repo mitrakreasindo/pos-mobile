@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
@@ -108,6 +109,8 @@ public class PaymentActivity extends AppCompatActivity
   private TaxLine taxLine;
   private Customer customer;
   private People people;
+  private Tax tax;
+  private Location location;
 
   private Viewsales viewsales;
   private Viewsalesitems viewsalesitem;
@@ -146,7 +149,9 @@ public class PaymentActivity extends AppCompatActivity
       salesId = bundle.getString("salesid");
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
+      viewsalesitems.containsAll(salesItemList);
 
+//      product = salesItemList.get(1).getProduct();
     }
 
     final ClosedCash closedCash = new ClosedCash();
@@ -154,6 +159,18 @@ public class PaymentActivity extends AppCompatActivity
       closedCash.setMoney(UUID.randomUUID().toString());
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
+
+    customer = new Customer();
+    customer.setId(null);
+
+    people = new People();
+    people.setId("1111111");
+
+    location = new Location();
+    location.setId(UUID.randomUUID().toString());
+
+    tax = new Tax();
+    tax.setId("001");
 
     receipt = new Receipt();
     receipt.setId(salesId);
@@ -175,7 +192,6 @@ public class PaymentActivity extends AppCompatActivity
     sales.setCustomer(customer);
     sales.setPerson(people);
     sales.setReceipt(receipt);
-
 
 
     if (salesItemList != null)
@@ -252,13 +268,29 @@ public class PaymentActivity extends AppCompatActivity
           confirmationDialog.setMessage(decimalFormat.format(
             Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
           ));
-          postSales();
+          confirmationDialog.setCancelable(false);
 
           confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+
+              data();
+              salesPack = new SalesPack();
+              salesPack.setSales(viewsales);
+              salesPack.setReceipts(viewreceipt);
+              salesPack.setSalesItems(viewsalesitems);
+              salesPack.setPayments(viewpayments);
+              salesPack.setStockdiary(viewstockdiaries);
+              salesPack.setTaxlines(viewtaxlines);
+
+              TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+              tableSalesHelper.open();
+              tableSalesHelper.insertSales(sales);
+              tableSalesHelper.close();
+
+              postSales();
               SalesActivity.sActivity.finish();
               finish();
             }
@@ -316,18 +348,6 @@ public class PaymentActivity extends AppCompatActivity
   public void data()
   {
 
-    customer = new Customer();
-    customer.setId(null);
-
-    people = new People();
-    people.setId("1111111");
-
-    Location location = new Location();
-    location.setId(UUID.randomUUID().toString());
-
-    Tax tax = new Tax();
-    tax.setId("001");
-
 //    receipt = new Receipt();
 //    receipt.setId(UUID.randomUUID().toString());
 //    receipt.setAttributes(null);
@@ -347,15 +367,6 @@ public class PaymentActivity extends AppCompatActivity
 //    sales.setCustomer(customer);
 //    sales.setPerson(people);
 //    sales.setReceipt(receipt);
-
-    salesItem = new SalesItem();
-    salesItem.setProduct(product);
-    salesItem.setAttributes(bytes);
-    salesItem.setUnits(1);
-    salesItem.setPrice(product.getPricesell());
-    salesItem.setSalesId(sales);
-    salesItem.setSflag(true);
-    salesItem.setTaxid(tax);
 
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
@@ -378,18 +389,6 @@ public class PaymentActivity extends AppCompatActivity
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
-
-    stockDiary = new StockDiary();
-    stockDiary.setId(UUID.randomUUID().toString());
-    stockDiary.setReason(0);
-    stockDiary.setUnits(1);
-    stockDiary.setPrice(salesItem.getProduct().getPricesell());
-    stockDiary.setAppuser(IDs.getLoginUser());
-    stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    stockDiary.setSflag(true);
-    stockDiary.setAttributesetinstanceId(null);
-    stockDiary.setLocation(location);
-    stockDiary.setProduct(salesItem.getProduct());
 
     viewtaxline = new Viewtaxlines();
     viewtaxline.setId(taxLine.getId());
@@ -414,22 +413,7 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setPersonName(null);
     viewsales.setDatenew("2017-07-26 06:00:18");
 
-    viewsalesitem = new Viewsalesitems();
-    viewsalesitem.setId(0);
-    viewsalesitem.setSalesId(sales.getId());
-    viewsalesitem.setLine(salesItem.getLine());
-    viewsalesitem.setProduct(salesItem.getProduct().getId());
-    viewsalesitem.setAttributesetinstanceId(null);
-    viewsalesitem.setUnits(salesItem.getUnits());
-    viewsalesitem.setPrice(salesItem.getPrice());
-    viewsalesitem.setTaxid(salesItem.getTaxid().getId());
-    viewsalesitem.setAttributes(null);
-    viewsalesitem.setRefundqty(salesItem.getRefundqty());
-    viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewsalesitem.setSflag(sales.getSflag());
-    viewsalesitem.setProductName(null);
-    viewsalesitem.setTaxName(null);
-    viewsalesitem.setRate(null);
+
 
 
     viewreceipt = new Viewreceipts();
@@ -462,28 +446,77 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setDatenew(null);
 
 
-    viewstockdiary = new Viewstockdiary();
-    viewstockdiary.setId(stockDiary.getId());
-    viewstockdiary.setProduct(stockDiary.getProduct().getId());
-    viewstockdiary.setDatenew(new Date().toString());
-    viewstockdiary.setReason(stockDiary.getReason());
-    viewstockdiary.setUnits(stockDiary.getUnits());
-    viewstockdiary.setPrice(stockDiary.getPrice());
-    viewstockdiary.setAppuser(stockDiary.getAppuser());
-    viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewstockdiary.setSflag(true);
-    viewstockdiary.setAttributesetinstanceId(null);
-    viewstockdiary.setLocation("0");
 
+
+    for (int i = 0; i < salesItemList.size(); i++)
+    {
+      product = salesItemList.get(i).getProduct();
+
+      salesItem = salesItemList.get(i);
+      salesItem.setProduct(product);
+      salesItem.setAttributes(bytes);
+      salesItem.setUnits(1);
+      salesItem.setPrice(product.getPricesell());
+      salesItem.setSalesId(sales);
+      salesItem.setSflag(true);
+      salesItem.setTaxid(tax);
+
+      viewsalesitem = new Viewsalesitems();
+      viewsalesitem.setId(0);
+      viewsalesitem.setSalesId(sales.getId());
+      viewsalesitem.setLine(salesItem.getLine());
+      viewsalesitem.setProduct(salesItem.getProduct().getId());
+      viewsalesitem.setAttributesetinstanceId(null);
+      viewsalesitem.setUnits(salesItem.getUnits());
+      viewsalesitem.setPrice(salesItem.getPrice());
+      viewsalesitem.setTaxid(salesItem.getTaxid().getId());
+      viewsalesitem.setAttributes(null);
+      viewsalesitem.setRefundqty(salesItem.getRefundqty());
+      viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      viewsalesitem.setSflag(sales.getSflag());
+      viewsalesitem.setProductName(null);
+      viewsalesitem.setTaxName(null);
+      viewsalesitem.setRate(null);
+      viewsalesitems.add(viewsalesitem);
+
+      stockDiary = new StockDiary();
+      stockDiary.setId(UUID.randomUUID().toString());
+      stockDiary.setReason(0);
+      stockDiary.setUnits(1);
+      stockDiary.setPrice(salesItem.getProduct().getPricesell());
+      stockDiary.setAppuser(IDs.getLoginUser());
+      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      stockDiary.setSflag(true);
+      stockDiary.setAttributesetinstanceId(null);
+      stockDiary.setLocation(location);
+      stockDiary.setProduct(salesItem.getProduct());
+
+      viewstockdiary = new Viewstockdiary();
+      viewstockdiary.setId(stockDiary.getId());
+      viewstockdiary.setProduct(stockDiary.getProduct().getId());
+      viewstockdiary.setDatenew(new Date().toString());
+      viewstockdiary.setReason(stockDiary.getReason());
+      viewstockdiary.setUnits(stockDiary.getUnits());
+      viewstockdiary.setPrice(stockDiary.getPrice());
+      viewstockdiary.setAppuser(stockDiary.getAppuser());
+      viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      viewstockdiary.setSflag(true);
+      viewstockdiary.setAttributesetinstanceId(null);
+      viewstockdiary.setLocation("0");
+      viewstockdiaries.add(viewstockdiary);
+    }
+
+    viewtaxlines.add(viewtaxline);
+    viewpayments.add(viewpayment);
 
   }
 
   public void postSales()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage("Loading");
-    progressDialog.show();
+//    final ProgressDialog progressDialog = new ProgressDialog(this);
+//    progressDialog.setCancelable(false);
+//    progressDialog.setMessage("Loading");
+//    progressDialog.show();
 
     Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
     saveSales.enqueue(new Callback<HashMap<Integer, String>>()
@@ -503,7 +536,8 @@ public class PaymentActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
+            Log.d("SUCCESS", "SSSSUUCCCEESSSS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
           }
         }

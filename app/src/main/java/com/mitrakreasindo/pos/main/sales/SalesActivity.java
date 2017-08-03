@@ -162,10 +162,10 @@ public class SalesActivity extends AppCompatActivity
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
 
-      viewtaxlines.add(viewtaxline);
-      viewsalesitems.add(viewsalesitem);
-      viewpayments.add(viewpayment);
-      viewstockdiaries.add(viewstockdiary);
+//      viewtaxlines.add(viewtaxline);
+//      viewsalesitems.add(viewsalesitem);
+//      viewpayments.add(viewpayment);
+//      viewstockdiaries.add(viewstockdiary);
 
       if (product != null)
       {
@@ -398,10 +398,10 @@ public class SalesActivity extends AppCompatActivity
         salesItem.setSflag(true);
         salesItem.setTaxid(tax);
 
-        viewtaxlines.add(viewtaxline);
-        viewsalesitems.add(viewsalesitem);
-        viewpayments.add(viewpayment);
-        viewstockdiaries.add(viewstockdiary);
+//        viewtaxlines.add(viewtaxline);
+//        viewsalesitems.add(viewsalesitem);
+//        viewpayments.add(viewpayment);
+//        viewstockdiaries.add(viewstockdiary);
 
 //        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
 //        tableSalesItemHelper.open();
