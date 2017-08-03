@@ -51,7 +51,7 @@
     <string name="image_select">Select</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="title_activity_main">POS++ Main Menu</string>
+    <string name="title_activity_main">POS Main Menu</string>
     <string name="error_incorrect_reinput_password">Password is not match</string>
     <string name="error_empty_name">Name required</string>
     <string name="error_empty_pass">Password required</string>
@@ -278,6 +278,8 @@
     <string name="error_post_register">Cannot register. There is something wrong.</string>
     <string name="error_get_category">Get category failed</string>
     <string name="error_get_subcategory">Get subcategory failed</string>
+    <string name="money">Money</string>
+    <string name="has_no_product">Put stuff first</string>
 
     <string name="action_bar_userform_create">Create User</string>
     <string name="action_bar_userform_edit">Edit User</string>

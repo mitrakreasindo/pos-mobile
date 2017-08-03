@@ -18,10 +18,10 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
-import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
 import com.mitrakreasindo.pos.model.TaxCusCategory;
+import com.mitrakreasindo.pos.service.TaxService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,11 +49,8 @@ public class TaxesFormActivity extends AppCompatActivity
 
   private Tax tax;
   private TaxService taxService;
-
   private TaxesListAdapter taxesListAdapter;
-
   private Bundle bundle;
-
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
 

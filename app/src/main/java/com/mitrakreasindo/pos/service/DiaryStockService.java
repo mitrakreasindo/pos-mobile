@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.stock.diary.service;
+package com.mitrakreasindo.pos.service;
 
 import com.mitrakreasindo.pos.model.StockDiary;
 
@@ -19,7 +19,6 @@ import retrofit2.http.Path;
 
 public interface DiaryStockService
 {
-
   @GET("chromis.stockdiary/{kodeMerchant}/")
   Call<List<StockDiary>> getStockDiaryAll(@Path("kodeMerchant") String kodeMerchant);
 
@@ -31,5 +30,4 @@ public interface DiaryStockService
 
   @DELETE("chromis.stockdiary/public/{id}")
   Call<HashMap<Integer, String>> deleteStockDiary(@Path("id") String id);
-
 }

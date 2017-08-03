@@ -174,28 +174,34 @@ public class TableRoleHelper
   public List<Role> getData()
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
             new String[] {"CAST(id AS INTEGER)", KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
             null, null, null, null, "1"));
+    close();
+
+    return list;
   }
 
   public List<Role> getDataByName(String name)
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
             new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
             KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+    close();
+
+    return list;
   }
 
   public List<Role> getDataById(String id)
   {
     open();
-
-    return populateRole(db.query(DATABASE_TABLE,
+    List<Role> list = populateRole(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
       KEY_ID + " LIKE '%"+id+"%'", null, null, null, null));
+    close();
+
+    return list;
   }
 
   public byte[] getPermission (String name)
@@ -210,6 +216,7 @@ public class TableRoleHelper
     {
       permissions = cursor.getBlob(cursor.getColumnIndexOrThrow(KEY_PERMISSION));
     }
+    close();
     return permissions;
   }
 
@@ -223,19 +230,12 @@ public class TableRoleHelper
       public void onResponse(Call<List<Role>> call, Response<List<Role>> response)
       {
         final List<Role> list = response.body();
-//        new Thread(new Runnable()
-//        {
-//          @Override
-//          public void run()
-//          {
-            open();
-            deleteAll();
-            insert(list);
-            close();
+        open();
+        deleteAll();
+        insert(list);
+        close();
 
         EventBus.getDefault().post(new Event(id, Event.COMPLETE));
-//          }
-//        }).start();
       }
 
       @Override
@@ -245,6 +245,4 @@ public class TableRoleHelper
       }
     });
   }
-
-
 }

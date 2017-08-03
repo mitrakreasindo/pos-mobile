@@ -28,6 +28,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener
 {
   private String valueUser, valueFullname, valueCompanyName, valueCompanyAddress, valueCompanyPhone;
-  private String companyCode;
+  private String companyCode, valueCloseCashID;
 
   private NavigationView navigationView;
 
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity
     TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
     TableProductHelper tableProductHelper = new TableProductHelper(this);
     TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
+    TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(this);
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,12 +94,14 @@ public class MainActivity extends AppCompatActivity
     valueCompanyName = getIntent().getExtras().getString("COMPANYNAME");
     valueCompanyAddress = getIntent().getExtras().getString("COMPANYADDRESS");
     valueCompanyPhone = getIntent().getExtras().getString("COMPANYPHONE");
+    valueCloseCashID = getIntent().getExtras().getString("CLOSECASH_ID");
 
     IDs.setLoginUser(valueUser);
     IDs.setLoginCompanyName(valueCompanyName);
     IDs.setLoginCompanyAddress(valueCompanyAddress);
     IDs.setLoginCompanyPhone(valueCompanyPhone);
-    
+    IDs.setLoginCloseCashID(valueCloseCashID);
+
     Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
 
     View headerLayout = navigationView.getHeaderView(0);

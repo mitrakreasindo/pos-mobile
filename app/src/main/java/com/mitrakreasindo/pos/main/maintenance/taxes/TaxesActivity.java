@@ -21,7 +21,7 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
-import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
+import com.mitrakreasindo.pos.service.TaxService;
 import com.mitrakreasindo.pos.model.Tax;
 
 import java.util.ArrayList;
@@ -42,11 +42,8 @@ public class TaxesActivity extends AppCompatActivity
 
   private Tax tax;
   private TaxService taxService;
-
   private TaxesListAdapter taxesListAdapter;
-
   private TableTaxesHelper tableTaxesHelper;
-
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
 

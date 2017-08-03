@@ -19,8 +19,8 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
-import com.mitrakreasindo.pos.main.maintenance.taxes.service.TaxService;
 import com.mitrakreasindo.pos.model.Tax;
+import com.mitrakreasindo.pos.service.TaxService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
