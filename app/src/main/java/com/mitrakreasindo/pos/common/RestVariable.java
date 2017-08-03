@@ -6,6 +6,7 @@ package com.mitrakreasindo.pos.common;
 
 public class RestVariable
 {
+//    public static final String SERVER_URL = "http://192.168.1.80:8081/MKChromisServices/webresources/";
     public static final String SERVER_URL = "http://192.168.1.113:8080/MKChromisServices/webresources/";
     public static final String URL_GET_PRODUCT = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.products/{kodeMerchant}/";
     public static final String URL_GET_PEOPLE = "http://192.168.1.113:8080/MKChromisServices/webresources/chromis.people/{kodeMerchant}/";
