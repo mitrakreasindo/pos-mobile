@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.model.SalesItem;
 
 import java.text.DecimalFormat;
@@ -71,23 +72,35 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
       {
-        if (charSequence.length() > 0 && holder.txtQty.getText().toString().length() > 0)
-        {
-          holder.txtSubTotal.setText(decimalFormat.format(
-            salesItem.getProduct().getPricesell() *
-              Double.parseDouble(holder.txtQty.getText().toString())));
-
-          salesItem.setUnits(Double.parseDouble(charSequence.toString()));
-        }
-        else
-        {
-          holder.txtQty.setText("0");
-        }
       }
 
       @Override
       public void afterTextChanged(Editable editable)
       {
+        if (editable.length() > 0 && holder.txtQty.getText().toString().length() > 0)
+        {
+          holder.txtSubTotal.setText(decimalFormat.format(
+            salesItem.getProduct().getPricesell() *
+              Double.parseDouble(holder.txtQty.getText().toString())));
+
+          salesItem.setUnits(Double.parseDouble(editable.toString()));
+
+          double totalPrice = 0;
+
+          for (int z = 0; z < salesItems.size(); z++)
+          {
+            totalPrice += salesItems.get(z).getProduct().getPricesell() * salesItems.get(z).getUnits();
+          }
+          Log.e("TICKET SIZE", String.valueOf(salesItems.size()));
+
+          ((SalesActivity) context).setTextTotal(totalPrice);
+
+        }
+        else
+        {
+          holder.txtQty.setText("0");
+        }
+
       }
 
     });
@@ -171,6 +184,7 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
   public void removeSalesItem(SalesItem salesItem)
   {
     salesItems.remove(salesItem);
+    ((SalesActivity) context).refreshData();
     notifyDataSetChanged();
   }
 
