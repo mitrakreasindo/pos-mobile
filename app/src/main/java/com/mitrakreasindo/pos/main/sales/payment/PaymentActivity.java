@@ -281,6 +281,8 @@ public class PaymentActivity extends AppCompatActivity
               salesPack.setStockdiary(viewstockdiaries);
               salesPack.setTaxlines(viewtaxlines);
 
+              Log.e("UNIT", String.valueOf(salesItem.getUnits()));
+
               TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
               tableSalesHelper.open();
               tableSalesHelper.insertSales(sales);
@@ -451,7 +453,7 @@ public class PaymentActivity extends AppCompatActivity
       salesItem = salesItemList.get(i);
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
-      salesItem.setUnits(1);
+      salesItem.setUnits(salesItemList.get(i).getUnits());
       salesItem.setPrice(product.getPricesell());
       salesItem.setSalesId(sales);
       salesItem.setSflag(true);

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.main.R;
@@ -91,8 +92,14 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
 
     });
 
-
-//    holder.txtTotal.setText(String.valueOf(grandTotal()));
+    holder.btnSalesDeleteItem.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        removeSalesItem(salesItem);
+      }
+    });
 
   }
 
@@ -169,7 +176,9 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
 
   public class ViewHolder extends RecyclerView.ViewHolder
   {
-    private TextView txtName, txtQty, txtPrice, txtSubTotal, txtTotal;
+    private TextView txtName, txtPrice, txtSubTotal, txtTotal;
+    private EditText txtQty;
+    private ImageView btnSalesDeleteItem;
 
     public ViewHolder(View itemView)
     {
@@ -178,7 +187,7 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       txtQty = (EditText) itemView.findViewById(R.id.sales_text_qty);
       txtPrice = (TextView) itemView.findViewById(R.id.sales_text_price);
       txtSubTotal = (TextView) itemView.findViewById(R.id.sales_text_subtotal);
-//      txtTotal = (TextView) itemView.findViewById(R.id.sales_product_total);
+      btnSalesDeleteItem = (ImageView) itemView.findViewById(R.id.sales_btn_delete_item);
     }
   }
 

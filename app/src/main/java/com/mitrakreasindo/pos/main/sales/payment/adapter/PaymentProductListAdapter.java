@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.main.R;
@@ -44,7 +45,7 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater.from(parent.getContext())
-      .inflate(R.layout.adapter_sales_item_list, parent, false);
+      .inflate(R.layout.adapter_payment_item_list, parent, false);
     return new ViewHolder(itemView);
   }
 
@@ -56,40 +57,9 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
     holder.txtName.setText(salesItem.getProduct().getName());
     holder.txtQty.setText(String.valueOf((int) salesItem.getUnits()));
     holder.txtPrice.setText(decimalFormat.format(salesItem.getProduct().getPricesell()));
-//    holder.txtSubTotal.setText(decimalFormat.format(
-//      Double.parseDouble(holder.txtPrice.getText().toString()) *
-//        Double.parseDouble(holder.txtQty.getText().toString())));
-//    holder.txtQty.addTextChangedListener(new TextWatcher()
-//    {
-//      @Override
-//      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-//      {
-//      }
-//
-//      @Override
-//      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-//      {
-//        if (charSequence.length() > 0 && holder.txtQty.getText().toString().length() > 0)
-//        {
-//          DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
-//          holder.txtSubTotal.setText(decimalFormat.format(
-//            Double.parseDouble(holder.txtPrice.getText().toString()) *
-//              Double.parseDouble(holder.txtQty.getText().toString())));
-//
-//          salesItem.setUnits(Double.parseDouble(charSequence.toString()));
-//        }
-//        else
-//        {
-//          holder.txtQty.setText("0");
-//        }
-//      }
-//
-//      @Override
-//      public void afterTextChanged(Editable editable)
-//      {
-//      }
-//
-//    });
+    holder.txtSubTotal.setText(decimalFormat.format(
+      salesItem.getProduct().getPricesell() *
+        Double.parseDouble(holder.txtQty.getText().toString())));
 
   }
 
@@ -109,7 +79,7 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
       super(itemView);
 
       txtName = (TextView) itemView.findViewById(R.id.sales_text_name);
-      txtQty = (EditText) itemView.findViewById(R.id.sales_text_qty);
+      txtQty = (TextView) itemView.findViewById(R.id.payment_text_qty);
       txtPrice = (TextView) itemView.findViewById(R.id.sales_text_price);
       txtSubTotal = (TextView) itemView.findViewById(R.id.sales_text_subtotal);
 
