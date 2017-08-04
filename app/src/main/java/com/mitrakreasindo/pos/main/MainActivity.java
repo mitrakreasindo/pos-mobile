@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
     valueCloseCashID = getIntent().getExtras().getString("CLOSECASH_ID");
 
     IDs.setLoginUser(valueUser);
+    IDs.setLoginUsername(valueFullname);
     IDs.setLoginCompanyName(valueCompanyName);
     IDs.setLoginCompanyAddress(valueCompanyAddress);
     IDs.setLoginCompanyPhone(valueCompanyPhone);
@@ -116,12 +117,11 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-//    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-//    tableCategoryHelper.downloadData(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+    tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
   }
-
 
   @Override
   protected void onStop()
