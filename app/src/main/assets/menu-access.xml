@@ -2,7 +2,7 @@
 <permissions>
     <navigation>
         <inactive>nd_edit_sales</inactive>
-       <!-- <inactive>nd_customer_payment</inactive>-->
+        <inactive>nd_customer_payment</inactive>
         <inactive>nd_payment</inactive>
         <inactive>nd_customer</inactive>
         <inactive>nd_administration_sales</inactive>
@@ -11,7 +11,7 @@
         <inactive>nd_tools</inactive>
         <inactive>nd_change_password</inactive>
         <inactive>nd_configuration</inactive>
-        <!--<inactive>nd_printers</inactive>-->
+        <inactive>nd_printers</inactive>
         <inactive>nd_check_in_out</inactive>
     </navigation>
 

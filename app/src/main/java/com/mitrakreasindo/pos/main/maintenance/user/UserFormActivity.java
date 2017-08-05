@@ -142,8 +142,7 @@ public class UserFormActivity extends AppCompatActivity
 
     TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
     data = tableRoleHelper.getData();
-    rolesArrayAdapter = new ArrayAdapter<>(UserFormActivity.this,
-      android.R.layout.simple_spinner_item, data);
+    rolesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
     userListAdapter = new UserListAdapter(this, new ArrayList<People>());
     rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinnerRole.setAdapter(rolesArrayAdapter);
@@ -173,14 +172,15 @@ public class UserFormActivity extends AppCompatActivity
       byte[] image = bundle.getByteArray("image");
 
       edittextFullname.setText(bundle.getString("fullname"));
-      edittextBirthDate.setText(df.format(bundle.get("birthdate")));
+      if (bundle.get("birthdate") != null)
+        edittextBirthDate.setText(df.format(bundle.get("birthdate")));
 
       String compareValue = bundle.getString("gender");
       ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.spinner_sex, android.R.layout.simple_spinner_item);
       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       spinnerSex.setAdapter(adapter);
-      if (!compareValue.equals(null))
+      if (compareValue != null)
       {
         int spinnerPosition = adapter.getPosition(compareValue);
         spinnerSex.setSelection(spinnerPosition);

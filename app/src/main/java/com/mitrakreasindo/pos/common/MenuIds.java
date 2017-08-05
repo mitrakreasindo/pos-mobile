@@ -8,8 +8,8 @@ import java.util.HashMap;
  * Created by miftakhul on 7/21/17.
  */
 
-public class MenuIds {
-
+public class MenuIds
+{
   public static final String rp_mtc_rl_action_insert = "rp_mtc_rl_action_insert";
   public static final String rp_mtc_rl_action_update = "rp_mtc_rl_action_update";
   public static final String rp_mtc_rl_action_delete = "rp_mtc_rl_action_delete";
@@ -47,7 +47,6 @@ public class MenuIds {
     list.put(R.id.rp_logout, "nd_logout");
     return list;
   }
-
 
   // button
   public static HashMap<Integer, String> listMain()
@@ -158,9 +157,6 @@ public class MenuIds {
     list.put(R.id.rp_mtc_tx_delete, rp_mtc_tx_action_delete);
     return list;
   }
-
-
-
 
   public static HashMap<Integer, String> listAllMenu()
   {

@@ -1,7 +1,5 @@
 package com.mitrakreasindo.pos.main;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +30,6 @@ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
-import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
@@ -59,8 +56,7 @@ public class MainActivity extends AppCompatActivity
   private String companyCode, valueCloseCashID;
 
   private NavigationView navigationView;
-  private BluetoothAdapter mBluetoothAdapter = null;
-  BluetoothServerSocket mmServerSocket;
+
   TablePeopleHelper tablePeopleHelper;
   TableRoleHelper tableRoleHelper;
 
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
-    
+
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -125,7 +121,8 @@ public class MainActivity extends AppCompatActivity
     tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
   }
-  
+
+
   @Override
   protected void onStop()
   {
@@ -152,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 //    public boolean onCreateOptionsMenu(Menu menu)
 //    {
 //        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.wireless, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
 //        return true;
 //    }
 
@@ -210,11 +207,6 @@ public class MainActivity extends AppCompatActivity
         .replace(R.id.main_content, salesFragment, "SALES_FRAGMENT")
         .addToBackStack("SALES_FRAGMENT").commit();
       getSupportFragmentManager().executePendingTransactions();
-    }
-    else if (id == R.id.nd_printers)
-    {
-      Toast.makeText(this, "Print", Toast.LENGTH_LONG).show();
-      startActivity(new Intent(this, Wireless_Activity.class));
     }
     else if (id == R.id.nd_customer_payment)
     {
@@ -332,5 +324,4 @@ public class MainActivity extends AppCompatActivity
       super.onBackPressed();
     }
   }
-  
 }

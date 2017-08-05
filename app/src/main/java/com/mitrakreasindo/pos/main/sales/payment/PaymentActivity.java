@@ -79,7 +79,7 @@ public class PaymentActivity extends AppCompatActivity
   @BindView(R.id.list_payment_product)
   RecyclerView listPaymentProduct;
   @BindView(R.id.sales_payment_total)
-  TextView salesPaymentTotal;
+  public TextView salesPaymentTotal;
   @BindView(R.id.btn_payment_confirm)
   Button btnPaymentConfirm;
 
@@ -442,9 +442,6 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewpayment.setSflag(payment.getSflag());
     viewpayment.setDatenew(null);
-
-
-
 
     for (int i = 0; i < salesItemList.size(); i++)
     {

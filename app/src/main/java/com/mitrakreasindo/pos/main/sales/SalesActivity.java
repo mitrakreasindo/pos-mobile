@@ -641,6 +641,15 @@ public class SalesActivity extends AppCompatActivity
 
   }
 
+  public void refreshData(){
+    salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
+  }
+
+  public void setTextTotal(double total)
+  {
+    salesProductTotal.setText(decimalFormat.format(total));
+  }
+
 //  public void postSales()
 //  {
 //    final ProgressDialog progressDialog = new ProgressDialog(this);

@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class IDs
 {
-  private static String loginUser,
+  private static String loginUser, loginUsername,
     loginCompanyName, loginCompanyAddress, loginCompanyPhone,
     loginCloseCashID;
 
@@ -25,6 +25,16 @@ public class IDs
     IDs.loginUser = loginUser;
   }
 
+  public static String getLoginUsername()
+  {
+    return loginUsername;
+  }
+
+  public static void setLoginUsername(String loginUsername)
+  {
+    IDs.loginUsername = loginUsername;
+  }
+
   public static String getLoginCompanyName()
   {
     return loginCompanyName;
@@ -34,6 +44,8 @@ public class IDs
   {
     IDs.loginCompanyName = loginCompanyName;
   }
+
+
 
   public static String getLoginCompanyAddress()
   {

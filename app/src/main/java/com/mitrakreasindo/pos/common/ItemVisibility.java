@@ -28,12 +28,14 @@ public class ItemVisibility
     {
       menuitem.add(getResId(list.get(i), R.id.class));
     }
-
+    Log.d("item visibility", "Nav menuitem size "+menuitem.size());
     for(int i=0; i<menuitem.size(); i++)
     {
       MenuItem mi = menu.findItem(menuitem.get(i));
-      if (mi == null) continue;
-      mi.setVisible(false);
+      if (mi != null)
+      {
+        mi.setVisible(false);
+      }
     }
   }
 
@@ -45,47 +47,7 @@ public class ItemVisibility
     {
       button.add(getResId(list.get(i), R.id.class));
     }
-//    if (resource == R.layout.fragment_maintenance)
-//    {
-//      int btn_maintenance[] =
-//        {
-//          R.id.btn_tax_categories,
-//          R.id.btn_consumer_tax_categories,
-//          R.id.btn_resources,
-//          R.id.btn_locations,
-//          R.id.btn_floors,
-//          R.id.btn_tables,
-//          R.id.btn_reset_pickup_counter,
-//          R.id.btn_release_table_locks
-//        };
-//
-//      for (int i = 0; i < btn_maintenance.length ; i++)
-//      {
-//        button.add(btn_maintenance[i]);
-//      }
-//    }
-//    else if (resource == R.layout.fragment_stock)
-//    {
-//      int btn_stock[] =
-//        {
-//          R.id.btn_stok_mnt_product_location,
-//          R.id.btn_stok_mnt_auxiliary_products,
-//          R.id.btn_stok_mnt_product_attributes,
-//          R.id.btn_stok_mnt_attributes_values,
-//          R.id.btn_stok_mnt_product_attribute_sets,
-//          R.id.btn_stok_mnt_product_attribute_use,
-//          R.id.btn_stok_mnt_stock_movement,
-//          R.id.btn_stok_mnt_promotions,
-//          R.id.btn_stok_mnt_recipes
-//        };
-//
-//      for (int i = 0; i < btn_stock.length ; i++)
-//      {
-//        button.add(btn_stock[i]);
-//      }
-//    }
-
-    Log.d("item visibilite", "button size "+button.size());
+    Log.d("item visibility", "View button size "+button.size());
     for(int i=0; i<button.size(); i++)
     {
       Button btn = (Button) view.findViewById(button.get(i));

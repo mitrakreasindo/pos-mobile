@@ -83,6 +83,6 @@ public class Role
   @Override
   public String toString()
   {
-    return name+" "+permissions;
+    return name;
   }
 }

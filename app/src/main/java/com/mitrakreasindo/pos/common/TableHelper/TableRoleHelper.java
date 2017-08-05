@@ -115,7 +115,7 @@ public class TableRoleHelper
   {
     ContentValues initialValues = new ContentValues();
 
-    initialValues.put(KEY_ID, role.getId());
+//    initialValues.put(KEY_ID, role.getId());
     initialValues.put(KEY_NAME, role.getName());
     initialValues.put(KEY_PERMISSION, role.getPermissions());
     initialValues.put(KEY_RIGHTSLEVEL, role.getRightslevel());
@@ -175,8 +175,8 @@ public class TableRoleHelper
   {
     open();
     List<Role> list = populateRole(db.query(DATABASE_TABLE,
-            new String[] {"CAST(id AS INTEGER)", KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
-            null, null, null, null, "1"));
+            new String[] {KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+            null, null, null, null, null));
     close();
 
     return list;

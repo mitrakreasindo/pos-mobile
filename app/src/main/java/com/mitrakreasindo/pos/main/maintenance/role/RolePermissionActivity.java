@@ -276,18 +276,14 @@ public class RolePermissionActivity extends AppCompatActivity
     });
 
     roleService = ClientService.createService().create(RoleService.class);
-
     sharedPreferenceEditor = new SharedPreferenceEditor();
-    serializer = new Persister();
-    listMenuId = new HashMap<>();
-
-    listMenuId.putAll(MenuIds.listStock());
-
-
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-    final Bundle bundle = getIntent().getExtras();
+    serializer = new Persister();
+    listMenuId = new HashMap<>();
+    listMenuId.putAll(MenuIds.listStock());
 
+    final Bundle bundle = getIntent().getExtras();
     if (bundle != null)
     {
       String name = bundle.getString("name");
@@ -306,7 +302,6 @@ public class RolePermissionActivity extends AppCompatActivity
           StringWriter newxml = new StringWriter();
           serializer.write(permission, newxml);
           Log.d("new permission xml", newxml.toString());
-
         }
         catch (Exception e)
         {
@@ -317,7 +312,6 @@ public class RolePermissionActivity extends AppCompatActivity
       {
         Log.d("permission byte", "not exist");
       }
-
       editRole.setText(name);
     }
     setupDefaultPermission(permission);
@@ -445,13 +439,13 @@ public class RolePermissionActivity extends AppCompatActivity
         setVisibility(rpMtcTxLayout);
         break;
     }
-
   }
 
   private void setupDefaultPermission(Permission permission)
   {
     if (permission == null)
     {
+      Log.d("PERMISSION: ", "permission is null");
       this.permission = new Permission();
       this.permission.navigation.addAll(MenuIds.listNavigatoin().values());
       this.permission.main.addAll(MenuIds.listMain().values());
@@ -465,6 +459,7 @@ public class RolePermissionActivity extends AppCompatActivity
     }
     else
     {
+      Log.d("PERMISSION: ", "permission is not null");
       List<String> inActivePermission = new ArrayList<>();
       inActivePermission.addAll(this.permission.navigation);
       inActivePermission.addAll(this.permission.main);
@@ -586,7 +581,6 @@ public class RolePermissionActivity extends AppCompatActivity
         }
       }
     }
-
   }
 
   private void setCheckAll(ButterKnife.Action<CheckBox> isCheck)
@@ -695,7 +689,7 @@ public class RolePermissionActivity extends AppCompatActivity
     role = new Role();
     role.setId(UUID.randomUUID().toString());
     role.setName(editRole.getText().toString());
-    role.setRightslevel(3);
+    role.setRightslevel(0);
     role.setPermissions(generateXmlPermission().getBytes());
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
@@ -729,6 +723,7 @@ public class RolePermissionActivity extends AppCompatActivity
             onBackPressed();
           }
         }
+        progressDialog.dismiss();
         Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
@@ -747,6 +742,7 @@ public class RolePermissionActivity extends AppCompatActivity
     progressDialog.setMessage(getString(R.string.progress_message));
     progressDialog.setCancelable(false);
     progressDialog.show();
+    Log.d(getClass().getSimpleName(), "Put Role !!!");
 
     Bundle bundle = getIntent().getExtras();
     String id = bundle.getString("id");
@@ -754,7 +750,7 @@ public class RolePermissionActivity extends AppCompatActivity
     role = new Role();
     role.setId(id);
     role.setName(editRole.getText().toString());
-    role.setRightslevel(3);
+    role.setRightslevel(1);
     role.setPermissions(generateXmlPermission().getBytes());
     role.setSiteguid(RestVariable.SITE_GUID);
     role.setSflag(true);
@@ -786,6 +782,7 @@ public class RolePermissionActivity extends AppCompatActivity
             onBackPressed();
           }
         }
+        progressDialog.dismiss();
         Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 

@@ -1,8 +1,6 @@
 package com.mitrakreasindo.pos.common;
 
 import android.content.Context;
-import android.renderscript.ScriptGroup;
-import android.util.Base64;
 import android.util.Log;
 
 import org.w3c.dom.Document;
@@ -12,7 +10,6 @@ import org.w3c.dom.NodeList;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
