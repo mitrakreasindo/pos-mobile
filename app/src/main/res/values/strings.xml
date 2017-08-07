@@ -69,7 +69,7 @@
     <string name="business_city">City</string>
     <string name="business_state">State</string>
     <string name="business_zip">Zip Code</string>
-    
+
     <string name="owner_info"><b>OWNER INFORMATION</b></string>
     <string name="owner_full_name">Full Name</string>
     <string name="owner_sex">Gender</string>
