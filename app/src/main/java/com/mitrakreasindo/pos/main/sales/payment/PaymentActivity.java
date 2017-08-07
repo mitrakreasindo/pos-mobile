@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.main.sales.payment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,9 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
+import com.mitrakreasindo.pos.common.Wireless.BluetoothService;
+import com.mitrakreasindo.pos.common.Wireless.PrintReceipt;
+import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.sales.payment.adapter.PaymentProductListAdapter;
@@ -143,7 +147,6 @@ public class PaymentActivity extends AppCompatActivity
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
-
       salesId = bundle.getString("salesid");
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
@@ -262,38 +265,113 @@ public class PaymentActivity extends AppCompatActivity
         if (paymentProductListAdapter.grandTotal() <= Double.parseDouble(edittextPaymentMoney.getText().toString()))
         {
           final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-          confirmationDialog.setTitle("Change money");
-          confirmationDialog.setMessage(decimalFormat.format(
-            Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
-          ));
-          confirmationDialog.setCancelable(false);
-
-          confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+          confirmationDialog.setTitle(R.string.printOptions);
+          confirmationDialog.setMessage(R.string.Qs_print);
+          
+          confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-
-              data();
-              salesPack = new SalesPack();
-              salesPack.setSales(viewsales);
-              salesPack.setReceipts(viewreceipt);
-              salesPack.setSalesItems(viewsalesitems);
-              salesPack.setPayments(viewpayments);
-              salesPack.setStockdiary(viewstockdiaries);
-              salesPack.setTaxlines(viewtaxlines);
-
-              TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
-              tableSalesHelper.open();
-              tableSalesHelper.insertSales(sales);
-              tableSalesHelper.close();
-
-              postSales();
-              SalesActivity.sActivity.finish();
-              finish();
+              if (mService == null) {
+                Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                  .show();
+                Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                startActivity(intent);
+                return;
+              }
+              else
+              {
+                if (mService.getState() == BluetoothService.STATE_CONNECTED)
+                {
+                  final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+                  confirmationDialog.setTitle("Change money");
+                  confirmationDialog.setMessage(decimalFormat.format(
+                    Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+                  ));
+                  confirmationDialog.setCancelable(false);
+                  confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+                  {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                      data();
+                      salesPack = new SalesPack();
+                      salesPack.setSales(viewsales);
+                      salesPack.setReceipts(viewreceipt);
+                      salesPack.setSalesItems(viewsalesitems);
+                      salesPack.setPayments(viewpayments);
+                      salesPack.setStockdiary(viewstockdiaries);
+                      salesPack.setTaxlines(viewtaxlines);
+      
+                      TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                      tableSalesHelper.open();
+                      tableSalesHelper.insertSales(sales);
+                      tableSalesHelper.close();
+      
+                      postSales();
+                      SalesActivity.sActivity.finish();
+                      finish();
+                      PrintReceipt.printReceipt(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString()));
+                      Log.d("Grandtotal: ",Double.toString(paymentProductListAdapter.grandTotal()));
+                    }
+                  });
+                  confirmationDialog.show();
+                  
+                  return;
+              }
+                else
+                {
+                  Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+                  Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                  startActivity(intent);
+                  return;
+                }
+              }
             }
           });
-
+  
+          confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+          {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+              confirmationDialog.setTitle("Change money");
+              confirmationDialog.setMessage(decimalFormat.format(
+                Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+              ));
+              confirmationDialog.setCancelable(false);
+              confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+      
+                  data();
+                  salesPack = new SalesPack();
+                  salesPack.setSales(viewsales);
+                  salesPack.setReceipts(viewreceipt);
+                  salesPack.setSalesItems(viewsalesitems);
+                  salesPack.setPayments(viewpayments);
+                  salesPack.setStockdiary(viewstockdiaries);
+                  salesPack.setTaxlines(viewtaxlines);
+                  Log.d("TAX: ",salesPack.getTaxlines().toString());
+      
+                  TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                  tableSalesHelper.open();
+                  tableSalesHelper.insertSales(sales);
+                  tableSalesHelper.close();
+      
+                  postSales();
+                  SalesActivity.sActivity.finish();
+                  finish();
+                }
+              });
+              confirmationDialog.show();
+            }
+          });
           confirmationDialog.show();
         }
         else
@@ -305,7 +383,7 @@ public class PaymentActivity extends AppCompatActivity
     });
 
     salesPaymentTotal.setText(decimalFormat.format(paymentProductListAdapter.grandTotal()));
-
+    Log.d("Total: ",Double.toString(paymentProductListAdapter.grandTotal()));
   }
 
   @Override
@@ -450,7 +528,7 @@ public class PaymentActivity extends AppCompatActivity
       salesItem = salesItemList.get(i);
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
-      salesItem.setUnits(1);
+      salesItem.setUnits(salesItemList.get(i).getUnits());
       salesItem.setPrice(product.getPricesell());
       salesItem.setSalesId(sales);
       salesItem.setSflag(true);

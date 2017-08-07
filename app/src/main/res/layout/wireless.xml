@@ -3,6 +3,12 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical" >
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include layout="@layout/include_toolbar" />
+  </android.support.design.widget.AppBarLayout>
 
   <Button
     android:id="@+id/button_scan"
@@ -96,7 +102,7 @@
         android:id="@+id/btn_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DISCONNECT" />
+        android:text="@string/text_disconnect" />
 
     </LinearLayout>
   </ScrollView>
