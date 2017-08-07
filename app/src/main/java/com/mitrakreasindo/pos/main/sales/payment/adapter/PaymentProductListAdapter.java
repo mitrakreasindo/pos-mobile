@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.main.R;
@@ -55,6 +53,7 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
 
     holder.txtName.setText(salesItem.getProduct().getName());
     holder.txtQty.setText(String.valueOf((int) salesItem.getUnits()));
+    Log.d("UNIT: ", Double.toString(salesItem.getUnits()));
     holder.txtPrice.setText(decimalFormat.format(salesItem.getProduct().getPricesell()));
     holder.txtSubTotal.setText(decimalFormat.format(
       salesItem.getProduct().getPricesell() *

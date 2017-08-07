@@ -1,7 +1,6 @@
 
 package com.mitrakreasindo.pos.common.Wireless;
 
-import android.app.Application;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,7 +15,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.mitrakreasindo.pos.main.R;
 
 import java.io.IOException;
 import java.io.InputStream;

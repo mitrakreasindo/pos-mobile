@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,122 +29,141 @@ import com.mitrakreasindo.pos.model.Print;
 
 import java.io.UnsupportedEncodingException;
 
-public class Wireless_Activity extends Activity implements View.OnClickListener
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class Wireless_Activity extends AppCompatActivity implements View.OnClickListener
 {
-/******************************************************************************************************/
-	// Debugging
-	private static final String TAG = "Wireless_Activity";
-	private static final boolean DEBUG = true;
+  /******************************************************************************************************/
+  // Debugging
+  private static final String TAG = "Wireless_Activity";
+  private static final boolean DEBUG = true;
   public static int x = 0;
   public static int y = 0;
   public static int z = 0;
-/******************************************************************************************************/
-	// Message types sent from the BluetoothService Handler
-	public static final int MESSAGE_STATE_CHANGE = 1;
-	public static final int MESSAGE_READ = 2;
-	public static final int MESSAGE_WRITE = 3;
-	public static final int MESSAGE_DEVICE_NAME = 4;
-	public static final int MESSAGE_TOAST = 5;
-	public static final int MESSAGE_CONNECTION_LOST = 6;
-	public static final int MESSAGE_UNABLE_CONNECT = 7;
+  /******************************************************************************************************/
+  // Message types sent from the BluetoothService Handler
+  public static final int MESSAGE_STATE_CHANGE = 1;
+  public static final int MESSAGE_READ = 2;
+  public static final int MESSAGE_WRITE = 3;
+  public static final int MESSAGE_DEVICE_NAME = 4;
+  public static final int MESSAGE_TOAST = 5;
+  public static final int MESSAGE_CONNECTION_LOST = 6;
+  public static final int MESSAGE_UNABLE_CONNECT = 7;
   public static String KEY_NAMA = "";
   
-/*******************************************************************************************************/
-	// Key names received from the BluetoothService Handler
-	public static final String DEVICE_NAME = "device_name";
-	public static final String TOAST = "toast";
-
-	// Intent request codes
-	private static final int REQUEST_CONNECT_DEVICE = 1;
-	private static final int REQUEST_ENABLE_BT = 2;
-	private static final int REQUEST_CHOSE_BMP = 3;
-/*********************************************************************************/
-	private TextView mTitle;
-	EditText editText;
-	ImageView imageViewPicture;
-	private Button sendButton = null;
-	private Button testButton = null;
-	private Button printbmpButton = null;
-	private Button btnScanButton = null;
-	private Button btnClose = null;
-	private Button btn_BMP = null;
-	private Button btn_ChoseCommand = null;
-	private Button btn_prtsma = null;
-	private Button btn_prttableButton = null;
-	private Button btn_prtcodeButton = null;
-	private Button btn_scqrcode = null;
-	private Button btn_camer = null;
+  /*******************************************************************************************************/
+  // Key names received from the BluetoothService Handler
+  public static final String DEVICE_NAME = "device_name";
+  public static final String TOAST = "toast";
+  
+  // Intent request codes
+  private static final int REQUEST_CONNECT_DEVICE = 1;
+  private static final int REQUEST_ENABLE_BT = 2;
+  private static final int REQUEST_CHOSE_BMP = 3;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  /*********************************************************************************/
+  private TextView mTitle;
+  EditText editText;
+  ImageView imageViewPicture;
+  private Button sendButton = null;
+  private Button testButton = null;
+  private Button printbmpButton = null;
+  private Button btnScanButton = null;
+  private Button btnClose = null;
+  private Button btn_BMP = null;
+  private Button btn_ChoseCommand = null;
+  private Button btn_prtsma = null;
+  private Button btn_prttableButton = null;
+  private Button btn_prtcodeButton = null;
+  private Button btn_scqrcode = null;
+  private Button btn_camer = null;
   private SalesListAdapter salesListAdapter;
   private Print print;
   private ProgressDialog progressDialog;
-
-/******************************************************************************************************/
-	// Name of the connected device
-	private String mConnectedDeviceName = null;
-	// Local Bluetooth adapter
-	private BluetoothAdapter mBluetoothAdapter = null;
-	// Member object for the services
-	public static BluetoothService mService;
+  
+  /******************************************************************************************************/
+  // Name of the connected device
+  private String mConnectedDeviceName = null;
+  // Local Bluetooth adapter
+  private BluetoothAdapter mBluetoothAdapter = null;
+  // Member object for the services
+  public static BluetoothService mService;
 /***************************   指                 令****************************************************************/
-/******************************************************************************************************/
-	@Override
-public void onCreate(Bundle savedInstanceState) {
-  super.onCreate(savedInstanceState);
-    progressDialog 	= new ProgressDialog(this);
-  if (DEBUG)
-    Log.e(TAG, "+++ ON CREATE +++");
+  /******************************************************************************************************/
+  @Override
+  public void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
     setContentView(R.layout.wireless);
+    ButterKnife.bind(this);
+    progressDialog = new ProgressDialog(this);
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setTitle("Bluetooth Printer");
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
+    if (DEBUG)
+      Log.e(TAG, "+++ ON CREATE +++");
+    
     // Get local Bluetooth adapter
     mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     
     // If the adapter is null, then Bluetooth is not supported
-  if (mBluetoothAdapter == null) {
-    Toast.makeText(this, "Bluetooth is not available",
-      Toast.LENGTH_LONG).show();
-    finish();
-  }
-  
-  if(mService!=null)
-  {
-    if (mService.getState() == BluetoothService.STATE_CONNECTED)
+    if (mBluetoothAdapter == null)
     {
-      Toast.makeText(this, "Bluetooth is Connected",
-        Toast.LENGTH_SHORT).show();
-      KeyListenerDis();
-      btnScanButton.setEnabled(false);
-      btnClose.setEnabled(true);
-      
-      btnClose.setOnClickListener(new View.OnClickListener()
+      Toast.makeText(this, getText(R.string.bluetooth_not_available),
+        Toast.LENGTH_LONG).show();
+      finish();
+    }
+    
+    if (mService != null)
+    {
+      if (mService.getState() == BluetoothService.STATE_CONNECTED)
       {
-        @Override
-        public void onClick(View v)
+        Toast.makeText(this, getText(R.string.bluetooth_connected),
+          Toast.LENGTH_SHORT).show();
+        KeyListenerDis();
+        btnScanButton.setEnabled(false);
+        btnClose.setEnabled(true);
+        
+        btnClose.setOnClickListener(new View.OnClickListener()
         {
-          if (!mBluetoothAdapter.isEnabled())
+          @Override
+          public void onClick(View v)
           {
-            Intent enableIntent = new Intent(
-              BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
+            if (!mBluetoothAdapter.isEnabled())
+            {
+              Intent enableIntent = new Intent(
+                BluetoothAdapter.ACTION_REQUEST_ENABLE);
+              startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+              // Otherwise, setup the session
+            }
+            else
+            {
+              mService.stop();
+              KeyListenerInit();
+            }
+            
           }
-          else
-          {
-            mService.stop();
-            KeyListenerInit();
-          }
-          
-        }
-      });
-      // Start the Bluetooth services
-      
-      return;
-    }
-    else if (mService.getState() != BluetoothService.STATE_CONNECTED)
-    {
-      KeyListenerInit();
-      return;
+        });
+        // Start the Bluetooth services
+        
+        return;
+      }
+      else if (mService.getState() != BluetoothService.STATE_CONNECTED)
+      {
+        KeyListenerInit();
+        return;
+      }
     }
   }
-}
   
   @Override
   public void onStart()
@@ -161,20 +182,22 @@ public void onCreate(Bundle savedInstanceState) {
     {
       if (mService == null)
       {
-        Toast.makeText(this, "mService Null",
-          Toast.LENGTH_SHORT).show();
         KeyListenerInit();
       }
     }
   }
+  
   @Override
-  public synchronized void onResume() {
+  public synchronized void onResume()
+  {
     super.onResume();
     if (DEBUG)
       Log.e(TAG, "- ON RESUME -");
-    if (mService != null) {
-    
-      if (mService.getState() == BluetoothService.STATE_NONE) {
+    if (mService != null)
+    {
+      
+      if (mService.getState() == BluetoothService.STATE_NONE)
+      {
         // Start the Bluetooth services
         mService.start();
       }
@@ -182,55 +205,65 @@ public void onCreate(Bundle savedInstanceState) {
   }
   
   @Override
-  public synchronized void onPause() {
+  public synchronized void onPause()
+  {
     super.onPause();
     if (DEBUG)
       Log.e(TAG, "- ON PAUSE -");
   }
   
   @Override
-  public void onStop() {
+  public void onStop()
+  {
     super.onStop();
     if (DEBUG)
       Log.e(TAG, "-- ON STOP --");
   }
   
   @Override
-  public void onDestroy() {
+  public void onDestroy()
+  {
     super.onDestroy();
     // Stop the Bluetooth services
-      if (DEBUG)
-        Log.e(TAG, "--- ON DESTROY ---");
+    if (DEBUG)
+      Log.e(TAG, "--- ON DESTROY ---");
   }
   
   /*****************************************************************************************************/
-  private void KeyListenerDis() {
-  
-    btnScanButton = (Button)findViewById(R.id.button_scan);
+  private void KeyListenerDis()
+  {
+    
+    btnScanButton = (Button) findViewById(R.id.button_scan);
     btnScanButton.setOnClickListener(this);
-  
-    btnClose = (Button)findViewById(R.id.btn_close);
+    
+    btnClose = (Button) findViewById(R.id.btn_close);
     btnClose.setOnClickListener(this);
     
     /*mService = new BluetoothService(this, mHandler);*/
   }
-  private void KeyListenerInit() {
+  
+  private void KeyListenerInit()
+  {
     
-    btnScanButton = (Button)findViewById(R.id.button_scan);
+    btnScanButton = (Button) findViewById(R.id.button_scan);
     btnScanButton.setOnClickListener(this);
     
-    btnClose = (Button)findViewById(R.id.btn_close);
+    btnClose = (Button) findViewById(R.id.btn_close);
     btnClose.setOnClickListener(this);
     
     btnScanButton.setEnabled(true);
     btnClose.setEnabled(false);
     mService = new BluetoothService(this, mHandler);
   }
+  
   @Override
-  public void onClick(View v) {
+  public void onClick(View v)
+  {
     // TODO Auto-generated method stub
-    switch (v.getId()) {
-      case R.id.button_scan:{
+    switch (v.getId())
+    {
+      case R.id.button_scan:
+      {
         if (!mBluetoothAdapter.isEnabled())
         {
           Intent enableIntent = new Intent(
@@ -244,7 +277,8 @@ public void onCreate(Bundle savedInstanceState) {
           break;
         }
       }
-      case R.id.btn_close:{
+      case R.id.btn_close:
+      {
         /*unbindService(mConnection);*/
         if (!mBluetoothAdapter.isEnabled())
         {
@@ -275,21 +309,28 @@ public void onCreate(Bundle savedInstanceState) {
         break;
     }
   }
+  
   /*****************************************************************************************************/
-	/*
+  /*
 	 * SendDataString
 	 */
-  public static void SendDataString(Context context, String data) {
+  public static void SendDataString(Context context, String data)
+  {
     
-    if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+    if (mService.getState() != BluetoothService.STATE_CONNECTED)
+    {
       Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT)
         .show();
       return;
     }
-    if (data.length() > 0) {
-      try {
+    if (data.length() > 0)
+    {
+      try
+      {
         mService.write(data.getBytes("GBK"));
-      } catch (UnsupportedEncodingException e) {
+      }
+      catch (UnsupportedEncodingException e)
+      {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
@@ -299,8 +340,10 @@ public void onCreate(Bundle savedInstanceState) {
   /*
    *SendDataByte
    */
-  public static void SendDataByte(Context context, byte[] data) {
-    if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+  public static void SendDataByte(Context context, byte[] data)
+  {
+    if (mService.getState() != BluetoothService.STATE_CONNECTED)
+    {
       Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT)
         .show();
       return;
@@ -310,14 +353,18 @@ public void onCreate(Bundle savedInstanceState) {
   
   /****************************************************************************************************/
   @SuppressLint("HandlerLeak")
-  private final Handler mHandler = new Handler() {
+  private final Handler mHandler = new Handler()
+  {
     @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
+    public void handleMessage(Message msg)
+    {
+      switch (msg.what)
+      {
         case MESSAGE_STATE_CHANGE:
           if (DEBUG)
             Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-          switch (msg.arg1) {
+          switch (msg.arg1)
+          {
             case BluetoothService.STATE_CONNECTED:
 					/*mTitle.setText(R.string.title_connected_to);
 					mTitle.append(mConnectedDeviceName);*/
@@ -334,7 +381,7 @@ public void onCreate(Bundle savedInstanceState) {
 				/*	mTitle.setText(R.string.title_connecting);*/
               break;
             case BluetoothService.STATE_LISTEN:
-              
+            
             case BluetoothService.STATE_NONE:
 					/*mTitle.setText(R.string.title_not_connected);*/
               break;
@@ -349,8 +396,7 @@ public void onCreate(Bundle savedInstanceState) {
         case MESSAGE_DEVICE_NAME:
           // save the connected device's name
           mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-          Toast.makeText(getApplicationContext(),
-            "Connected to " + mConnectedDeviceName,
+          Toast.makeText(getApplicationContext(), getText(R.string.title_connected_to) + " " + mConnectedDeviceName,
             Toast.LENGTH_SHORT).show();
           progressDialog.dismiss();
           finish();
@@ -362,7 +408,7 @@ public void onCreate(Bundle savedInstanceState) {
           progressDialog.dismiss();
           break;
         case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-          Toast.makeText(getApplicationContext(), "Device connection was lost",
+          Toast.makeText(getApplicationContext(), getText(R.string.Connection_lost),
             Toast.LENGTH_SHORT).show();
          /* editText.setEnabled(false);*/
           /*imageViewPicture.setEnabled(false);*/
@@ -372,7 +418,7 @@ public void onCreate(Bundle savedInstanceState) {
           break;
         case MESSAGE_UNABLE_CONNECT:     //无法连接设备
           progressDialog.dismiss();
-          Toast.makeText(getApplicationContext(), "Unable to connect device",
+          Toast.makeText(getApplicationContext(), getText(R.string.unable_connect),
             Toast.LENGTH_SHORT).show();
           break;
       }
@@ -380,18 +426,23 @@ public void onCreate(Bundle savedInstanceState) {
   };
   
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  public void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
     if (DEBUG)
       Log.d(TAG, "onActivityResult " + resultCode);
-    switch (requestCode) {
-      case REQUEST_CONNECT_DEVICE:{
+    switch (requestCode)
+    {
+      case REQUEST_CONNECT_DEVICE:
+      {
         // When DeviceListActivity returns with a device to connect
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK)
+        {
           // Get the device MAC address
           String address = data.getExtras().getString(
             DeviceListActivity.EXTRA_DEVICE_ADDRESS);
           // Get the BLuetoothDevice object
-          if (BluetoothAdapter.checkBluetoothAddress(address)) {
+          if (BluetoothAdapter.checkBluetoothAddress(address))
+          {
             BluetoothDevice device = mBluetoothAdapter
               .getRemoteDevice(address);
             // Attempt to connect to the device
@@ -402,17 +453,21 @@ public void onCreate(Bundle savedInstanceState) {
         }
         break;
       }
-      case REQUEST_ENABLE_BT:{
+      case REQUEST_ENABLE_BT:
+      {
         // When the request to enable Bluetooth returns
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK)
+        {
           // Bluetooth is now enabled, so set up a session
-          btnClose = (Button)findViewById(R.id.btn_close);
+          btnClose = (Button) findViewById(R.id.btn_close);
           btnClose.setEnabled(false);
           KeyListenerInit();
-        } else {
+        }
+        else
+        {
           // User did not enable Bluetooth or an error occured
           Log.d(TAG, "BT not enabled");
-          Toast.makeText(this, R.string.bt_not_enabled_leaving,
+          Toast.makeText(this, this.getString(R.string.bt_not_enabled_leaving),
             Toast.LENGTH_SHORT).show();
           finish();
         }
@@ -426,16 +481,17 @@ public void onCreate(Bundle savedInstanceState) {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service)
     {
-      BluetoothService.Localservice localservice = (BluetoothService.Localservice)service;
+      BluetoothService.Localservice localservice = (BluetoothService.Localservice) service;
       mService = localservice.getservice();
     }
-  
+    
     @Override
     public void onServiceDisconnected(ComponentName name)
     {
-    
+      
     }
   };
+  
   /*@SuppressLint("SimpleDateFormat")
   private void Print_Ex()
   {
