@@ -97,7 +97,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:background="@drawable/default_edit_text"
-                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:inputType="number"
                 android:paddingLeft="7dp"
                 android:textColor="@color/gray600"/>
 

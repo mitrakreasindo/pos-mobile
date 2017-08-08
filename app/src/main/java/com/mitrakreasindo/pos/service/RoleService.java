@@ -20,16 +20,16 @@ import retrofit2.http.Path;
 public interface RoleService
 {
 
-  @GET("chromis.roles/{kodeMerchant}/")
+  @GET("roles/{kodeMerchant}/")
   Call<List<Role>> getRoleAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("chromis.roles/{kodeMerchant}/")
+  @POST("roles/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
 
-  @DELETE("chromis.roles/{kodeMerchant}/{id}")
+  @DELETE("roles/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deleteRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
-  @PUT("chromis.roles/{kodeMerchant}/{id}")
+  @PUT("roles/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Role role);
 
 }

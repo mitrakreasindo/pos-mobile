@@ -19,15 +19,15 @@ import retrofit2.http.Path;
 
 public interface DiaryStockService
 {
-  @GET("chromis.stockdiary/{kodeMerchant}/")
+  @GET("stockdiary/{kodeMerchant}/")
   Call<List<StockDiary>> getStockDiaryAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("chromis.stockdiary/{kodeMerchant}/")
+  @POST("stockdiary/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary stockDiary);
 
-  @PUT("chromis.stockdiary/{kodeMerchant}/{id}")
+  @PUT("stockdiary/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateStockDiary(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary StockDiary);
 
-  @DELETE("chromis.stockdiary/public/{id}")
+  @DELETE("stockdiary/public/{id}")
   Call<HashMap<Integer, String>> deleteStockDiary(@Path("id") String id);
 }

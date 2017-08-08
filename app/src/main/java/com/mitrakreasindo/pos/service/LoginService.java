@@ -16,6 +16,6 @@ import retrofit2.http.POST;
 public interface LoginService
 {
   @Headers("Content-type: application/json")
-  @POST("chromis.people/doLogin")
+  @POST("peoples/auth/public")
   Call<HashMap<Integer,String>> postLogin(@Body Login login);
 }

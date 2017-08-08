@@ -21,18 +21,18 @@ import retrofit2.http.Path;
 public interface ProductService
 {
 
-  @POST("chromis.products/{kodeMerchant}/")
+  @POST("products/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postProduct(@Path("kodeMerchant") String kodeMerchant, @Body Product product);
 
-  @PUT("chromis.products/{kodeMerchant}/{id}")
+  @PUT("products/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateProduct(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Product product);
 
-  @GET("chromis.products/{kodeMerchant}/")
+  @GET("products/{kodeMerchant}/")
   Call<List<Product>> getProductAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @GET("chromis.products/{kodeMerchant}/{id}")
+  @GET("products/{kodeMerchant}/{id}")
   Call<List<Product>> getProductById(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
-  @DELETE("chromis.products/{kodeMerchant}/{id}")
+  @DELETE("products/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deleteProduct(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }

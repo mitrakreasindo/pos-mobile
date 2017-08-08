@@ -1,9 +1,12 @@
 package com.mitrakreasindo.pos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by lisa on 22/06/17.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tax
 {
   private String id;

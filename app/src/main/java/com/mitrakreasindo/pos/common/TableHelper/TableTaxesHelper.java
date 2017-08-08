@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.model.Tax;
@@ -224,6 +227,10 @@ public class TableTaxesHelper
     @Override
     protected Tax[] doInBackground(Void... params)
     {
+
+//      ObjectMapper mapper = new ObjectMapper();
+//      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
       try
       {
         final String url = RestVariable.URL_GET_TAX;
