@@ -16,7 +16,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/main_content"
+        android:id="@+id/header_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -26,56 +26,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="0dp"
-            app:cardElevation="0dp">
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="8dp">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp">
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Open Cash Start Date"/>
+                        android:text="@string/start_date"/>
 
                     <TextView
-                        android:id="@+id/diary_date_field"
+                        android:id="@+id/open_cash_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Wednesday, 4 April 2017"/>
+                        android:text="Wednesday, 4 April 2017"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingRight="10dp">
+                        android:paddingEnd="5dp"
+                        android:paddingStart="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Payment"/>
+                            android:text="@string/total_payment"/>
 
                         <TextView
-                            android:id="@+id/diary_product_buy_price_field"
+                            android:id="@+id/closecash_total_payment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$ 0.0"
+                            android:text="0.0"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
@@ -84,18 +86,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp">
+                        android:paddingEnd="5dp"
+                        android:paddingStart="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Cash In Hand"/>
+                            android:text="@string/total_cash_in_hand"/>
 
                         <TextView
-                            android:id="@+id/diary_product_sell_price_field"
+                            android:id="@+id/closecash_total_cash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$ 0.0"
+                            android:text="0.0"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
@@ -104,14 +107,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp">
+                        android:layout_weight="1"
+                        android:paddingEnd="5dp"
+                        android:paddingStart="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Units Sold"/>
+                            android:text="@string/total_units_sold"/>
 
                         <TextView
+                            android:id="@+id/closecash_total_units"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0.0"
@@ -130,86 +136,17 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/main_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <android.support.v7.widget.CardView
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_transaction"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="0dp">
+                    android:layout_height="match_parent"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorAccent"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2.5"
-                                android:text="No"
-                                android:textAlignment="center"
-                                android:textColor="@color/white"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="10"
-                                android:text="Transaction ID"
-                                android:textAlignment="center"
-                                android:textColor="@color/white"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="7"
-                                android:text="Payment"
-                                android:textAlignment="center"
-                                android:textColor="@color/white"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:text="Cash"
-                                android:textAlignment="center"
-                                android:textColor="@color/white"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:text="Units Sold"
-                                android:textAlignment="center"
-                                android:textColor="@color/white"
-                                android:textStyle="bold"/>
-
-                        </LinearLayout>
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/list_queue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                        </android.support.v7.widget.RecyclerView>
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
             </LinearLayout>
-
         </ScrollView>
 
     </LinearLayout>
@@ -230,8 +167,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:onClick="ConfirmRegisterPeople"
-            android:text="Close Cash"
+            android:onClick="ConfirmCloseCash"
+            android:text="@string/close_cash"
             android:textColor="@color/white"/>
 
         <Button

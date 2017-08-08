@@ -353,5 +353,14 @@
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">CASHIER: </string>
 
-
+    <!-- Close Cash -->
+    <string name="start_date">Open Cash Start Date</string>
+    <string name="total_payment">Total Payment</string>
+    <string name="total_cash_in_hand">Total Cash In Hand</string>
+    <string name="total_units_sold">Total Units Sold</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="payment">Payment :</string>
+    <string name="cash">Cash :</string>
+    <string name="units_sold">Units Sold :</string>
+    <string name="close_cash">Close Cash</string>
 </resources>

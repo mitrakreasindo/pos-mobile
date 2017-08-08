@@ -18,18 +18,18 @@ import retrofit2.http.Path;
 
 public interface ClosedCashService
 {
-  @GET("api/closedcash/{kodeMerchant}")
+  @GET("closedcash/{kodeMerchant}")
   Call<List<Viewclosedcash>> getClosedCashAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @GET("api/closedcash/{kodeMerchant}/money/{moneyId}")
+  @GET("closedcash/{kodeMerchant}/money/{moneyId}")
   Call<List<Viewclosedcash>> getClosedCashByMoney(@Path("kodeMerchant") String kodeMerchant,
                                                   @Path("moneyId") String moneyId);
 
-  @GET("api/closedcash/{kodeMerchant}/{receipt_id}")
+  @GET("closedcash/{kodeMerchant}/{receipt_id}")
   Call<List<Viewclosedcash>> getClosedCashByReceipt(@Path("kodeMerchant") String kodeMerchant,
                                                     @Path("receipt_id") String receipt_id);
 
-  @POST("api/closedcash/{kodeMerchant}/")
+  @POST("closedcash/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postClosedCash(@Path("kodeMerchant") String kodeMerchant,
                                                 @Body ClosedCash closedCash);
 }

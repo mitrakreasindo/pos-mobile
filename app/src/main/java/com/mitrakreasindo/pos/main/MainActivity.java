@@ -35,6 +35,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
+import com.mitrakreasindo.pos.main.closecash.CloseCashActivity;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
@@ -45,7 +46,6 @@ import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -220,12 +220,11 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_printers)
     {
-      Toast.makeText(this, "Print", Toast.LENGTH_SHORT).show();
       startActivity(new Intent(this, Wireless_Activity.class));
     }
-    else if (id == R.id.nd_customer_payment)
+    else if (id == R.id.nd_close_cash)
     {
-      startActivity(new Intent(this, ProductFormActivity.class));
+      startActivity(new Intent(this, CloseCashActivity.class));
     }
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

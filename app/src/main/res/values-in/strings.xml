@@ -292,53 +292,64 @@
         <item>Stok Keluar (-)</item>
     </string-array>
 
-  <!--Wireles-Activity-->
-  <string name="connect">Cari dan Hubungkan ke Bluetooth Printer</string>
+    <!--Wireles-Activity-->
+    <string name="connect">Cari dan Hubungkan ke Bluetooth Printer</string>
 
-  <!--  DeviceListActivity -->
-  <string name="scanning">Memindai Perangkat&#8230;</string>
-  <string name="select_device">Pilih perangkat</string>
-  <string name="none_paired">Tidak ada perangkat yang cocok</string>
-  <string name="none_found">Perangkat tidak ditemukan</string>
-  <string name="title_paired_devices">Cocokkan peralatan</string>
-  <string name="title_other_devices">Peralatan lain yang berguna</string>
-  <string name="button_scan">Memindai perangkat</string>
+    <!--  DeviceListActivity -->
+    <string name="scanning">Memindai Perangkat&#8230;</string>
+    <string name="select_device">Pilih perangkat</string>
+    <string name="none_paired">Tidak ada perangkat yang cocok</string>
+    <string name="none_found">Perangkat tidak ditemukan</string>
+    <string name="title_paired_devices">Cocokkan peralatan</string>
+    <string name="title_other_devices">Peralatan lain yang berguna</string>
+    <string name="button_scan">Memindai perangkat</string>
 
-  <!--  Message -->
-  <string name="not_connected">Sambungkan printer Bluetooth</string>
-  <string name="bt_not_enabled_leaving">Bluetooth tidak dimulai, keluar dari program</string>
-  <string name="connecting_message">Menghubungkan…</string>
-  <string name="title_connected_to">Terhubung ke </string>
-  <string name="Connecting">Terhubung ke printer Bluetooth</string>
-  <string name="bluetooth_not_available">Bluetooth tidak tersedia</string>
-  <string name="bluetooth_connected">Bluetooth terhubung</string>
-  <string name="Connection_lost">Sambungan perangkat hilang</string>
-  <string name="unable_connect">Tidak dapat menyambungkan perangkat</string>
-  <string name="SalesEmpty">Penjualan kosong</string>
+    <!--  Message -->
+    <string name="not_connected">Sambungkan printer Bluetooth</string>
+    <string name="bt_not_enabled_leaving">Bluetooth tidak dimulai, keluar dari program</string>
+    <string name="connecting_message">Menghubungkan…</string>
+    <string name="title_connected_to">Terhubung ke </string>
+    <string name="Connecting">Terhubung ke printer Bluetooth</string>
+    <string name="bluetooth_not_available">Bluetooth tidak tersedia</string>
+    <string name="bluetooth_connected">Bluetooth terhubung</string>
+    <string name="Connection_lost">Sambungan perangkat hilang</string>
+    <string name="unable_connect">Tidak dapat menyambungkan perangkat</string>
+    <string name="SalesEmpty">Penjualan kosong</string>
 
 
-  <string name="text_bluetooth_off">Bluetooth tidak aktif</string>
-  <string name="text_bluetooth_on">Bluetooth aktif</string>
+    <string name="text_bluetooth_off">Bluetooth tidak aktif</string>
+    <string name="text_bluetooth_on">Bluetooth aktif</string>
 
-  <string name="text_connect">Menghubungkan</string>
-  <string name="text_disconnect">Memutuskan</string>
+    <string name="text_connect">Menghubungkan</string>
+    <string name="text_disconnect">Memutuskan</string>
 
-  <string name="text_enable_bluetooth">Aktifkan Bluetooth</string>
-  <string name="text_disable_bluetooth">Nonaktifkan Bluetooth</string>
+    <string name="text_enable_bluetooth">Aktifkan Bluetooth</string>
+    <string name="text_disable_bluetooth">Nonaktifkan Bluetooth</string>
 
-  <string name="text_scan_devices">Perangkat Pindai</string>
-  <string name="text_stop_scan">Perangkat Pindai</string>
+    <string name="text_scan_devices">Perangkat Pindai</string>
+    <string name="text_stop_scan">Perangkat Pindai</string>
 
-  <string name="text_list_paired_devices">Perangkat Terpasang</string>
-  <string name="text_list_devices">Daftar Perangkat</string>
-  <string name="text_pair">Pasangan</string>
-  <string name="text_total">TOTAL</string>
-  <string name="text_tunai">BAYAR</string>
-  <string name="text_kembali">KEMBALI</string>
-  <string name="text_ucapan">TERIMA KASIH. SELAMAT BELANJA KEMBALI</string>
+    <string name="text_list_paired_devices">Perangkat Terpasang</string>
+    <string name="text_list_devices">Daftar Perangkat</string>
+    <string name="text_pair">Pasangan</string>
+    <string name="text_total">TOTAL</string>
+    <string name="text_tunai">BAYAR</string>
+    <string name="text_kembali">KEMBALI</string>
+    <string name="text_ucapan">TERIMA KASIH. SELAMAT BELANJA KEMBALI</string>
 
-  <string name="printOptions">Pilihan Cetak</string>
-  <string name="Qs_print">Cetak Struk?</string>
-  <string name="cashier">KASIR: </string>
+    <string name="printOptions">Pilihan Cetak</string>
+    <string name="Qs_print">Cetak Struk?</string>
+    <string name="cashier">KASIR: </string>
+
+    <!-- Close Cash -->
+    <string name="start_date">Tanggal Mulai Buka Kas</string>
+    <string name="total_payment">Total Pembayaran</string>
+    <string name="total_cash_in_hand">Total Kas yang Dipegang</string>
+    <string name="total_units_sold">Total Barang yang Terjual</string>
+    <string name="transaction_id">ID Transaksi :</string>
+    <string name="payment">Pembayaran :</string>
+    <string name="cash">Kas :</string>
+    <string name="units_sold">Barang Terjual :</string>
+    <string name="close_cash">Tutup Kas</string>
 
 </resources>

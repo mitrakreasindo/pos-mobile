@@ -80,15 +80,6 @@ public class ProductActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listProduct.setLayoutManager(layoutManager);
 
-    toolbar.setNavigationOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        onBackPressed();
-      }
-    });
-
     if (!is_action_mode)
     {
       txtActionToolbar.setVisibility(View.GONE);
