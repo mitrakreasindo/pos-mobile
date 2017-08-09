@@ -224,7 +224,10 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_close_cash)
     {
-      startActivity(new Intent(this, CloseCashActivity.class));
+      if (IDs.getLoginCloseCashID() != null)
+        startActivity(new Intent(this, CloseCashActivity.class));
+      else
+        Toast.makeText(MainActivity.this, R.string.error_close_cash, Toast.LENGTH_SHORT).show();
     }
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -293,7 +296,7 @@ public class MainActivity extends AppCompatActivity
         {
           setupNavigation();
           progressDialog.dismiss();
-          Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
+          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
     }
   }

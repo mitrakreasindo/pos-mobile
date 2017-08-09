@@ -53,7 +53,6 @@ import com.mitrakreasindo.pos.model.ViewTaxLine;
 import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -165,7 +164,11 @@ public class PaymentActivity extends AppCompatActivity
 
     final ClosedCash closedCash = new ClosedCash();
     if (IDs.getLoginCloseCashID() == null)
-      closedCash.setMoney(UUID.randomUUID().toString());
+    {
+      String id = UUID.randomUUID().toString();
+      closedCash.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
 
