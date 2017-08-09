@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
@@ -52,6 +53,7 @@ import com.mitrakreasindo.pos.model.ViewTaxLine;
 import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -88,6 +90,8 @@ public class PaymentActivity extends AppCompatActivity
   Button btnPaymentConfirm;
 
   private DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+
+  DefaultHelper defaultHelper = new DefaultHelper();
 
   String example = "Convert Java String";
   byte[] bytes = example.getBytes();
@@ -160,7 +164,7 @@ public class PaymentActivity extends AppCompatActivity
     }
 
     final ClosedCash closedCash = new ClosedCash();
-    if (IDs.getLoginCloseCashID().equals(""))
+    if (IDs.getLoginCloseCashID() == null)
       closedCash.setMoney(UUID.randomUUID().toString());
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
@@ -358,7 +362,7 @@ public class PaymentActivity extends AppCompatActivity
               final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
               confirmationDialog.setTitle("Change money");
               confirmationDialog.setMessage(decimalFormat.format(
-                Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+                formatTotalPrice() - paymentProductListAdapter.grandTotal()
               ));
               confirmationDialog.setCancelable(false);
               confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
@@ -476,6 +480,11 @@ public class PaymentActivity extends AppCompatActivity
 //    sales.setPerson(people);
 //    sales.setReceipt(receipt);
 
+//    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//    String date = formater.format(new Date());
+
+
+
 
 
     payment = new Payment();
@@ -522,18 +531,22 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setSflag(sales.getSflag());
     viewsales.setCustomerName(null);
     viewsales.setPersonName(null);
-    viewsales.setDatenew("2017-07-26 06:00:18");
+    viewsales.setDatenew(defaultHelper.dateFormat(new Date()));
 
 
     viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
 
-    if (IDs.getLoginCloseCashID().equals(""))
-      viewreceipt.setMoney(UUID.randomUUID().toString());
+    if (IDs.getLoginCloseCashID() == null)
+    {
+      String id = UUID.randomUUID().toString();
+      viewreceipt.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
     else
       viewreceipt.setMoney(IDs.getLoginCloseCashID());
 
-    viewreceipt.setDatenew(new Date().toString());
+    viewreceipt.setDatenew(defaultHelper.dateFormat(new Date()));
     viewreceipt.setPerson(receipt.getPerson());
     viewreceipt.setAttributes(null);
     viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -552,7 +565,7 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setReturnmsg(payment.getReturnmsg());
     viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewpayment.setSflag(payment.getSflag());
-    viewpayment.setDatenew(null);
+    viewpayment.setDatenew(defaultHelper.dateFormat(new Date()));
 
     for (int i = 0; i < salesItemList.size(); i++)
     {
@@ -600,7 +613,7 @@ public class PaymentActivity extends AppCompatActivity
       viewstockdiary = new ViewStockDiary();
       viewstockdiary.setId(stockDiary.getId());
       viewstockdiary.setProduct(stockDiary.getProduct().getId());
-      viewstockdiary.setDatenew(new Date().toString());
+      viewstockdiary.setDatenew(defaultHelper.dateFormat(new Date()));
       viewstockdiary.setReason(stockDiary.getReason());
       viewstockdiary.setUnits(stockDiary.getUnits());
       viewstockdiary.setPrice(stockDiary.getPrice());

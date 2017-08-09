@@ -1,0 +1,96 @@
+package com.mitrakreasindo.pos.main.report.adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.mitrakreasindo.pos.common.DefaultHelper;
+import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.report.SubReportActivity;
+import com.mitrakreasindo.pos.model.SubProductReport;
+import com.mitrakreasindo.pos.model.SubReport;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by lisa on 09/08/17.
+ */
+
+public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.ViewHolder>
+{
+
+  private List<SubProductReport> subProductReports = new ArrayList<SubProductReport>();
+  private Context context;
+  private LayoutInflater inflater;
+  private SubProductReport subProductReport;
+  private DefaultHelper defaultHelper = new DefaultHelper();
+
+  public SubProductAdapter(Context context, List<SubProductReport> subProductReports)
+  {
+    this.context = context;
+    this.subProductReports = subProductReports;
+    inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+  }
+
+  @Override
+  public SubProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+  {
+    View itemView = LayoutInflater.from(parent.getContext())
+      .inflate(R.layout.adapter_sub_product, parent, false);
+
+    return new SubProductAdapter.ViewHolder(itemView);
+  }
+
+  @Override
+  public void onBindViewHolder(SubProductAdapter.ViewHolder holder, int position)
+  {
+    subProductReport = subProductReports.get(position);
+    holder.itemSubProductName.setText(String.valueOf(subProductReport.getProductName().substring(1, 10) + "..."));
+    holder.itemSubProductItemAndDate.setText(defaultHelper.decimalFormat(subProductReport.getQty()));
+    holder.itemProductTotal.setText("Rp. " + defaultHelper.decimalFormat(subProductReport.getTotal()));
+  }
+
+
+  public void clear()
+  {
+    subProductReports.clear();
+    notifyDataSetChanged();
+  }
+
+  public void addSubReports(List<SubProductReport> subProductReports)
+  {
+    this.subProductReports.addAll(subProductReports);
+    notifyDataSetChanged();
+  }
+
+  @Override
+  public int getItemCount()
+  {
+    return subProductReports.size();
+  }
+
+  @Override
+  public long getItemId(int id)
+  {
+    return 0;
+  }
+
+  public class ViewHolder extends RecyclerView.ViewHolder
+  {
+
+    private TextView itemSubProductName, itemSubProductItemAndDate, itemProductTotal;
+    public ViewHolder(View itemView)
+    {
+      super(itemView);
+      itemSubProductName = (TextView) itemView.findViewById(R.id.item_sub_product_name);
+      itemSubProductItemAndDate = (TextView) itemView.findViewById(R.id.item_sub_product_item_and_date);
+      itemProductTotal = (TextView) itemView.findViewById(R.id.item_sub_product_total);
+    }
+  }
+
+}

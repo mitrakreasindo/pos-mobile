@@ -1,10 +1,12 @@
 package com.mitrakreasindo.pos.model;
 
+import java.io.Serializable;
+
 /**
  * Created by lisa on 07/08/17.
  */
 
-public class SubProductReport
+public class SubProductReport implements Serializable
 {
 
   private String productId;

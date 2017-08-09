@@ -1,17 +1,20 @@
 package com.mitrakreasindo.pos.main.report.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.report.SubReportActivity;
+import com.mitrakreasindo.pos.model.SubProductReport;
 import com.mitrakreasindo.pos.model.SubReport;
-import com.mitrakreasindo.pos.service.ReportService;
-import com.mitrakreasindo.pos.model.Report;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   private Context context;
   private LayoutInflater inflater;
   private SubReport subReport;
+  private DefaultHelper defaultHelper = new DefaultHelper();
+  private SubProductAdapter subProductAdapter;
+  private List<SubProductReport> productReportList = new ArrayList<>();
 
   public SubReportListAdapter(Context context, List<SubReport> subReports)
   {
@@ -46,9 +52,28 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   @Override
   public void onBindViewHolder(SubReportListAdapter.ViewHolder holder, int position)
   {
+    final SubReport subReport = subReports.get(position);
+    holder.itemReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
+    holder.itemReportTotalTransaction.setText("Rp. " + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
+    holder.itemView.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        List<SubProductReport> list = new ArrayList<SubProductReport>();
+        list.addAll(subReport.getSubProductReports());
 
+        Intent intent = new Intent(context, SubReportActivity.class);
+        intent.putExtra("listProduct", (Serializable) subReport);
+        context.startActivity(intent);
+      }
+    });
   }
 
+  public List<SubProductReport> listSubProduct()
+  {
+    return productReportList;
+  }
 
   public void clear()
   {
@@ -77,11 +102,13 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtMerchantName;
+    private TextView txtMerchantName, itemReportDate, itemReportTotalTransaction;
     public ViewHolder(View itemView)
     {
       super(itemView);
       txtMerchantName = (TextView) itemView.findViewById(R.id.txt_merchant_name);
+      itemReportDate = (TextView) itemView.findViewById(R.id.item_report_date);
+      itemReportTotalTransaction = (TextView) itemView.findViewById(R.id.item_report_total_transaction);
     }
   }
 
