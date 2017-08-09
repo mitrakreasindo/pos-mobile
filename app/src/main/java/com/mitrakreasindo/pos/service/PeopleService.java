@@ -19,18 +19,18 @@ import retrofit2.http.Path;
 
 public interface PeopleService
 {
-  @GET("chromis.people/{kodeMerchant}/")
+  @GET("peoples/{kodeMerchant}/")
   Call<List<People>> getPeopleAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @GET("chromis.people/{kodeMerchant}/{id}")
+  @GET("peoples/{kodeMerchant}/{id}")
   Call<List<People>> getPeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
-  @POST("chromis.people/{kodeMerchant}/")
+  @POST("peoples/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postPeople(@Path("kodeMerchant") String kodeMerchant, @Body People people);
 
-  @PUT("chromis.people/{kodeMerchant}/{id}")
+  @PUT("peoples/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updatePeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body People people);
 
-  @DELETE("chromis.people/{kodeMerchant}/{id}")
+  @DELETE("peoples/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deletePeople(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }

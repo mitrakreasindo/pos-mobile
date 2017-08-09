@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.content.DialogInterface;
@@ -34,17 +35,17 @@ import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
+import com.mitrakreasindo.pos.main.closecash.CloseCashActivity;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
 import com.mitrakreasindo.pos.main.fragment.MaintenanceFragment;
-import com.mitrakreasindo.pos.main.fragment.SalesFragment;
 import com.mitrakreasindo.pos.main.fragment.StockFragment;
 import com.mitrakreasindo.pos.main.maintenance.role.RoleActivity;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesActivity;
 import com.mitrakreasindo.pos.main.maintenance.user.UserActivity;
+import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,9 +61,10 @@ public class MainActivity extends AppCompatActivity
 
   private NavigationView navigationView;
   private BluetoothAdapter mBluetoothAdapter = null;
-  BluetoothServerSocket mmServerSocket;
-  TablePeopleHelper tablePeopleHelper;
-  TableRoleHelper tableRoleHelper;
+  private BluetoothServerSocket mmServerSocket;
+  private TablePeopleHelper tablePeopleHelper;
+  private TableRoleHelper tableRoleHelper;
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -73,6 +75,11 @@ public class MainActivity extends AppCompatActivity
     
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage(this.getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
+    progressDialog.show();
 
     EventBus.getDefault().register(this);
 
@@ -106,8 +113,6 @@ public class MainActivity extends AppCompatActivity
     IDs.setLoginCloseCashID(valueCloseCashID);
     IDs.setLoginUserFullname(valueFullname);
 
-    Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
-
     View headerLayout = navigationView.getHeaderView(0);
     TextView textViewUser = (TextView) headerLayout.findViewById(R.id.textViewUser);
     textViewUser.setText(valueFullname);
@@ -121,10 +126,10 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-//    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-//    tableCategoryHelper.downloadData(companyCode);
-    tableProductHelper.downloadDataAlternate(companyCode);
     tableTaxesHelper.downloadData(companyCode);
+    tableCategoryHelper.downloadData(companyCode);
+    tableProductHelper.downloadDataAlternate(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
   }
   
   @Override
@@ -205,21 +210,21 @@ public class MainActivity extends AppCompatActivity
     }
     else if (id == R.id.nd_sales)
     {
-      getSupportActionBar().setTitle("Sales");
-      SalesFragment salesFragment = new SalesFragment();
-      getSupportFragmentManager().beginTransaction()
-        .replace(R.id.main_content, salesFragment, "SALES_FRAGMENT")
-        .addToBackStack("SALES_FRAGMENT").commit();
-      getSupportFragmentManager().executePendingTransactions();
+//      getSupportActionBar().setTitle("Sales");
+//      SalesFragment salesFragment = new SalesFragment();
+//      getSupportFragmentManager().beginTransaction()
+//        .replace(R.id.main_content, salesFragment, "SALES_FRAGMENT")
+//        .addToBackStack("SALES_FRAGMENT").commit();
+//      getSupportFragmentManager().executePendingTransactions();
+      startActivity(new Intent(this, SalesActivity.class));
     }
     else if (id == R.id.nd_printers)
     {
-      Toast.makeText(this, "Print", Toast.LENGTH_SHORT).show();
       startActivity(new Intent(this, Wireless_Activity.class));
     }
-    else if (id == R.id.nd_customer_payment)
+    else if (id == R.id.nd_close_cash)
     {
-      startActivity(new Intent(this, ProductFormActivity.class));
+      startActivity(new Intent(this, CloseCashActivity.class));
     }
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -229,8 +234,29 @@ public class MainActivity extends AppCompatActivity
 
   private void Logout()
   {
-    Toast.makeText(this, getString(R.string.logout_message, valueFullname), Toast.LENGTH_SHORT).show();
-    finish();
+    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+    confirmationDialog.setTitle(R.string.logout_question);
+    confirmationDialog.setMessage(R.string.logout_question_message);
+    confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        Toast.makeText(MainActivity.this, getString(R.string.logout_message, valueFullname),
+          Toast.LENGTH_SHORT).show();
+        finish();
+      }
+    });
+
+    confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        dialog.dismiss();
+      }
+    });
+    confirmationDialog.show();
   }
 
   private void setupNavigation()
@@ -266,6 +292,8 @@ public class MainActivity extends AppCompatActivity
         if (event.getStatus() == Event.COMPLETE)
         {
           setupNavigation();
+          progressDialog.dismiss();
+          Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
     }
   }
@@ -306,27 +334,7 @@ public class MainActivity extends AppCompatActivity
     Fragment fragment = getSupportFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
     if (fragment.isVisible())
     {
-      final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-      confirmationDialog.setTitle(R.string.logout_question);
-      confirmationDialog.setMessage(R.string.logout_question_message);
-      confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
-      {
-        @Override
-        public void onClick(DialogInterface dialog, int which)
-        {
-          Logout();
-        }
-      });
-
-      confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
-      {
-        @Override
-        public void onClick(DialogInterface dialog, int which)
-        {
-          dialog.dismiss();
-        }
-      });
-      confirmationDialog.show();
+      Logout();
     }
     else
     {

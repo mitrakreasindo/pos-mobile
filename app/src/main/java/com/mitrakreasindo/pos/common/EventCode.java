@@ -13,4 +13,5 @@ public class EventCode
   public static final int EVENT_TAXES_GET = 105;
   public static final int EVENT_BUSINESS_CATEGORY_GET = 11;
   public static final int EVENT_BUSINESS_SUBCATEGORY_GET = 12;
+  public static final int EVENT_CLOSECASH_TRANSACTION_GET = 21;
 }

@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mitrakreasindo.pos.main"
           android:installLocation="preferExternal">
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -20,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="com.mitrakreasindo.pos.common.Wireless.BluetoothService"></service>
+        <service android:name="com.mitrakreasindo.pos.common.Wireless.BluetoothService"/>
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -84,39 +86,44 @@
             android:label="Sales"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".sales.payment.PaymentActivity"
             android:label="Payment"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity android:name=".stock.diary.activity.DiarySelectProductActivity">
         </activity>
-
         <activity
             android:name=".maintenance.taxes.TaxesActivity"
             android:label="@string/taxes"/>
-
         <activity
             android:name=".maintenance.taxes.TaxesFormActivity"
             android:label="@string/tax_form"/>
-        <activity android:name=".maintenance.role.RolePermissionActivity"
-            android:label="@string/role_form">
-        <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN"/>-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-        <!--</intent-filter>-->
+        <activity android:name=".report.SubReportActivity"
+                  android:label="@string/reports" />
+        <activity
+            android:name=".maintenance.role.RolePermissionActivity"
+            android:label="@string/role_form">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
-          android:name="com.mitrakreasindo.pos.common.Wireless.DeviceListActivity"
-          android:label="@string/select_device"
-          android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"
-          android:configChanges="orientation|keyboardHidden" />
-
+            android:name="com.mitrakreasindo.pos.common.Wireless.DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/select_device"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>
+        <activity android:name="com.mitrakreasindo.pos.common.Wireless.Wireless_Activity"/>
+        <activity android:name=".closecash.CloseCashActivity">
+        </activity>
         <activity
-          android:name="com.mitrakreasindo.pos.common.Wireless.Wireless_Activity"/>
+            android:name=".report.ReportActivity"
+            android:label="@string/reports"/>
     </application>
 
 </manifest>

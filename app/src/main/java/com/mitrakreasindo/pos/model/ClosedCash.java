@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class ClosedCash
 {
-
   private String money;
   private String host;
   private int hostsequence;

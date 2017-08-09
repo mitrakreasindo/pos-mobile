@@ -4,11 +4,11 @@ package com.mitrakreasindo.pos.model;
  * Created by lisa on 28/07/17.
  */
 
-public class Viewsalesitems
+public class ViewSalesItem
 {
 
   private int id;
-  private String salesId;
+  private String sales_id;
   private int line;
   private String product;
   private String attributesetinstanceId;
@@ -33,14 +33,14 @@ public class Viewsalesitems
     this.id = id;
   }
 
-  public String getSalesId()
+  public String getSales_id()
   {
-    return salesId;
+    return sales_id;
   }
 
-  public void setSalesId(String salesId)
+  public void setSales_id(String sales_id)
   {
-    this.salesId = salesId;
+    this.sales_id = sales_id;
   }
 
   public Integer getLine()

@@ -16,7 +16,7 @@ import retrofit2.http.Path;
 public interface SalesService
 {
 
-  @POST("chromis.sales/{kodeMerchant}/")
+  @POST("sales/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postSales(@Path("kodeMerchant") String kodeMerchant, @Body SalesPack salesPack);
 
 }

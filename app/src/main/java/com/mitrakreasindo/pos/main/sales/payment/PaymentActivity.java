@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
@@ -43,15 +44,16 @@ import com.mitrakreasindo.pos.model.SalesPack;
 import com.mitrakreasindo.pos.model.StockDiary;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxLine;
-import com.mitrakreasindo.pos.model.Viewpayments;
-import com.mitrakreasindo.pos.model.Viewreceipts;
-import com.mitrakreasindo.pos.model.Viewsales;
-import com.mitrakreasindo.pos.model.Viewsalesitems;
-import com.mitrakreasindo.pos.model.Viewstockdiary;
-import com.mitrakreasindo.pos.model.Viewtaxlines;
+import com.mitrakreasindo.pos.model.ViewPayment;
+import com.mitrakreasindo.pos.model.ViewReceipt;
+import com.mitrakreasindo.pos.model.ViewSale;
+import com.mitrakreasindo.pos.model.ViewSalesItem;
+import com.mitrakreasindo.pos.model.ViewStockDiary;
+import com.mitrakreasindo.pos.model.ViewTaxLine;
 import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -89,8 +91,13 @@ public class PaymentActivity extends AppCompatActivity
 
   private DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
+  DefaultHelper defaultHelper = new DefaultHelper();
+
   String example = "Convert Java String";
   byte[] bytes = example.getBytes();
+
+  private String originalString;
+  private Long longval;
 
   private Bundle bundle;
   private String salesId;
@@ -114,17 +121,17 @@ public class PaymentActivity extends AppCompatActivity
   private Tax tax;
   private Location location;
 
-  private Viewsales viewsales;
-  private Viewsalesitems viewsalesitem;
-  private Viewreceipts viewreceipt;
-  private Viewpayments viewpayment;
-  private Viewstockdiary viewstockdiary;
-  private Viewtaxlines viewtaxline;
+  private ViewSale viewsales;
+  private ViewSalesItem viewsalesitem;
+  private ViewReceipt viewreceipt;
+  private ViewPayment viewpayment;
+  private ViewStockDiary viewstockdiary;
+  private ViewTaxLine viewtaxline;
 
-  private Collection<Viewsalesitems> viewsalesitems = new ArrayList<>();
-  private Collection<Viewpayments> viewpayments = new ArrayList<>();
-  private Collection<Viewstockdiary> viewstockdiaries = new ArrayList<>();
-  private Collection<Viewtaxlines> viewtaxlines = new ArrayList<>();
+  private Collection<ViewSalesItem> viewsalesitems = new ArrayList<>();
+  private Collection<ViewPayment> viewpayments = new ArrayList<>();
+  private Collection<ViewStockDiary> viewstockdiaries = new ArrayList<>();
+  private Collection<ViewTaxLine> viewtaxlines = new ArrayList<>();
 
   private SalesService salesService;
   private SharedPreferenceEditor sharedPreferenceEditor;
@@ -147,6 +154,7 @@ public class PaymentActivity extends AppCompatActivity
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
+
       salesId = bundle.getString("salesid");
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
@@ -156,7 +164,7 @@ public class PaymentActivity extends AppCompatActivity
     }
 
     final ClosedCash closedCash = new ClosedCash();
-    if (IDs.getLoginCloseCashID().equals(""))
+    if (IDs.getLoginCloseCashID() == null)
       closedCash.setMoney(UUID.randomUUID().toString());
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
@@ -184,7 +192,7 @@ public class PaymentActivity extends AppCompatActivity
     receipt.setSflag(true);
 
     sales = new Sales();
-    sales.setId(receipt.getId());
+    sales.setId(salesId);
     sales.setSalesnum(1);
     sales.setSalestype(1);
     sales.setStatus(1);
@@ -227,17 +235,7 @@ public class PaymentActivity extends AppCompatActivity
         if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
         {
 
-          if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
-          {
-
-          }
-          else
-          {
-            edittextPaymentMoney.setText("0");
-          }
-
-        }
-        else
+        } else
         {
           edittextPaymentMoney.setText("0");
         }
@@ -254,6 +252,27 @@ public class PaymentActivity extends AppCompatActivity
       public void afterTextChanged(Editable s)
       {
 
+        try
+        {
+          edittextPaymentMoney.removeTextChangedListener(this);
+          String originalString = s.toString();
+
+          if (originalString.contains(","))
+          {
+            originalString = originalString.replaceAll(",", "");
+          }
+          Long longval = Long.parseLong(originalString);
+
+          DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+          edittextPaymentMoney.setText(decimalFormat.format(longval));
+          edittextPaymentMoney.setSelection(edittextPaymentMoney.getText().length());
+        } catch (Exception e)
+        {
+          e.printStackTrace();
+        }
+
+        edittextPaymentMoney.addTextChangedListener(this);
+
       }
     });
 
@@ -262,12 +281,15 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        if (paymentProductListAdapter.grandTotal() <= Double.parseDouble(edittextPaymentMoney.getText().toString()))
+
+
+        Log.d("price", String.valueOf(formatTotalPrice()));
+        if (paymentProductListAdapter.grandTotal() <= formatTotalPrice())
         {
           final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
           confirmationDialog.setTitle(R.string.printOptions);
           confirmationDialog.setMessage(R.string.Qs_print);
-          
+
           confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
           {
             @Override
@@ -303,12 +325,12 @@ public class PaymentActivity extends AppCompatActivity
                       salesPack.setPayments(viewpayments);
                       salesPack.setStockdiary(viewstockdiaries);
                       salesPack.setTaxlines(viewtaxlines);
-      
+
                       TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
                       tableSalesHelper.open();
                       tableSalesHelper.insertSales(sales);
                       tableSalesHelper.close();
-      
+
                       postSales();
                       SalesActivity.sActivity.finish();
                       finish();
@@ -317,7 +339,7 @@ public class PaymentActivity extends AppCompatActivity
                     }
                   });
                   confirmationDialog.show();
-                  
+
                   return;
               }
                 else
@@ -331,7 +353,7 @@ public class PaymentActivity extends AppCompatActivity
               }
             }
           });
-  
+
           confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
           {
             @Override
@@ -340,7 +362,7 @@ public class PaymentActivity extends AppCompatActivity
               final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
               confirmationDialog.setTitle("Change money");
               confirmationDialog.setMessage(decimalFormat.format(
-                Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+                formatTotalPrice() - paymentProductListAdapter.grandTotal()
               ));
               confirmationDialog.setCancelable(false);
               confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
@@ -348,7 +370,7 @@ public class PaymentActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which)
                 {
-      
+
                   data();
                   salesPack = new SalesPack();
                   salesPack.setSales(viewsales);
@@ -358,12 +380,12 @@ public class PaymentActivity extends AppCompatActivity
                   salesPack.setStockdiary(viewstockdiaries);
                   salesPack.setTaxlines(viewtaxlines);
                   Log.d("TAX: ",salesPack.getTaxlines().toString());
-      
+
                   TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
                   tableSalesHelper.open();
                   tableSalesHelper.insertSales(sales);
                   tableSalesHelper.close();
-      
+
                   postSales();
                   SalesActivity.sActivity.finish();
                   finish();
@@ -383,7 +405,21 @@ public class PaymentActivity extends AppCompatActivity
     });
 
     salesPaymentTotal.setText(decimalFormat.format(paymentProductListAdapter.grandTotal()));
-    Log.d("Total: ",Double.toString(paymentProductListAdapter.grandTotal()));
+
+  }
+
+  private double formatTotalPrice()
+  {
+    originalString = edittextPaymentMoney.getText().toString();
+
+    if (originalString.contains(","))
+    {
+      originalString = originalString.replaceAll(",", "");
+    }
+    Long longval = Long.parseLong(originalString);
+    double clearValue = Double.parseDouble(longval.toString());
+    return clearValue;
+
   }
 
   @Override
@@ -444,13 +480,21 @@ public class PaymentActivity extends AppCompatActivity
 //    sales.setPerson(people);
 //    sales.setReceipt(receipt);
 
+//    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//    String date = formater.format(new Date());
+
+
+
+
+
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
     payment.setPayment("cash");
     payment.setTotal(paymentProductListAdapter.grandTotal());
     payment.setTransid("tesssssss");
     payment.setNotes("test notes");
-    payment.setTendered(Double.parseDouble(edittextPaymentMoney.getText().toString()));
+//    payment.setTendered(Double.parseDouble(edittextPaymentMoney.getText().toString()));
+    payment.setTendered(formatTotalPrice());
     payment.setCardname("CardName");
     payment.setReturnmsg(null);
     payment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -466,7 +510,7 @@ public class PaymentActivity extends AppCompatActivity
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
 
-    viewtaxline = new Viewtaxlines();
+    viewtaxline = new ViewTaxLine();
     viewtaxline.setId(taxLine.getId());
     viewtaxline.setReceipt(taxLine.getReceipt().getId());
     viewtaxline.setTaxid(taxLine.getTaxid().getId());
@@ -476,7 +520,7 @@ public class PaymentActivity extends AppCompatActivity
     viewtaxline.setSflag(taxLine.getSflag());
     viewtaxline.setTaxName(null);
 
-    viewsales = new Viewsales();
+    viewsales = new ViewSale();
     viewsales.setId(receipt.getId());
     viewsales.setSalesnum(sales.getSalesnum());
     viewsales.setPerson("0");
@@ -487,27 +531,29 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setSflag(sales.getSflag());
     viewsales.setCustomerName(null);
     viewsales.setPersonName(null);
-    viewsales.setDatenew("2017-07-26 06:00:18");
+    viewsales.setDatenew(defaultHelper.dateFormat(new Date()));
 
 
-
-
-    viewreceipt = new Viewreceipts();
+    viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
 
-    if (IDs.getLoginCloseCashID().equals(""))
-      viewreceipt.setMoney(UUID.randomUUID().toString());
+    if (IDs.getLoginCloseCashID() == null)
+    {
+      String id = UUID.randomUUID().toString();
+      viewreceipt.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
     else
       viewreceipt.setMoney(IDs.getLoginCloseCashID());
 
-    viewreceipt.setDatenew(new Date().toString());
+    viewreceipt.setDatenew(defaultHelper.dateFormat(new Date()));
     viewreceipt.setPerson(receipt.getPerson());
     viewreceipt.setAttributes(null);
     viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewreceipt.setSflag(true);
     viewreceipt.setHost("");
 
-    viewpayment = new Viewpayments();
+    viewpayment = new ViewPayment();
     viewpayment.setId(payment.getId());
     viewpayment.setReceipt(receipt.getId());
     viewpayment.setPayment(payment.getPayment());
@@ -519,7 +565,7 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setReturnmsg(payment.getReturnmsg());
     viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewpayment.setSflag(payment.getSflag());
-    viewpayment.setDatenew(null);
+    viewpayment.setDatenew(defaultHelper.dateFormat(new Date()));
 
     for (int i = 0; i < salesItemList.size(); i++)
     {
@@ -534,9 +580,9 @@ public class PaymentActivity extends AppCompatActivity
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
 
-      viewsalesitem = new Viewsalesitems();
+      viewsalesitem = new ViewSalesItem();
       viewsalesitem.setId(0);
-      viewsalesitem.setSalesId(sales.getId());
+      viewsalesitem.setSales_id(sales.getId());
       viewsalesitem.setLine(salesItem.getLine());
       viewsalesitem.setProduct(salesItem.getProduct().getId());
       viewsalesitem.setAttributesetinstanceId(null);
@@ -564,10 +610,10 @@ public class PaymentActivity extends AppCompatActivity
       stockDiary.setLocation(location);
       stockDiary.setProduct(salesItem.getProduct());
 
-      viewstockdiary = new Viewstockdiary();
+      viewstockdiary = new ViewStockDiary();
       viewstockdiary.setId(stockDiary.getId());
       viewstockdiary.setProduct(stockDiary.getProduct().getId());
-      viewstockdiary.setDatenew(new Date().toString());
+      viewstockdiary.setDatenew(defaultHelper.dateFormat(new Date()));
       viewstockdiary.setReason(stockDiary.getReason());
       viewstockdiary.setUnits(stockDiary.getUnits());
       viewstockdiary.setPrice(stockDiary.getPrice());

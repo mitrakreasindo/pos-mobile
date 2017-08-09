@@ -1,9 +1,6 @@
 package com.mitrakreasindo.pos.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by lisa on 28/07/17.
@@ -12,69 +9,69 @@ import java.util.List;
 public class SalesPack
 {
 
-  private Viewsales sales;
-  private Viewreceipts receipts;
-  private Collection<Viewsalesitems> salesItems;
-  private Collection<Viewpayments> payments;
-  private Collection<Viewstockdiary> stockdiary;
-  private Collection<Viewtaxlines> taxlines;
+  private ViewSale sales;
+  private ViewReceipt receipts;
+  private Collection<ViewSalesItem> salesItems;
+  private Collection<ViewPayment> payments;
+  private Collection<ViewStockDiary> stockdiary;
+  private Collection<ViewTaxLine> taxlines;
 
-  public Viewsales getSales()
+  public ViewSale getSales()
   {
     return sales;
   }
 
-  public void setSales(Viewsales sales)
+  public void setSales(ViewSale sales)
   {
     this.sales = sales;
   }
 
-  public Viewreceipts getReceipts()
+  public ViewReceipt getReceipts()
   {
     return receipts;
   }
 
-  public void setReceipts(Viewreceipts receipts)
+  public void setReceipts(ViewReceipt receipts)
   {
     this.receipts = receipts;
   }
 
-  public Collection<Viewsalesitems> getSalesItems()
+  public Collection<ViewSalesItem> getSalesItems()
   {
     return salesItems;
   }
 
-  public void setSalesItems(Collection<Viewsalesitems> salesItems)
+  public void setSalesItems(Collection<ViewSalesItem> salesItems)
   {
     this.salesItems = salesItems;
   }
 
-  public Collection<Viewpayments> getPayments()
+  public Collection<ViewPayment> getPayments()
   {
     return payments;
   }
 
-  public void setPayments(Collection<Viewpayments> payments)
+  public void setPayments(Collection<ViewPayment> payments)
   {
     this.payments = payments;
   }
 
-  public Collection<Viewstockdiary> getStockdiary()
+  public Collection<ViewStockDiary> getStockdiary()
   {
     return stockdiary;
   }
 
-  public void setStockdiary(Collection<Viewstockdiary> stockdiary)
+  public void setStockdiary(Collection<ViewStockDiary> stockdiary)
   {
     this.stockdiary = stockdiary;
   }
 
-  public Collection<Viewtaxlines> getTaxlines()
+  public Collection<ViewTaxLine> getTaxlines()
   {
     return taxlines;
   }
 
-  public void setTaxlines(Collection<Viewtaxlines> taxlines)
+  public void setTaxlines(Collection<ViewTaxLine> taxlines)
   {
     this.taxlines = taxlines;
   }

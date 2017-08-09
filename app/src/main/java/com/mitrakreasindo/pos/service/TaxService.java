@@ -19,15 +19,15 @@ import retrofit2.http.Path;
 
 public interface TaxService
 {
-  @GET("chromis.taxes/{kodeMerchant}/")
+  @GET("taxes/{kodeMerchant}/")
   Call<List<Tax>> getTaxAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("chromis.taxes/{kodeMerchant}/")
+  @POST("taxes/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postTax(@Path("kodeMerchant") String kodeMerchant, @Body Tax tax);
 
-  @PUT("chromis.taxes/{kodeMerchant}/{id}")
+  @PUT("taxes/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Tax tax);
 
-  @DELETE("chromis.taxes/{kodeMerchant}/{id}")
+  @DELETE("taxes/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deleteTax(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 }

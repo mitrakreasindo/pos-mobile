@@ -18,15 +18,15 @@ import retrofit2.http.Path;
 
 public interface MerchantService
 {
-  @POST("chromis.merchants/public")
+  @POST("merchants/public")
   Call<HashMap<Integer,String>> postMerchantRegistration(@Body MerchantRegistration merchantRegistration);
 
-  @GET("chromis.merchantcategories/public/getname/")
+  @GET("merchantcategories/public/getname/")
   Call<List<MerchantCategories>> getMerchantCategories();
 
-  @GET("chromis.merchantcategories/public/getsubname/{name}/")
+  @GET("merchantcategories/public/getsubname/{name}/")
   Call<List<MerchantCategories>> getMerchantSubCategories(@Path("name") String categoryName);
 
-  @GET("chromis.merchantcategories/public/")
+  @GET("merchantcategories/public/")
   Call<List<MerchantCategories>> getAllMerchantCategories();
 }

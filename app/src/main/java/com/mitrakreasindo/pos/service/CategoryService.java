@@ -19,16 +19,16 @@ import retrofit2.http.Path;
 
 public interface CategoryService
 {
-  @GET("chromis.categories/{kodeMerchant}/")
+  @GET("categories/{kodeMerchant}/")
   Call<List<Category>> getCategoryAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("chromis.categories/{kodeMerchant}/")
+  @POST("categories/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postCategory(@Path("kodeMerchant") String kodeMerchant, @Body Category category);
 
-  @PUT("chromis.categories/{kodeMerchant}/{id}")
+  @PUT("categories/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> updateCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Category category);
 
-  @DELETE("chromis.categories/{kodeMerchant}/{id}")
+  @DELETE("categories/{kodeMerchant}/{id}")
   Call<HashMap<Integer, String>> deleteCategory(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
 
 }

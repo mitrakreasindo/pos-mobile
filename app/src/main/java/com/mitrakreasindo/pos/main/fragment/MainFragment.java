@@ -19,11 +19,13 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
+import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.MainQueueListAdapter;
 import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
 import com.mitrakreasindo.pos.main.fragment.menu.ReportsDataFragment;
+import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -96,11 +98,12 @@ public class MainFragment extends Fragment
       @Override
       public void onClick(View v)
       {
-        ReportsDataFragment reportsDataFragment = new ReportsDataFragment();
-        getActivity().getSupportFragmentManager().beginTransaction()
-          .replace(R.id.main_content, reportsDataFragment, "ReportDataFragment")
-          .addToBackStack("ReportDataFragment").commit();
-        getActivity().getSupportFragmentManager().executePendingTransactions();
+//        ReportsDataFragment reportsDataFragment = new ReportsDataFragment();
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//          .replace(R.id.main_content, reportsDataFragment, "ReportDataFragment")
+//          .addToBackStack("ReportDataFragment").commit();
+//        getActivity().getSupportFragmentManager().executePendingTransactions();
+        startActivity(new Intent(getContext(), ReportActivity.class));
       }
     });
     return view;

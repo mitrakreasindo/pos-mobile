@@ -15,6 +15,8 @@ public class IDs
     loginCompanyName, loginCompanyAddress, loginCompanyPhone,
     loginCloseCashID;
 
+  public static final String SITE_GUID = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
+
   public static String getLoginUser()
   {
     return loginUser;
@@ -44,8 +46,6 @@ public class IDs
   {
     IDs.loginCompanyName = loginCompanyName;
   }
-
-
 
   public static String getLoginCompanyAddress()
   {

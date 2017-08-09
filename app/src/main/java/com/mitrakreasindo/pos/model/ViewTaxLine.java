@@ -4,7 +4,7 @@ package com.mitrakreasindo.pos.model;
  * Created by lisa on 28/07/17.
  */
 
-public class Viewtaxlines
+public class ViewTaxLine
 {
 
   private String id;

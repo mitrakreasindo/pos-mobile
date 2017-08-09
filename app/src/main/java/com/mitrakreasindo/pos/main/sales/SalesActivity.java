@@ -49,12 +49,12 @@ import com.mitrakreasindo.pos.model.SalesPack;
 import com.mitrakreasindo.pos.model.StockDiary;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxLine;
-import com.mitrakreasindo.pos.model.Viewpayments;
-import com.mitrakreasindo.pos.model.Viewreceipts;
-import com.mitrakreasindo.pos.model.Viewsales;
-import com.mitrakreasindo.pos.model.Viewsalesitems;
-import com.mitrakreasindo.pos.model.Viewstockdiary;
-import com.mitrakreasindo.pos.model.Viewtaxlines;
+import com.mitrakreasindo.pos.model.ViewPayment;
+import com.mitrakreasindo.pos.model.ViewReceipt;
+import com.mitrakreasindo.pos.model.ViewSale;
+import com.mitrakreasindo.pos.model.ViewSalesItem;
+import com.mitrakreasindo.pos.model.ViewStockDiary;
+import com.mitrakreasindo.pos.model.ViewTaxLine;
 import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
@@ -66,6 +66,8 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static java.util.UUID.randomUUID;
 
 
 public class SalesActivity extends AppCompatActivity
@@ -121,17 +123,17 @@ public class SalesActivity extends AppCompatActivity
   private Customer customer;
   private People people;
 
-  private Viewsales viewsales;
-  private Viewsalesitems viewsalesitem;
-  private Viewreceipts viewreceipt;
-  private Viewpayments viewpayment;
-  private Viewstockdiary viewstockdiary;
-  private Viewtaxlines viewtaxline;
+  private ViewSale viewsales;
+  private ViewSalesItem viewsalesitem;
+  private ViewReceipt viewreceipt;
+  private ViewPayment viewpayment;
+  private ViewStockDiary viewstockdiary;
+  private ViewTaxLine viewtaxline;
 
-  private Collection<Viewsalesitems> viewsalesitems = new ArrayList<>();
-  private Collection<Viewpayments> viewpayments = new ArrayList<>();
-  private Collection<Viewstockdiary> viewstockdiaries = new ArrayList<>();
-  private Collection<Viewtaxlines> viewtaxlines = new ArrayList<>();
+  private Collection<ViewSalesItem> viewsalesitems = new ArrayList<>();
+  private Collection<ViewPayment> viewpayments = new ArrayList<>();
+  private Collection<ViewStockDiary> viewstockdiaries = new ArrayList<>();
+  private Collection<ViewTaxLine> viewtaxlines = new ArrayList<>();
 
   private BarcodeCallback callback = new BarcodeCallback()
   {
@@ -231,11 +233,15 @@ public class SalesActivity extends AppCompatActivity
 
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
 
-    final ClosedCash closedCash = new ClosedCash();
-    if (IDs.getLoginCloseCashID().equals(""))
-      closedCash.setMoney(UUID.randomUUID().toString());
-    else
-      closedCash.setMoney(IDs.getLoginCloseCashID());
+//    final ClosedCash closedCash = new ClosedCash();
+//    if (IDs.getLoginCloseCashID() == null)
+//    {
+//      String id = UUID.randomUUID().toString();
+//      viewreceipt.setMoney(id);
+//      IDs.setLoginCloseCashID(id);
+//    }
+//    else
+//      closedCash.setMoney(IDs.getLoginCloseCashID());
 
     Tax tax = new Tax();
     tax.setId("001");
@@ -247,10 +253,10 @@ public class SalesActivity extends AppCompatActivity
     customer.setId(null);
 
     receipt = new Receipt();
-    receipt.setId(UUID.randomUUID().toString());
+    receipt.setId(randomUUID().toString());
     receipt.setAttributes(null);
     receipt.setSales(sales);
-    receipt.setMoney(closedCash);
+//    receipt.setMoney(closedCash);
     receipt.setDatenew(new Date());
     receipt.setPerson(IDs.getLoginUser());
     receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -486,7 +492,7 @@ public class SalesActivity extends AppCompatActivity
   {
 
     Location location = new Location();
-    location.setId(UUID.randomUUID().toString());
+    location.setId(randomUUID().toString());
 
     Tax tax = new Tax();
     tax.setId("001");
@@ -521,7 +527,7 @@ public class SalesActivity extends AppCompatActivity
     salesItem.setTaxid(tax);
 
     payment = new Payment();
-    payment.setId(UUID.randomUUID().toString());
+    payment.setId(randomUUID().toString());
     payment.setPayment("cash");
     payment.setTotal(20000);
     payment.setTransid("tesssssss");
@@ -534,7 +540,7 @@ public class SalesActivity extends AppCompatActivity
     payment.setReceipt(receipt);
 
     taxLine = new TaxLine();
-    taxLine.setId(UUID.randomUUID().toString());
+    taxLine.setId(randomUUID().toString());
     taxLine.setBase(1000);
     taxLine.setAmount(100);
     taxLine.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -543,7 +549,7 @@ public class SalesActivity extends AppCompatActivity
     taxLine.setTaxid(tax);
 
     stockDiary = new StockDiary();
-    stockDiary.setId(UUID.randomUUID().toString());
+    stockDiary.setId(randomUUID().toString());
     stockDiary.setReason(0);
     stockDiary.setUnits(1);
     stockDiary.setPrice(salesItem.getProduct().getPricesell());
@@ -553,90 +559,94 @@ public class SalesActivity extends AppCompatActivity
     stockDiary.setAttributesetinstanceId(null);
     stockDiary.setLocation(location);
     stockDiary.setProduct(salesItem.getProduct());
-
-    viewtaxline = new Viewtaxlines();
-    viewtaxline.setId(taxLine.getId());
-    viewtaxline.setReceipt(taxLine.getReceipt().getId());
-    viewtaxline.setTaxid(taxLine.getTaxid().getId());
-    viewtaxline.setBase(taxLine.getBase());
-    viewtaxline.setAmount(taxLine.getAmount());
-    viewtaxline.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewtaxline.setSflag(taxLine.getSflag());
-    viewtaxline.setTaxName(null);
-
-    viewsales = new Viewsales();
-    viewsales.setId(receipt.getId());
-    viewsales.setSalesnum(sales.getSalesnum());
-    viewsales.setPerson("0");
-    viewsales.setCustomer(null);
-    viewsales.setSalestype(sales.getSalestype());
-    viewsales.setStatus(viewsales.getStatus());
-    viewsales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewsales.setSflag(sales.getSflag());
-    viewsales.setCustomerName(null);
-    viewsales.setPersonName(null);
-    viewsales.setDatenew("2017-07-26 06:00:18");
-
-    viewsalesitem = new Viewsalesitems();
-    viewsalesitem.setId(0);
-    viewsalesitem.setSalesId(sales.getId());
-    viewsalesitem.setLine(salesItem.getLine());
-    viewsalesitem.setProduct(salesItem.getProduct().getId());
-    viewsalesitem.setAttributesetinstanceId(null);
-    viewsalesitem.setUnits(salesItem.getUnits());
-    viewsalesitem.setPrice(salesItem.getPrice());
-    viewsalesitem.setTaxid(salesItem.getTaxid().getId());
-    viewsalesitem.setAttributes(null);
-    viewsalesitem.setRefundqty(salesItem.getRefundqty());
-    viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewsalesitem.setSflag(sales.getSflag());
-    viewsalesitem.setProductName(null);
-    viewsalesitem.setTaxName(null);
-    viewsalesitem.setRate(null);
-
-
-    viewreceipt = new Viewreceipts();
-    viewreceipt.setId(receipt.getId());
-
-    if (IDs.getLoginCloseCashID().equals(""))
-      viewreceipt.setMoney(UUID.randomUUID().toString());
-    else
-      viewreceipt.setMoney(IDs.getLoginCloseCashID());
-
-    viewreceipt.setDatenew(new Date().toString());
-    viewreceipt.setPerson(receipt.getPerson());
-    viewreceipt.setAttributes(null);
-    viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewreceipt.setSflag(true);
-    viewreceipt.setHost("");
-
-    viewpayment = new Viewpayments();
-    viewpayment.setId(payment.getId());
-    viewpayment.setReceipt(receipt.getId());
-    viewpayment.setPayment(payment.getPayment());
-    viewpayment.setTotal(payment.getTotal());
-    viewpayment.setTransid(payment.getTransid());
-    viewpayment.setNotes(payment.getNotes());
-    viewpayment.setTendered(payment.getTendered());
-    viewpayment.setCardname(payment.getCardname());
-    viewpayment.setReturnmsg(payment.getReturnmsg());
-    viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewpayment.setSflag(payment.getSflag());
-    viewpayment.setDatenew(null);
-
-
-    viewstockdiary = new Viewstockdiary();
-    viewstockdiary.setId(stockDiary.getId());
-    viewstockdiary.setProduct(stockDiary.getProduct().getId());
-    viewstockdiary.setDatenew(new Date().toString());
-    viewstockdiary.setReason(stockDiary.getReason());
-    viewstockdiary.setUnits(stockDiary.getUnits());
-    viewstockdiary.setPrice(stockDiary.getPrice());
-    viewstockdiary.setAppuser(stockDiary.getAppuser());
-    viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    viewstockdiary.setSflag(true);
-    viewstockdiary.setAttributesetinstanceId(null);
-    viewstockdiary.setLocation("0");
+//
+//    viewtaxline = new ViewTaxLine();
+//    viewtaxline.setId(taxLine.getId());
+//    viewtaxline.setReceipt(taxLine.getReceipt().getId());
+//    viewtaxline.setTaxid(taxLine.getTaxid().getId());
+//    viewtaxline.setBase(taxLine.getBase());
+//    viewtaxline.setAmount(taxLine.getAmount());
+//    viewtaxline.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewtaxline.setSflag(taxLine.getSflag());
+//    viewtaxline.setTaxName(null);
+//
+//    viewsales = new ViewSale();
+//    viewsales.setId(receipt.getId());
+//    viewsales.setSalesnum(sales.getSalesnum());
+//    viewsales.setPerson("0");
+//    viewsales.setCustomer(null);
+//    viewsales.setSalestype(sales.getSalestype());
+//    viewsales.setStatus(viewsales.getStatus());
+//    viewsales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewsales.setSflag(sales.getSflag());
+//    viewsales.setCustomerName(null);
+//    viewsales.setPersonName(null);
+//    viewsales.setDatenew("2017-07-26 06:00:18");
+//
+//    viewsalesitem = new ViewSalesItem();
+//    viewsalesitem.setId(0);
+//    viewsalesitem.setSales_id(sales.getId());
+//    viewsalesitem.setLine(salesItem.getLine());
+//    viewsalesitem.setProduct(salesItem.getProduct().getId());
+//    viewsalesitem.setAttributesetinstanceId(null);
+//    viewsalesitem.setUnits(salesItem.getUnits());
+//    viewsalesitem.setPrice(salesItem.getPrice());
+//    viewsalesitem.setTaxid(salesItem.getTaxid().getId());
+//    viewsalesitem.setAttributes(null);
+//    viewsalesitem.setRefundqty(salesItem.getRefundqty());
+//    viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewsalesitem.setSflag(sales.getSflag());
+//    viewsalesitem.setProductName(null);
+//    viewsalesitem.setTaxName(null);
+//    viewsalesitem.setRate(null);
+//
+//
+//    viewreceipt = new ViewReceipt();
+//    viewreceipt.setId(receipt.getId());
+//
+//    if (IDs.getLoginCloseCashID() == null)
+//    {
+//      String id = UUID.randomUUID().toString();
+//      viewreceipt.setMoney(id);
+//      IDs.setLoginCloseCashID(id);
+//    }
+//    else
+//      viewreceipt.setMoney(IDs.getLoginCloseCashID());
+//
+//    viewreceipt.setDatenew(new Date().toString());
+//    viewreceipt.setPerson(receipt.getPerson());
+//    viewreceipt.setAttributes(null);
+//    viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewreceipt.setSflag(true);
+//    viewreceipt.setHost("");
+//
+//    viewpayment = new ViewPayment();
+//    viewpayment.setId(payment.getId());
+//    viewpayment.setReceipt(receipt.getId());
+//    viewpayment.setPayment(payment.getPayment());
+//    viewpayment.setTotal(payment.getTotal());
+//    viewpayment.setTransid(payment.getTransid());
+//    viewpayment.setNotes(payment.getNotes());
+//    viewpayment.setTendered(payment.getTendered());
+//    viewpayment.setCardname(payment.getCardname());
+//    viewpayment.setReturnmsg(payment.getReturnmsg());
+//    viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewpayment.setSflag(payment.getSflag());
+//    viewpayment.setDatenew(null);
+//
+//
+//    viewstockdiary = new ViewStockDiary();
+//    viewstockdiary.setId(stockDiary.getId());
+//    viewstockdiary.setProduct(stockDiary.getProduct().getId());
+//    viewstockdiary.setDatenew(new Date().toString());
+//    viewstockdiary.setReason(stockDiary.getReason());
+//    viewstockdiary.setUnits(stockDiary.getUnits());
+//    viewstockdiary.setPrice(stockDiary.getPrice());
+//    viewstockdiary.setAppuser(stockDiary.getAppuser());
+//    viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+//    viewstockdiary.setSflag(true);
+//    viewstockdiary.setAttributesetinstanceId(null);
+//    viewstockdiary.setLocation("0");
 
 
   }
@@ -650,43 +660,5 @@ public class SalesActivity extends AppCompatActivity
     salesProductTotal.setText(decimalFormat.format(total));
   }
 
-//  public void postSales()
-//  {
-//    final ProgressDialog progressDialog = new ProgressDialog(this);
-//    progressDialog.setCancelable(false);
-//    progressDialog.setMessage("Loading");
-//    progressDialog.show();
-//
-//    Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
-//    saveSales.enqueue(new Callback<HashMap<Integer, String>>()
-//    {
-//
-//      private int responseCode;
-//      private String responseMessage;
-//
-//      @Override
-//      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
-//      {
-//        final HashMap<Integer, String> data = response.body();
-//        for (int resultKey : data.keySet())
-//        {
-//          responseCode = resultKey;
-//          responseMessage = data.get(resultKey);
-//
-//          if (responseCode == 0)
-//          {
-//            progressDialog.dismiss();
-//            Toast.makeText(SalesActivity.this, "success", Toast.LENGTH_LONG).show();
-//          }
-//        }
-//      }
-//
-//      @Override
-//      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//  }
 
 }

@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.MenuIds;
-import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -691,7 +691,7 @@ public class RolePermissionActivity extends AppCompatActivity
     role.setName(editRole.getText().toString());
     role.setRightslevel(0);
     role.setPermissions(generateXmlPermission().getBytes());
-    role.setSiteguid(RestVariable.SITE_GUID);
+    role.setSiteguid(IDs.SITE_GUID);
     role.setSflag(true);
 
     Call<HashMap<Integer, String>> call = roleService.postRole(kodeMerchant, role);
@@ -752,7 +752,7 @@ public class RolePermissionActivity extends AppCompatActivity
     role.setName(editRole.getText().toString());
     role.setRightslevel(1);
     role.setPermissions(generateXmlPermission().getBytes());
-    role.setSiteguid(RestVariable.SITE_GUID);
+    role.setSiteguid(IDs.SITE_GUID);
     role.setSflag(true);
 
     Call<HashMap<Integer, String>> call = roleService.updateRole(kodeMerchant, id, role);
