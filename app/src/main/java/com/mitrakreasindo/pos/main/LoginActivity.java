@@ -329,7 +329,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             intent.putExtra("COMPANYNAME", parts[1]);
             intent.putExtra("COMPANYADDRESS", parts[2]);
             intent.putExtra("COMPANYPHONE", parts[3]);
-            intent.putExtra("CLOSECASH_ID", parts[4]);
+            if(parts.length == 5)
+            {
+              intent.putExtra("CLOSECASH_ID", parts[4]);
+            }
 
             progressDialog.dismiss();
             startActivity(intent);

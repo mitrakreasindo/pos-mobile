@@ -1,5 +1,6 @@
 package com.mitrakreasindo.pos.main.closecash;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.closecash.controller.CloseCashListAdapter;
+import com.mitrakreasindo.pos.model.ClosedCash;
 import com.mitrakreasindo.pos.model.Viewclosedcash;
 import com.mitrakreasindo.pos.service.ClosedCashService;
 
@@ -25,10 +27,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,8 +56,12 @@ public class CloseCashActivity extends AppCompatActivity
   @BindView(R.id.closecash_total_units)
   TextView closecashTotalUnits;
 
+  private String companyCode, moneyID, userID;
   private CloseCashListAdapter closeCashListAdapter;
   private List<Viewclosedcash> viewclosedcashList;
+  private ClosedCashService service;
+  private ProgressDialog progressDialog;
+  private DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
   private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   @Override
@@ -81,12 +89,19 @@ public class CloseCashActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listTransaction.setLayoutManager(layoutManager);
 
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
+    moneyID = IDs.getLoginCloseCashID();
+    userID = IDs.getLoginUser();
+
     openCashDate.setText(GetToday());
+    service = ClientService.createService().create(ClosedCashService.class);
 
-    Log.d("CLOSECASH_ID", IDs.getLoginCloseCashID());
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage(this.getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
+    progressDialog.show();
 
-    downloadClosedCashByMoney(SharedPreferenceEditor.LoadPreferences(this, "Company Code", ""),
-      IDs.getLoginCloseCashID(), EventCode.EVENT_CLOSECASH_TRANSACTION_GET);
+    DownloadClosedCashByMoney(companyCode, moneyID, EventCode.EVENT_CLOSECASH_TRANSACTION_GET);
   }
 
   public static String GetToday()
@@ -95,10 +110,38 @@ public class CloseCashActivity extends AppCompatActivity
     return dateFormat.format(presentTime_Date);
   }
 
-  public void downloadClosedCashByMoney(String kodeMerchant, String moneyID, final int id)
+  public void ConfirmCloseCash(View view)
   {
-    ClosedCashService service = ClientService.createService().create(ClosedCashService.class);
-    final Call<List<Viewclosedcash>> call = service.getClosedCashByMoney(kodeMerchant, moneyID);
+    progressDialog.setMessage(this.getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
+    progressDialog.show();
+
+    PostCloseCash(companyCode, PrepareData(Calendar.getInstance().getTime(), userID, moneyID, IDs.SITE_GUID));
+  }
+
+  public void CancelCloseCash(View view)
+  {
+    finish();
+  }
+
+  private ClosedCash PrepareData(Date dateEnd, String userID, String moneyID, String siteGUID)
+  {
+    ClosedCash closedCash = new ClosedCash();
+    closedCash.setDateend(dateEnd);
+    closedCash.setDatestart(null);
+    closedCash.setHost(userID);
+    closedCash.setHostsequence(0);
+    closedCash.setMoney(moneyID);
+    closedCash.setNosales(0);
+    closedCash.setSflag(true);
+    closedCash.setSiteguid(siteGUID);
+
+    return closedCash;
+  }
+
+  private void DownloadClosedCashByMoney(String kodeMerchant, String moneyID, final int id)
+  {
+    Call<List<Viewclosedcash>> call = service.getClosedCashByMoney(kodeMerchant, moneyID);
     call.enqueue(new Callback<List<Viewclosedcash>>()
     {
       @Override
@@ -113,7 +156,47 @@ public class CloseCashActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<List<Viewclosedcash>> call, Throwable t)
       {
-        Toast.makeText(CloseCashActivity.this, getString(R.string.error_webservice), Toast.LENGTH_LONG).show();
+        Toast.makeText(CloseCashActivity.this, getString(R.string.error_webservice),
+          Toast.LENGTH_LONG).show();
+      }
+    });
+  }
+
+  private void PostCloseCash(String kodeMerchant, ClosedCash closedCash)
+  {
+    Call<HashMap<Integer, String>> call = service.postClosedCash(kodeMerchant, closedCash);
+    call.enqueue(new Callback<HashMap<Integer, String>>()
+    {
+      private int responseCode;
+      private String responseMessage;
+
+      @Override
+      public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+      {
+        final HashMap<Integer, String> data = response.body();
+        for (int resultKey : data.keySet())
+        {
+          responseCode = resultKey;
+          responseMessage = data.get(resultKey);
+          Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
+
+          if (responseCode == 0)
+          {
+            progressDialog.dismiss();
+            finish();
+          }
+          Toast.makeText(CloseCashActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+        }
+        progressDialog.dismiss();
+      }
+
+      @Override
+      public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
+      {
+        progressDialog.dismiss();
+        responseCode = -1;
+        responseMessage = getString(R.string.error_webservice);
+        Toast.makeText(CloseCashActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }
@@ -126,7 +209,7 @@ public class CloseCashActivity extends AppCompatActivity
     {
       total += viewclosedcashList.get(i).getTotalAllPayment();
     }
-    return String.valueOf(total);
+    return decimalFormat.format(total);
   }
 
   @NonNull
@@ -137,7 +220,7 @@ public class CloseCashActivity extends AppCompatActivity
     {
       total += viewclosedcashList.get(i).getTotalCashPayment();
     }
-    return String.valueOf(total);
+    return decimalFormat.format(total);
   }
 
   @NonNull
@@ -166,6 +249,8 @@ public class CloseCashActivity extends AppCompatActivity
           closecashTotalPayment.setText(CalculateTotalPayment());
           closecashTotalCash.setText(CalculateTotalCash());
           closecashTotalUnits.setText(CalculateTotalUnits());
+
+          progressDialog.dismiss();
         }
         break;
     }

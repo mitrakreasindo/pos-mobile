@@ -29,7 +29,7 @@ public interface ClosedCashService
   Call<List<Viewclosedcash>> getClosedCashByReceipt(@Path("kodeMerchant") String kodeMerchant,
                                                     @Path("receipt_id") String receipt_id);
 
-  @POST("closedcash/{kodeMerchant}/")
+  @POST("closedcashes/{kodeMerchant}/")
   Call<HashMap<Integer, String>> postClosedCash(@Path("kodeMerchant") String kodeMerchant,
                                                 @Body ClosedCash closedCash);
 }

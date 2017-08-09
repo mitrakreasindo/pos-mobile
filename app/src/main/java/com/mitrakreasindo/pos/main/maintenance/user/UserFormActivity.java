@@ -451,7 +451,7 @@ public class UserFormActivity extends AppCompatActivity
     return flag;
   }
 
-  public People PrepareData()
+  private People PrepareData()
   {
     try
     {

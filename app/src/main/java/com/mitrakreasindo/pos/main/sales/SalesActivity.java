@@ -67,6 +67,8 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static java.util.UUID.randomUUID;
+
 
 public class SalesActivity extends AppCompatActivity
 {
@@ -232,8 +234,12 @@ public class SalesActivity extends AppCompatActivity
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
 
     final ClosedCash closedCash = new ClosedCash();
-    if (IDs.getLoginCloseCashID().equals(""))
-      closedCash.setMoney(UUID.randomUUID().toString());
+    if (IDs.getLoginCloseCashID() == null)
+    {
+      String id = UUID.randomUUID().toString();
+      viewreceipt.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
 
@@ -247,7 +253,7 @@ public class SalesActivity extends AppCompatActivity
     customer.setId(null);
 
     receipt = new Receipt();
-    receipt.setId(UUID.randomUUID().toString());
+    receipt.setId(randomUUID().toString());
     receipt.setAttributes(null);
     receipt.setSales(sales);
     receipt.setMoney(closedCash);
@@ -486,7 +492,7 @@ public class SalesActivity extends AppCompatActivity
   {
 
     Location location = new Location();
-    location.setId(UUID.randomUUID().toString());
+    location.setId(randomUUID().toString());
 
     Tax tax = new Tax();
     tax.setId("001");
@@ -521,7 +527,7 @@ public class SalesActivity extends AppCompatActivity
     salesItem.setTaxid(tax);
 
     payment = new Payment();
-    payment.setId(UUID.randomUUID().toString());
+    payment.setId(randomUUID().toString());
     payment.setPayment("cash");
     payment.setTotal(20000);
     payment.setTransid("tesssssss");
@@ -534,7 +540,7 @@ public class SalesActivity extends AppCompatActivity
     payment.setReceipt(receipt);
 
     taxLine = new TaxLine();
-    taxLine.setId(UUID.randomUUID().toString());
+    taxLine.setId(randomUUID().toString());
     taxLine.setBase(1000);
     taxLine.setAmount(100);
     taxLine.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -543,7 +549,7 @@ public class SalesActivity extends AppCompatActivity
     taxLine.setTaxid(tax);
 
     stockDiary = new StockDiary();
-    stockDiary.setId(UUID.randomUUID().toString());
+    stockDiary.setId(randomUUID().toString());
     stockDiary.setReason(0);
     stockDiary.setUnits(1);
     stockDiary.setPrice(salesItem.getProduct().getPricesell());
@@ -598,8 +604,12 @@ public class SalesActivity extends AppCompatActivity
     viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
 
-    if (IDs.getLoginCloseCashID().equals(""))
-      viewreceipt.setMoney(UUID.randomUUID().toString());
+    if (IDs.getLoginCloseCashID() == null)
+    {
+      String id = UUID.randomUUID().toString();
+      viewreceipt.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
     else
       viewreceipt.setMoney(IDs.getLoginCloseCashID());
 

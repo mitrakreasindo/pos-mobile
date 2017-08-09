@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.model.Viewclosedcash;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class CloseCashListAdapter extends RecyclerView.Adapter<CloseCashListAdap
   private List<Viewclosedcash> viewclosedcashes = new ArrayList<>();
   private Context context;
   private LayoutInflater inflater;
+  private DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
   public CloseCashListAdapter(Context context, List<Viewclosedcash> viewclosedcashes)
   {
@@ -45,9 +47,9 @@ public class CloseCashListAdapter extends RecyclerView.Adapter<CloseCashListAdap
     final Viewclosedcash viewclosedcash = viewclosedcashes.get(position);
 
     holder.txtTransactionID.setText(viewclosedcash.getReceiptId());
-    holder.txtCash.setText(String.valueOf(viewclosedcash.getTotalCashPayment()));
+    holder.txtCash.setText(decimalFormat.format(viewclosedcash.getTotalCashPayment()));
     holder.txtUnitsSold.setText(String.valueOf(viewclosedcash.getTotalSoldUnits()));
-    holder.txtPayment.setText(String.valueOf(viewclosedcash.getTotalAllPayment()));
+    holder.txtPayment.setText(decimalFormat.format(viewclosedcash.getTotalAllPayment()));
   }
 
   public void addCloseCashTransaction(Viewclosedcash viewclosedcash)

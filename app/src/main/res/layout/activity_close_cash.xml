@@ -179,7 +179,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@color/red500"
-            android:onClick="Cancel"
+            android:onClick="CancelCloseCash"
             android:text="@string/cancel"
             android:textColor="@color/white"/>
     </LinearLayout>

@@ -126,10 +126,10 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+    tableTaxesHelper.downloadData(companyCode);
     tableCategoryHelper.downloadData(companyCode);
     tableProductHelper.downloadDataAlternate(companyCode);
-    tableTaxesHelper.downloadData(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
   }
   
   @Override
@@ -275,10 +275,6 @@ public class MainActivity extends AppCompatActivity
     {
       Log.d(getClass().getSimpleName(), "permission null");
     }
-
-    progressDialog.dismiss();
-
-    Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
@@ -296,6 +292,8 @@ public class MainActivity extends AppCompatActivity
         if (event.getStatus() == Event.COMPLETE)
         {
           setupNavigation();
+          progressDialog.dismiss();
+          Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
     }
   }
