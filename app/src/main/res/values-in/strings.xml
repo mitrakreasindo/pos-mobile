@@ -352,5 +352,7 @@
     <string name="cash">Kas :</string>
     <string name="units_sold">Barang Terjual :</string>
     <string name="close_cash">Tutup Kas</string>
-
+    <string name="error_close_cash">Belum ada riwayat buka kas</string>
+    <string name="closecash_question">Tutup Kas</string>
+    <string name="closecash_question_message">Apakah anda yakin untuk tutup kas?</string>
 </resources>

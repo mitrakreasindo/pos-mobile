@@ -233,15 +233,15 @@ public class SalesActivity extends AppCompatActivity
 
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
 
-//    final ClosedCash closedCash = new ClosedCash();
-//    if (IDs.getLoginCloseCashID() == null)
-//    {
-//      String id = UUID.randomUUID().toString();
-//      viewreceipt.setMoney(id);
-//      IDs.setLoginCloseCashID(id);
-//    }
-//    else
-//      closedCash.setMoney(IDs.getLoginCloseCashID());
+    final ClosedCash closedCash = new ClosedCash();
+    if (IDs.getLoginCloseCashID() == null)
+    {
+      String id = randomUUID().toString();
+      closedCash.setMoney(id);
+      IDs.setLoginCloseCashID(id);
+    }
+    else
+      closedCash.setMoney(IDs.getLoginCloseCashID());
 
     Tax tax = new Tax();
     tax.setId("001");
@@ -256,7 +256,7 @@ public class SalesActivity extends AppCompatActivity
     receipt.setId(randomUUID().toString());
     receipt.setAttributes(null);
     receipt.setSales(sales);
-//    receipt.setMoney(closedCash);
+    receipt.setMoney(closedCash);
     receipt.setDatenew(new Date());
     receipt.setPerson(IDs.getLoginUser());
     receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");

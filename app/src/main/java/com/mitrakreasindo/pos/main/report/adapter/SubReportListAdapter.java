@@ -53,6 +53,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   public void onBindViewHolder(SubReportListAdapter.ViewHolder holder, int position)
   {
     final SubReport subReport = subReports.get(position);
+    holder.itemReportSalesName.setText(subReport.getPeopleName());
     holder.itemReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
     holder.itemReportTotalTransaction.setText("Rp. " + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
     holder.itemView.setOnClickListener(new View.OnClickListener()
@@ -64,7 +65,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
         list.addAll(subReport.getSubProductReports());
 
         Intent intent = new Intent(context, SubReportActivity.class);
-        intent.putExtra("listProduct", (Serializable) subReport);
+        intent.putExtra("listProduct", subReport);
         context.startActivity(intent);
       }
     });
@@ -102,11 +103,11 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtMerchantName, itemReportDate, itemReportTotalTransaction;
+    private TextView itemReportSalesName, itemReportDate, itemReportTotalTransaction;
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtMerchantName = (TextView) itemView.findViewById(R.id.txt_merchant_name);
+      itemReportSalesName = (TextView) itemView.findViewById(R.id.item_report_sales_name);
       itemReportDate = (TextView) itemView.findViewById(R.id.item_report_date);
       itemReportTotalTransaction = (TextView) itemView.findViewById(R.id.item_report_total_transaction);
     }

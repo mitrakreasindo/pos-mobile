@@ -8,10 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
 import com.mitrakreasindo.pos.model.SubProductReport;
 import com.mitrakreasindo.pos.model.SubReport;
 
@@ -32,11 +34,18 @@ public class SubReportActivity extends AppCompatActivity
   Toolbar toolbar;
   @BindView(R.id.list_sub_product)
   RecyclerView listSubProduct;
+  @BindView(R.id.item_sub_report_total_transaction)
+  TextView itemSubReportTotalTransaction;
+  @BindView(R.id.item_sub_report_sales)
+  TextView itemSubReportSales;
+  @BindView(R.id.item_sub_report_date)
+  TextView itemSubReportDate;
 
   private SubProductAdapter subProductAdapter;
   private List<SubProductReport> subProductReportList = new ArrayList<SubProductReport>();
   private Bundle bundle;
   private SubReport subReport;
+  private DefaultHelper defaultHelper = new DefaultHelper();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -46,6 +55,14 @@ public class SubReportActivity extends AppCompatActivity
     ButterKnife.bind(this);
 
     setSupportActionBar(toolbar);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        onBackPressed();
+      }
+    });
 
     bundle = getIntent().getExtras();
     if (bundle != null)
@@ -55,6 +72,10 @@ public class SubReportActivity extends AppCompatActivity
       Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));
 
     }
+
+    itemSubReportTotalTransaction.setText("Rp." + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
+    itemSubReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
+    itemSubReportSales.setText(subReport.getPeopleName());
 
     subProductAdapter = new SubProductAdapter(this, subReport.getSubProductReports());
 

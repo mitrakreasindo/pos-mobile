@@ -1,8 +1,10 @@
 package com.mitrakreasindo.pos.main.closecash;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,6 +73,10 @@ public class CloseCashActivity extends AppCompatActivity
     setContentView(R.layout.activity_close_cash);
     ButterKnife.bind(this);
 
+    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
+    moneyID = IDs.getLoginCloseCashID();
+    userID = IDs.getLoginUser();
+
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -88,10 +94,6 @@ public class CloseCashActivity extends AppCompatActivity
     listTransaction.setAdapter(closeCashListAdapter);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listTransaction.setLayoutManager(layoutManager);
-
-    companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-    moneyID = IDs.getLoginCloseCashID();
-    userID = IDs.getLoginUser();
 
     openCashDate.setText(GetToday());
     service = ClientService.createService().create(ClosedCashService.class);
@@ -112,11 +114,26 @@ public class CloseCashActivity extends AppCompatActivity
 
   public void ConfirmCloseCash(View view)
   {
-    progressDialog.setMessage(this.getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
-    PostCloseCash(companyCode, PrepareData(Calendar.getInstance().getTime(), userID, moneyID, IDs.SITE_GUID));
+    new AlertDialog.Builder(this)
+      .setIcon(android.R.drawable.ic_dialog_info)
+      .setTitle(R.string.closecash_question)
+      .setMessage(R.string.closecash_question_message)
+      .setPositiveButton
+        (
+          R.string.yes, new DialogInterface.OnClickListener()
+          {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              progressDialog.setMessage(CloseCashActivity.this.getString(R.string.progress_message));
+              progressDialog.setCancelable(false);
+              progressDialog.show();
+              PostCloseCash(companyCode, PrepareData(Calendar.getInstance().getTime(), userID, moneyID, IDs.SITE_GUID));
+            }
+          }
+        )
+      .setNegativeButton(R.string.no, null)
+      .show();
   }
 
   public void CancelCloseCash(View view)
@@ -183,6 +200,7 @@ public class CloseCashActivity extends AppCompatActivity
           if (responseCode == 0)
           {
             progressDialog.dismiss();
+            IDs.setLoginCloseCashID(null);
             finish();
           }
           Toast.makeText(CloseCashActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
@@ -205,7 +223,7 @@ public class CloseCashActivity extends AppCompatActivity
   private String CalculateTotalPayment()
   {
     double total = 0.0;
-    for (int i=0; i<viewclosedcashList.size(); i++)
+    for (int i = 0; i < viewclosedcashList.size(); i++)
     {
       total += viewclosedcashList.get(i).getTotalAllPayment();
     }
@@ -216,7 +234,7 @@ public class CloseCashActivity extends AppCompatActivity
   private String CalculateTotalCash()
   {
     double total = 0.0;
-    for (int i=0; i<viewclosedcashList.size(); i++)
+    for (int i = 0; i < viewclosedcashList.size(); i++)
     {
       total += viewclosedcashList.get(i).getTotalCashPayment();
     }
@@ -227,7 +245,7 @@ public class CloseCashActivity extends AppCompatActivity
   private String CalculateTotalUnits()
   {
     double total = 0.0;
-    for (int i=0; i<viewclosedcashList.size(); i++)
+    for (int i = 0; i < viewclosedcashList.size(); i++)
     {
       total += viewclosedcashList.get(i).getTotalSoldUnits();
     }
