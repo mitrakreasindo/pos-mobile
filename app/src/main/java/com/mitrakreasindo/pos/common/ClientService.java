@@ -27,4 +27,21 @@ public class ClientService
       .client(httpClient.build())
       .build();
   }
+
+  public static Retrofit createPaymentGatewayService()
+  {
+    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+    // set your desired log level
+    logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    // add your other interceptors …
+    // add logging as last interceptor
+    httpClient.addInterceptor(logging);  // <-- this is the important line!
+
+    return new Retrofit.Builder()
+      .baseUrl(RestVariable.URL_PAYMENT_GATEWAY)
+      .addConverterFactory(JacksonConverterFactory.create())
+      .client(httpClient.build())
+      .build();
+  }
 }

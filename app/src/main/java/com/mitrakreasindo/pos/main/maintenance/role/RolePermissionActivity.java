@@ -541,19 +541,38 @@ public class RolePermissionActivity extends AppCompatActivity
         break;
       case R.id.rp_stk_pos_products:
         setVisibility(rpStkProductMoreLayout, rpStkProductLayout, checked);
+        autoCheckUncheckAllChild(rpStkProductLayout, rpStkMntProducts);
         break;
       case R.id.rp_stk_pos_categories:
         setVisibility(rpStkCategoryMoreLayout, rpStkCategoryLayout, checked);
+        autoCheckUncheckAllChild(rpStkCategoryLayout, rpStkMntCategories);
         break;
       case R.id.rp_mtc_roles:
         setVisibility(rpMtcRlMoreLayout, rpMtcRlLayout, checked);
+        autoCheckUncheckAllChild(rpMtcRlLayout, rpMtcRoles);
         break;
       case R.id.rp_mtc_users:
         setVisibility(rpMtcUsrMoreLayout, rpMtcUsrLayout, checked);
+        autoCheckUncheckAllChild(rpMtcUsrLayout, rpMtcUsers);
         break;
       case R.id.rp_mtc_taxes:
         setVisibility(rpMtcTxMoreLayout, rpMtcTxLayout, checked);
+        autoCheckUncheckAllChild(rpMtcTxLayout, rpMtcTaxes);
         break;
+    }
+  }
+
+  private void autoCheckUncheckAllChild(LinearLayout parentLayout, CheckBox parentBox)
+  {
+    for (int i = 0; i < parentLayout.getChildCount(); i++)
+    {
+      View view = parentLayout.getChildAt(i);
+      if (view instanceof CheckBox)
+      {
+        CheckBox cb = (CheckBox)view;
+        // isChecked should be a boolean indicating if every Checkbox should be checked or not
+        cb.setChecked(parentBox.isChecked());
+      }
     }
   }
 
