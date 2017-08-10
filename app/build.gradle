@@ -63,6 +63,8 @@ dependencies {
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    compile 'com.birbit:android-priority-jobqueue:2.0.1'
+
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

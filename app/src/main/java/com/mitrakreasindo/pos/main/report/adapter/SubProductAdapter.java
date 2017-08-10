@@ -50,8 +50,8 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
   public void onBindViewHolder(SubProductAdapter.ViewHolder holder, int position)
   {
     subProductReport = subProductReports.get(position);
-    holder.itemSubProductName.setText(String.valueOf(subProductReport.getProductName().substring(1, 10) + "..."));
-    holder.itemSubProductItemAndDate.setText(defaultHelper.decimalFormat(subProductReport.getQty()));
+    holder.itemSubProductName.setText(subProductReport.getProductName());
+    holder.itemSubProductItemAndDate.setText(defaultHelper.decimalFormat(subProductReport.getQty()) + " items");
     holder.itemProductTotal.setText("Rp. " + defaultHelper.decimalFormat(subProductReport.getTotal()));
   }
 

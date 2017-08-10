@@ -34,9 +34,10 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/item_sub_report_total_transaction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rp. 80,000,000"
+                    android:text="Rp. 0"
                     android:textColor="@color/white"
                     android:textSize="25dp"/>
 
@@ -65,6 +66,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/item_sub_report_sales"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Owner"
@@ -88,6 +90,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/item_sub_report_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2017-08-07"

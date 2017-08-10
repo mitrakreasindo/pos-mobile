@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name="com.mitrakreasindo.pos.common.Wireless.BluetoothService"/>
+        <service android:name="com.mitrakreasindo.pos.common.DownloadService"/>
 
         <activity android:name=".LoginActivity">
             <intent-filter>
