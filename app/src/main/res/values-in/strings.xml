@@ -340,7 +340,7 @@
     <string name="printOptions">Pilihan Cetak</string>
     <string name="Qs_print">Cetak Struk?</string>
     <string name="cashier">KASIR: </string>
-    <string name="prepare_data">Preparing your data...</string>
+    <string name="prepare_data">Menyiapkan data anda</string>
 
     <!-- Close Cash -->
     <string name="start_date">Tanggal Mulai Buka Kas</string>

@@ -138,7 +138,7 @@ public class DownloadService extends IntentService
 
     notificationManager.cancel(0);
     notificationBuilder.setProgress(0,0,false);
-    notificationBuilder.setContentText("File Downloaded");
+    notificationBuilder.setContentText(getString(R.string.file_downloaded));
     notificationManager.notify(0, notificationBuilder.build());
 
   }

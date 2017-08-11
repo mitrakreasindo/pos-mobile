@@ -113,7 +113,6 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
       super(itemView);
       txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
       txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
-      checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
       itemLayout = (LinearLayout) itemView.findViewById(R.id.item_product);
       txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
       txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);

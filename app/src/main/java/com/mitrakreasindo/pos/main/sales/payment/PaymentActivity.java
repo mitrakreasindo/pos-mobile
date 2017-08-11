@@ -157,19 +157,19 @@ public class PaymentActivity extends AppCompatActivity
     @Override
     public void onPrintError(int arg0)
     {
-      Toast.makeText(PaymentActivity.this,"Printer mencetak tiba-tiba",Toast.LENGTH_SHORT);
+      Toast.makeText(PaymentActivity.this,"Printer mencetak tiba-tiba",Toast.LENGTH_SHORT).show();
     }
     
     @Override
     public void onPrintFinish()
     {
-      Toast.makeText(PaymentActivity.this,"Data cetak selesai",Toast.LENGTH_SHORT);
+      Toast.makeText(PaymentActivity.this,"Data cetak selesai",Toast.LENGTH_SHORT).show();
     }
     
     @Override
     public void onPrintOutOfPaper()
     {
-      Toast.makeText(PaymentActivity.this,"Printer kehabisan kertas, kertas pemuatan. Coba lagi",Toast.LENGTH_SHORT);
+      Toast.makeText(PaymentActivity.this,"Printer kehabisan kertas, kertas pemuatan. Coba lagi",Toast.LENGTH_SHORT).show();
     }
   }
   @Override

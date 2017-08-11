@@ -136,7 +136,7 @@ public class ReportActivity extends AppCompatActivity
         mSecond = c.get(Calendar.SECOND);
 
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener()
+        DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, R.style.DefaultDatePicker, new DatePickerDialog.OnDateSetListener()
         {
           @Override
           public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
@@ -181,7 +181,7 @@ public class ReportActivity extends AppCompatActivity
         mMinute = c.get(Calendar.MINUTE);
         mSecond = c.get(Calendar.SECOND);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener()
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, R.style.DefaultDatePicker, new DatePickerDialog.OnDateSetListener()
         {
           @Override
           public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)

@@ -369,4 +369,6 @@
     <string name="error_close_cash">No Open Cash history</string>
     <string name="closecash_question">Confirm Close Cash</string>
     <string name="closecash_question_message">Are you sure want to close cash?</string>
+    <string name="file_downloaded">File Downloaded</string>
+    <string name="prepare_data">Preparing your data...</string>
 </resources>

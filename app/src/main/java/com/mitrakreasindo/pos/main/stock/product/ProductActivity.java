@@ -140,7 +140,7 @@ public class ProductActivity extends AppCompatActivity
     }
     else if (id == R.id.menu_delete)
     {
-      productListAdapter.deleteMultipleProduct();
+//      productListAdapter.deleteMultipleProduct();
     }
     return super.onOptionsItemSelected(item);
   }
