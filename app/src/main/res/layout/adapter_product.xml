@@ -53,10 +53,11 @@
                         android:text="0"/>
 
                     <CheckBox
-                        android:id="@+id/checkBox"
+                        android:id="@+id/cb_multi_select"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
+                        android:visibility="gone"
                         android:clickable="false"/>
 
                 </LinearLayout>

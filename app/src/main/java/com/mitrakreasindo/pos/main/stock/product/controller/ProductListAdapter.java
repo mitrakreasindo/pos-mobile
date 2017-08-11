@@ -121,41 +121,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         }
       });
     }
-//    if (counter == 0){ holder.checkBox.setVisibility(View.GONE); }
-//    holder.productItem.setOnClickListener(new View.OnClickListener()
-//    {
-//      @Override
-//      public void onClick(View v)
-//      {
-//        if (!productActivity.is_action_mode)
-//        {
-////          holder.checkBox.setChecked(true);
-//          notifyDataSetChanged();
-//        }
-//        else
-//        {
-//          holder.checkBox.toggle();
-//          prepareSelection(holder, position);
-//          Toast.makeText(context, "IF TRUE", Toast.LENGTH_LONG).show();
-//          notifyDataSetChanged();
-//        }
-//      }
-//    });
-
-
-//    holder.productItem.setOnLongClickListener(new View.OnLongClickListener()
-//    {
-//      @Override
-//      public boolean onLongClick(View v)
-//      {
-//        productActivity.is_action_mode = true;
-//        holder.checkBox.setChecked(true);
-//        prepareSelection(holder, position);
-//        productActivity.txtActionToolbar.setVisibility(View.VISIBLE);
-//        notifyDataSetChanged();
-//        return true;
-//      }
-//    });
 
     holder.txtCodeProduct.setText(product.getCode());
     holder.txtSellPrice.setText("IDR " + Double.toString(product.getPricesell()));
@@ -213,7 +178,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   {
 
     private TextView txtCodeProduct, txtNameProduct, txtBuyPrice,txtSellPrice;
-    private CheckBox checkBox;
+    private CheckBox cbMultiSelect;
     private LinearLayout productItem;
 
     public ViewHolder(View itemView)
@@ -221,58 +186,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       super(itemView);
       txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
       txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
-      checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+      cbMultiSelect = (CheckBox) itemView.findViewById(R.id.cb_multi_select);
       productItem = (LinearLayout) itemView.findViewById(R.id.item_product);
       txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
       txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
     }
-  }
-
-  public void prepareSelection(final ProductListAdapter.ViewHolder holder, int position){
-
-    if (holder.checkBox.isChecked()){
-      list_product.add(products.get(position));
-      counter = counter + 1;
-      updateCounter(counter);
-    }
-    else
-    {
-      list_product.remove(products.get(position));
-      counter = counter - 1;
-      updateCounter(counter);
-    }
-    notifyDataSetChanged();
-  }
-
-  public void updateCounter(int counter){
-    if (counter == 0){
-      productActivity.txtActionToolbar.setText("0 item selected");
-      productActivity.is_action_mode = false;
-//      holder.checkBox.setChecked(false);
-      productActivity.txtActionToolbar.setVisibility(View.GONE);
-      productActivity.toolbar.getMenu().clear();
-      productActivity.toolbar.inflateMenu(R.menu.default_list_menu);
-      notifyDataSetChanged();
-    }
-    else
-    {
-      productActivity.txtActionToolbar.setText(counter + " item selected");
-      productActivity.toolbar.getMenu().clear();
-      productActivity.toolbar.inflateMenu(R.menu.menu_action_mode);
-    }
-    notifyDataSetChanged();
-  }
-
-  public void deleteMultipleProduct()
-  {
-    productActivity.is_action_mode = false;
-    productActivity.txtActionToolbar.setVisibility(View.GONE);
-    productActivity.toolbar.getMenu().clear();
-    productActivity.toolbar.inflateMenu(R.menu.default_list_menu);
-//    list_product.clear();
-    counter = 0;
-    list_product.clear();
-    notifyDataSetChanged();
   }
 
   private void deleteProduct(String kodeMerchant, final String id)
@@ -316,26 +234,4 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     removeProduct(product);
   }
 
-//
-//  private void getCategories()
-//  {
-//    final Call<List<Category>> category = categoryService.getCategoryAll();
-//    category.enqueue(new Callback<List<Category>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-//      {
-//        List<Category> categoryList = response.body();
-//        clear();
-//        addCategory(categoryList);
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Category>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//
-//  }
 }
