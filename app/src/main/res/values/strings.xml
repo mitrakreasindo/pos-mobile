@@ -201,7 +201,6 @@
     <string name="receive">Receive</string>
     <string name="export">Export</string>
     <string name="logout">Logout</string>
-    <string name="today_s_revenue">Today\'s Revenue</string>
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
@@ -369,6 +368,14 @@
     <string name="error_close_cash">No Open Cash history</string>
     <string name="closecash_question">Confirm Close Cash</string>
     <string name="closecash_question_message">Are you sure want to close cash?</string>
+
     <string name="file_downloaded">File Downloaded</string>
     <string name="prepare_data">Preparing your data...</string>
-</resources>
+
+    <!-- Dashboard Revenue  -->
+    <string name="today_revenue">Today\'s Revenue</string>
+    <string name="this_week_revenue">This Week\'s Revenue</string>
+    <string name="this_month_revenue">This Month\'s Revenue</string>
+    <string name="this_year_revenue">This Year\'s Revenue</string>
+    <string name="cost">Cost</string>
+    </resources>

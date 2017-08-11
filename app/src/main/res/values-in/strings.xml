@@ -200,8 +200,7 @@
     <string name="data">Data</string>
     <string name="receive">Receive</string>
     <string name="export">Export</string>
-    <string name="logout">Logout</string>
-    <string name="today_s_revenue">Today\'s Revenue</string>
+    <string name="logout">Keluar</string>
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
@@ -355,4 +354,11 @@
     <string name="error_close_cash">Belum ada riwayat buka kas</string>
     <string name="closecash_question">Tutup Kas</string>
     <string name="closecash_question_message">Apakah anda yakin untuk tutup kas?</string>
+
+    <!-- Dashboard Revenue  -->
+    <string name="today_revenue">Pendapatan Hari Ini</string>
+    <string name="this_week_revenue">Pendapatan Minggu Ini</string>
+    <string name="this_month_revenue">Pendapatan Bulan Ini</string>
+    <string name="this_year_revenue">Pendapatan Tahun Ini</string>
+    <string name="cost">Pengeluaran</string>
 </resources>

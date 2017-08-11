@@ -241,9 +241,9 @@ public class DiaryFormActivity extends AppCompatActivity
           diaryProductPriceField.removeTextChangedListener(this);
           String originalString = s.toString();
 
-          if (originalString.contains(",")) {
-            originalString = originalString.replaceAll(",", "");
-          }
+          if (originalString.contains(",") || originalString.contains("."))
+            originalString = originalString.replaceAll("[,.]", "");
+
           Long longval = Long.parseLong(originalString);
 
           DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
@@ -327,9 +327,9 @@ public class DiaryFormActivity extends AppCompatActivity
   {
     String originalString = diaryProductPriceField.getText().toString();
 
-    if (originalString.contains(",")) {
-      originalString = originalString.replaceAll(",", "");
-    }
+    if (originalString.contains(",") || originalString.contains("."))
+      originalString = originalString.replaceAll("[,.]", "");
+
     Long longval = Long.parseLong(originalString);
 
     DecimalFormat decimalFormat = new DecimalFormat("###,###.###");

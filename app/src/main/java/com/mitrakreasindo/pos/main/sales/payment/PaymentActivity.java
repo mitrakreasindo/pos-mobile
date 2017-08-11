@@ -235,34 +235,24 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-        if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
-        {
-
-        } else
-        {
+        if (s.length() == 0 && edittextPaymentMoney.getText().toString().length() == 0)
           edittextPaymentMoney.setText("0");
-        }
-
       }
-
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)
       {
-
       }
-
       @Override
       public void afterTextChanged(Editable s)
       {
-
         try
         {
           edittextPaymentMoney.removeTextChangedListener(this);
           String originalString = s.toString();
 
-          if (originalString.contains(","))
+          if (originalString.contains(",") || originalString.contains("."))
           {
-            originalString = originalString.replaceAll(",", "");
+            originalString = originalString.replaceAll("[,.]", "");
           }
           Long longval = Long.parseLong(originalString);
 
@@ -273,9 +263,7 @@ public class PaymentActivity extends AppCompatActivity
         {
           e.printStackTrace();
         }
-
         edittextPaymentMoney.addTextChangedListener(this);
-
       }
     });
 
@@ -415,9 +403,9 @@ public class PaymentActivity extends AppCompatActivity
   {
     originalString = edittextPaymentMoney.getText().toString();
 
-    if (originalString.contains(","))
+    if (originalString.contains(",") || originalString.contains("."))
     {
-      originalString = originalString.replaceAll(",", "");
+      originalString = originalString.replaceAll("[,.]", "");
     }
     Long longval = Long.parseLong(originalString);
     double clearValue = Double.parseDouble(longval.toString());
