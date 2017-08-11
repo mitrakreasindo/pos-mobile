@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

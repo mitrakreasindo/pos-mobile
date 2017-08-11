@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import java.io.UnsupportedEncodingException;
 
@@ -6,14 +6,6 @@ import zj.com.customize.sdk.Other;
 
 public class PrinterCommand
 {
-	
-/*
-*
-    * 打印机初始化
-    * @return
-    
-*/
-
    public static byte[] POS_Set_PrtInit(){
    	
    	byte[] data = Other.byteArraysToBytes(new byte[][] {
@@ -21,12 +13,7 @@ public class PrinterCommand
  		
  		return data;
    }
-/*
-*
-    * 打印并换行
-    * @return
-    */
-
+   
    public static byte[] POS_Set_LF(){
    	byte[] data = Other.byteArraysToBytes(new byte[][] {
    			Command.LF});

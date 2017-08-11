@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,9 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.SendDataByte;
-import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.SendDataString;
-import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.mService;
+import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataByte;
+import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataString;
+import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.mService;
 
 /**
  * Created by MK-fepriyadi on 7/31/2017.
@@ -176,49 +176,49 @@ public class PrintReceipt
           SendDataByte(context, Command.ESC_Relative);
           SendDataByte(context,String.format("%15s",decimalFormat.format(grandTotal).replace('.',',')+"\n").replace(' ',' ').getBytes("GBK"));
     
-      Command.ESC_Relative[2] = 0x79;
-      Command.ESC_Relative[3] = 0x00;
-      SendDataByte(context, Command.ESC_Relative);
-    
-      Command.ESC_Relative[2] = 1;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataString(context,(context.getString(R.string.text_tunai)));
-  
-      Command.ESC_Relative[2] = (byte) 100;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataString(context,":");
-    
-      Command.ESC_Relative[2] = 0x79;
-      Command.ESC_Relative[2] = 0x00;
-      Command.ESC_Relative[3] = 0x01;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%15s",decimalFormat.format(Cash).replace('.',',')+"\n").replace(' ',' ').getBytes("GBK"));
-    
-      Command.ESC_Relative[2] = 0x79;
-      Command.ESC_Relative[3] = 0x00;
-      SendDataByte(context, Command.ESC_Relative);
-    
-      Command.ESC_Relative[2] = 1;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataString(context,(context.getString(R.string.text_kembali)));
-  
-      Command.ESC_Relative[2] = (byte) 100;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataString(context,":");
-    
-      Command.ESC_Relative[2] = 0x79;
-      Command.ESC_Relative[2] = 0x00;
-      Command.ESC_Relative[3] = 0x01;
-      SendDataByte(context, Command.ESC_Relative);
-      SendDataByte(context,String.format("%16s",decimalFormat.format(Cash-grandTotal).replace('.',',')+"\n\n"). replace(' ',' ').getBytes("GBK"));
-    
-      Command.ESC_Align[2] = 0x01;
-      SendDataByte(context, Command.ESC_Align);
-      Command.GS_ExclamationMark[2] = 0x00;
-      SendDataByte(context, Command.GS_ExclamationMark);
-      SendDataString(context,(context.getString(R.string.text_ucapan))+"\n\n");
-      SendDataByte(context,PrinterCommand.POS_Set_PrtAndFeedPaper(55));
-      SendDataByte(context,Command.GS_V_m_n);
+          Command.ESC_Relative[2] = 0x79;
+          Command.ESC_Relative[3] = 0x00;
+          SendDataByte(context, Command.ESC_Relative);
+        
+          Command.ESC_Relative[2] = 1;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataString(context,(context.getString(R.string.text_tunai)));
+      
+          Command.ESC_Relative[2] = (byte) 100;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataString(context,":");
+        
+          Command.ESC_Relative[2] = 0x79;
+          Command.ESC_Relative[2] = 0x00;
+          Command.ESC_Relative[3] = 0x01;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataByte(context,String.format("%15s",decimalFormat.format(Cash).replace('.',',')+"\n").replace(' ',' ').getBytes("GBK"));
+        
+          Command.ESC_Relative[2] = 0x79;
+          Command.ESC_Relative[3] = 0x00;
+          SendDataByte(context, Command.ESC_Relative);
+        
+          Command.ESC_Relative[2] = 1;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataString(context,(context.getString(R.string.text_kembali)));
+      
+          Command.ESC_Relative[2] = (byte) 100;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataString(context,":");
+        
+          Command.ESC_Relative[2] = 0x79;
+          Command.ESC_Relative[2] = 0x00;
+          Command.ESC_Relative[3] = 0x01;
+          SendDataByte(context, Command.ESC_Relative);
+          SendDataByte(context,String.format("%16s",decimalFormat.format(Cash-grandTotal).replace('.',',')+"\n\n"). replace(' ',' ').getBytes("GBK"));
+        
+          Command.ESC_Align[2] = 0x01;
+          SendDataByte(context, Command.ESC_Align);
+          Command.GS_ExclamationMark[2] = 0x00;
+          SendDataByte(context, Command.GS_ExclamationMark);
+          SendDataString(context,(context.getString(R.string.text_ucapan))+"\n\n");
+          SendDataByte(context,PrinterCommand.POS_Set_PrtAndFeedPaper(55));
+          SendDataByte(context,Command.GS_V_m_n);
         } catch (UnsupportedEncodingException e)
         {
           // TODO Auto-generated catch block
@@ -228,6 +228,7 @@ public class PrintReceipt
       }
       
     }
-    
   }
+  
+  
 }

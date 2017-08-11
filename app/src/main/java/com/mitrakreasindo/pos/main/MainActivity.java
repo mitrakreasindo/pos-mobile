@@ -3,10 +3,13 @@ package com.mitrakreasindo.pos.main;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,9 +23,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
+import com.centerm.smartpos.util.LogUtil;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
@@ -34,7 +40,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
-import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
+import com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.closecash.CloseCashActivity;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
@@ -66,19 +72,20 @@ public class MainActivity extends AppCompatActivity
   private TablePeopleHelper tablePeopleHelper;
   private TableRoleHelper tableRoleHelper;
   private ProgressDialog progressDialog;
-
-  TableCategoryHelper tableCategoryHelper;
-  TableProductHelper tableProductHelper;
-  TableTaxesHelper tableTaxesHelper;
-  TableSalesItemHelper tableSalesItemHelper;
-
+  
+  
+  public LinearLayout rightButArea = null;
+  
+  public AidlDeviceManager manager = null;
+  
+  
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
-
+    
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -89,39 +96,12 @@ public class MainActivity extends AppCompatActivity
 
     EventBus.getDefault().register(this);
 
-    new Thread(new Runnable()
-    {
-      @Override
-      public void run()
-      {
-        tablePeopleHelper = new TablePeopleHelper(MainActivity.this);
-        tableRoleHelper = new TableRoleHelper(MainActivity.this);
-        tableCategoryHelper = new TableCategoryHelper(MainActivity.this);
-        tableProductHelper = new TableProductHelper(MainActivity.this);
-        tableTaxesHelper = new TableTaxesHelper(MainActivity.this);
-        tableSalesItemHelper = new TableSalesItemHelper(MainActivity.this);
-
-        tableTaxesHelper.downloadData(companyCode);
-        tableCategoryHelper.downloadData(companyCode);
-        tableProductHelper.downloadDataAlternate(companyCode);
-        tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-
-        progressDialog.dismiss();
-//        onEvent(EventCode.EVENT_PEOPLE_GET);
-//        progressDialog.post(new Runnable() {
-//          public void run() {
-//            mImageView.setImageBitmap(bitmap);
-//          }
-//        });
-      }
-    }).start();
-
-//    tablePeopleHelper = new TablePeopleHelper(this);
-//    tableRoleHelper = new TableRoleHelper(this);
-//    tableCategoryHelper = new TableCategoryHelper(this);
-//    tableProductHelper = new TableProductHelper(this);
-//    tableTaxesHelper = new TableTaxesHelper(this);
-//    tableSalesItemHelper = new TableSalesItemHelper(this);
+    tablePeopleHelper = new TablePeopleHelper(this);
+    tableRoleHelper = new TableRoleHelper(this);
+    TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(this);
+    TableProductHelper tableProductHelper = new TableProductHelper(this);
+    TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(this);
+    TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(this);
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -159,12 +139,12 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-//    tableTaxesHelper.downloadData(companyCode);
-//    tableCategoryHelper.downloadData(companyCode);
-//    tableProductHelper.downloadDataAlternate(companyCode);
-//    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+    tableTaxesHelper.downloadData(companyCode);
+    tableCategoryHelper.downloadData(companyCode);
+    tableProductHelper.downloadDataAlternate(companyCode);
+    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
   }
-
+  
   @Override
   protected void onStop()
   {
@@ -222,7 +202,8 @@ public class MainActivity extends AppCompatActivity
     if (id == R.id.nd_logout)
     {
       Logout();
-    } else if (id == R.id.nd_maintenance)
+    }
+    else if (id == R.id.nd_maintenance)
     {
       getSupportActionBar().setTitle("Maintenance");
       MaintenanceFragment maintenanceFragment = new MaintenanceFragment();
@@ -230,7 +211,8 @@ public class MainActivity extends AppCompatActivity
         .replace(R.id.main_content, maintenanceFragment, "MAINTENANCE_FRAGMENT")
         .addToBackStack("MAINTENANCE_FRAGMENT").commit();
       getSupportFragmentManager().executePendingTransactions();
-    } else if (id == R.id.nd_stock)
+    }
+    else if (id == R.id.nd_stock)
     {
       getSupportActionBar().setTitle("Stock");
       StockFragment stockFragment = new StockFragment();
@@ -238,7 +220,8 @@ public class MainActivity extends AppCompatActivity
         .replace(R.id.main_content, stockFragment, "STOCK_FRAGMENT")
         .addToBackStack("STOCK_FRAGMENT").commit();
       getSupportFragmentManager().executePendingTransactions();
-    } else if (id == R.id.nd_sales)
+    }
+    else if (id == R.id.nd_sales)
     {
 //      getSupportActionBar().setTitle("Sales");
 //      SalesFragment salesFragment = new SalesFragment();
@@ -247,15 +230,14 @@ public class MainActivity extends AppCompatActivity
 //        .addToBackStack("SALES_FRAGMENT").commit();
 //      getSupportFragmentManager().executePendingTransactions();
       startActivity(new Intent(this, SalesActivity.class));
-    } else if (id == R.id.nd_printers)
+    }
+    else if (id == R.id.nd_printers)
     {
       startActivity(new Intent(this, Wireless_Activity.class));
-    } else if (id == R.id.nd_close_cash)
+    }
+    else if (id == R.id.nd_close_cash)
     {
-      if (IDs.getLoginCloseCashID() != null)
-        startActivity(new Intent(this, CloseCashActivity.class));
-      else
-        Toast.makeText(MainActivity.this, R.string.error_close_cash, Toast.LENGTH_SHORT).show();
+      startActivity(new Intent(this, CloseCashActivity.class));
     }
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -301,7 +283,8 @@ public class MainActivity extends AppCompatActivity
     if (permission != null)
     {
       Log.d(getClass().getSimpleName(), "permission not null " + permission);
-    } else
+    }
+    else
     {
       Log.d(getClass().getSimpleName(), "permission null");
     }
@@ -323,7 +306,7 @@ public class MainActivity extends AppCompatActivity
         {
           setupNavigation();
           progressDialog.dismiss();
-          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
+          Toast.makeText(this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
     }
   }
@@ -365,10 +348,60 @@ public class MainActivity extends AppCompatActivity
     if (fragment.isVisible())
     {
       Logout();
-    } else
+    }
+    else
     {
       super.onBackPressed();
     }
   }
-
+  
+  @Override
+  protected void onResume() {
+    // TODO Auto-generated method stub
+    super.onResume();
+    if(!this.getClass().getName().equals(MainActivity.class)){
+      bindService();
+    }
+    
+  }
+  
+  
+  public void bindService() {
+    Intent intent = new Intent();
+    intent.setPackage("com.centerm.smartposservice");
+    intent.setAction("com.centerm.smartpos.service.MANAGER_SERVICE");
+    bindService(intent, conn, Context.BIND_AUTO_CREATE);
+  }
+  
+  /**
+   * 服务连接桥
+   */
+  public ServiceConnection conn = new ServiceConnection() {
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      manager = null;
+      LogUtil.print("服务绑定失败");
+      LogUtil.print("manager = " + manager);
+    }
+    
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      manager = AidlDeviceManager.Stub.asInterface(service);
+      LogUtil.print("服务绑定成功");
+      LogUtil.print("manager = " + manager);
+      if (null != manager) {
+        AidlDeviceManager deviceManager = manager;
+      }
+    }
+  };
+  
+  @Override
+  protected void onPause() {
+    // TODO Auto-generated method stub
+    super.onPause();
+    //if(!this.getClass().getName().equals(MainActivity.class)){
+      unbindService(conn);
+    //}
+  }
+  
 }

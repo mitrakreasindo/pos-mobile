@@ -1,5 +1,5 @@
 
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -15,8 +15,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.mitrakreasindo.pos.main.R;
 
 import java.io.IOException;
 import java.io.InputStream;

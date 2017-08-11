@@ -1,5 +1,5 @@
 
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

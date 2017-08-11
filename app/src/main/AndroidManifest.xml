@@ -21,8 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="com.mitrakreasindo.pos.common.Wireless.BluetoothService"/>
-        <service android:name="com.mitrakreasindo.pos.common.DownloadService"/>
+        <service android:name="com.mitrakreasindo.pos.common.WirelessPrinter.BluetoothService"/>
 
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -115,11 +114,11 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name="com.mitrakreasindo.pos.common.Wireless.DeviceListActivity"
+            android:name="com.mitrakreasindo.pos.common.WirelessPrinter.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>
-        <activity android:name="com.mitrakreasindo.pos.common.Wireless.Wireless_Activity"/>
+        <activity android:name="com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity"/>
         <activity android:name=".closecash.CloseCashActivity">
         </activity>
         <activity
