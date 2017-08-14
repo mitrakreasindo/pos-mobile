@@ -39,7 +39,7 @@ public class Print
     }
     
     String strHeader = IDs.getLoginCompanyName().toUpperCase()+"\n" + IDs.getLoginCompanyAddress() +"\n" +
-      "PHONE: " + IDs.getLoginCompanyPhone() +"\n\n";
+      (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() +"\n\n";
     PrintDataObject printDataObject1 = new PrintDataObject(strHeader,8,true, PrintDataObject.ALIGN.CENTER);
     printDataObject1.setIsLittleSize(true);
     printDataObject1.setBold(true);

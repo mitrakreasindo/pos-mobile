@@ -254,7 +254,7 @@
     <string name="nav_sys_system">System</string>
     <string name="nav_sys_change_password">Change Password</string>
     <string name="nav_sys_configuration">Configuration</string>
-    <string name="nav_sys_printers">Printers</string>
+    <string name="nav_sys_printers">Bluetooth Printer</string>
     <string name="nav_sys_check_in_out">Check In/Out</string>
     <string name="nav_sys_log_out">Log out</string>
 
@@ -352,6 +352,10 @@
     <string name="printOptions">Print Options</string>
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">CASHIER: </string>
+    <string name="phone">PHONE: </string>
+    <string name="text_suddenly">The printer is looking abruptly</string>
+    <string name="text_PrintFinished">Printing is completed</string>
+    <string name="text_outOfPaper">Printer is out of paper, Load paper. Try again</string>
 
     <string name="total_transaction">Total Transaction</string>
     <string name="download">Download</string>

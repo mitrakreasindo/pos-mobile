@@ -56,7 +56,6 @@ public class Wireless_Activity extends AppCompatActivity implements View.OnClick
   // Key names received from the BluetoothService Handler
   public static final String DEVICE_NAME = "device_name";
   public static final String TOAST = "toast";
-  
   // Intent request codes
   private static final int REQUEST_CONNECT_DEVICE = 1;
   private static final int REQUEST_ENABLE_BT = 2;

@@ -3,13 +3,9 @@ package com.mitrakreasindo.pos.main;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
-import com.centerm.smartpos.util.LogUtil;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
@@ -353,55 +348,6 @@ public class MainActivity extends AppCompatActivity
     {
       super.onBackPressed();
     }
-  }
-  
-  @Override
-  protected void onResume() {
-    // TODO Auto-generated method stub
-    super.onResume();
-    if(!this.getClass().getName().equals(MainActivity.class)){
-      bindService();
-    }
-    
-  }
-  
-  
-  public void bindService() {
-    Intent intent = new Intent();
-    intent.setPackage("com.centerm.smartposservice");
-    intent.setAction("com.centerm.smartpos.service.MANAGER_SERVICE");
-    bindService(intent, conn, Context.BIND_AUTO_CREATE);
-  }
-  
-  /**
-   * 服务连接桥
-   */
-  public ServiceConnection conn = new ServiceConnection() {
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      manager = null;
-      LogUtil.print("服务绑定失败");
-      LogUtil.print("manager = " + manager);
-    }
-    
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      manager = AidlDeviceManager.Stub.asInterface(service);
-      LogUtil.print("服务绑定成功");
-      LogUtil.print("manager = " + manager);
-      if (null != manager) {
-        AidlDeviceManager deviceManager = manager;
-      }
-    }
-  };
-  
-  @Override
-  protected void onPause() {
-    // TODO Auto-generated method stub
-    super.onPause();
-    //if(!this.getClass().getName().equals(MainActivity.class)){
-      unbindService(conn);
-    //}
   }
   
 }

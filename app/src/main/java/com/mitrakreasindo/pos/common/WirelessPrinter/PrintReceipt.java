@@ -76,7 +76,7 @@ public class PrintReceipt
         
           Command.ESC_Align[2] = 0x01;
           SendDataByte(context,Command.ESC_Align);
-          SendDataByte(context,String.format(IDs.getLoginCompanyAddress()+"\n"+ "PHONE:" +IDs.getLoginCompanyPhone()+"\n\n").getBytes("GBK"));
+          SendDataByte(context,String.format(IDs.getLoginCompanyAddress()+"\n"+ (context.getString(R.string.phone)) +IDs.getLoginCompanyPhone()+"\n\n").getBytes("GBK"));
           Command.ESC_Align[2] = 0x00;
           SendDataByte(context,Command.ESC_Align);
           SendDataByte(context,String.format((date) +" "+ (context.getString(R.string.cashier))+" "+ cashier+ "\n==========================================\n").getBytes("GBK"));

@@ -16,6 +16,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.mitrakreasindo.pos.main.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,6 +44,7 @@ public class BluetoothService extends Service
     // Member fields
     private BluetoothAdapter mAdapter;
     private Handler mHandler;
+    private Context mcontext;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -53,7 +56,6 @@ public class BluetoothService extends Service
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
-
     public static String ErrorMessage = "No_Error_Message";
     /**
      * Constructor. Prepares a new BTPrinter session.
@@ -69,6 +71,7 @@ public class BluetoothService extends Service
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+        mcontext = context;
     }
     
     public class Localservice extends Binder
@@ -208,11 +211,10 @@ public class BluetoothService extends Service
      */
     private void connectionFailed() {
         setState(STATE_LISTEN);
-        
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Wireless_Activity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(Wireless_Activity.TOAST, "Unable to connect device");
+        bundle.putString(Wireless_Activity.TOAST, mcontext.getString(R.string.unable_connect));
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -221,12 +223,12 @@ public class BluetoothService extends Service
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
+        
         //setState(STATE_LISTEN);
- 
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Wireless_Activity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(Wireless_Activity.TOAST, "Device connection was lost");
+        bundle.putString(Wireless_Activity.TOAST, mcontext.getString(R.string.Connection_lost));
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     
