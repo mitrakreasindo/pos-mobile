@@ -239,9 +239,16 @@ public class ReportActivity extends AppCompatActivity
     if (id == R.id.action_download)
     {
 //      downloadReport();
-      if(checkPermission()){
+      if (checkPermission())
+      {
         startDownload();
-      } else {
+//        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/example.pdf");
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        startActivity(intent);
+      } else
+      {
         requestPermission();
       }
     }
@@ -313,14 +320,16 @@ public class ReportActivity extends AppCompatActivity
 //    progressDialog.dismiss();
 //  }
 
-  private void startDownload(){
+  private void startDownload()
+  {
 
-    Intent intent = new Intent(this,DownloadService.class);
+    Intent intent = new Intent(this, DownloadService.class);
     startService(intent);
 
   }
 
-  private void registerReceiver(){
+  private void registerReceiver()
+  {
 
     LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this);
     IntentFilter intentFilter = new IntentFilter();
@@ -329,11 +338,14 @@ public class ReportActivity extends AppCompatActivity
 
   }
 
-  private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+  private BroadcastReceiver broadcastReceiver = new BroadcastReceiver()
+  {
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent)
+    {
 
-      if(intent.getAction().equals(MESSAGE_PROGRESS)){
+      if (intent.getAction().equals(MESSAGE_PROGRESS))
+      {
 
         Download download = intent.getParcelableExtra("download");
 //        mProgressBar.setProgress(download.getProgress());
@@ -350,33 +362,41 @@ public class ReportActivity extends AppCompatActivity
     }
   };
 
-  private boolean checkPermission(){
+  private boolean checkPermission()
+  {
     int result = ContextCompat.checkSelfPermission(this,
       Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    if (result == PackageManager.PERMISSION_GRANTED){
+    if (result == PackageManager.PERMISSION_GRANTED)
+    {
 
       return true;
 
-    } else {
+    } else
+    {
 
       return false;
     }
   }
 
-  private void requestPermission(){
+  private void requestPermission()
+  {
 
-    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
+    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
 
   }
 
   @Override
-  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-    switch (requestCode) {
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+  {
+    switch (requestCode)
+    {
       case PERMISSION_REQUEST_CODE:
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        {
 
           startDownload();
-        } else {
+        } else
+        {
 
 //          Snackbar.make(findViewById(R.id.coordinatorLayout),"Permission Denied, Please allow to proceed !", Snackbar.LENGTH_LONG).show();
           Toast.makeText(this, "Permisson denied", Toast.LENGTH_LONG).show();

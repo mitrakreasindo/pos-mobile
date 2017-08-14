@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/item_category"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="72dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/item_category"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/item_people_image"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"/>
 
         <LinearLayout
-            android:padding="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="62dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:src="@drawable/employee"
+            <TextView
+                android:id="@+id/item_people_name"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:textColor="@color/gray700"
+                android:textSize="17dp"
+                android:textStyle="bold"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/txt_name"
-                    android:text="Name"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/txt_role"
-                    android:text="Role"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/item_people_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/gray500"/>
 
         </LinearLayout>
 
+    </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="72dp"
+        android:background="@color/gray400"/>
 
-    <include layout="@layout/divider"/>
 
-</LinearLayout>
+</android.support.v7.widget.CardView>

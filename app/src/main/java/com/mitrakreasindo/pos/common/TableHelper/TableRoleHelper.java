@@ -36,7 +36,7 @@ public class TableRoleHelper
   private static final String KEY_PERMISSION = "permissions";
   private static final String KEY_RIGHTSLEVEL = "rightslevel";
 
-  private final Context context;
+  private Context context;
   private DatabaseHelper DBHelper;
   private SQLiteDatabase db;
   private RoleService service;
@@ -164,6 +164,7 @@ public class TableRoleHelper
     }
   }
 
+
   public Cursor getAllData()
   {
     return db.query(DATABASE_TABLE,
@@ -202,6 +203,24 @@ public class TableRoleHelper
     close();
 
     return list;
+  }
+
+  public String getRoleName(String roleId)
+  {
+    String role;
+
+    open();
+    Cursor cursor = db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, KEY_NAME, KEY_PERMISSION, KEY_RIGHTSLEVEL},
+      KEY_ID + " = '" + roleId + "'", null, null, null, null);
+
+    if (cursor.moveToFirst())
+      role = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME));
+    else
+      role = "";
+
+    close();
+    return role;
   }
 
   public byte[] getPermission (String name)

@@ -3,11 +3,13 @@ package com.mitrakreasindo.pos.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by lisa on 22/06/17.
  */
 
-public class SalesItem implements Parcelable
+public class SalesItem implements Serializable
 {
   private int id;
   private Sales salesId;
@@ -22,36 +24,36 @@ public class SalesItem implements Parcelable
   private String siteguid;
   private Boolean sflag;
   
-  public SalesItem()
-  {
-    
-  }
-  
-  protected SalesItem(Parcel in)
-  {
-    id = in.readInt();
-    line = in.readInt();
-    units = in.readDouble();
-    price = in.readDouble();
-    attributes = in.createByteArray();
-    siteguid = in.readString();
-    product = in.readParcelable(Product.class.getClassLoader());
-  }
-  
-  public static final Creator<SalesItem> CREATOR = new Creator<SalesItem>()
-  {
-    @Override
-    public SalesItem createFromParcel(Parcel in)
-    {
-      return new SalesItem(in);
-    }
-    
-    @Override
-    public SalesItem[] newArray(int size)
-    {
-      return new SalesItem[size];
-    }
-  };
+//  public SalesItem()
+//  {
+//
+//  }
+//
+//  protected SalesItem(Parcel in)
+//  {
+//    id = in.readInt();
+//    line = in.readInt();
+//    units = in.readDouble();
+//    price = in.readDouble();
+//    attributes = in.createByteArray();
+//    siteguid = in.readString();
+//    product = in.readParcelable(Product.class.getClassLoader());
+//  }
+
+//  public static final Creator<SalesItem> CREATOR = new Creator<SalesItem>()
+//  {
+//    @Override
+//    public SalesItem createFromParcel(Parcel in)
+//    {
+//      return new SalesItem(in);
+//    }
+//
+//    @Override
+//    public SalesItem[] newArray(int size)
+//    {
+//      return new SalesItem[size];
+//    }
+//  };
   
   public int getId()
   {
@@ -173,22 +175,22 @@ public class SalesItem implements Parcelable
     this.sflag = sflag;
   }
   
-  @Override
-  public int describeContents()
-  {
-    return 0;
-  }
-  
-  @Override
-  public void writeToParcel(Parcel dest, int flags)
-  {
-  
-    dest.writeInt(id);
-    dest.writeInt(line);
-    dest.writeDouble(units);
-    dest.writeDouble(price);
-    dest.writeByteArray(attributes);
-    dest.writeString(siteguid);
-    dest.writeParcelable(product, flags);
-  }
+//  @Override
+//  public int describeContents()
+//  {
+//    return 0;
+//  }
+//
+//  @Override
+//  public void writeToParcel(Parcel dest, int flags)
+//  {
+//
+//    dest.writeInt(id);
+//    dest.writeInt(line);
+//    dest.writeDouble(units);
+//    dest.writeDouble(price);
+//    dest.writeByteArray(attributes);
+//    dest.writeString(siteguid);
+//    dest.writeParcelable(product, flags);
+//  }
 }

@@ -19,6 +19,7 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
+import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.service.TaxService;
 
@@ -63,8 +64,8 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
   @Override
   public void onBindViewHolder(TaxesListAdapter.ViewHolder holder, int position)
   {
-    tax = taxes.get(position);
-    holder.txtTax.setText(tax.getName());
+    final Tax t = taxes.get(position);
+    holder.txtTax.setText(t.getName());
 
     if (!inactive.contains(MenuIds.rp_mtc_tx_action_update)) {
       //On Click
@@ -72,10 +73,10 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
         @Override
         public void onClick(View view) {
           Intent intent = new Intent(context, TaxesFormActivity.class);
-          intent.putExtra("id", tax.getId());
-          intent.putExtra("name", tax.getName());
-          intent.putExtra("rate", String.valueOf(tax.getRate()));
-          intent.putExtra("category", tax.getCategory().getId());
+          intent.putExtra("id", t.getId());
+          intent.putExtra("name", t.getName());
+          intent.putExtra("rate", String.valueOf(t.getRate()));
+          intent.putExtra("category", t.getCategory().getId());
           context.startActivity(intent);
         }
       });
@@ -100,7 +101,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
                           .setIcon(android.R.drawable.ic_dialog_alert)
                           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                              deleteTax(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), tax.getId());
+                              deleteTax(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), t);
                             }
                           })
                           .setNegativeButton(android.R.string.no, null).show();
@@ -164,10 +165,10 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
     }
   }
 
-  private void deleteTax (String kodeMerchant, final String id)
+  private void deleteTax (String kodeMerchant, final Tax tax)
   {
     taxService = ClientService.createService().create(TaxService.class);
-    Call<HashMap<Integer, String>> call = taxService.deleteTax(kodeMerchant, id);
+    Call<HashMap<Integer, String>> call = taxService.deleteTax(kodeMerchant, tax.getId());
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -187,8 +188,10 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
           {
             TableTaxesHelper tableTaxesHelper = new TableTaxesHelper(context);
             tableTaxesHelper.open();
-            tableTaxesHelper.delete(id);
+            tableTaxesHelper.delete(tax.getId());
             tableTaxesHelper.close();
+
+            removeTax(tax);
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
@@ -201,7 +204,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-    removeTax(tax);
+
   }
 
 }

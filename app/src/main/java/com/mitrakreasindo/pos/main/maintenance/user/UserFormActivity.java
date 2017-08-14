@@ -149,7 +149,6 @@ public class UserFormActivity extends AppCompatActivity
 
     setSupportActionBar(toolbar);
 
-    //Edit Mode
     bundle = getIntent().getExtras();
     SetupEditMode();
 

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
 
         progressDialog.dismiss();
-//        onEvent(EventCode.EVENT_PEOPLE_GET);
+
 //        progressDialog.post(new Runnable() {
 //          public void run() {
 //            mImageView.setImageBitmap(bitmap);
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
 //    tableProductHelper = new TableProductHelper(this);
 //    tableTaxesHelper = new TableTaxesHelper(this);
 //    tableSalesItemHelper = new TableSalesItemHelper(this);
+
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

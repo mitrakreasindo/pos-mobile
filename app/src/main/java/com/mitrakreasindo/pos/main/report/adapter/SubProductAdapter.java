@@ -50,7 +50,7 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
   public void onBindViewHolder(SubProductAdapter.ViewHolder holder, int position)
   {
     subProductReport = subProductReports.get(position);
-    if (subProductReport.getProductName().length() > 20)
+    if (subProductReport.getProductName().length() > 20 )
     {holder.itemSubProductName.setText(String.valueOf(subProductReport.getProductName().substring(0,20) + "..."));}
     else
     {holder.itemSubProductName.setText(subProductReport.getProductName());}
