@@ -288,6 +288,25 @@ public class TablePeopleHelper
     return list;
   }
 
+  public String getRoleID(String username)
+  {
+    String role;
+
+    open();
+    Cursor cursor = db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+        KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
+      KEY_NAME + " = '" + username + "'", null, null, null, null);
+
+    if (cursor.moveToFirst())
+      role = cursor.getString(cursor.getColumnIndexOrThrow(KEY_ROLE));
+    else
+      role = "";
+
+    close();
+    return role;
+  }
+
   public void downloadDataAlternate(String kodeMerchant, final int id)
   {
     this.id = id;

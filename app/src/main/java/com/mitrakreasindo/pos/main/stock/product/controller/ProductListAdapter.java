@@ -3,6 +3,10 @@ package com.mitrakreasindo.pos.main.stock.product.controller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
@@ -48,6 +55,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   private int counter = 0;
   private Product product;
   private List<String> inactive;
+  private DefaultHelper defaultHelper = new DefaultHelper();
 
   public ProductListAdapter(Context context, List<Product> products)
   {
@@ -61,7 +69,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   public ProductListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.adapter_product, parent, false);
+      .inflate(R.layout.adapter_product, parent, false);
 
     return new ProductListAdapter.ViewHolder(itemView);
   }
@@ -69,49 +77,63 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   @Override
   public void onBindViewHolder(final ProductListAdapter.ViewHolder holder, final int position)
   {
-    product = products.get(position);
+    final Product p = products.get(position);
 
-    if (!inactive.contains(MenuIds.rp_stk_product_action_update)) {
-      holder.productItem.setOnClickListener(new View.OnClickListener() {
+    if (!inactive.contains(MenuIds.rp_stk_product_action_update))
+    {
+      holder.itemView.setOnClickListener(new View.OnClickListener()
+      {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v)
+        {
           Intent intent = new Intent(context, ProductFormActivity.class);
-          intent.putExtra("id", product.getId());
-          intent.putExtra("barcode", product.getCode());
-          intent.putExtra("name", product.getName());
-          intent.putExtra("shortName", product.getAlias());
-          intent.putExtra("category", product.getCategory().getId());
-          intent.putExtra("buyPrice", product.getPricebuy().toString());
-          intent.putExtra("sellPrice", product.getPricebuy().toString());
-          intent.putExtra("stockCost", product.getStockcost().toString());
-          intent.putExtra("stockVolume", product.getStockvolume().toString());
-          intent.putExtra("image", product.getImage());
+          intent.putExtra("product", p);
+          Log.d("BUNDLE", p.getName());
+          Log.d("POSITION", "" + position);
+//          intent.putExtra("id", product.getId());
+//          intent.putExtra("barcode", product.getCode());
+//          intent.putExtra("name", product.getName());
+//          intent.putExtra("shortName", product.getAlias());
+//          intent.putExtra("category", product.getCategory().getId());
+//          intent.putExtra("buyPrice", product.getPricebuy().toString());
+//          intent.putExtra("sellPrice", product.getPricebuy().toString());
+//          intent.putExtra("stockCost", product.getStockcost().toString());
+//          intent.putExtra("stockVolume", product.getStockvolume().toString());
+//          intent.putExtra("image", product.getImage());
           context.startActivity(intent);
         }
       });
     }
 
-    if (!inactive.contains(MenuIds.rp_stk_product_action_delete)) {
-      holder.productItem.setOnLongClickListener(new View.OnLongClickListener() {
+    if (!inactive.contains(MenuIds.rp_stk_product_action_delete))
+    {
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+      {
         @Override
-        public boolean onLongClick(final View v) {
+        public boolean onLongClick(final View v)
+        {
           final AlertDialog.Builder builder = new AlertDialog.Builder(context);
           builder.setTitle(R.string.adapter_options_dialog);
-          builder.setItems(new String[]{context.getString(R.string.adapter_options_delete)}, new DialogInterface.OnClickListener() {
+          builder.setItems(new String[]{context.getString(R.string.adapter_options_delete)}, new DialogInterface.OnClickListener()
+          {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-              switch (which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
+              switch (which)
+              {
                 case 0:
                   new AlertDialog.Builder(context)
-                          .setTitle(context.getString(R.string.alert_dialog_delete_product))
-                          .setMessage(context.getString(R.string.alert_dialog_delete_product_message))
-                          .setIcon(android.R.drawable.ic_dialog_alert)
-                          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                              deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), product.getId());
-                            }
-                          })
-                          .setNegativeButton(android.R.string.no, null).show();
+                    .setTitle(context.getString(R.string.alert_dialog_delete_product))
+                    .setMessage(context.getString(R.string.alert_dialog_delete_product_message))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                    {
+                      public void onClick(DialogInterface dialog, int whichButton)
+                      {
+                        deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), p.getId());
+                      }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
                   break;
               }
             }
@@ -122,10 +144,29 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
       });
     }
 
-    holder.txtCodeProduct.setText(product.getCode());
-    holder.txtSellPrice.setText("IDR " + Double.toString(product.getPricesell()));
-    holder.txtNameProduct.setText(product.getName());
-    holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
+    Glide.with(context)
+      .asBitmap().load(p.getImage())
+      .into(holder.itemProductImage).onLoadFailed(ContextCompat.getDrawable(context, R.drawable.box));
+
+    if (p.getName().length() > 25)
+    {
+      holder.itemProductName.setText(String.valueOf(p.getName().substring(0, 25) + "..."));
+    }
+    else
+    {
+      holder.itemProductName.setText(p.getName());
+    }
+
+    holder.itemProductCode.setText(p.getCode());
+    holder.itemProductPriceAndUnit.setText("Rp. "
+      + defaultHelper.decimalFormat(p.getPricesell())
+      + " | " + defaultHelper.decimalFormat(p.getStockunits())
+      + " items");
+
+//    holder.txtCodeProduct.setText(p.getCode());
+//    holder.txtSellPrice.setText("IDR " + Double.toString(p.getPricesell()));
+//    holder.txtNameProduct.setText(p.getName());
+//    holder.txtBuyPrice.setText(Double.toString(p.getPricebuy()));
 
 //    if (!productActivity.is_action_mode)
 //    {
@@ -177,19 +218,18 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtCodeProduct, txtNameProduct, txtBuyPrice,txtSellPrice;
-    private CheckBox cbMultiSelect;
-    private LinearLayout productItem;
+    private ImageView itemProductImage;
+    private TextView itemProductName, itemProductCode, itemProductPriceAndUnit;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
-      txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
-      cbMultiSelect = (CheckBox) itemView.findViewById(R.id.cb_multi_select);
-      productItem = (LinearLayout) itemView.findViewById(R.id.item_product);
-      txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
-      txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
+
+      itemProductImage = (ImageView) itemView.findViewById(R.id.item_product_image);
+      itemProductName = (TextView) itemView.findViewById(R.id.item_product_name);
+      itemProductCode = (TextView) itemView.findViewById(R.id.item_product_code);
+      itemProductPriceAndUnit = (TextView) itemView.findViewById(R.id.item_product_price_and_unit);
+
     }
   }
 
@@ -216,7 +256,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
           {
             TableProductHelper tableProductHelper = new TableProductHelper(context);
             tableProductHelper.open();
-            tableProductHelper.delete(product.getId());
+            tableProductHelper.delete(id);
             tableProductHelper.close();
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();

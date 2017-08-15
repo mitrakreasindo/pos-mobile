@@ -64,11 +64,11 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
       }
     });
 
-    holder.txtCodeProduct.setText(product.getCode());
-    holder.txtSellPrice.setText(Double.toString(product.getPricesell()));
-    holder.txtNameProduct.setText(product.getName());
-    holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
-    holder.checkBox.setVisibility(View.GONE);
+//    holder.txtCodeProduct.setText(product.getCode());
+//    holder.txtSellPrice.setText(Double.toString(product.getPricesell()));
+//    holder.txtNameProduct.setText(product.getName());
+//    holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
+//    holder.checkBox.setVisibility(View.GONE);
   }
 
   public void addProduct(Product product)
@@ -111,11 +111,11 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
-      txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
-      itemLayout = (LinearLayout) itemView.findViewById(R.id.item_product);
-      txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
-      txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
+//      txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
+//      txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
+//      itemLayout = (LinearLayout) itemView.findViewById(R.id.item_product);
+//      txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
+//      txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
     }
 
   }

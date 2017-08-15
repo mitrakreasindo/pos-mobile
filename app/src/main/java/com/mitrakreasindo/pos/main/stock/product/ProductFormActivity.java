@@ -176,33 +176,34 @@ public class ProductFormActivity extends AppCompatActivity
 
     if (bundle != null)
     {
-      String id = bundle.getString("id");
-      String name = bundle.getString("name");
-      String barcode = bundle.getString("barcode");
-      String shortName = bundle.getString("shortName");
-      String buyPrice = bundle.getString("buyPrice");
-      String sellPrice = bundle.getString("sellPrice");
-      String stockCost = bundle.getString("stockCost");
-      String stockVolume = bundle.getString("stockVolume");
-      String categoryId = bundle.getString("category");
-      byte[] image = bundle.getByteArray("image");
-      Toast.makeText(this, name, Toast.LENGTH_LONG).show();
+      product = (Product) bundle.getSerializable("product");
+//      String id = bundle.getString("id");
+//      String name = bundle.getString("name");
+//      String barcode = bundle.getString("barcode");
+//      String shortName = bundle.getString("shortName");
+//      String buyPrice = bundle.getString("buyPrice");
+//      String sellPrice = bundle.getString("sellPrice");
+//      String stockCost = bundle.getString("stockCost");
+//      String stockVolume = bundle.getString("stockVolume");
+//      String categoryId = bundle.getString("category");
+      byte[] image = product.getImage();
+      Toast.makeText(this, product.getName(), Toast.LENGTH_LONG).show();
 
-      productId = id;
-      edittextBarcode.setText(barcode);
-      edittextGeneralName.setText(name);
-      edittextGeneralShortname.setText(shortName);
-      edittextGeneralBuyPrice.setText(buyPrice);
-      edittextGeneralSellPrice.setText(sellPrice);
-      edittextStockByYear.setText(stockCost);
-      edittextStockVolume.setText(stockVolume);
+      productId = product.getId();
+      edittextBarcode.setText(product.getCode());
+      edittextGeneralName.setText(product.getName());
+      edittextGeneralShortname.setText(product.getAlias());
+      edittextGeneralBuyPrice.setText(product.getPricebuy().toString());
+      edittextGeneralSellPrice.setText(product.getPricesell().toString());
+      edittextStockByYear.setText(product.getStockcost().toString());
+      edittextStockVolume.setText(product.getStockvolume().toString());
       int spinnerPosition = 0;
-      if (!categoryId.equals(null))
+      if (!product.getCategory().getId().equals(null))
       {
         int i = 0;
         while (i < dataCategory.size())
         {
-          if (dataCategory.get(i).getId().equals(categoryId))
+          if (dataCategory.get(i).getId().equals(product.getCategory().getId()))
           {
             spinnerPosition = i;
             break;
@@ -443,6 +444,17 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        if (responseCode == 0)
+        {
+          TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
+          tableProductHelper.open();
+          tableProductHelper.insert(product);
+          tableProductHelper.close();
+          productListAdapter.addProduct(product);
+          productListAdapter.notifyDataSetChanged();
+
+          progressDialog.dismiss();
+        }
         progressDialog.dismiss();
         responseCode = -1;
         responseMessage = getString(R.string.error_webservice);

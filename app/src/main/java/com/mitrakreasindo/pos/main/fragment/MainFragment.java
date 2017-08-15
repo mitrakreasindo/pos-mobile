@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,14 +18,13 @@ import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ItemVisibility;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
-import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.MainQueueListAdapter;
 import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
-import com.mitrakreasindo.pos.main.fragment.menu.ReportsDataFragment;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 
@@ -34,18 +34,22 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by lisa on 15/06/17.
  */
 
 public class MainFragment extends Fragment
 {
-
+  private Unbinder unbinder;
   private RecyclerView listQueue;
   private MainQueueListAdapter queueListAdapter;
   private Queue queue;
   private Button menuSales, menuData, menuReceive, menuSetting, menuReport, menuExport;
   private View view;
+  private CardView revenueLayout, queueLayout;
 
   @Nullable
   @Override
@@ -54,6 +58,25 @@ public class MainFragment extends Fragment
     view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
 
     EventBus.getDefault().register(this);
+
+    revenueLayout = (CardView) view.findViewById(R.id.revenue_dashboard_layout);
+    queueLayout = (CardView) view.findViewById(R.id.queue_dashboard_layout);
+
+    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(getContext());
+    String role = tablePeopleHelper.getRoleID(IDs.getLoginUser());
+
+    //Owner & Manager role
+    if (role.equals("0") || role.equals("1"))
+      queueLayout.setVisibility(View.GONE);
+    //Cashier role
+    else if (role.equals("2"))
+      revenueLayout.setVisibility(View.GONE);
+    //Stockist role
+    else
+    {
+      revenueLayout.setVisibility(View.GONE);
+      queueLayout.setVisibility(View.GONE);
+    }
 
     listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
     queueListAdapter = new MainQueueListAdapter(getContext(), Queue.queueData());
@@ -106,6 +129,7 @@ public class MainFragment extends Fragment
         startActivity(new Intent(getContext(), ReportActivity.class));
       }
     });
+    unbinder = ButterKnife.bind(this, view);
     return view;
   }
 
@@ -148,5 +172,12 @@ public class MainFragment extends Fragment
       ItemVisibility.hideButton(view, buttonList);
     }
 
+  }
+
+  @Override
+  public void onDestroyView()
+  {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

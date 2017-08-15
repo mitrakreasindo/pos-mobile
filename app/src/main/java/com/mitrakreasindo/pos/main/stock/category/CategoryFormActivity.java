@@ -1,7 +1,10 @@
 package com.mitrakreasindo.pos.main.stock.category;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +16,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.birbit.android.jobqueue.JobManager;
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.FormMode;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
+import com.mitrakreasindo.pos.common.job.PostCategoryJob;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -47,6 +54,7 @@ public class CategoryFormActivity extends AppCompatActivity
   private Bundle bundle;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant, name, categoryId;
+  private JobManager jobManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -99,6 +107,8 @@ public class CategoryFormActivity extends AppCompatActivity
       else
       {
         postCategory();
+
+//        jobManager
       }
     }
     return super.onOptionsItemSelected(item);
@@ -120,11 +130,13 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setTexttip("");
     category.setCatshowname(true);
     category.setImage(null);
-    category.setParentid(parentCategory);
+    category.setParentid(null);
     category.setColour("");
     category.setCatorder(11);
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     category.setSflag(true);
+
+//    jobManager.addJobInBackground(new PostCategoryJob(FormMode.SAVE, category));
 
     Call<HashMap<Integer, String>> call = categoryService.postCategory(kodeMerchant, category);
     call.enqueue(new Callback<HashMap<Integer, String>>()
@@ -161,6 +173,7 @@ public class CategoryFormActivity extends AppCompatActivity
       {
         responseCode = -1;
         responseMessage = getString(R.string.error_webservice);
+        t.printStackTrace();
         Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });

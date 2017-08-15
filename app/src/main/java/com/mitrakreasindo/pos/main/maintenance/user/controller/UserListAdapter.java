@@ -3,8 +3,11 @@ package com.mitrakreasindo.pos.main.maintenance.user.controller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.mitrakreasindo.pos.common.MenuIds;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
+import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.model.People;
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +46,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   private PeopleService peopleService;
   private People user;
   private List<String> inactive;
+  private TableRoleHelper tableRoleHelper;
 
   public UserListAdapter(Context context, List<People> peoples)
   {
@@ -63,10 +69,38 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
   @Override
   public void onBindViewHolder(ViewHolder holder, int position)
   {
-    user = peoples.get(position);
+//    user = peoples.get(position);
+    tableRoleHelper = new TableRoleHelper(context);
     final People people = peoples.get(position);
-    holder.txtName.setText(people.getName());
-    holder.txtRole.setText(people.getEmail());
+
+    String roleName = tableRoleHelper.getRoleName(people.getRole().getId());
+
+    byte[] image = people.getImage();
+
+    if (image != null)
+    {
+      if (image.length != 0)
+      {
+        Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+//        DisplayMetrics dm = new DisplayMetrics();
+//        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        holder.itemPeopleImage.setMinimumHeight(dm.heightPixels);
+//        holder.itemPeopleImage.setMinimumWidth(dm.widthPixels);
+        holder.itemPeopleImage.setImageBitmap(bm);
+        holder.itemPeopleImage.setVisibility(View.VISIBLE);
+      }
+      else
+      {
+        holder.itemPeopleImage.setVisibility(View.INVISIBLE);
+      }
+    }
+    else
+    {
+      holder.itemPeopleImage.setVisibility(View.INVISIBLE);
+    }
+
+    holder.itemPeopleName.setText(people.getName());
+    holder.itemPeopleRole.setText(roleName);
 
     if (!inactive.contains(MenuIds.rp_mtc_usr_action_update))
     {
@@ -171,13 +205,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
   public class ViewHolder extends RecyclerView.ViewHolder
   {
-    private TextView txtName, txtRole;
+    private TextView itemPeopleName, itemPeopleRole;
+    private CircleImageView itemPeopleImage;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtName = (TextView) itemView.findViewById(R.id.txt_name);
-      txtRole = (TextView) itemView.findViewById(R.id.txt_role);
+      itemPeopleName = (TextView) itemView.findViewById(R.id.item_people_name);
+      itemPeopleRole = (TextView) itemView.findViewById(R.id.item_people_role);
+      itemPeopleImage = (CircleImageView) itemView.findViewById(R.id.item_people_image);
     }
   }
 

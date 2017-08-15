@@ -200,8 +200,7 @@
     <string name="data">Data</string>
     <string name="receive">Receive</string>
     <string name="export">Export</string>
-    <string name="logout">Logout</string>
-    <string name="today_s_revenue">Today\'s Revenue</string>
+    <string name="logout">Keluar</string>
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
@@ -254,7 +253,7 @@
     <string name="nav_sys_system">Sistem</string>
     <string name="nav_sys_change_password">Ubah Kata Sandi</string>
     <string name="nav_sys_configuration">Konfigurasi</string>
-    <string name="nav_sys_printers">Bluetooth Printer</string>
+    <string name="nav_sys_printers">Printer</string>
     <string name="nav_sys_check_in_out">Check In/Out</string>
     <string name="nav_sys_log_out">Keluar</string>
 
@@ -312,7 +311,7 @@
     <string name="Connecting">Terhubung ke printer Bluetooth</string>
     <string name="bluetooth_not_available">Bluetooth tidak tersedia</string>
     <string name="bluetooth_connected">Bluetooth terhubung</string>
-    <string name="Connection_lost">Sambungan perangkat putus</string>
+    <string name="Connection_lost">Sambungan perangkat hilang</string>
     <string name="unable_connect">Tidak dapat menyambungkan perangkat</string>
     <string name="SalesEmpty">Penjualan kosong</string>
 
@@ -340,9 +339,6 @@
     <string name="printOptions">Pilihan Cetak</string>
     <string name="Qs_print">Cetak Struk?</string>
     <string name="cashier">KASIR: </string>
-    <string name="text_suddenly">Printer mencetak tiba-tiba</string>
-    <string name="text_PrintFinished">Data cetak selesai</string>
-    <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>
     <string name="prepare_data">Menyiapkan data anda</string>
 
     <!-- Close Cash -->
@@ -358,4 +354,11 @@
     <string name="error_close_cash">Belum ada riwayat buka kas</string>
     <string name="closecash_question">Tutup Kas</string>
     <string name="closecash_question_message">Apakah anda yakin untuk tutup kas?</string>
+
+    <!-- Dashboard Revenue  -->
+    <string name="today_revenue">Pendapatan Hari Ini</string>
+    <string name="this_week_revenue">Pendapatan Minggu Ini</string>
+    <string name="this_month_revenue">Pendapatan Bulan Ini</string>
+    <string name="this_year_revenue">Pendapatan Tahun Ini</string>
+    <string name="cost">Pengeluaran</string>
 </resources>

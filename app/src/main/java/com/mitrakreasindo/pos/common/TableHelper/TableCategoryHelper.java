@@ -12,6 +12,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,6 +87,10 @@ public class TableCategoryHelper
       {
         initialValues.put(KEY_PARENTID, list.get(i).getParentid().getId());
       }
+      else
+      {
+        initialValues.put(KEY_PARENTID, "");
+      }
       initialValues.put(KEY_TEXTTIP, list.get(i).getTexttip());
       initialValues.put(KEY_IMAGE, list.get(i).getImage());
       initialValues.put(KEY_COLOUR, list.get(i).getColour());
@@ -102,7 +107,8 @@ public class TableCategoryHelper
 
     initialValues.put(KEY_ID, category.getId());
     initialValues.put(KEY_NAME, category.getName());
-    initialValues.put(KEY_PARENTID, category.getParentid().getId());
+//    initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    initialValues.put(KEY_PARENTID, UUID.randomUUID().toString());
     initialValues.put(KEY_TEXTTIP, category.getTexttip());
     initialValues.put(KEY_IMAGE, category.getImage());
     initialValues.put(KEY_COLOUR, category.getColour());
