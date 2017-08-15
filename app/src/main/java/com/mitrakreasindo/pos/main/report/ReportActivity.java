@@ -74,8 +74,6 @@ public class ReportActivity extends AppCompatActivity
   Toolbar toolbar;
   @BindView(R.id.list_report)
   RecyclerView listReport;
-  @BindView(R.id.main_content)
-  LinearLayout mainContent;
   @BindView(R.id.filter_report_from_date)
   TextView filterReportFromDate;
   @BindView(R.id.filter_report_to_date)
@@ -118,6 +116,7 @@ public class ReportActivity extends AppCompatActivity
     cal.setTime(new Date());
     cal.add(Calendar.DAY_OF_YEAR, -7);
     Date aWeekDateBefore = cal.getTime();
+
 
     filterReportFromDate.setText(defaultHelper.dateOnlyFormat(aWeekDateBefore));
     filterReportToDate.setText(defaultHelper.dateOnlyFormat(new Date()));
@@ -219,6 +218,11 @@ public class ReportActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listReport.setLayoutManager(layoutManager);
     listReport.setItemAnimator(new DefaultItemAnimator());
+
+    if (findViewById(R.id.detail_report) != null)
+    {
+      reportListAdapter.twoPane = true;
+    }
 
     registerReceiver();
 

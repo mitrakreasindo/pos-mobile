@@ -2,15 +2,20 @@ package com.mitrakreasindo.pos.main.report.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.report.SubReportActivity;
+import com.mitrakreasindo.pos.main.report.fragment.DetailReportFragment;
 import com.mitrakreasindo.pos.model.SubProductReport;
 import com.mitrakreasindo.pos.model.SubReport;
 
@@ -32,6 +37,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   private DefaultHelper defaultHelper = new DefaultHelper();
   private SubProductAdapter subProductAdapter;
   private List<SubProductReport> productReportList = new ArrayList<>();
+  public boolean twoPane = false;
 
   public SubReportListAdapter(Context context, List<SubReport> subReports)
   {
@@ -61,15 +67,30 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
       @Override
       public void onClick(View v)
       {
-        List<SubProductReport> list = new ArrayList<SubProductReport>();
-        list.addAll(subReport.getSubProductReports());
-
-        Intent intent = new Intent(context, SubReportActivity.class);
-        intent.putExtra("listProduct", subReport);
-        context.startActivity(intent);
+        if (twoPane)
+        {
+          Bundle bundle = new Bundle();
+          bundle.putSerializable("subReport", subReport);
+          DetailReportFragment detailReportFragment = new DetailReportFragment();
+          detailReportFragment.setArguments(bundle);
+          ((ReportActivity)context).getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.detail_report, detailReportFragment).commit();
+          Toast.makeText(context, "Test Click", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+          List<SubProductReport> list = new ArrayList<SubProductReport>();
+          list.addAll(subReport.getSubProductReports());
+          Intent intent = new Intent(context, SubReportActivity.class);
+          intent.putExtra("listProduct", subReport);
+          context.startActivity(intent);
+        }
       }
     });
   }
+
+
 
   public List<SubProductReport> listSubProduct()
   {
