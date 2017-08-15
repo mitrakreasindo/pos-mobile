@@ -27,30 +27,30 @@ public class Print
     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
     String tanggal = formatter.format(curDate);
     String date = tanggal;
-    
+    String separator = "--------------------------------";
     String cashier= "";
-    if(IDs.getLoginUserFullname().length()<=15)
+    if(IDs.getLoginUserFullname().length()<=20)
     {
       cashier = IDs.getLoginUserFullname();
     }
     else
     {
-      cashier = IDs.getLoginUserFullname().substring(0, 1);
+      cashier = IDs.getLoginUserFullname().substring(0, 20);
     }
     
     String strHeader = IDs.getLoginCompanyName().toUpperCase()+"\n" + IDs.getLoginCompanyAddress() +"\n" +
-      (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() +"\n\n";
+      (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() +"\n" + separator;
     PrintDataObject printDataObject1 = new PrintDataObject(strHeader,8,true, PrintDataObject.ALIGN.CENTER);
-    printDataObject1.setIsLittleSize(true);
-    printDataObject1.setBold(true);
+    printDataObject1.setIsLittleSize(false);
+    printDataObject1.setBold(false);
     list.add(printDataObject1);
-    String separator = "------------------------------------------------";
+    
     String tgl = String.format("%-23s",date);
     String kasir = String.format(context.getString(R.string.cashier)+" "+ cashier);
-    String strDC = tgl+kasir +"\n" + separator ;
+    String strDC = tgl +"\n" +kasir +"\n" + separator ;
     PrintDataObject printDataObject3 = new PrintDataObject(strDC);
-    printDataObject3.setIsLittleSize(true);
-    printDataObject3.setBold(true);
+    printDataObject3.setIsLittleSize(false);
+    printDataObject3.setBold(false);
     list.add(printDataObject3);
     
     for(int i=0;i<salesItemList.size();i++)
@@ -60,22 +60,22 @@ public class Print
       int Qty = (int) tiket.getUnits();
       int price =  tiket.getProduct().getPricesell().intValue();
       int Total = price * Qty;
-  
+      
       String ProductName;
       int Quantity;
       String Harga;
       String TotalHarga;
-  
-      if(name.length()<=20)
+      
+      if(name.length()<=30)
       {
         ProductName = name;
       }
       else
       {
-        ProductName = name.substring(0, 20);
+        ProductName = name.substring(0, 30);
       }
       
-      if((decimalFormat.format(price)).length()<=10)
+      if((decimalFormat.format(price)).length()<=12)
       {
         Harga = decimalFormat.format(price).replace('.',',');
       }
@@ -84,7 +84,7 @@ public class Print
         Harga = Integer.toString(price);
       }
   
-      if(decimalFormat.format(Total).length()<=10)
+      if(decimalFormat.format(Total).length()<=12)
       {
         TotalHarga = decimalFormat.format(Total).replace('.',',');
       }
@@ -92,34 +92,36 @@ public class Print
       {
         TotalHarga = Integer.toString(Total);
       }
-      String nama = String.format("%-21s", ProductName);
-      String quantity = String.format("%4s", Qty).replace(' ', ' ');
-      String prise = String.format("%10s", Harga).replace(' ', ' ');
-      String total = String.format("%10s", TotalHarga).replace(' ', ' ');
-      String str = String.format(nama + " " + quantity + " " + prise + " " + total);
-  
+      String nama = String.format("%-32s", ProductName).replace(' ', ' ');
+      String quantity = String.format("%-3s", Qty).replace(' ', ' ');
+      String prise = String.format("%11s", Harga).replace(' ', ' ');
+      String total = String.format("%12s", TotalHarga).replace(' ', ' ');
+      String str = String.format(nama +"\n"  + quantity + " x " + prise + " = " + total);
+      
       PrintDataObject printDataObject = new PrintDataObject(str);
-      printDataObject.setIsLittleSize(true);
-      printDataObject.setBold(true);
+      printDataObject.setIsLittleSize(false);
+      printDataObject.setFontSize(-1);
+      printDataObject.getFontSize();
+      printDataObject.setBold(false);
       list.add(printDataObject);
     }
-    String Total = String.format("%-33s",context.getString(R.string.text_total));
+    String Total = String.format("%-17s",context.getString(R.string.text_total));
     String Total2 = String.format("%15s",decimalFormat.format(grandTotal).replace('.',',')).replace(' ',' ');
     
-    String payment = String.format("%-33s",context.getString(R.string.text_tunai));
+    String payment = String.format("%-17s",context.getString(R.string.text_tunai));
     String payment2 = String.format("%15s",decimalFormat.format(Cash).replace('.',',')).replace(' ',' ');
-    String Change = String.format("%-33s",context.getString(R.string.text_kembali));
+    String Change = String.format("%-17s",context.getString(R.string.text_kembali));
     String footer = context.getString(R.string.text_ucapan);
     String Change2 = String.format("%15s",decimalFormat.format(Cash-grandTotal).replace('.',',')).replace(' ',' ');
-    String str2 = separator + Total + Total2 +"\n" + payment + payment2 +"\n" + Change + Change2 +"\n";
+    String str2 = separator +"\n" + Total + Total2 +"\n" + payment + payment2 +"\n" + Change + Change2 +"\n";
     PrintDataObject printDataObject2 = new PrintDataObject(str2);
-    printDataObject2.setIsLittleSize(true);
-    printDataObject2.setBold(true);
+    printDataObject2.setIsLittleSize(false);
+    printDataObject2.setBold(false);
     list.add(printDataObject2);
-  
+    
     PrintDataObject printDataObject4 = new PrintDataObject(footer +"\n\n\n\n",8,false, PrintDataObject.ALIGN.CENTER);
-    printDataObject4.setIsLittleSize(true);
-    printDataObject4.setBold(true);
+    printDataObject4.setIsLittleSize(false);
+    printDataObject4.setBold(false);
     list.add(printDataObject4);
     
   }
