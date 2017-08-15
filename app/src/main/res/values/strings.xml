@@ -201,6 +201,7 @@
     <string name="receive">Receive</string>
     <string name="export">Export</string>
     <string name="logout">Logout</string>
+    <string name="today_s_revenue">Today\'s Revenue</string>
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
@@ -253,7 +254,7 @@
     <string name="nav_sys_system">System</string>
     <string name="nav_sys_change_password">Change Password</string>
     <string name="nav_sys_configuration">Configuration</string>
-    <string name="nav_sys_printers">Printers</string>
+    <string name="nav_sys_printers">Bluetooth Printer</string>
     <string name="nav_sys_check_in_out">Check In/Out</string>
     <string name="nav_sys_log_out">Log out</string>
 
@@ -351,6 +352,10 @@
     <string name="printOptions">Print Options</string>
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">CASHIER: </string>
+    <string name="phone">PHONE: </string>
+    <string name="text_suddenly">The printer is looking abruptly</string>
+    <string name="text_PrintFinished">Printing is completed</string>
+    <string name="text_outOfPaper">Printer is out of paper, Load paper. Try again</string>
 
     <string name="total_transaction">Total Transaction</string>
     <string name="download">Download</string>
@@ -368,14 +373,17 @@
     <string name="error_close_cash">No Open Cash history</string>
     <string name="closecash_question">Confirm Close Cash</string>
     <string name="closecash_question_message">Are you sure want to close cash?</string>
-
     <string name="file_downloaded">File Downloaded</string>
     <string name="prepare_data">Preparing your data...</string>
-
     <!-- Dashboard Revenue  -->
     <string name="today_revenue">Today\'s Revenue</string>
     <string name="this_week_revenue">This Week\'s Revenue</string>
     <string name="this_month_revenue">This Month\'s Revenue</string>
     <string name="this_year_revenue">This Year\'s Revenue</string>
     <string name="cost">Cost</string>
-    </resources>
+    <string name="pending_transaction_no">No</string>
+    <string name="pending_transaction_customer">Customer</string>
+    <string name="pending_transaction_time">Transaction Time</string>
+    <string name="pending_transaction_total">Total</string>
+    <string name="pending_transaction_host">Host</string>
+</resources>

@@ -914,39 +914,5 @@ public class PaymentActivity extends AppCompatActivity
     handler.sendMessage(msg);
   }
   
-  public void ChangeMoney(final Context context)
-  {
-    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(context);
-    confirmationDialog.setTitle("Change money");
-    confirmationDialog.setMessage(decimalFormat.format(
-      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
-    ));
-    confirmationDialog.setCancelable(false);
-    confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
-    {
-      @Override
-      public void onClick(DialogInterface dialog, int which)
-      {
-        data();
-        salesPack = new SalesPack();
-        salesPack.setSales(viewsales);
-        salesPack.setReceipts(viewreceipt);
-        salesPack.setSalesItems(viewsalesitems);
-        salesPack.setPayments(viewpayments);
-        salesPack.setStockdiary(viewstockdiaries);
-        salesPack.setTaxlines(viewtaxlines);
-      
-        TableSalesHelper tableSalesHelper = new TableSalesHelper(context);
-        tableSalesHelper.open();
-        tableSalesHelper.insertSales(sales);
-        tableSalesHelper.close();
-      
-        postSales();
-        SalesActivity.sActivity.finish();
-        finish();
-      }
-    });
-    confirmationDialog.show();
-    return;
-  }
+  
 }

@@ -33,7 +33,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
-import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
+import com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.closecash.CloseCashActivity;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
