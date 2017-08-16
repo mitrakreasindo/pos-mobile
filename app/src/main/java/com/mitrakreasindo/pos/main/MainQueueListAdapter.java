@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.main.fragment.MainFragment;
-import com.mitrakreasindo.pos.model.Category;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,6 @@ import java.util.List;
 
 public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdapter.ViewHolder>
 {
-
   private List<Queue> queues = new ArrayList<>();
   private Context context;
   private LayoutInflater layoutInflater;
@@ -70,10 +66,10 @@ public class MainQueueListAdapter extends RecyclerView.Adapter<MainQueueListAdap
     public ViewHolder(View itemView)
     {
       super(itemView);
-      txtNo = (TextView) itemView.findViewById(R.id.text_no);
-      txtName = (TextView) itemView.findViewById(R.id.text_product);
-      txtQueueNumber = (TextView) itemView.findViewById(R.id.text_no_queue);
-      txtValue = (TextView) itemView.findViewById(R.id.text_value);
+//      txtNo = (TextView) itemView.findViewById(R.id.text_no);
+//      txtName = (TextView) itemView.findViewById(R.id.text_product);
+//      txtQueueNumber = (TextView) itemView.findViewById(R.id.text_no_queue);
+//      txtValue = (TextView) itemView.findViewById(R.id.text_value);
     }
   }
 }

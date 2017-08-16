@@ -378,4 +378,9 @@
     <string name="this_month_revenue">This Month\'s Revenue</string>
     <string name="this_year_revenue">This Year\'s Revenue</string>
     <string name="cost">Cost</string>
-    </resources>
+    <string name="pending_transaction_no">No</string>
+    <string name="pending_transaction_customer">Customer</string>
+    <string name="pending_transaction_time">Transaction Time</string>
+    <string name="pending_transaction_total">Total</string>
+    <string name="pending_transaction_host">Host</string>
+</resources>

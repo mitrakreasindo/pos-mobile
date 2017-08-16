@@ -361,4 +361,9 @@
     <string name="this_month_revenue">Pendapatan Bulan Ini</string>
     <string name="this_year_revenue">Pendapatan Tahun Ini</string>
     <string name="cost">Pengeluaran</string>
+    <string name="pending_transaction_customer">Pelanggan</string>
+    <string name="pending_transaction_no">No</string>
+    <string name="pending_transaction_time">Waktu Transaksi</string>
+    <string name="pending_transaction_total">Total</string>
+    <string name="pending_transaction_host">Penyedia</string>
 </resources>

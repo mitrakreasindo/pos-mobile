@@ -1,11 +1,8 @@
 package com.mitrakreasindo.pos.common;
 
-import com.mitrakreasindo.pos.model.SubProductReport;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by lisa on 09/08/17.
@@ -14,7 +11,7 @@ import java.util.List;
 public class DefaultHelper
 {
 
-  public String dateFormat(Date date)
+  public static String dateFormat(Date date)
   {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String dateString = formater.format(date);
@@ -38,7 +35,7 @@ public class DefaultHelper
     return dateString;
   }
 
-  public String dateFormat(long date)
+  public static String dateFormat(long date)
   {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String dateString = formater.format(date);
@@ -46,7 +43,7 @@ public class DefaultHelper
     return dateString;
   }
 
-  public String decimalFormat(double d)
+  public static String decimalFormat(double d)
   {
     DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
     return decimalFormat.format(d);

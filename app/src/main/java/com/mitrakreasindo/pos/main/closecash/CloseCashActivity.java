@@ -164,8 +164,7 @@ public class CloseCashActivity extends AppCompatActivity
       @Override
       public void onResponse(Call<List<Viewclosedcash>> call, Response<List<Viewclosedcash>> response)
       {
-        List<Viewclosedcash> list = response.body();
-        viewclosedcashList = list;
+        viewclosedcashList = response.body();
 
         EventBus.getDefault().post(new Event(id, Event.COMPLETE));
       }

@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity
   private TablePeopleHelper tablePeopleHelper;
   private TableRoleHelper tableRoleHelper;
   private ProgressDialog progressDialog;
+  private MainFragment mainFragment = new MainFragment();
+//  private PendingTransactionService service;
 
   TableCategoryHelper tableCategoryHelper;
   TableProductHelper tableProductHelper;
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity
     progressDialog.setCancelable(false);
     progressDialog.show();
 
+//    service = ClientService.createService().create(PendingTransactionService.class);
+
     EventBus.getDefault().register(this);
 
     new Thread(new Runnable()
@@ -104,8 +108,6 @@ public class MainActivity extends AppCompatActivity
         tableCategoryHelper.downloadData(companyCode);
         tableProductHelper.downloadDataAlternate(companyCode);
         tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-
-        progressDialog.dismiss();
 
 //        progressDialog.post(new Runnable() {
 //          public void run() {
@@ -154,7 +156,6 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-    MainFragment mainFragment = new MainFragment();
     getSupportFragmentManager().beginTransaction()
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
@@ -166,10 +167,10 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  protected void onStop()
+  protected void onDestroy()
   {
-    super.onStop();
     EventBus.getDefault().unregister(this);
+    super.onDestroy();
   }
 
   private Fragment getCurrentFragment()
@@ -322,9 +323,23 @@ public class MainActivity extends AppCompatActivity
         if (event.getStatus() == Event.COMPLETE)
         {
           setupNavigation();
+//          if (tablePeopleHelper.getRoleID(IDs.getLoginUser()).equals("2"))
+//          {
+//            downloadUnpaidPendingTransaction(companyCode , EventCode.EVENT_PENDING_TRANSACTION_GET);
+//          }
           progressDialog.dismiss();
           Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
+        break;
+//      case EventCode.EVENT_PENDING_TRANSACTION_GET:
+//        if (event.getStatus() == Event.COMPLETE)
+//        {
+//          mainFragment.pendingTransactionListAdapter.clear();
+//          Log.d("COMPLETE GET UNPAID", "clear done");
+//          mainFragment.pendingTransactionListAdapter.addPendingTransaction(mainFragment.viewPendingTransactions);
+//          Log.d("COMPLETE GET UNPAID", "add done");
+//        }
+//        break;
     }
   }
 
@@ -363,11 +378,32 @@ public class MainActivity extends AppCompatActivity
   {
     Fragment fragment = getSupportFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
     if (fragment.isVisible())
-    {
       Logout();
-    } else
-    {
+    else
       super.onBackPressed();
-    }
   }
+
+//  public void downloadUnpaidPendingTransaction(final String kodeMerchant, final int id)
+//  {
+//    Log.d("GET API", "get unpaid trans");
+//    Call<List<ViewPendingTransaction>> call = service.getAllPendingTransaction(kodeMerchant);
+//    call.enqueue(new Callback<List<ViewPendingTransaction>>()
+//    {
+//      @Override
+//      public void onResponse(Call<List<ViewPendingTransaction>> call, Response<List<ViewPendingTransaction>> response)
+//      {
+//        Log.d("COMPLETE GET API", "get unpaid trans done");
+//        mainFragment.viewPendingTransactions = response.body();
+//        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+//      }
+//
+//      @Override
+//      public void onFailure(Call<List<ViewPendingTransaction>> call, Throwable t)
+//      {
+//        Log.d("COMPLETE GET API", "get unpaid trans failed");
+//        Toast.makeText(MainActivity.this, getString(R.string.error_webservice),
+//          Toast.LENGTH_LONG).show();
+//      }
+//    });
+//  }
 }
