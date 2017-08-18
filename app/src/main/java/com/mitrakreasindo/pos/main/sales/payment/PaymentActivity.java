@@ -591,7 +591,7 @@ public class PaymentActivity extends AppCompatActivity
 
       stockDiary = new StockDiary();
       stockDiary.setId(UUID.randomUUID().toString());
-      stockDiary.setReason(0);
+      stockDiary.setReason(-1);
       stockDiary.setUnits(1);
       stockDiary.setPrice(salesItem.getProduct().getPricesell());
       stockDiary.setAppuser(IDs.getLoginUser());

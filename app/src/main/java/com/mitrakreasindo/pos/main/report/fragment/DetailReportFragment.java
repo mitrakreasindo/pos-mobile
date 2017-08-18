@@ -41,6 +41,7 @@ public class DetailReportFragment extends Fragment
   private Bundle bundle;
   private SubReport subReport;
   private DefaultHelper defaultHelper = new DefaultHelper();
+  private boolean twoPane = false;
 
   public DetailReportFragment()
   {
@@ -57,10 +58,8 @@ public class DetailReportFragment extends Fragment
     bundle = getArguments();
     if (bundle != null)
     {
-
       subReport = (SubReport) bundle.getSerializable("subReport");
-      Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));
-
+      twoPane = bundle.getBoolean("twoPane");
     }
 
     itemSubReportTotalTransaction.setText("Rp." + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
@@ -68,6 +67,8 @@ public class DetailReportFragment extends Fragment
     itemSubReportSales.setText(subReport.getPeopleName());
 
     subProductAdapter = new SubProductAdapter(getContext(), subReport.getSubProductReports());
+
+    subProductAdapter.twoPane = twoPane;
 
     listSubProduct.setAdapter(subProductAdapter);
     listSubProduct.setHasFixedSize(true);

@@ -3,14 +3,18 @@ package com.mitrakreasindo.pos.main.report.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.DefaultHelper;
+import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.report.SubReportActivity;
+import com.mitrakreasindo.pos.main.report.fragment.DetailReportFragment;
 import com.mitrakreasindo.pos.model.SubProductReport;
 import com.mitrakreasindo.pos.model.SubReport;
 
@@ -28,6 +32,7 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
   private Context context;
   private LayoutInflater inflater;
   private SubProductReport subProductReport;
+  public boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
   public SubProductAdapter(Context context, List<SubProductReport> subProductReports)
@@ -49,11 +54,24 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
   @Override
   public void onBindViewHolder(SubProductAdapter.ViewHolder holder, int position)
   {
+    DetailReportFragment detailReportFragment = new DetailReportFragment();
     subProductReport = subProductReports.get(position);
-    if (subProductReport.getProductName().length() > 20 )
-    {holder.itemSubProductName.setText(String.valueOf(subProductReport.getProductName().substring(0,20) + "..."));}
+//
+//    if (detailReportFragment != null)
+//      Log.d("FRAGNOTNULL", "NOTNULL");
+//    else
+//      Log.d("FRAGNULL", "NULL");
+    Log.d("TWOPANE", String.valueOf(twoPane));
+    if (subProductReport.getProductName().length() > 20  && !twoPane)
+    {
+      holder.itemSubProductName
+        .setText(String.valueOf(subProductReport.getProductName().substring(0,20) + "..."));
+    }
     else
-    {holder.itemSubProductName.setText(subProductReport.getProductName());}
+    {
+      holder.itemSubProductName
+        .setText(subProductReport.getProductName());
+    }
 
     holder.itemSubProductItemAndDate.setText(defaultHelper.decimalFormat(subProductReport.getQty()) + " items");
     holder.itemProductTotal.setText("Rp. " + defaultHelper.decimalFormat(subProductReport.getTotal()));

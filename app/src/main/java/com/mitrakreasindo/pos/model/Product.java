@@ -543,4 +543,10 @@ public class Product implements Serializable
 //    dest.writeString(promotionid);
 //    dest.writeString(siteguid);
 //  }
+
+  @Override
+  public String toString(){
+
+    return name;
+  }
 }

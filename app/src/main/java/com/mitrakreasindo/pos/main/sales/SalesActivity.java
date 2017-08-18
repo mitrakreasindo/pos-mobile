@@ -12,13 +12,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,10 +59,8 @@ import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,27 +72,26 @@ public class SalesActivity extends AppCompatActivity
 {
 
   private static final String TAG = SalesActivity.class.getSimpleName();
+
+  public static Activity sActivity;
+  private final String siteguid = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
   @BindView(R.id.toolbar)
   Toolbar toolbar;
+  @BindView(R.id.edittext_search_product)
+  AutoCompleteTextView edittextSearchProduct;
   @BindView(R.id.barcodePreview)
   ImageView barcodePreview;
   @BindView(R.id.barcode_scanner)
   DecoratedBarcodeView barcodeScanner;
-  @BindView(R.id.main_content)
-  LinearLayout mainContent;
-  @BindView(R.id.edittext_search_product)
-  AutoCompleteTextView edittextSearchProduct;
   @BindView(R.id.list_sales_product)
   RecyclerView listSalesProduct;
   @BindView(R.id.sales_product_total)
   TextView salesProductTotal;
-  @BindView(R.id.btn_sales_save)
-  ImageView btnSalesSave;
   @BindView(R.id.btn_sales_checkout)
   ImageView btnSalesCheckout;
+  @BindView(R.id.btn_sales_save)
+  ImageView btnSalesSave;
 
-  public static Activity sActivity;
-  private final String siteguid = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
   private DecimalFormat decimalFormat;
 
   String example = "Convert Java String";
@@ -130,10 +127,12 @@ public class SalesActivity extends AppCompatActivity
   private ViewStockDiary viewstockdiary;
   private ViewTaxLine viewtaxline;
 
-  private Collection<ViewSalesItem> viewsalesitems = new ArrayList<>();
-  private Collection<ViewPayment> viewpayments = new ArrayList<>();
-  private Collection<ViewStockDiary> viewstockdiaries = new ArrayList<>();
-  private Collection<ViewTaxLine> viewtaxlines = new ArrayList<>();
+  private List<ViewSalesItem> viewsalesitems = new ArrayList<>();
+  private List<ViewPayment> viewpayments = new ArrayList<>();
+  private List<ViewStockDiary> viewstockdiaries = new ArrayList<>();
+  private List<ViewTaxLine> viewtaxlines = new ArrayList<>();
+
+//  String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
 
   private BarcodeCallback callback = new BarcodeCallback()
   {
@@ -143,40 +142,27 @@ public class SalesActivity extends AppCompatActivity
 
       product = tableProductHelper.getProduct(result.getText());
 
-//      Sales sales = new Sales();
-//      sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
-      data();
-
-      Tax tax = new Tax();
-      tax.setId("001");
-
-      salesItem = new SalesItem();
-      salesItem.setProduct(product);
-      salesItem.setAttributes(bytes);
-      salesItem.setUnits(1);
-      salesItem.setPrice(product.getPricesell());
-      salesItem.setSalesId(sales);
-      salesItem.setSflag(true);
-      salesItem.setTaxid(tax);
-
-//      viewtaxlines.add(viewtaxline);
-//      viewsalesitems.add(viewsalesitem);
-//      viewpayments.add(viewpayment);
-//      viewstockdiaries.add(viewstockdiary);
-
       if (product != null)
       {
 
-//        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
-//        tableSalesItemHelper.open();
-//        tableSalesItemHelper.insertSalesItem(salesItem);
-//        tableSalesItemHelper.close();
+        data();
+
+        Tax tax = new Tax();
+        tax.setId("001");
+
+        salesItem = new SalesItem();
+        salesItem.setProduct(product);
+        salesItem.setAttributes(bytes);
+        salesItem.setUnits(1);
+        salesItem.setPrice(product.getPricesell());
+        salesItem.setSalesId(sales);
+        salesItem.setSflag(true);
+        salesItem.setTaxid(tax);
 
         salesListAdapter.addSalesItem(salesItem);
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
-      }
-      else
+      } else
       {
         Toast.makeText(SalesActivity.this, "Product not found!", Toast.LENGTH_LONG).show();
       }
@@ -228,6 +214,8 @@ public class SalesActivity extends AppCompatActivity
 
     salesService = ClientService.createService().create(SalesService.class);
 
+    tableProductHelper = new TableProductHelper(this);
+
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
@@ -239,8 +227,7 @@ public class SalesActivity extends AppCompatActivity
       String id = randomUUID().toString();
       closedCash.setMoney(id);
       IDs.setLoginCloseCashID(id);
-    }
-    else
+    } else
       closedCash.setMoney(IDs.getLoginCloseCashID());
 
     Tax tax = new Tax();
@@ -298,8 +285,7 @@ public class SalesActivity extends AppCompatActivity
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
-        }
-        else
+        } else
         {
           TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
           tableSalesItemHelper.open();
@@ -308,7 +294,6 @@ public class SalesActivity extends AppCompatActivity
 
           Intent intent = new Intent(SalesActivity.this, PaymentActivity.class);
           intent.putExtra("salesid", sales.getId());
-//          intent.putExtra("salesid", sales.getId());
 
           startActivity(intent);
         }
@@ -326,8 +311,7 @@ public class SalesActivity extends AppCompatActivity
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
-        }
-        else
+        } else
         {
           TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
           tableSalesHelper.open();
@@ -341,37 +325,13 @@ public class SalesActivity extends AppCompatActivity
 
           finish();
         }
-//        salesPack = new SalesPack();
-//        salesPack.setSales(viewsales);
-//        salesPack.setReceipts(viewreceipt);
-//        salesPack.setSalesItems(viewsalesitems);
-//        salesPack.setPayments(viewpayments);
-//        salesPack.setStockdiary(viewstockdiaries);
-//        salesPack.setTaxlines(viewtaxlines);
-
-//        postSales();
-
-//        for (Viewpayments lpayment : viewpayments)
-//        {
-//          Log.d("DATA payment", lpayment.getId());
-//        }
-
-//        TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
-//        tableSalesHelper.open();
-//        tableSalesHelper.insertSales(sales);
-//        tableSalesHelper.close();
-
-//        Toast.makeText(SalesActivity.this, "Success", Toast.LENGTH_LONG).show();
-
-//        finish();
 
       }
     });
 
-    tableProductHelper = new TableProductHelper(this);
 
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
-
+    Log.d("NAME", tableProductHelper.getData().get(2).getName());
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -399,16 +359,6 @@ public class SalesActivity extends AppCompatActivity
         salesItem.setSflag(true);
         salesItem.setTaxid(tax);
 
-//        viewtaxlines.add(viewtaxline);
-//        viewsalesitems.add(viewsalesitem);
-//        viewpayments.add(viewpayment);
-//        viewstockdiaries.add(viewstockdiary);
-
-//        TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
-//        tableSalesItemHelper.open();
-//        tableSalesItemHelper.insertSalesItem(salesItem);
-//        tableSalesItemHelper.close();
-
         salesListAdapter.addSalesItem(salesItem);
         edittextSearchProduct.setText("");
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
@@ -420,7 +370,6 @@ public class SalesActivity extends AppCompatActivity
     salesListAdapter.notifyDataSetChanged();
 
     decimalFormat = new DecimalFormat("###,###.###");
-//    String value = decimalFormat.format(salesListAdapter.grandTotal());
 
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
@@ -497,26 +446,6 @@ public class SalesActivity extends AppCompatActivity
     Tax tax = new Tax();
     tax.setId("001");
 
-//    receipt = new Receipt();
-//    receipt.setId(UUID.randomUUID().toString());
-//    receipt.setAttributes(null);
-//    receipt.setSales(sales);
-//    receipt.setDatenew(new Date());
-//    receipt.setPerson("test");
-//    receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    receipt.setSflag(true);
-//
-//    sales = new Sales();
-//    sales.setId(receipt.getId());
-//    sales.setSalesnum(1);
-//    sales.setSalestype(1);
-//    sales.setStatus(1);
-//    sales.setSiteguid(UUID.randomUUID().toString());
-//    sales.setSflag(true);
-//    sales.setCustomer(customer);
-//    sales.setPerson(people);
-//    sales.setReceipt(receipt);
-
     salesItem = new SalesItem();
     salesItem.setProduct(product);
     salesItem.setAttributes(bytes);
@@ -559,99 +488,11 @@ public class SalesActivity extends AppCompatActivity
     stockDiary.setAttributesetinstanceId(null);
     stockDiary.setLocation(location);
     stockDiary.setProduct(salesItem.getProduct());
-//
-//    viewtaxline = new ViewTaxLine();
-//    viewtaxline.setId(taxLine.getId());
-//    viewtaxline.setReceipt(taxLine.getReceipt().getId());
-//    viewtaxline.setTaxid(taxLine.getTaxid().getId());
-//    viewtaxline.setBase(taxLine.getBase());
-//    viewtaxline.setAmount(taxLine.getAmount());
-//    viewtaxline.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewtaxline.setSflag(taxLine.getSflag());
-//    viewtaxline.setTaxName(null);
-//
-//    viewsales = new ViewSale();
-//    viewsales.setId(receipt.getId());
-//    viewsales.setSalesnum(sales.getSalesnum());
-//    viewsales.setPerson("0");
-//    viewsales.setCustomer(null);
-//    viewsales.setSalestype(sales.getSalestype());
-//    viewsales.setStatus(viewsales.getStatus());
-//    viewsales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewsales.setSflag(sales.getSflag());
-//    viewsales.setCustomerName(null);
-//    viewsales.setPersonName(null);
-//    viewsales.setDatenew("2017-07-26 06:00:18");
-//
-//    viewsalesitem = new ViewSalesItem();
-//    viewsalesitem.setId(0);
-//    viewsalesitem.setSales_id(sales.getId());
-//    viewsalesitem.setLine(salesItem.getLine());
-//    viewsalesitem.setProduct(salesItem.getProduct().getId());
-//    viewsalesitem.setAttributesetinstanceId(null);
-//    viewsalesitem.setUnits(salesItem.getUnits());
-//    viewsalesitem.setPrice(salesItem.getPrice());
-//    viewsalesitem.setTaxid(salesItem.getTaxid().getId());
-//    viewsalesitem.setAttributes(null);
-//    viewsalesitem.setRefundqty(salesItem.getRefundqty());
-//    viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewsalesitem.setSflag(sales.getSflag());
-//    viewsalesitem.setProductName(null);
-//    viewsalesitem.setTaxName(null);
-//    viewsalesitem.setRate(null);
-//
-//
-//    viewreceipt = new ViewReceipt();
-//    viewreceipt.setId(receipt.getId());
-//
-//    if (IDs.getLoginCloseCashID() == null)
-//    {
-//      String id = UUID.randomUUID().toString();
-//      viewreceipt.setMoney(id);
-//      IDs.setLoginCloseCashID(id);
-//    }
-//    else
-//      viewreceipt.setMoney(IDs.getLoginCloseCashID());
-//
-//    viewreceipt.setDatenew(new Date().toString());
-//    viewreceipt.setPerson(receipt.getPerson());
-//    viewreceipt.setAttributes(null);
-//    viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewreceipt.setSflag(true);
-//    viewreceipt.setHost("");
-//
-//    viewpayment = new ViewPayment();
-//    viewpayment.setId(payment.getId());
-//    viewpayment.setReceipt(receipt.getId());
-//    viewpayment.setPayment(payment.getPayment());
-//    viewpayment.setTotal(payment.getTotal());
-//    viewpayment.setTransid(payment.getTransid());
-//    viewpayment.setNotes(payment.getNotes());
-//    viewpayment.setTendered(payment.getTendered());
-//    viewpayment.setCardname(payment.getCardname());
-//    viewpayment.setReturnmsg(payment.getReturnmsg());
-//    viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewpayment.setSflag(payment.getSflag());
-//    viewpayment.setDatenew(null);
-//
-//
-//    viewstockdiary = new ViewStockDiary();
-//    viewstockdiary.setId(stockDiary.getId());
-//    viewstockdiary.setProduct(stockDiary.getProduct().getId());
-//    viewstockdiary.setDatenew(new Date().toString());
-//    viewstockdiary.setReason(stockDiary.getReason());
-//    viewstockdiary.setUnits(stockDiary.getUnits());
-//    viewstockdiary.setPrice(stockDiary.getPrice());
-//    viewstockdiary.setAppuser(stockDiary.getAppuser());
-//    viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-//    viewstockdiary.setSflag(true);
-//    viewstockdiary.setAttributesetinstanceId(null);
-//    viewstockdiary.setLocation("0");
-
 
   }
 
-  public void refreshData(){
+  public void refreshData()
+  {
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
   }
 

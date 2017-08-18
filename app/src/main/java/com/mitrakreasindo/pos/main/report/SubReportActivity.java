@@ -45,6 +45,7 @@ public class SubReportActivity extends AppCompatActivity
   private List<SubProductReport> subProductReportList = new ArrayList<SubProductReport>();
   private Bundle bundle;
   private SubReport subReport;
+  private boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
   @Override
@@ -69,6 +70,8 @@ public class SubReportActivity extends AppCompatActivity
     {
 
       subReport = (SubReport) bundle.getSerializable("listProduct");
+      twoPane = bundle.getBoolean("twoPane");
+
       Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));
 
     }
@@ -78,6 +81,7 @@ public class SubReportActivity extends AppCompatActivity
     itemSubReportSales.setText(subReport.getPeopleName());
 
     subProductAdapter = new SubProductAdapter(this, subReport.getSubProductReports());
+    subProductAdapter.twoPane = twoPane;
 
     listSubProduct.setAdapter(subProductAdapter);
     listSubProduct.setHasFixedSize(true);

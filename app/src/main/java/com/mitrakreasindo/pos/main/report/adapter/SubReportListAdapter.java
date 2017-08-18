@@ -71,6 +71,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
         {
           Bundle bundle = new Bundle();
           bundle.putSerializable("subReport", subReport);
+          bundle.putBoolean("twoPane", true);
           DetailReportFragment detailReportFragment = new DetailReportFragment();
           detailReportFragment.setArguments(bundle);
           ((ReportActivity)context).getSupportFragmentManager()
@@ -84,6 +85,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
           list.addAll(subReport.getSubProductReports());
           Intent intent = new Intent(context, SubReportActivity.class);
           intent.putExtra("listProduct", subReport);
+          intent.putExtra("twoPane", false);
           context.startActivity(intent);
         }
       }

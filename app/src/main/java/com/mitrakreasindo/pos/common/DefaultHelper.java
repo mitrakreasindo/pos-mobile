@@ -49,6 +49,11 @@ public class DefaultHelper
     return decimalFormat.format(d);
   }
 
+  public String decimalFormatToPercentage(double d)
+  {
+    DecimalFormat decimalFormat = new DecimalFormat(" #,##0.00 '%'");
+    return decimalFormat.format(d);
+  }
 //  public List<SubProductReport> productReportList(List<SubProductReport> list)
 //  {
 //    return list;

@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
@@ -46,12 +47,19 @@ import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
+import com.mitrakreasindo.pos.model.Category;
+import com.mitrakreasindo.pos.model.Money;
+import com.mitrakreasindo.pos.service.DashboardService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity
   private TablePeopleHelper tablePeopleHelper;
   private TableRoleHelper tableRoleHelper;
   private ProgressDialog progressDialog;
+  private DashboardService dashboardService;
   private MainFragment mainFragment = new MainFragment();
 //  private PendingTransactionService service;
 
@@ -72,6 +81,9 @@ public class MainActivity extends AppCompatActivity
   TableProductHelper tableProductHelper;
   TableTaxesHelper tableTaxesHelper;
   TableSalesItemHelper tableSalesItemHelper;
+
+  public Money revenue;
+  public Money cost;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -82,6 +94,8 @@ public class MainActivity extends AppCompatActivity
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    dashboardService = ClientService.createService().create(DashboardService.class);
 
     progressDialog = new ProgressDialog(this);
     progressDialog.setMessage(this.getString(R.string.progress_message));
@@ -156,6 +170,13 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
+    getRevenue(companyCode, EventCode.EVENT_MONEY_GET);
+
+    getCost(companyCode, EventCode.EVENT_MONEY_GET);
+
+//    Log.d("REVENUE", revenue.getMonth().toString());
+
+    MainFragment mainFragment = new MainFragment();
     getSupportFragmentManager().beginTransaction()
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
@@ -406,4 +427,57 @@ public class MainActivity extends AppCompatActivity
 //      }
 //    });
 //  }
+
+  public void getRevenue(String kodeMerchant, final int id)
+  {
+    final Call<Money> call = dashboardService.getRevenue(kodeMerchant);
+    call.enqueue(new Callback<Money>()
+    {
+      @Override
+      public void onResponse(Call<Money> call, Response<Money> response)
+      {
+        revenue = response.body();
+
+        Log.d("REVENUE", revenue.getMonth().toString());
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+
+      }
+
+      @Override
+      public void onFailure(Call<Money> call, Throwable t)
+      {
+
+      }
+
+    });
+
+  }
+
+  public void getCost(String kodeMerchant, final int id)
+  {
+    final Call<Money> call = dashboardService.getCost(kodeMerchant);
+    call.enqueue(new Callback<Money>()
+    {
+      @Override
+      public void onResponse(Call<Money> call, Response<Money> response)
+      {
+        cost = response.body();
+
+        Log.d("REVENUE", cost.getMonth().toString());
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+
+      }
+
+      @Override
+      public void onFailure(Call<Money> call, Throwable t)
+      {
+
+      }
+
+    });
+
+  }
+
 }
