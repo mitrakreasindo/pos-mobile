@@ -17,4 +17,5 @@ public class EventCode
 
   public static final int EVENT_MONEY_GET = 101;
   public static final int EVENT_PENDING_TRANSACTION_GET = 22;
+  public static final int EVENT_VIEW_SALESITEMS_GET = 23;
 }

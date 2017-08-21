@@ -353,11 +353,11 @@ public class DiaryFormActivity extends AppCompatActivity
 
       stockDiary.setDatenew(dateFormat.parse(diaryDateField.getText().toString()));
       int reason = 0;
-      if (diaryProductReasonSpinner.getSelectedItem().toString().contains("+"))
+      if (diaryProductReasonSpinner.getSelectedItem().toString().contains("(+)"))
       {
         reason = 1;
       }
-      else if (diaryProductReasonSpinner.getSelectedItem().toString().contains("-"))
+      else if (diaryProductReasonSpinner.getSelectedItem().toString().contains("(-)"))
       {
         reason = -1;
       }

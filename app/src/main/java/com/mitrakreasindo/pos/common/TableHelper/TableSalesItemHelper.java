@@ -4,17 +4,28 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.model.AttributesetInstance;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Sales;
 import com.mitrakreasindo.pos.model.SalesItem;
-import com.mitrakreasindo.pos.service.CategoryService;
+import com.mitrakreasindo.pos.model.Tax;
+import com.mitrakreasindo.pos.model.ViewSalesItem;
+import com.mitrakreasindo.pos.service.SalesService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by lisa on 27/07/17.
@@ -40,7 +51,7 @@ public class TableSalesItemHelper
   private final Context context;
   private TableSalesItemHelper.DatabaseHelper DBHelper;
   private SQLiteDatabase db;
-  private CategoryService service;
+  private SalesService service;
 
   private TableProductHelper tableProductHelper;
 
@@ -48,7 +59,7 @@ public class TableSalesItemHelper
   {
     this.context = context;
     DBHelper = new TableSalesItemHelper.DatabaseHelper(context);
-    service = ClientService.createService().create(CategoryService.class);
+    service = ClientService.createService().create(SalesService.class);
   }
 
   private class DatabaseHelper extends SQLiteAssetHelper
@@ -235,33 +246,65 @@ public class TableSalesItemHelper
 //    return null;
 //  }
 
-//  public void downloadData(String kodeMerchant)
-//  {
-//    final Call<List<SalesItem>> call = service.getCategoryAll(kodeMerchant);
-//    call.enqueue(new Callback<List<Category>>()
-//    {
-//      @Override
-//      public void onResponse(Call<List<Category>> call, Response<List<Category>> response)
-//      {
-//        final List<Category> list = response.body();
-////        new Thread(new Runnable()
-////        {
-////          @Override
-////          public void run()
-////          {
-//        open();
-//        deleteAll();
-//        insert(list);
-//        close();
-////          }
-////        }).start();
-//      }
-//
-//      @Override
-//      public void onFailure(Call<List<Category>> call, Throwable t)
-//      {
-//
-//      }
-//    });
-//  }
+  private List<SalesItem> convertViewSalesItem(List<ViewSalesItem> list)
+  {
+    List<SalesItem> salesItemList = new ArrayList<>();
+
+    SalesItem salesItem = new SalesItem();
+    Sales sales = new Sales();
+    Product product = new Product();
+    AttributesetInstance attributesetInstance = new AttributesetInstance();
+    Tax tax = new Tax();
+
+    for (ViewSalesItem viewSalesItem : list)
+    {
+      salesItem.setId(viewSalesItem.getId());
+
+      sales.setId(viewSalesItem.getSales_id());
+      salesItem.setSalesId(sales);
+      salesItem.setLine(viewSalesItem.getLine());
+
+      product.setId(viewSalesItem.getProduct());
+      salesItem.setProduct(product);
+
+      attributesetInstance.setId(viewSalesItem.getAttributesetinstanceId());
+      salesItem.setAttributesetinstanceId(attributesetInstance);
+      salesItem.setUnits(viewSalesItem.getUnits());
+      salesItem.setPrice(viewSalesItem.getPrice());
+
+      tax.setId(viewSalesItem.getTaxid());
+      salesItem.setTaxid(tax);
+      salesItem.setAttributes(viewSalesItem.getAttributes());
+      salesItem.setRefundqty(viewSalesItem.getRefundqty());
+      salesItem.setSiteguid(viewSalesItem.getSiteguid());
+      salesItem.setSflag(viewSalesItem.getSflag());
+
+      salesItemList.add(salesItem);
+    }
+    return salesItemList;
+  }
+
+  public void downloadSalesItems(String kodeMerchant, String salesId, final int id)
+  {
+    final Call<List<ViewSalesItem>> call = service.getSalesItemBySalesId(kodeMerchant, salesId);
+    call.enqueue(new Callback<List<ViewSalesItem>>()
+    {
+      @Override
+      public void onResponse(Call<List<ViewSalesItem>> call, Response<List<ViewSalesItem>> response)
+      {
+        List<ViewSalesItem> list = response.body();
+        open();
+        insertSalesItem(convertViewSalesItem(list));
+        close();
+
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+      }
+
+      @Override
+      public void onFailure(Call<List<ViewSalesItem>> call, Throwable t)
+      {
+        Toast.makeText(context, R.string.error_webservice, Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
 }

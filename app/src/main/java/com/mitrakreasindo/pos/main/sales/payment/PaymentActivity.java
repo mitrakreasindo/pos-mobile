@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.DefaultHelper;
+import com.mitrakreasindo.pos.common.Event;
+import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
@@ -51,6 +53,9 @@ import com.mitrakreasindo.pos.model.ViewSalesItem;
 import com.mitrakreasindo.pos.model.ViewStockDiary;
 import com.mitrakreasindo.pos.model.ViewTaxLine;
 import com.mitrakreasindo.pos.service.SalesService;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -154,11 +159,15 @@ public class PaymentActivity extends AppCompatActivity
     if (bundle != null)
     {
 
-      salesId = bundle.getString("salesid");
+      salesId = bundle.getString("sales_id");
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
-      viewsalesitems.containsAll(salesItemList);
-
+      if (salesItemList.size() > 0)
+        viewsalesitems.containsAll(salesItemList);
+      else
+      {
+        tableSalesItemHelper.downloadSalesItems(kodeMerchant, salesId, EventCode.EVENT_VIEW_SALESITEMS_GET);
+      }
 //      product = salesItemList.get(1).getProduct();
     }
 
@@ -631,7 +640,6 @@ public class PaymentActivity extends AppCompatActivity
     Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
     saveSales.enqueue(new Callback<HashMap<Integer, String>>()
     {
-
       private int responseCode;
       private String responseMessage;
 
@@ -647,7 +655,7 @@ public class PaymentActivity extends AppCompatActivity
           if (responseCode == 0)
           {
 //            progressDialog.dismiss();
-            Log.d("SUCCESS", "SSSSUUCCCEESSSS");
+            Log.d("SUCCESS", "SUCCESS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
           }
         }
@@ -656,9 +664,29 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-
+        responseCode = -1;
+        responseMessage = getString(R.string.error_webservice);
+        Toast.makeText(PaymentActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
   }
 
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(Event event)
+  {
+    switch (event.getId())
+    {
+      case EventCode.EVENT_VIEW_SALESITEMS_GET:
+        if (event.getStatus() == Event.COMPLETE)
+        {
+          salesItemList = tableSalesItemHelper.getSalesItems(salesId);
+          viewsalesitems.containsAll(salesItemList);
+          if (salesItemList != null)
+          {
+            paymentProductListAdapter.addSalesItem(salesItemList);
+          }
+        }
+        break;
+    }
+  }
 }

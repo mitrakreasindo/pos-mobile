@@ -1,15 +1,17 @@
 package com.mitrakreasindo.pos.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.sales.payment.PaymentActivity;
 import com.mitrakreasindo.pos.model.ViewPendingTransaction;
 
 import java.util.ArrayList;
@@ -45,13 +47,23 @@ public class PendingTransactionListAdapter extends RecyclerView.Adapter<PendingT
   public void onBindViewHolder(final ViewHolder holder, final int position)
   {
     final ViewPendingTransaction viewPendingTransactions = pendingTransactions.get(position);
+
+    holder.itemLayout.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        Intent intent = new Intent(context, PaymentActivity.class);
+        intent.putExtra("sales_id", viewPendingTransactions.getReceiptId());
+        context.startActivity(intent);
+      }
+    });
+
     holder.txtNo.setText(String.valueOf(position+1));
-    Log.d("NO: ", String.valueOf(position+1));
     holder.txtCustomer.setText(viewPendingTransactions.getCustomer());
     holder.txtTransactionTime.setText(viewPendingTransactions.getTransactionTime());
     holder.txtTotal.setText(DefaultHelper.decimalFormat(viewPendingTransactions.getReceiptTotal()));
     holder.txtHost.setText(viewPendingTransactions.getHost());
-    Log.d("HOST: ", viewPendingTransactions.getHost());
   }
 
   public void clear()
@@ -81,10 +93,12 @@ public class PendingTransactionListAdapter extends RecyclerView.Adapter<PendingT
   public class ViewHolder extends RecyclerView.ViewHolder
   {
     private TextView txtNo, txtCustomer, txtTransactionTime, txtTotal, txtHost;
+    private LinearLayout itemLayout;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
+      itemLayout = (LinearLayout) itemView.findViewById(R.id.queue_layout);
       txtNo = (TextView) itemView.findViewById(R.id.unpaid_no);
       txtCustomer = (TextView) itemView.findViewById(R.id.unpaid_customer);
       txtTransactionTime = (TextView) itemView.findViewById(R.id.unpaid_transaction_time);

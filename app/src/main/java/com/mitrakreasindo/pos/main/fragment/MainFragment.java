@@ -297,7 +297,6 @@ public class MainFragment extends Fragment
             pendingTransactionListAdapter.clear();
             pendingTransactionListAdapter.addPendingTransaction(viewPendingTransactions);
           }
-          progressDialog.dismiss();
         }
         break;
       case EventCode.EVENT_ROLE_GET:
