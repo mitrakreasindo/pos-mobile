@@ -1,8 +1,15 @@
 package com.mitrakreasindo.pos.main.sales.payment;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,17 +26,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
+import com.centerm.smartpos.aidl.printer.PrintDataObject;
+import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
+import com.centerm.smartpos.constant.Constant;
+import com.centerm.smartpos.util.LogUtil;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.DefaultHelper;
+import com.mitrakreasindo.pos.common.EmbededPrinter.Print;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
-import com.mitrakreasindo.pos.common.Wireless.BluetoothService;
-import com.mitrakreasindo.pos.common.Wireless.PrintReceipt;
-import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
+import com.mitrakreasindo.pos.common.WirelessPrinter.BluetoothService;
+import com.mitrakreasindo.pos.common.WirelessPrinter.PrintReceipt;
+import com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity;
+import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.sales.payment.adapter.PaymentProductListAdapter;
@@ -71,7 +86,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.mService;
+import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.mService;
 
 /**
  * Created by lisa on 01/08/17.
@@ -79,7 +94,6 @@ import static com.mitrakreasindo.pos.common.Wireless.Wireless_Activity.mService;
 
 public class PaymentActivity extends AppCompatActivity
 {
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.txt_payment_date)
@@ -141,6 +155,40 @@ public class PaymentActivity extends AppCompatActivity
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
 
+  private AidlPrinter printDev = null;
+  public AidlDeviceManager manager = null;
+  private AidlPrinterStateChangeListener callback = new PrinterCallback();
+  private Context mcontext;
+  private static boolean PrinterMessage;
+
+  public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
+    boolean message = true;
+    @Override
+    public void onPrintError(int arg0) throws RemoteException
+    {
+      message = false;
+      GetMessage(message);
+      showMessage(PaymentActivity.this,getString(R.string.text_suddenly) + arg0);
+      return;
+    }
+
+    @Override
+    public void onPrintFinish() throws RemoteException
+    {
+      message = true;
+      GetMessage(message);
+      showMessage(PaymentActivity.this,getString(R.string.text_PrintFinished));
+    }
+
+    @Override
+    public void onPrintOutOfPaper() throws RemoteException
+    {
+      message = false;
+      GetMessage(message);
+      showMessage(PaymentActivity.this,getString(R.string.text_outOfPaper));
+      return;
+    }
+  }
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
   {
@@ -244,24 +292,34 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
-        if (s.length() == 0 && edittextPaymentMoney.getText().toString().length() == 0)
+        if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
+        {
+
+        } else
+        {
           edittextPaymentMoney.setText("0");
+        }
+
       }
+
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)
       {
+
       }
+
       @Override
       public void afterTextChanged(Editable s)
       {
+
         try
         {
           edittextPaymentMoney.removeTextChangedListener(this);
           String originalString = s.toString();
 
-          if (originalString.contains(",") || originalString.contains("."))
+          if (originalString.contains(","))
           {
-            originalString = originalString.replaceAll("[,.]", "");
+            originalString = originalString.replaceAll(",", "");
           }
           Long longval = Long.parseLong(originalString);
 
@@ -272,7 +330,9 @@ public class PaymentActivity extends AppCompatActivity
         {
           e.printStackTrace();
         }
+
         edittextPaymentMoney.addTextChangedListener(this);
+
       }
     });
 
@@ -281,7 +341,6 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-
 
         Log.d("price", String.valueOf(formatTotalPrice()));
         if (paymentProductListAdapter.grandTotal() <= formatTotalPrice())
@@ -295,21 +354,21 @@ public class PaymentActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-              if (mService == null) {
-                Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
-                  .show();
-                Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
-                startActivity(intent);
-                return;
-              }
-              else
+              if(manager!=null)
               {
-                if (mService.getState() == BluetoothService.STATE_CONNECTED)
+                cetak();
+                Log.d(String.valueOf(PrinterMessage), "ISI pesan: ");
+                /*if (PrinterMessage)
                 {
-                  final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+                  Toast.makeText(PaymentActivity.this, "berhasil", Toast.LENGTH_SHORT).show();
+                  return;
+                }
+                else
+                {*/
+                  /*final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
                   confirmationDialog.setTitle("Change money");
                   confirmationDialog.setMessage(decimalFormat.format(
-                    Double.parseDouble(edittextPaymentMoney.getText().toString()) - paymentProductListAdapter.grandTotal()
+                    Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
                   ));
                   confirmationDialog.setCancelable(false);
                   confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
@@ -334,12 +393,58 @@ public class PaymentActivity extends AppCompatActivity
                       postSales();
                       SalesActivity.sActivity.finish();
                       finish();
-                      PrintReceipt.printReceipt(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString()));
-                      Log.d("Grandtotal: ",Double.toString(paymentProductListAdapter.grandTotal()));
                     }
                   });
                   confirmationDialog.show();
+                  return;*/
+                /*}*/
+              }
+              else
+              {
+              if (mService == null) {
+                Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                  .show();
+                Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                startActivity(intent);
+                return;
+              }
+              else
+              {
+                if (mService.getState() == BluetoothService.STATE_CONNECTED)
+                {
+                  PrintReceipt.printReceipt(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),paymentProductListAdapter.grandTotal(),
+                    Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")));
+                  final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+                  confirmationDialog.setTitle("Change money");
+                  confirmationDialog.setMessage(decimalFormat.format(
+                    Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")) - paymentProductListAdapter.grandTotal()
+                  ));
+                  confirmationDialog.setCancelable(false);
+                  confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+                  {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                      data();
+                      salesPack = new SalesPack();
+                      salesPack.setSales(viewsales);
+                      salesPack.setReceipts(viewreceipt);
+                      salesPack.setSalesItems(viewsalesitems);
+                      salesPack.setPayments(viewpayments);
+                      salesPack.setStockdiary(viewstockdiaries);
+                      salesPack.setTaxlines(viewtaxlines);
 
+                      TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                      tableSalesHelper.open();
+                      tableSalesHelper.insertSales(sales);
+                      tableSalesHelper.close();
+
+                      postSales();
+                      SalesActivity.sActivity.finish();
+                      finish();
+                    }
+                  });
+                  confirmationDialog.show();
                   return;
               }
                 else
@@ -350,6 +455,7 @@ public class PaymentActivity extends AppCompatActivity
                   startActivity(intent);
                   return;
                 }
+              }
               }
             }
           });
@@ -412,9 +518,9 @@ public class PaymentActivity extends AppCompatActivity
   {
     originalString = edittextPaymentMoney.getText().toString();
 
-    if (originalString.contains(",") || originalString.contains("."))
+    if (originalString.contains(","))
     {
-      originalString = originalString.replaceAll("[,.]", "");
+      originalString = originalString.replaceAll(",", "");
     }
     Long longval = Long.parseLong(originalString);
     double clearValue = Double.parseDouble(longval.toString());
@@ -688,5 +794,188 @@ public class PaymentActivity extends AppCompatActivity
         }
         break;
     }
+  }
+
+  public void cetak()
+  {
+    List<PrintDataObject> list = new ArrayList<PrintDataObject>();
+    Print.IsiStruk(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),
+      list,paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")));
+    try
+    {
+      this.printDev.printText(list, callback);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    if(!this.getClass().getName().equals(MainActivity.class)){
+      bindService();
+    }
+  }
+
+  public void bindService() {
+    Intent intent = new Intent();
+    intent.setPackage("com.centerm.smartposservice");
+    intent.setAction("com.centerm.smartpos.service.MANAGER_SERVICE");
+    bindService(intent, conn, Context.BIND_AUTO_CREATE);
+  }
+
+  public ServiceConnection conn = new ServiceConnection() {
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      manager = null;
+      LogUtil.print("服务绑定失败");
+      LogUtil.print("manager = " + manager);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      manager = AidlDeviceManager.Stub.asInterface(service);
+      LogUtil.print("服务绑定成功");
+      LogUtil.print("manager = " + manager);
+      if (null != manager) {
+        onDeviceConnected(manager);
+      }
+    }
+  };
+
+  @Override
+  protected void onDestroy()
+  {
+    super.onDestroy();
+    if(!this.getClass().getName().equals(MainActivity.class)){
+      unbindService(conn);
+    }
+  }
+
+  public void onDeviceConnected(AidlDeviceManager deviceManager)
+  {
+    try
+    {
+      printDev = AidlPrinter.Stub.asInterface(deviceManager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PRINTERDEV));
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  private Handler handler = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+      // TODO Auto-generated method stub
+      super.handleMessage(msg);
+      Bundle bundle = msg.getData();
+      String msg1 = bundle.getString("msg1");
+      Toast.makeText(mcontext, msg1, Toast.LENGTH_SHORT).show();
+    }
+  };
+
+  private Handler handler2 = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+      // TODO Auto-generated method stub
+      super.handleMessage(msg);
+      Bundle bundle = msg.getData();
+      boolean msg1 = bundle.getBoolean("msg1");
+      PrinterMessage = msg1;
+      Log.d("handleMessage: ", String.valueOf(PrinterMessage));
+      if (PrinterMessage)
+      {
+        final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+        confirmationDialog.setTitle("Change money");
+        confirmationDialog.setMessage(decimalFormat.format(
+          Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
+        ));
+        confirmationDialog.setCancelable(false);
+        confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+        {
+          @Override
+          public void onClick(DialogInterface dialog, int which)
+          {
+            data();
+            salesPack = new SalesPack();
+            salesPack.setSales(viewsales);
+            salesPack.setReceipts(viewreceipt);
+            salesPack.setSalesItems(viewsalesitems);
+            salesPack.setPayments(viewpayments);
+            salesPack.setStockdiary(viewstockdiaries);
+            salesPack.setTaxlines(viewtaxlines);
+
+            TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+            tableSalesHelper.open();
+            tableSalesHelper.insertSales(sales);
+            tableSalesHelper.close();
+
+            postSales();
+            SalesActivity.sActivity.finish();
+            finish();
+          }
+        });
+        confirmationDialog.show();
+        return;
+      }
+    }
+  };
+
+  public void GetMessage(final boolean pesan)
+  {
+    Message a = new Message();
+    Bundle bundle = new Bundle();
+    bundle.putBoolean("msg1", pesan);
+    a.setData(bundle);
+    handler2.sendMessage(a);
+  }
+
+  public void showMessage(Context context, final String msg1) {
+    Message msg = new Message();
+    Bundle bundle = new Bundle();
+    bundle.putString("msg1", msg1);
+    msg.setData(bundle);
+    this.mcontext = context;
+    handler.sendMessage(msg);
+  }
+
+  public void ChangeMoney(final Context context)
+  {
+    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(context);
+    confirmationDialog.setTitle("Change money");
+    confirmationDialog.setMessage(decimalFormat.format(
+      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
+    ));
+    confirmationDialog.setCancelable(false);
+    confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        data();
+        salesPack = new SalesPack();
+        salesPack.setSales(viewsales);
+        salesPack.setReceipts(viewreceipt);
+        salesPack.setSalesItems(viewsalesitems);
+        salesPack.setPayments(viewpayments);
+        salesPack.setStockdiary(viewstockdiaries);
+        salesPack.setTaxlines(viewtaxlines);
+
+        TableSalesHelper tableSalesHelper = new TableSalesHelper(context);
+        tableSalesHelper.open();
+        tableSalesHelper.insertSales(sales);
+        tableSalesHelper.close();
+
+        postSales();
+        SalesActivity.sActivity.finish();
+        finish();
+      }
+    });
+    confirmationDialog.show();
+    return;
   }
 }

@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.common.Wireless;
+package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 public class Command {
   private static final byte ESC = 0x1B;
