@@ -248,7 +248,7 @@ public class PaymentActivity extends AppCompatActivity
     receipt.setMoney(closedCash);
     receipt.setDatenew(new Date());
     receipt.setPerson(IDs.getLoginUser());
-    receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    receipt.setSiteguid(IDs.SITE_GUID);
     receipt.setSflag(true);
 
     sales = new Sales();
@@ -256,7 +256,7 @@ public class PaymentActivity extends AppCompatActivity
     sales.setSalesnum(1);
     sales.setSalestype(1);
     sales.setStatus(1);
-    sales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    sales.setSiteguid(IDs.SITE_GUID);
     sales.setSflag(true);
     sales.setCustomer(customer);
     sales.setPerson(people);
@@ -603,7 +603,7 @@ public class PaymentActivity extends AppCompatActivity
     payment.setTendered(formatTotalPrice());
     payment.setCardname("CardName");
     payment.setReturnmsg(null);
-    payment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    payment.setSiteguid(IDs.SITE_GUID);
     payment.setSflag(true);
     payment.setReceipt(receipt);
 
@@ -611,7 +611,7 @@ public class PaymentActivity extends AppCompatActivity
     taxLine.setId(UUID.randomUUID().toString());
     taxLine.setBase(1000);
     taxLine.setAmount(100);
-    taxLine.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    taxLine.setSiteguid(IDs.SITE_GUID);
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
@@ -622,7 +622,7 @@ public class PaymentActivity extends AppCompatActivity
     viewtaxline.setTaxid(taxLine.getTaxid().getId());
     viewtaxline.setBase(taxLine.getBase());
     viewtaxline.setAmount(taxLine.getAmount());
-    viewtaxline.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    viewtaxline.setSiteguid(IDs.SITE_GUID);
     viewtaxline.setSflag(taxLine.getSflag());
     viewtaxline.setTaxName(null);
 
@@ -633,7 +633,7 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setCustomer(null);
     viewsales.setSalestype(sales.getSalestype());
     viewsales.setStatus(viewsales.getStatus());
-    viewsales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    viewsales.setSiteguid(IDs.SITE_GUID);
     viewsales.setSflag(sales.getSflag());
     viewsales.setCustomerName(null);
     viewsales.setPersonName(null);
@@ -655,7 +655,7 @@ public class PaymentActivity extends AppCompatActivity
     viewreceipt.setDatenew(defaultHelper.dateFormat(new Date()));
     viewreceipt.setPerson(receipt.getPerson());
     viewreceipt.setAttributes(null);
-    viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    viewreceipt.setSiteguid(IDs.SITE_GUID);
     viewreceipt.setSflag(true);
     viewreceipt.setHost("");
 
@@ -669,7 +669,7 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setTendered(payment.getTendered());
     viewpayment.setCardname(payment.getCardname());
     viewpayment.setReturnmsg(payment.getReturnmsg());
-    viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    viewpayment.setSiteguid(IDs.SITE_GUID);
     viewpayment.setSflag(payment.getSflag());
     viewpayment.setDatenew(defaultHelper.dateFormat(new Date()));
 
@@ -697,7 +697,7 @@ public class PaymentActivity extends AppCompatActivity
       viewsalesitem.setTaxid(salesItem.getTaxid().getId());
       viewsalesitem.setAttributes(null);
       viewsalesitem.setRefundqty(salesItem.getRefundqty());
-      viewsalesitem.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      viewsalesitem.setSiteguid(IDs.SITE_GUID);
       viewsalesitem.setSflag(sales.getSflag());
       viewsalesitem.setProductName(null);
       viewsalesitem.setTaxName(null);
@@ -710,7 +710,7 @@ public class PaymentActivity extends AppCompatActivity
       stockDiary.setUnits(1);
       stockDiary.setPrice(salesItem.getProduct().getPricesell());
       stockDiary.setAppuser(IDs.getLoginUser());
-      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      stockDiary.setSiteguid(IDs.SITE_GUID);
       stockDiary.setSflag(true);
       stockDiary.setAttributesetinstanceId(null);
       stockDiary.setLocation(location);
@@ -724,7 +724,7 @@ public class PaymentActivity extends AppCompatActivity
       viewstockdiary.setUnits(stockDiary.getUnits());
       viewstockdiary.setPrice(stockDiary.getPrice());
       viewstockdiary.setAppuser(stockDiary.getAppuser());
-      viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      viewstockdiary.setSiteguid(IDs.SITE_GUID);
       viewstockdiary.setSflag(true);
       viewstockdiary.setAttributesetinstanceId(null);
       viewstockdiary.setLocation("0");

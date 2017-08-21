@@ -352,6 +352,11 @@
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">CASHIER: </string>
 
+    <string name="phone">PHONE: </string>
+    <string name="text_suddenly">The printer is looking abruptly</string>
+    <string name="text_PrintFinished">Printing is completed</string>
+    <string name="text_outOfPaper">Printer is out of paper, Load paper. Try again</string>
+
     <string name="total_transaction">Total Transaction</string>
     <string name="download">Download</string>
 

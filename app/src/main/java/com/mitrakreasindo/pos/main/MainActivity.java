@@ -34,7 +34,7 @@ import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
-import com.mitrakreasindo.pos.common.Wireless.Wireless_Activity;
+import com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.closecash.CloseCashActivity;
 import com.mitrakreasindo.pos.main.fragment.MainFragment;
@@ -47,7 +47,6 @@ import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Money;
 import com.mitrakreasindo.pos.service.DashboardService;
 

@@ -341,6 +341,11 @@
     <string name="cashier">KASIR: </string>
     <string name="prepare_data">Menyiapkan data anda</string>
 
+    <string name="phone">TELEPON: </string>
+    <string name="text_suddenly">Printer mencetak tiba-tiba</string>
+    <string name="text_PrintFinished">Data cetak selesai</string>
+    <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>
+
     <!-- Close Cash -->
     <string name="start_date">Tanggal Mulai Buka Kas</string>
     <string name="total_payment">Total Pembayaran</string>
