@@ -3,14 +3,18 @@ package com.mitrakreasindo.pos.main.stock.diary.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.model.Product;
 
@@ -48,7 +52,7 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
   {
     final Product product = products.get(position);
 
-    holder.itemLayout.setOnClickListener(new View.OnClickListener()
+    holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
@@ -64,11 +68,25 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
       }
     });
 
-//    holder.txtCodeProduct.setText(product.getCode());
-//    holder.txtSellPrice.setText(Double.toString(product.getPricesell()));
-//    holder.txtNameProduct.setText(product.getName());
-//    holder.txtBuyPrice.setText(Double.toString(product.getPricebuy()));
-//    holder.checkBox.setVisibility(View.GONE);
+    Glide.with(context)
+      .asBitmap().load(product.getImage())
+      .into(holder.itemProductImage).onLoadFailed(ContextCompat.getDrawable(context, R.drawable.box));
+
+    if (product.getName().length() > 25)
+    {
+      holder.itemProductName.setText(String.valueOf(product.getName().substring(0, 25) + "..."));
+    }
+    else
+    {
+      holder.itemProductName.setText(product.getName());
+    }
+
+    holder.itemProductCode.setText(product.getCode());
+    holder.itemProductPriceAndUnit.setText("Rp. "
+      + DefaultHelper.decimalFormat(product.getPricesell())
+      + " | " + DefaultHelper.decimalFormat(product.getStockunits())
+      + " items");
+
   }
 
   public void addProduct(Product product)
@@ -104,18 +122,18 @@ public class DiarySelectProductAdapter extends RecyclerView.Adapter<DiarySelectP
   public class ViewHolder extends RecyclerView.ViewHolder
   {
 
-    private TextView txtCodeProduct, txtNameProduct, txtBuyPrice,txtSellPrice;
-    private CheckBox checkBox;
-    private LinearLayout itemLayout;
+    private ImageView itemProductImage;
+    private TextView itemProductName, itemProductCode, itemProductPriceAndUnit;
 
     public ViewHolder(View itemView)
     {
       super(itemView);
-//      txtCodeProduct = (TextView) itemView.findViewById(R.id.txt_code_product);
-//      txtNameProduct = (TextView) itemView.findViewById(R.id.txt_name_product);
-//      itemLayout = (LinearLayout) itemView.findViewById(R.id.item_product);
-//      txtBuyPrice = (TextView) itemView.findViewById(R.id.txt_buy_price_product);
-//      txtSellPrice = (TextView) itemView.findViewById(R.id.txt_sell_price);
+
+      itemProductImage = (ImageView) itemView.findViewById(R.id.item_product_image);
+      itemProductName = (TextView) itemView.findViewById(R.id.item_product_name);
+      itemProductCode = (TextView) itemView.findViewById(R.id.item_product_code);
+      itemProductPriceAndUnit = (TextView) itemView.findViewById(R.id.item_product_price_and_unit);
+
     }
 
   }

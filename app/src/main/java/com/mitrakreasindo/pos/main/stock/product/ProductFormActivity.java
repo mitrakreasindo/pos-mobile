@@ -29,6 +29,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ImageHelper;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
@@ -109,6 +110,7 @@ public class ProductFormActivity extends AppCompatActivity
   private byte[] imageInByte;
   private Bitmap bitmap;
   private ByteArrayOutputStream baos;
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -242,13 +244,24 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        if (bundle != null)
+        progressDialog = new ProgressDialog(ProductFormActivity.this);
+        progressDialog.setMessage(ProductFormActivity.this.getString(R.string.progress_message));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        if (edittextBarcode.getText().toString().equals(""))
         {
-          updateProduct();
+          Toast.makeText(ProductFormActivity.this, "Barcode harus diisi", Toast.LENGTH_SHORT).show();
+          progressDialog.dismiss();
         }
         else
         {
-          postProduct();
+          if (bundle == null)
+            postProduct(prepareData());
+          else
+            updateProduct(prepareData());
+
+          progressDialog.dismiss();
         }
       }
     });
@@ -340,21 +353,20 @@ public class ProductFormActivity extends AppCompatActivity
     }
   }
 
-  private void postProduct()
+  private Product prepareData()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
     Category category = new Category();
     category.setId(dataCategory.get(spinnerGeneralCategory.getSelectedItemPosition()).getId());
 
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId("001");
 
-    final Product product = new Product();
-    product.setId(UUID.randomUUID().toString());
+    Product product = new Product();
+    if (bundle == null)
+      product.setId(UUID.randomUUID().toString());
+    else
+      product.setId(productId);
+
     product.setName(edittextGeneralName.getText().toString());
     product.setAttributes(null);
 
@@ -376,8 +388,17 @@ public class ProductFormActivity extends AppCompatActivity
     product.setCodetype(null);
     product.setPricebuy(Double.valueOf(edittextGeneralBuyPrice.getText().toString()));
     product.setPricesell(Double.valueOf(edittextGeneralSellPrice.getText().toString()));
-    product.setStockcost(Double.valueOf(edittextStockByYear.getText().toString()));
-    product.setStockvolume(Double.valueOf(edittextStockVolume.getText().toString()));
+
+    if (edittextStockByYear.getText().toString().equals(""))
+      product.setStockcost(0.0);
+    else
+      product.setStockcost(Double.valueOf(edittextStockByYear.getText().toString()));
+
+    if (edittextStockVolume.getText().toString().equals(""))
+      product.setStockcost(0.0);
+    else
+      product.setStockvolume(Double.valueOf(edittextStockVolume.getText().toString()));
+
     product.setIscom(false);
     product.setIsscale(false);
     product.setIskitchen(false);
@@ -389,19 +410,19 @@ public class ProductFormActivity extends AppCompatActivity
     product.setIsverpatrib(false);
     product.setTexttip("");
     product.setWarranty(false);
-    product.setStockunits(30.0);
+    product.setStockunits(0.0);
     product.setAlias("");
     product.setAlwaysavailable(false);
-    product.setDiscounted("no");
+    product.setDiscounted("");
     product.setCandiscount(false);
     product.setIscatalog(true);
-    product.setCatorder(10);
+    product.setCatorder(0);
     product.setIspack(false);
-    product.setPackquantity(2.0);
+    product.setPackquantity(0.0);
     product.setAllproducts(false);
     product.setManagestock(false);
     product.setAlias(edittextGeneralShortname.getText().toString());
-    product.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    product.setSiteguid(IDs.SITE_GUID);
     product.setSflag(true);
     product.setAttributesetId(null);
     product.setCategory(category);
@@ -409,6 +430,11 @@ public class ProductFormActivity extends AppCompatActivity
     product.setPromotionid(null);
     product.setTaxcat(taxCategory);
 
+    return product;
+  }
+
+  private void postProduct(final Product product)
+  {
     Call<HashMap<Integer, String>> call = productService.postProduct(kodeMerchant, product);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
@@ -433,9 +459,8 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.close();
             productListAdapter.addProduct(product);
             productListAdapter.notifyDataSetChanged();
-
-            progressDialog.dismiss();
           }
+          progressDialog.dismiss();
           Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
         finish();
@@ -444,17 +469,6 @@ public class ProductFormActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        if (responseCode == 0)
-        {
-          TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
-          tableProductHelper.open();
-          tableProductHelper.insert(product);
-          tableProductHelper.close();
-          productListAdapter.addProduct(product);
-          productListAdapter.notifyDataSetChanged();
-
-          progressDialog.dismiss();
-        }
         progressDialog.dismiss();
         responseCode = -1;
         responseMessage = getString(R.string.error_webservice);
@@ -463,76 +477,8 @@ public class ProductFormActivity extends AppCompatActivity
     });
   }
 
-  private void updateProduct()
+  private void updateProduct(final Product product)
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
-    Category category = new Category();
-    category.setId(dataCategory.get(spinnerGeneralCategory.getSelectedItemPosition()).getId());
-
-    TaxCategory taxCategory = new TaxCategory();
-    taxCategory.setId("001");
-
-    final Product product = new Product();
-    product.setId(productId);
-    product.setName(edittextGeneralName.getText().toString());
-    product.setAttributes(null);
-
-    if (imageviewProduct.getVisibility() == View.VISIBLE)
-    {
-      bitmap = ((BitmapDrawable) imageviewProduct.getDrawable()).getBitmap();
-      bitmap = ImageHelper.getResizedBitmap(bitmap, 150);
-      baos = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
-      imageInByte = baos.toByteArray();
-    }
-    else
-    {
-      imageInByte = null;
-    }
-
-    product.setImage(imageInByte);
-    product.setReference(edittextBarcode.getText().toString());
-    product.setCode(edittextBarcode.getText().toString());
-    product.setCodetype(null);
-    product.setPricebuy(Double.valueOf(edittextGeneralBuyPrice.getText().toString()));
-    product.setPricesell(Double.valueOf(edittextGeneralSellPrice.getText().toString()));
-    product.setStockcost(Double.valueOf(edittextStockByYear.getText().toString()));
-    product.setStockvolume(Double.valueOf(edittextStockVolume.getText().toString()));
-    product.setIscom(false);
-    product.setIsscale(false);
-    product.setIskitchen(false);
-    product.setPrintkb(false);
-    product.setSendstatus(false);
-    product.setIsservice(false);
-    product.setDisplay("");
-    product.setIsvprice(false);
-    product.setIsverpatrib(false);
-    product.setTexttip("");
-    product.setWarranty(false);
-    product.setStockunits(30.0);
-    product.setAlias("");
-    product.setAlwaysavailable(false);
-    product.setDiscounted("no");
-    product.setCandiscount(false);
-    product.setIscatalog(true);
-    product.setCatorder(10);
-    product.setIspack(false);
-    product.setPackquantity(2.0);
-    product.setAllproducts(false);
-    product.setManagestock(false);
-    product.setAlias(edittextGeneralShortname.getText().toString());
-    product.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-    product.setSflag(true);
-    product.setAttributesetId(null);
-    product.setCategory(category);
-    product.setPackproduct(null);
-    product.setPromotionid(null);
-    product.setTaxcat(taxCategory);
-
     Call<HashMap<Integer, String>> call = productService.updateProduct(kodeMerchant, product.getId(), product);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
@@ -555,9 +501,8 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.open();
             tableProductHelper.update(product);
             tableProductHelper.close();
-
-            progressDialog.dismiss();
           }
+          progressDialog.dismiss();
           Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
         finish();

@@ -22,4 +22,19 @@
     <color name="blue">#4FC3F7</color>
     <color name="blue_gray">#90A4AE</color>
     <color name="deep_purple">#7E57C2</color>
+
+    <color name="orang800">#EF6C00</color>
+    <color name="orang600">#FB8C00</color>
+    <color name="orang500">#FF9800</color>
+    <color name="orang400">#FFA726</color>
+    
+    <color name="deepOrange700">#E64A19</color>
+    <color name="deepOrange500">#FF5722</color>
+    <color name="deepOrange400">#FF7043</color>
+    <color name="deepOrange300">#FF8A65</color>
+
+    <color name="test1">#FFD54F</color>
+    <color name="test2">#FFA726</color>
+
+
 </resources>

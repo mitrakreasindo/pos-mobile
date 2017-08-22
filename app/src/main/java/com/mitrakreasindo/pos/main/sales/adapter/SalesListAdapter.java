@@ -128,10 +128,12 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
     this.salesItems.addAll(salesItems);
     notifyDataSetChanged();
   }
+
   public List<SalesItem> getAllTickets()
   {
     return salesItems;
   }
+
   public void addSalesItem(SalesItem salesItem)
   {
 
@@ -150,7 +152,7 @@ public class SalesListAdapter extends RecyclerView.Adapter<SalesListAdapter.View
       boolean isAdd = false;
       for (int x = 0; x < salesItems.size(); x++)
       {
-        Log.e("SIZE", "ticke x " + x + " prodcut " + salesItems.get(x).getProduct().getName());
+        Log.e("SIZE", "ticke x " + x + " product " + salesItems.get(x).getProduct().getName());
         Log.e(getClass().getSimpleName(), "ticketline product id " + salesItems.get(x).getProduct().getId());
         Log.e(getClass().getSimpleName(), "product id " + salesItem.getProduct().getId());
 

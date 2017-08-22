@@ -58,7 +58,12 @@ public class PaymentProductListAdapter extends RecyclerView.Adapter<PaymentProdu
     holder.txtSubTotal.setText(decimalFormat.format(
       salesItem.getProduct().getPricesell() *
         Double.parseDouble(holder.txtQty.getText().toString())));
+  }
 
+  public void addSalesItem(List<SalesItem> list)
+  {
+    this.salesItems.addAll(list);
+    notifyDataSetChanged();
   }
 
   @Override

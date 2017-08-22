@@ -21,12 +21,12 @@ public interface MerchantService
   @POST("merchants/public")
   Call<HashMap<Integer,String>> postMerchantRegistration(@Body MerchantRegistration merchantRegistration);
 
-  @GET("merchantcategories/public/getname/")
+  @GET("merchants/public/categories/name")
   Call<List<MerchantCategories>> getMerchantCategories();
 
-  @GET("merchantcategories/public/getsubname/{name}/")
+  @GET("merchants/public/categories/subname/{name}")
   Call<List<MerchantCategories>> getMerchantSubCategories(@Path("name") String categoryName);
 
-  @GET("merchantcategories/public/")
+  @GET("merchants/public/categories")
   Call<List<MerchantCategories>> getAllMerchantCategories();
 }

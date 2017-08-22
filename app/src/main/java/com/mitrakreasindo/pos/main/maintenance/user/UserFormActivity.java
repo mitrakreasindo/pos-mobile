@@ -468,13 +468,9 @@ public class UserFormActivity extends AppCompatActivity
 
       people = new People();
       if (bundle == null)
-      {
         people.setId(UUID.randomUUID().toString());
-      }
       else
-      {
         people.setId(peopleId);
-      }
       people.setName(edittextUsername.getText().toString());
       people.setApppassword(edittextPass.getText().toString());
       people.setCard(null);
