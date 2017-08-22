@@ -63,8 +63,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   @Override
   public void onBindViewHolder(CategoryListAdapter.ViewHolder holder, int position)
   {
-    category = categories.get(position);
-    holder.txtCategory.setText(category.getName());
+    final Category c = categories.get(position);
+    holder.txtCategory.setText(c.getName());
 
     if (!inactive.contains(MenuIds.rp_stk_category_action_update))
     {
@@ -75,8 +75,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         public void onClick(View view)
         {
           Intent intent = new Intent(context, CategoryFormActivity.class);
-          intent.putExtra("id", category.getId());
-          intent.putExtra("name", category.getName());
+          intent.putExtra("id", c.getId());
+          intent.putExtra("name", c.getName());
           context.startActivity(intent);
         }
       });
@@ -109,8 +109,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                       {
                         public void onClick(DialogInterface dialog, int whichButton)
                         {
-                          deleteCategory(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""),
-                            category.getId());
+                          deleteCategory(SharedPreferenceEditor
+                            .LoadPreferences(context, "Company Code", ""), c);
                         }
                       })
                       .setNegativeButton(android.R.string.no, null).show();
@@ -173,10 +173,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
   }
 
-  private void deleteCategory(String kodeMerchant, final String id)
+  private void deleteCategory(String kodeMerchant, final Category c)
   {
     categoryService = ClientService.createService().create(CategoryService.class);
-    Call<HashMap<Integer, String>> call = categoryService.deleteCategory(kodeMerchant, id);
+    Call<HashMap<Integer, String>> call = categoryService.deleteCategory(kodeMerchant, c.getId());
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -196,10 +196,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
           {
             TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(context);
             tableCategoryHelper.open();
-            tableCategoryHelper.delete(id);
+            tableCategoryHelper.delete(c.getId());
             tableCategoryHelper.close();
+
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
+          removeCategory(c);
         }
       }
 
@@ -211,6 +213,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
       }
     });
-    removeCategory(category);
+
   }
 }
