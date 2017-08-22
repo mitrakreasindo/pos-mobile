@@ -62,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +71,7 @@ import static java.util.UUID.randomUUID;
 
 public class SalesActivity extends AppCompatActivity
 {
-
+  
   private static final String TAG = SalesActivity.class.getSimpleName();
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -92,26 +91,26 @@ public class SalesActivity extends AppCompatActivity
   ImageView btnSalesSave;
   @BindView(R.id.btn_sales_checkout)
   ImageView btnSalesCheckout;
-
+  
   public static Activity sActivity;
   private final String siteguid = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
   private DecimalFormat decimalFormat;
-
+  
   String example = "Convert Java String";
   byte[] bytes = example.getBytes();
-
+  
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
-
+  
   private SalesService salesService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
-
+  
   private SalesListAdapter salesListAdapter;
-
+  
   private TableProductHelper tableProductHelper;
-
+  
   private Sales sales;
   private Product product;
   private SalesPack salesPack;
@@ -122,34 +121,34 @@ public class SalesActivity extends AppCompatActivity
   private TaxLine taxLine;
   private Customer customer;
   private People people;
-
+  
   private ViewSale viewsales;
   private ViewSalesItem viewsalesitem;
   private ViewReceipt viewreceipt;
   private ViewPayment viewpayment;
   private ViewStockDiary viewstockdiary;
   private ViewTaxLine viewtaxline;
-
+  
   private Collection<ViewSalesItem> viewsalesitems = new ArrayList<>();
   private Collection<ViewPayment> viewpayments = new ArrayList<>();
   private Collection<ViewStockDiary> viewstockdiaries = new ArrayList<>();
   private Collection<ViewTaxLine> viewtaxlines = new ArrayList<>();
-
+  
   private BarcodeCallback callback = new BarcodeCallback()
   {
     @Override
     public void barcodeResult(BarcodeResult result)
     {
-
+      
       product = tableProductHelper.getProduct(result.getText());
 
 //      Sales sales = new Sales();
 //      sales.setId("c3ea963f-b767-46fc-9e42-d247b9167bdb");
       data();
-
+      
       Tax tax = new Tax();
       tax.setId("001");
-
+      
       salesItem = new SalesItem();
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
@@ -163,7 +162,7 @@ public class SalesActivity extends AppCompatActivity
 //      viewsalesitems.add(viewsalesitem);
 //      viewpayments.add(viewpayment);
 //      viewstockdiaries.add(viewstockdiary);
-
+      
       if (product != null)
       {
 
@@ -171,29 +170,29 @@ public class SalesActivity extends AppCompatActivity
 //        tableSalesItemHelper.open();
 //        tableSalesItemHelper.insertSalesItem(salesItem);
 //        tableSalesItemHelper.close();
-
+        
         salesListAdapter.addSalesItem(salesItem);
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-
+        
       }
       else
       {
         Toast.makeText(SalesActivity.this, "Product not found!", Toast.LENGTH_LONG).show();
       }
-
-
+      
+      
       if (result.getText() != null || result.getText().equals(lastText))
       {
         barcodeScanner.pause();
-
+        
         new CountDownTimer(1000, 1000)
         {
-
+          
           public void onTick(long millisUntilFinished)
           {
 //            salesProductTotal.setText("seconds remaining: " + millisUntilFinished / 1000);
           }
-
+          
           public void onFinish()
           {
             barcodeScanner.resume();
@@ -201,38 +200,38 @@ public class SalesActivity extends AppCompatActivity
         }.start();
         // Prevent duplicate scans
       }
-
+      
       lastText = result.getText();
       barcodeView.setStatusText(result.getText());
       beepManager.playBeepSoundAndVibrate();
-
+      
       //Added preview of scanned barcode
       ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
       imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
       salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-
+      
     }
-
+    
     @Override
     public void possibleResultPoints(List<ResultPoint> resultPoints)
     {
     }
   };
-
+  
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_sales);
     ButterKnife.bind(this);
-
+    
     salesService = ClientService.createService().create(SalesService.class);
-
+    
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
+    
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
-
+    
     final ClosedCash closedCash = new ClosedCash();
     if (IDs.getLoginCloseCashID() == null)
     {
@@ -242,16 +241,16 @@ public class SalesActivity extends AppCompatActivity
     }
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
-
+    
     Tax tax = new Tax();
     tax.setId("001");
-
+    
     people = new People();
     people.setId("1111111");
-
+    
     customer = new Customer();
     customer.setId(null);
-
+    
     receipt = new Receipt();
     receipt.setId(randomUUID().toString());
     receipt.setAttributes(null);
@@ -261,7 +260,7 @@ public class SalesActivity extends AppCompatActivity
     receipt.setPerson(IDs.getLoginUser());
     receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     receipt.setSflag(true);
-
+    
     sales = new Sales();
     sales.setId(receipt.getId());
     sales.setSalesnum(1);
@@ -272,13 +271,13 @@ public class SalesActivity extends AppCompatActivity
     sales.setCustomer(customer);
     sales.setPerson(people);
     sales.setReceipt(receipt);
-
+    
     listSalesProduct.setAdapter(salesListAdapter);
     listSalesProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listSalesProduct.setLayoutManager(layoutManager);
     listSalesProduct.setItemAnimator(new DefaultItemAnimator());
-
+    
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -288,13 +287,13 @@ public class SalesActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
+    
     btnSalesCheckout.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-
+        
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
@@ -305,24 +304,24 @@ public class SalesActivity extends AppCompatActivity
           tableSalesItemHelper.open();
           tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
-
+          
           Intent intent = new Intent(SalesActivity.this, PaymentActivity.class);
           intent.putExtra("salesid", sales.getId());
 //          intent.putExtra("salesid", sales.getId());
-
+          
           startActivity(intent);
         }
-
-
+        
+        
       }
     });
-
+    
     btnSalesSave.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-
+        
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
@@ -333,12 +332,12 @@ public class SalesActivity extends AppCompatActivity
           tableSalesHelper.open();
           tableSalesHelper.insertSales(sales);
           tableSalesHelper.close();
-
+          
           TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
           tableSalesItemHelper.open();
           tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
-
+          
           finish();
         }
 //        salesPack = new SalesPack();
@@ -364,31 +363,31 @@ public class SalesActivity extends AppCompatActivity
 //        Toast.makeText(SalesActivity.this, "Success", Toast.LENGTH_LONG).show();
 
 //        finish();
-
+        
       }
     });
-
+    
     tableProductHelper = new TableProductHelper(this);
-
+    
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
-
+    
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()
     {
-
+      
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-
+        
         product = (Product) adapter.getItem(position);
         adapter.getItem(position);
-
+        
         Tax tax = new Tax();
         tax.setId("001");
-
+        
         data();
-
+        
         salesItem = new SalesItem();
         salesItem.setId(0);
         salesItem.setProduct(product);
@@ -408,58 +407,58 @@ public class SalesActivity extends AppCompatActivity
 //        tableSalesItemHelper.open();
 //        tableSalesItemHelper.insertSalesItem(salesItem);
 //        tableSalesItemHelper.close();
-
+        
         salesListAdapter.addSalesItem(salesItem);
         edittextSearchProduct.setText("");
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-
+        
       }
-
+      
     });
-
+    
     salesListAdapter.notifyDataSetChanged();
-
+    
     decimalFormat = new DecimalFormat("###,###.###");
 //    String value = decimalFormat.format(salesListAdapter.grandTotal());
-
+    
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-
+    
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
     beepManager = new BeepManager(this);
-
-
+    
+    
     sActivity = this;
   }
-
-
+  
+  
   @Override
   protected void onResume()
   {
     super.onResume();
-
+    
     barcodeView.resume();
   }
-
+  
   @Override
   protected void onPause()
   {
     super.onPause();
-
+    
     barcodeView.pause();
   }
-
+  
   public void triggerScan(View view)
   {
     barcodeView.decodeSingle(callback);
   }
-
+  
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event)
   {
     return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
   }
-
+  
   @Override
   public void onBackPressed()
   {
@@ -474,7 +473,7 @@ public class SalesActivity extends AppCompatActivity
         finish();
       }
     });
-
+    
     confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
     {
       @Override
@@ -483,17 +482,17 @@ public class SalesActivity extends AppCompatActivity
         dialog.dismiss();
       }
     });
-
+    
     confirmationDialog.show();
-
+    
   }
-
+  
   public void data()
   {
-
+    
     Location location = new Location();
     location.setId(randomUUID().toString());
-
+    
     Tax tax = new Tax();
     tax.setId("001");
 
@@ -516,7 +515,7 @@ public class SalesActivity extends AppCompatActivity
 //    sales.setCustomer(customer);
 //    sales.setPerson(people);
 //    sales.setReceipt(receipt);
-
+    
     salesItem = new SalesItem();
     salesItem.setProduct(product);
     salesItem.setAttributes(bytes);
@@ -525,7 +524,7 @@ public class SalesActivity extends AppCompatActivity
     salesItem.setSalesId(sales);
     salesItem.setSflag(true);
     salesItem.setTaxid(tax);
-
+    
     payment = new Payment();
     payment.setId(randomUUID().toString());
     payment.setPayment("cash");
@@ -538,7 +537,7 @@ public class SalesActivity extends AppCompatActivity
     payment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     payment.setSflag(true);
     payment.setReceipt(receipt);
-
+    
     taxLine = new TaxLine();
     taxLine.setId(randomUUID().toString());
     taxLine.setBase(1000);
@@ -547,7 +546,7 @@ public class SalesActivity extends AppCompatActivity
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
-
+    
     stockDiary = new StockDiary();
     stockDiary.setId(randomUUID().toString());
     stockDiary.setReason(0);
@@ -647,18 +646,18 @@ public class SalesActivity extends AppCompatActivity
 //    viewstockdiary.setSflag(true);
 //    viewstockdiary.setAttributesetinstanceId(null);
 //    viewstockdiary.setLocation("0");
-
-
+    
+    
   }
-
+  
   public void refreshData(){
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
   }
-
+  
   public void setTextTotal(double total)
   {
     salesProductTotal.setText(decimalFormat.format(total));
   }
-
-
+  
+  
 }

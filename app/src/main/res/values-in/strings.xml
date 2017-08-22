@@ -300,8 +300,8 @@
     <string name="select_device">Pilih perangkat</string>
     <string name="none_paired">Tidak ada perangkat yang cocok</string>
     <string name="none_found">Perangkat tidak ditemukan</string>
-    <string name="title_paired_devices">Cocokkan peralatan</string>
-    <string name="title_other_devices">Peralatan lain yang berguna</string>
+    <string name="title_paired_devices">Perangkat dipasangkan</string>
+    <string name="title_other_devices">Perangkat yang tersedia</string>
     <string name="button_scan">Memindai perangkat</string>
 
     <!--  Message -->
@@ -315,20 +315,20 @@
     <string name="Connection_lost">Sambungan perangkat putus</string>
     <string name="unable_connect">Tidak dapat menyambungkan perangkat</string>
     <string name="SalesEmpty">Penjualan kosong</string>
-
-
+    <string name="text_cancelPayment">Batal pembayaran?</string>
+    <string name="Qs_payment">Apakah anda yakin ingin membatalkan pembayaran?</string>
     <string name="text_bluetooth_off">Bluetooth tidak aktif</string>
     <string name="text_bluetooth_on">Bluetooth aktif</string>
-
+    <string name="txt_refresh">Segarkan</string>
     <string name="text_connect">Menghubungkan</string>
     <string name="text_disconnect">Memutuskan</string>
-
+    <string name="text_switchOn">Aktif</string>
+    <string name="text_switchOff">Non Aktif</string>
+    <string name="text_info">Saat Bluetooth aktif, perangkat dapat berkomunikasi dengan perangkat Bluetooth terdekat lainnya</string>
     <string name="text_enable_bluetooth">Aktifkan Bluetooth</string>
     <string name="text_disable_bluetooth">Nonaktifkan Bluetooth</string>
-
     <string name="text_scan_devices">Perangkat Pindai</string>
     <string name="text_stop_scan">Perangkat Pindai</string>
-
     <string name="text_list_paired_devices">Perangkat Terpasang</string>
     <string name="text_list_devices">Daftar Perangkat</string>
     <string name="text_pair">Pasangan</string>
@@ -336,9 +336,12 @@
     <string name="text_tunai">BAYAR</string>
     <string name="text_kembali">KEMBALI</string>
     <string name="text_ucapan">TERIMA KASIH. SELAMAT BELANJA KEMBALI</string>
-
+    <string name="Qs_bluetooth">Apakah Anda yakin ingin memutuskan koneksi?</string>
     <string name="printOptions">Pilihan Cetak</string>
+    <string name="text_finish">Selesai</string>
+    <string name="text_Change">Kembali</string>
     <string name="Qs_print">Cetak Struk?</string>
+    <string name="text_notEnough">Uang tidak cukup</string>
     <string name="cashier">KASIR: </string>
     <string name="text_suddenly">Printer mencetak tiba-tiba</string>
     <string name="text_PrintFinished">Data cetak selesai</string>

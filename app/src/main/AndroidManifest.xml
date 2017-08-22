@@ -20,8 +20,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <service android:name="com.mitrakreasindo.pos.common.WirelessPrinter.BluetoothService"/>
+        android:theme="@style/AppTheme"
+        android:name="com.mitrakreasindo.pos.common.WirelessPrinter.GlobalVariable">
 
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -125,5 +125,4 @@
             android:name=".report.ReportActivity"
             android:label="@string/reports"/>
     </application>
-
 </manifest>

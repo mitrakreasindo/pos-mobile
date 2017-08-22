@@ -18,10 +18,11 @@ import java.util.List;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataByte;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataString;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.mService;
-
 /**
- * Created by MK-fepriyadi on 7/31/2017.
- */
+  * Created by MK-fepriyadi on 7/31/2017.*/
+
+ 
+
 
 public class PrintReceipt
 {
@@ -105,7 +106,7 @@ public class PrintReceipt
             {
               ProductName = name.substring(0, 14);
             }
-            /*if(Integer.toString(Qty).length()<=4)
+            if(Integer.toString(Qty).length()<=4)
             {
               Quantity = Qty;
             }
@@ -113,7 +114,8 @@ public class PrintReceipt
             {
               Quantity = Integer.parseInt(Integer.toString(Qty).substring(0,4));
             }
-            */
+            
+
             if((decimalFormat.format(price)).length()<=10)
             {
               Harga = decimalFormat.format(price).replace('.',',');

@@ -303,8 +303,8 @@
     <string name="select_device">Select device</string>
     <string name="none_paired">No matching devices</string>
     <string name="none_found">No device found</string>
-    <string name="title_paired_devices">Match equipment</string>
-    <string name="title_other_devices">Other useful equipment</string>
+    <string name="title_paired_devices">Paired devices</string>
+    <string name="title_other_devices">Available device</string>
     <string name="button_scan">Scanning device</string>
 
     <!--  Message -->
@@ -318,37 +318,34 @@
     <string name="Connection_lost">Device connection was lost</string>
     <string name="unable_connect">Unable to connect device</string>
     <string name="SalesEmpty">Sales is Empty</string>
-
-
     <string name="text_bluetooth_off">Bluetooth is Off</string>
     <string name="text_bluetooth_on">Bluetooth is On</string>
+    <string name="txt_refresh">Refresh</string>
 
     <string name="text_connect">Connect</string>
     <string name="text_disconnect">Diconnect</string>
-
+    <string name="text_switchOn">ON</string>
+    <string name="text_switchOff">OFF</string>
+    <string name="text_info">When Bluetooth is turned on, your device can communicate with other nearby Bluetooth devices</string>
     <string name="text_enable_bluetooth">Enable Bluetooth</string>
     <string name="text_disable_bluetooth">Disable Bluetooth</string>
-
     <string name="text_scan_devices">Scan Devices</string>
     <string name="text_stop_scan">Scan Devices</string>
-
     <string name="text_list_paired_devices">Paired Devices</string>
     <string name="text_list_devices">List of Devices</string>
-
     <string name="text_pair">Pair</string>
-
+    <string name="text_cancelPayment">Cancel Payment ?</string>
+    <string name="Qs_payment">Are you sure want to cancel the payment ?</string>
 
     <string name="text_print_demo">Print Demo</string>
     <string name="text_print_barcode">Print Barcode</string>
     <string name="text_print_image">Print Image</string>
     <string name="text_print_receipt">Print Receipt</string>
     <string name="text_print_text">Print Text</string>
-
     <string name="text_total">TOTAL</string>
     <string name="text_tunai">PAYMENT</string>
     <string name="text_kembali">CHANGE</string>
     <string name="text_ucapan">THANK YOU</string>
-
     <string name="printOptions">Print Options</string>
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">CASHIER: </string>
@@ -356,7 +353,10 @@
     <string name="text_suddenly">The printer is looking abruptly</string>
     <string name="text_PrintFinished">Printing is completed</string>
     <string name="text_outOfPaper">Printer is out of paper, Load paper. Try again</string>
-
+    <string name="Qs_bluetooth">Are you sure want to disconnect?</string>
+    <string name="text_finish">Finish</string>
+    <string name="text_Change">Change Money</string>
+    <string name="text_notEnough">Money is not enough</string>
     <string name="total_transaction">Total Transaction</string>
     <string name="download">Download</string>
 
