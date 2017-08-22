@@ -78,7 +78,6 @@
 
             <TextView
                 android:id="@+id/txt_payment_date"
-                android:text="27 Januari 2018"
                 android:textColor="@color/gray700"
                 android:layout_marginBottom="5dp"
                 android:layout_width="wrap_content"

@@ -141,7 +141,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,900,000,000"
+                                android:id="@+id/txt_dashboard_chart_daily_revenue"
+                                android:text="Rp. 0"
                                 android:layout_marginStart="16dp"
                                 android:textSize="16sp"
                                 android:layout_width="wrap_content"
@@ -155,7 +156,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_daily_cost"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginBottom="16dp"
@@ -173,7 +175,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_daily_total"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_width="wrap_content"
@@ -221,7 +224,7 @@
                             android:layout_height="match_parent">
 
                             <TextView
-                                android:text="@string/daily_revenue"
+                                android:text="@string/weekly_revenue"
                                 android:layout_marginBottom="8dp"
                                 android:textStyle="bold"
                                 android:textSize="20sp"
@@ -236,7 +239,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,900,000,000"
+                                android:id="@+id/txt_dashboard_chart_weekly_revenue"
+                                android:text="Rp. 0"
                                 android:layout_marginStart="16dp"
                                 android:textSize="16sp"
                                 android:layout_width="wrap_content"
@@ -250,7 +254,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_weekly_cost"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginBottom="16dp"
@@ -268,7 +273,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_weekly_total"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_width="wrap_content"
@@ -326,7 +332,7 @@
                             android:layout_height="match_parent">
 
                             <TextView
-                                android:text="@string/daily_revenue"
+                                android:text="@string/monthly_revenue"
                                 android:layout_marginBottom="8dp"
                                 android:textStyle="bold"
                                 android:textSize="20sp"
@@ -341,7 +347,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,900,000,000"
+                                android:id="@+id/txt_dashboard_chart_monthly_revenue"
+                                android:text="Rp. 0"
                                 android:layout_marginStart="16dp"
                                 android:textSize="16sp"
                                 android:layout_width="wrap_content"
@@ -355,7 +362,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_monthly_cost"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginBottom="16dp"
@@ -373,7 +381,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_monthly_total"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_width="wrap_content"
@@ -421,7 +430,7 @@
                             android:layout_height="match_parent">
 
                             <TextView
-                                android:text="@string/daily_revenue"
+                                android:text="@string/yearly_revenue"
                                 android:layout_marginBottom="8dp"
                                 android:textStyle="bold"
                                 android:textSize="20sp"
@@ -436,7 +445,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,900,000,000"
+                                android:id="@+id/txt_dashboard_chart_yearly_revenue"
+                                android:text="Rp. 0"
                                 android:layout_marginStart="16dp"
                                 android:textSize="16sp"
                                 android:layout_width="wrap_content"
@@ -450,7 +460,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_yearly_cost"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginBottom="16dp"
@@ -468,7 +479,8 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:text="Rp. 1,000,000,000"
+                                android:id="@+id/txt_dashboard_chart_yearly_total"
+                                android:text="Rp. 0"
                                 android:textSize="16sp"
                                 android:layout_marginStart="16dp"
                                 android:layout_width="wrap_content"

@@ -13,8 +13,8 @@
         android:orientation="vertical">
 
         <!--<HorizontalScrollView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="80dp">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="80dp">-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,12 +47,6 @@
                 android:text="@string/receive"
                 android:textColor="@color/white"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <Button
                 android:id="@+id/btn_menu_setting"
                 android:layout_width="120dp"
@@ -82,17 +76,25 @@
 
         </LinearLayout>
 
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!---->
+
+        <!--</LinearLayout>-->
+
         <!--</HorizontalScrollView>-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="232dp"
             android:orientation="horizontal">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/revenue_dashboard_layout"
                 android:layout_width="0dp"
-                android:layout_height="192dp"
+                android:layout_height="224dp"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="0dp"
@@ -100,86 +102,87 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     android:background="#FFF"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5dp">
+                        android:divider="?android:attr/dividerHorizontal"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/item_revenue_daily_chart"
-                            android:layout_width="match_parent"
+                            android:layout_width="224dp"
                             android:layout_height="match_parent"/>
 
-                    </FrameLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                            <TextView
+                                android:text="@string/daily_revenue"
+                                android:layout_marginBottom="8dp"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/daily_revenue"
-                            android:layout_marginBottom="8dp"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/revenue"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/revenue"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_daily_revenue"
+                                android:text="Rp. 0"
+                                android:layout_marginStart="16dp"
+                                android:textSize="16sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_daily_revenue"
-                            android:text="Rp. 0"
-                            android:layout_marginStart="16dp"
-                            android:textSize="16sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/cost"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/cost"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_daily_cost"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_daily_cost"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <include layout="@layout/horizontal_divider" />
 
-                        <include layout="@layout/horizontal_divider" />
+                            <TextView
+                                android:text="@string/total"
+                                android:layout_marginTop="8dp"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/total"
-                            android:layout_marginTop="8dp"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_daily_total"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_daily_total"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -189,7 +192,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="192dp"
+                android:layout_height="224dp"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="0dp"
@@ -197,86 +200,87 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     android:background="#FFF"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5dp">
+                        android:divider="?android:attr/dividerHorizontal"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/item_revenue_weekly_chart"
-                            android:layout_width="match_parent"
+                            android:layout_width="224dp"
                             android:layout_height="match_parent"/>
 
-                    </FrameLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                            <TextView
+                                android:text="@string/weekly_revenue"
+                                android:layout_marginBottom="8dp"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/weekly_revenue"
-                            android:layout_marginBottom="8dp"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/revenue"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/revenue"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_weekly_revenue"
+                                android:text="Rp. 0"
+                                android:layout_marginStart="16dp"
+                                android:textSize="16sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_weekly_revenue"
-                            android:text="Rp. 0"
-                            android:layout_marginStart="16dp"
-                            android:textSize="16sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/cost"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/cost"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_weekly_cost"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_weekly_cost"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <include layout="@layout/horizontal_divider" />
 
-                        <include layout="@layout/horizontal_divider" />
+                            <TextView
+                                android:text="@string/total"
+                                android:layout_marginTop="8dp"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/total"
-                            android:layout_marginTop="8dp"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_weekly_total"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_weekly_total"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -289,13 +293,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="232dp"
             android:orientation="horizontal">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/queue_dashboard_layout"
                 android:layout_width="0dp"
-                android:layout_height="192dp"
+                android:layout_height="224dp"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="0dp"
@@ -303,87 +307,88 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     android:background="#FFF"
                     android:gravity="center"
                     android:orientation="horizontal">
 
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5dp">
+                        android:divider="?android:attr/dividerHorizontal"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/item_revenue_monthly_chart"
-                            android:layout_width="match_parent"
+                            android:layout_width="224dp"
                             android:layout_height="match_parent"/>
 
-                    </FrameLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                            <TextView
+                                android:text="@string/monthly_revenue"
+                                android:layout_marginBottom="8dp"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/monthly_revenue"
-                            android:layout_marginBottom="8dp"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/revenue"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/revenue"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_monthly_revenue"
+                                android:text="Rp. 0"
+                                android:layout_marginStart="16dp"
+                                android:textSize="16sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_monthly_revenue"
-                            android:text="Rp. 0"
-                            android:layout_marginStart="16dp"
-                            android:textSize="16sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/cost"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/cost"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_monthly_cost"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_monthly_cost"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <include layout="@layout/horizontal_divider" />
 
-                        <include layout="@layout/horizontal_divider" />
+                            <TextView
+                                android:text="@string/total"
+                                android:layout_marginTop="8dp"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/total"
-                            android:layout_marginTop="8dp"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_monthly_total"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_monthly_total"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -393,7 +398,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="192dp"
+                android:layout_height="224dp"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="0dp"
@@ -401,86 +406,87 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
+                    android:layout_height="match_parent"
                     android:background="#FFF"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5dp">
+                        android:divider="?android:attr/dividerHorizontal"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/item_revenue_yearly_chart"
-                            android:layout_width="match_parent"
+                            android:layout_width="224dp"
                             android:layout_height="match_parent"/>
 
-                    </FrameLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                            <TextView
+                                android:text="@string/yearly_revenue"
+                                android:layout_marginBottom="8dp"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/yearly_revenue"
-                            android:layout_marginBottom="8dp"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/revenue"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/revenue"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_yearly_revenue"
+                                android:text="Rp. 0"
+                                android:layout_marginStart="16dp"
+                                android:textSize="16sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_yearly_revenue"
-                            android:text="Rp. 0"
-                            android:layout_marginStart="16dp"
-                            android:textSize="16sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:text="@string/cost"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/cost"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_yearly_cost"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_yearly_cost"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <include layout="@layout/horizontal_divider" />
 
-                        <include layout="@layout/horizontal_divider" />
+                            <TextView
+                                android:text="@string/total"
+                                android:layout_marginTop="8dp"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:text="@string/total"
-                            android:layout_marginTop="8dp"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/txt_dashboard_chart_yearly_total"
+                                android:text="Rp. 0"
+                                android:textSize="16sp"
+                                android:layout_marginStart="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/txt_dashboard_chart_yearly_total"
-                            android:text="Rp. 0"
-                            android:textSize="16sp"
-                            android:layout_marginStart="16dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 

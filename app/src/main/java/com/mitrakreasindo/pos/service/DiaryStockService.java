@@ -19,15 +19,15 @@ import retrofit2.http.Path;
 
 public interface DiaryStockService
 {
-  @GET("stockdiary/{kodeMerchant}/")
-  Call<List<StockDiary>> getStockDiaryAll(@Path("kodeMerchant") String kodeMerchant);
+  @GET("stockcurrents/{kodeMerchant}/")
+  Call<List<StockDiary>> getstockcurrentsAll(@Path("kodeMerchant") String kodeMerchant);
 
-  @POST("stockdiary/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postStockDiary(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary stockDiary);
+  @POST("stockcurrents/{kodeMerchant}/")
+  Call<HashMap<Integer, String>> poststockcurrents(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary stockDiary);
 
-  @PUT("stockdiary/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> updateStockDiary(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary StockDiary);
+  @PUT("stockcurrents/{kodeMerchant}/{id}")
+  Call<HashMap<Integer, String>> updatestockcurrents(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary stockDiary);
 
-  @DELETE("stockdiary/public/{id}")
-  Call<HashMap<Integer, String>> deleteStockDiary(@Path("id") String id);
+  @DELETE("stockcurrents/public/{id}")
+  Call<HashMap<Integer, String>> deletestockcurrents(@Path("id") String id);
 }

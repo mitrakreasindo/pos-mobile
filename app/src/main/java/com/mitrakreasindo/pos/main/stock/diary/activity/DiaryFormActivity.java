@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
 import com.mitrakreasindo.pos.service.DiaryStockService;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
@@ -282,6 +284,28 @@ public class DiaryFormActivity extends AppCompatActivity
       }
     });
 
+    diaryProductReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+      {
+        if (diaryProductReasonSpinner.getSelectedItem().toString().contains("(-)"))
+        {
+          if (Double.valueOf(diaryUnitField.getText().toString()) > inStock)
+          {
+            diaryUnitField.setText(String.valueOf(inStock));
+          }
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent)
+      {
+
+      }
+    });
+
+
 //    //Spinner Items
 //    List<String> spinnerArray =  new ArrayList<>();
 //    spinnerArray.add("Stock In (+)");
@@ -347,6 +371,7 @@ public class DiaryFormActivity extends AppCompatActivity
 
       Product product = new Product();
       product.setId(tableProductHelper.getId(diaryProductBarcodeField.getText().toString()));
+      product.setStockunits(Double.valueOf(diaryUnitField.getText().toString()));
 
       stockDiary = new StockDiary();
       stockDiary.setId(UUID.randomUUID().toString());
@@ -376,7 +401,7 @@ public class DiaryFormActivity extends AppCompatActivity
       e.printStackTrace();
     }
 
-    Call<HashMap<Integer, String>> call = diaryStockService.postStockDiary(kodeMerchant, stockDiary);
+    Call<HashMap<Integer, String>> call = diaryStockService.poststockcurrents(kodeMerchant, stockDiary);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -394,6 +419,11 @@ public class DiaryFormActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
+
+            TableProductHelper tableProductHelper = new TableProductHelper(DiaryFormActivity.this);
+            tableProductHelper.open();
+            tableProductHelper.updateProductStock(stockDiary.getProduct(), stockDiary.getReason());
+            tableProductHelper.close();
 
           }
           Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();

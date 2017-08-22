@@ -146,26 +146,28 @@ public class SalesActivity extends AppCompatActivity
     public void barcodeResult(BarcodeResult result)
     {
 
-      product = tableProductHelper.getProduct(result.getText());
+      Product productByCode = tableProductHelper.getProduct(result.getText());
 
-      if (product != null)
+      if (productByCode != null)
       {
 
-        data();
+//        data();
 
         Tax tax = new Tax();
         tax.setId("001");
 
-        salesItem = new SalesItem();
-        salesItem.setProduct(product);
-        salesItem.setAttributes(bytes);
-        salesItem.setUnits(1);
-        salesItem.setPrice(product.getPricesell());
-        salesItem.setSalesId(sales);
-        salesItem.setSflag(true);
-        salesItem.setTaxid(tax);
+        Log.d("PRODUCTOPER", productByCode.getName());
 
-        salesListAdapter.addSalesItem(salesItem);
+        SalesItem itemByBarcode = new SalesItem();
+        itemByBarcode.setProduct(productByCode);
+        itemByBarcode.setAttributes(bytes);
+        itemByBarcode.setUnits(1);
+        itemByBarcode.setPrice(productByCode.getPricesell());
+        itemByBarcode.setSalesId(sales);
+        itemByBarcode.setSflag(true);
+        itemByBarcode.setTaxid(tax);
+
+        salesListAdapter.addSalesItem(itemByBarcode);
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 
       } else
@@ -362,25 +364,25 @@ public class SalesActivity extends AppCompatActivity
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
 
-        product = (Product) adapter.getItem(position);
+        Product productBySearch = (Product) adapter.getItem(position);
         adapter.getItem(position);
 
         Tax tax = new Tax();
         tax.setId("001");
 
-        data();
+//        data();
 
-        salesItem = new SalesItem();
-        salesItem.setId(0);
-        salesItem.setProduct(product);
-        salesItem.setAttributes(bytes);
-        salesItem.setUnits(1);
-        salesItem.setPrice(product.getPricesell());
-        salesItem.setSalesId(sales);
-        salesItem.setSflag(true);
-        salesItem.setTaxid(tax);
+        SalesItem itemBySearch = new SalesItem();
+        itemBySearch.setId(0);
+        itemBySearch.setProduct(productBySearch);
+        itemBySearch.setAttributes(bytes);
+        itemBySearch.setUnits(1);
+        itemBySearch.setPrice(productBySearch.getPricesell());
+        itemBySearch.setSalesId(sales);
+        itemBySearch.setSflag(true);
+        itemBySearch.setTaxid(tax);
 
-        salesListAdapter.addSalesItem(salesItem);
+        salesListAdapter.addSalesItem(itemBySearch);
         edittextSearchProduct.setText("");
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
 

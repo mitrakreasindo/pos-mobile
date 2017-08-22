@@ -16,14 +16,6 @@
 
         <include layout="@layout/include_toolbar"/>
 
-        <!--<android.support.design.widget.TabLayout-->
-        <!--android:id="@+id/tabs"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:tabIndicatorColor="@color/white"-->
-        <!--app:tabSelectedTextColor="@color/white"-->
-        <!--app:tabTextColor="@color/white"/>-->
-
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
@@ -145,7 +137,7 @@
                     android:padding="15dp">
 
                     <TextView
-                        android:text="@string/barcode"
+                        android:text="@string/stock_cost_by_year"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -158,7 +150,7 @@
                         android:inputType="textPersonName"/>
 
                     <TextView
-                        android:text="@string/barcode"
+                        android:text="@string/stock_volume"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -170,11 +162,6 @@
                         android:hint="@string/stock_volume"
                         android:inputType="textPersonName"/>
 
-                    <TextView
-                        android:text="@string/barcode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
                     <Switch
                         android:id="@+id/switch_multi_pack"
                         android:layout_width="wrap_content"
@@ -182,7 +169,7 @@
                         android:text="@string/multi_pack"/>
 
                     <TextView
-                        android:text="@string/barcode"
+                        android:text="@string/pack_quantity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

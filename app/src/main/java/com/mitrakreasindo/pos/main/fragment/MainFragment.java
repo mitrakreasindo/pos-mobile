@@ -7,21 +7,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
@@ -31,8 +32,6 @@ import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.MainActivity;
-import com.mitrakreasindo.pos.main.MainQueueListAdapter;
-import com.mitrakreasindo.pos.main.Queue;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.adapter.PendingTransactionListAdapter;
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
@@ -70,11 +69,41 @@ public class MainFragment extends Fragment
   PieChart itemRevenueMonthlyChart;
   @BindView(R.id.item_revenue_yearly_chart)
   PieChart itemRevenueYearlyChart;
+  @BindView(R.id.txt_dashboard_chart_daily_revenue)
+  TextView txtDashboardChartDailyRevenue;
+  @BindView(R.id.txt_dashboard_chart_daily_cost)
+  TextView txtDashboardChartDailyCost;
+  @BindView(R.id.txt_dashboard_chart_daily_total)
+  TextView txtDashboardChartDailyTotal;
+  @BindView(R.id.revenue_dashboard_layout)
+  CardView revenueDashboardLayout;
+  @BindView(R.id.txt_dashboard_chart_weekly_revenue)
+  TextView txtDashboardChartWeeklyRevenue;
+  @BindView(R.id.txt_dashboard_chart_weekly_cost)
+  TextView txtDashboardChartWeeklyCost;
+  @BindView(R.id.txt_dashboard_chart_weekly_total)
+  TextView txtDashboardChartWeeklyTotal;
+  @BindView(R.id.txt_dashboard_chart_monthly_revenue)
+  TextView txtDashboardChartMonthlyRevenue;
+  @BindView(R.id.txt_dashboard_chart_monthly_cost)
+  TextView txtDashboardChartMonthlyCost;
+  @BindView(R.id.txt_dashboard_chart_monthly_total)
+  TextView txtDashboardChartMonthlyTotal;
+  @BindView(R.id.queue_dashboard_layout)
+  CardView queueDashboardLayout;
+  @BindView(R.id.txt_dashboard_chart_yearly_revenue)
+  TextView txtDashboardChartYearlyRevenue;
+  @BindView(R.id.txt_dashboard_chart_yearly_cost)
+  TextView txtDashboardChartYearlyCost;
+  @BindView(R.id.txt_dashboard_chart_yearly_total)
+  TextView txtDashboardChartYearlyTotal;
+  @BindView(R.id.main_fragment)
+  ScrollView mainFragment;
   private Unbinder unbinder;
   private List<ViewPendingTransaction> viewPendingTransactions;
   private RecyclerView listQueue;
   private PendingTransactionListAdapter pendingTransactionListAdapter;
-//  private Queue queue;
+  //  private Queue queue;
   private Button menuSales, menuData, menuReceive, menuSetting, menuReport, menuExport;
   private View view;
   private CardView revenueLayout, queueLayout;
@@ -87,8 +116,8 @@ public class MainFragment extends Fragment
 
   private Bundle bundle;
 
-  float floatData[] = {150000000, 126000000};
-  String stringData[] = {"profit", "loss"};
+//  float floatData[] = {150000000, 126000000};
+//  String stringData[] = {"profit", "loss"};
 
   private PieDataSet dataSetDaily;
   private PieDataSet dataSetWeekly;
@@ -108,12 +137,16 @@ public class MainFragment extends Fragment
   private List<PieEntry> monthlyEntries;
   private List<PieEntry> yearlyEntries;
 
+  private String companyCode;
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
 
     EventBus.getDefault().register(this);
+
+    companyCode = SharedPreferenceEditor.LoadPreferences(getContext(), "Company Code", "");
 
 
   }
@@ -130,10 +163,9 @@ public class MainFragment extends Fragment
 
     if (!EventBus.getDefault().isRegistered(this))
     {
-      Log.d("EVENT BUS","not registered");
+      Log.d("EVENT BUS", "not registered");
       EventBus.getDefault().register(this);
-    }
-    else
+    } else
       Log.d("EVENT BUS", "already registered");
 
     service = ClientService.createService().create(PendingTransactionService.class);
@@ -231,7 +263,12 @@ public class MainFragment extends Fragment
   public void onResume()
   {
     super.onResume();
-    if(shouldExecuteOnResume)
+
+    ((MainActivity) getContext()).getRevenue(companyCode, EventCode.EVENT_MONEY_GET);
+
+    ((MainActivity) getContext()).getCost(companyCode, EventCode.EVENT_MONEY_GET);
+
+    if (shouldExecuteOnResume)
     {
       EventBus.getDefault().register(this);
 //      progressDialog = new ProgressDialog(getContext());
@@ -241,8 +278,7 @@ public class MainFragment extends Fragment
       Log.d("MAIN FRAGMENT", "RESUME");
 //      setupMenu();
 //      setupMainFragmentLayout();
-    }
-    else
+    } else
       shouldExecuteOnResume = true;
   }
 
@@ -292,7 +328,7 @@ public class MainFragment extends Fragment
       case EventCode.EVENT_PENDING_TRANSACTION_GET:
         if (event.getStatus() == Event.COMPLETE)
         {
-          if(viewPendingTransactions != null)
+          if (viewPendingTransactions != null)
           {
             pendingTransactionListAdapter.clear();
             pendingTransactionListAdapter.addPendingTransaction(viewPendingTransactions);
@@ -309,7 +345,6 @@ public class MainFragment extends Fragment
         break;
     }
 
-    super.onPause();
   }
 
   private void setupMenu()
@@ -364,8 +399,14 @@ public class MainFragment extends Fragment
   private void dailyRevenueChart()
   {
 
+    txtDashboardChartDailyRevenue.setText(DefaultHelper.decimalFormat(revenue.getDay()));
+    txtDashboardChartDailyCost.setText(DefaultHelper.decimalFormat(cost.getDay()));
+    txtDashboardChartDailyTotal.setText(DefaultHelper.decimalFormat(revenue.getDay() - cost.getDay()));
+
     if (revenue.getDay() == 0.0)
     {
+      Log.d("dailyrevenue", revenue.getDay().toString());
+
       dailyEntries = new ArrayList<PieEntry>();
       dailyEntries.add(new PieEntry(1, "no revenue"));
       dailyEntries.add(new PieEntry(1, "no cost"));
@@ -418,9 +459,13 @@ public class MainFragment extends Fragment
 
   private void weeklyRevenueChart()
   {
+    txtDashboardChartWeeklyRevenue.setText(DefaultHelper.decimalFormat(revenue.getWeek()));
+    txtDashboardChartWeeklyCost.setText(DefaultHelper.decimalFormat(cost.getWeek()));
+    txtDashboardChartWeeklyTotal.setText(DefaultHelper.decimalFormat(revenue.getWeek() - cost.getWeek()));
 
     if (revenue.getWeek() == 0.0)
     {
+
       weeklyEntries = new ArrayList<PieEntry>();
       weeklyEntries.add(new PieEntry(1, "no revenue"));
       weeklyEntries.add(new PieEntry(1, "no cost"));
@@ -473,8 +518,13 @@ public class MainFragment extends Fragment
   private void monthlyRevenueChart()
   {
 
+    txtDashboardChartMonthlyRevenue.setText(DefaultHelper.decimalFormat(revenue.getMonth()));
+    txtDashboardChartMonthlyCost.setText(DefaultHelper.decimalFormat(cost.getMonth()));
+    txtDashboardChartMonthlyTotal.setText(DefaultHelper.decimalFormat(revenue.getMonth() - cost.getMonth()));
+
     if (revenue.getMonth() == 0.0)
     {
+
       monthlyEntries = new ArrayList<PieEntry>();
       monthlyEntries.add(new PieEntry(1, "no revenue"));
       monthlyEntries.add(new PieEntry(1, "no cost"));
@@ -525,8 +575,13 @@ public class MainFragment extends Fragment
   private void yearlyRevenueChart()
   {
 
+    txtDashboardChartYearlyRevenue.setText(DefaultHelper.decimalFormat(revenue.getYear()));
+    txtDashboardChartYearlyCost.setText(DefaultHelper.decimalFormat(cost.getYear()));
+    txtDashboardChartYearlyTotal.setText(DefaultHelper.decimalFormat(revenue.getYear() - cost.getYear()));
+
     if (revenue.getYear() == 0.0)
     {
+
       yearlyEntries = new ArrayList<PieEntry>();
       yearlyEntries.add(new PieEntry(1, "no revenue"));
       yearlyEntries.add(new PieEntry(1, "no cost"));

@@ -55,7 +55,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
   private int counter = 0;
   private Product product;
   private List<String> inactive;
-  private DefaultHelper defaultHelper = new DefaultHelper();
 
   public ProductListAdapter(Context context, List<Product> products)
   {
@@ -88,18 +87,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         {
           Intent intent = new Intent(context, ProductFormActivity.class);
           intent.putExtra("product", p);
-          Log.d("BUNDLE", p.getName());
-          Log.d("POSITION", "" + position);
-//          intent.putExtra("id", product.getId());
-//          intent.putExtra("barcode", product.getCode());
-//          intent.putExtra("name", product.getName());
-//          intent.putExtra("shortName", product.getAlias());
-//          intent.putExtra("category", product.getCategory().getId());
-//          intent.putExtra("buyPrice", product.getPricebuy().toString());
-//          intent.putExtra("sellPrice", product.getPricebuy().toString());
-//          intent.putExtra("stockCost", product.getStockcost().toString());
-//          intent.putExtra("stockVolume", product.getStockvolume().toString());
-//          intent.putExtra("image", product.getImage());
           context.startActivity(intent);
         }
       });
@@ -159,24 +146,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     holder.itemProductCode.setText(p.getCode());
     holder.itemProductPriceAndUnit.setText("Rp. "
-      + defaultHelper.decimalFormat(p.getPricesell())
-      + " | " + defaultHelper.decimalFormat(p.getStockunits())
+      + DefaultHelper.decimalFormat(p.getPricesell())
+      + " | " + DefaultHelper.decimalFormat(p.getStockunits())
       + " items");
 
-//    holder.txtCodeProduct.setText(p.getCode());
-//    holder.txtSellPrice.setText("IDR " + Double.toString(p.getPricesell()));
-//    holder.txtNameProduct.setText(p.getName());
-//    holder.txtBuyPrice.setText(Double.toString(p.getPricebuy()));
-
-//    if (!productActivity.is_action_mode)
-//    {
-//      holder.checkBox.setVisibility(View.GONE);
-//      holder.checkBox.setChecked(false);
-//    }
-//    else
-//    {
-//      holder.checkBox.setVisibility(View.VISIBLE);
-//    }
   }
 
   public void addProduct(Product product)

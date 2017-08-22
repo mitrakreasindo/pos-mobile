@@ -19,7 +19,7 @@ public class DefaultHelper
     return dateString;
   }
 
-  public String dateOnlyFormat(long date)
+  public static String dateOnlyFormat(long date)
   {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
     String dateString = formater.format(date);
@@ -27,7 +27,7 @@ public class DefaultHelper
     return dateString;
   }
 
-  public String dateOnlyFormat(Date date)
+  public static String dateOnlyFormat(Date date)
   {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
     String dateString = formater.format(date);
@@ -49,7 +49,7 @@ public class DefaultHelper
     return decimalFormat.format(d);
   }
 
-  public String decimalFormatToPercentage(double d)
+  public static String decimalFormatToPercentage(double d)
   {
     DecimalFormat decimalFormat = new DecimalFormat(" #,##0.00 '%'");
     return decimalFormat.format(d);

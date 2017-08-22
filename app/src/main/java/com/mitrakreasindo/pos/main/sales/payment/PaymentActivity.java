@@ -189,6 +189,7 @@ public class PaymentActivity extends AppCompatActivity
       return;
     }
   }
+
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
   {
@@ -268,13 +269,13 @@ public class PaymentActivity extends AppCompatActivity
       paymentProductListAdapter = new PaymentProductListAdapter(this, salesItemList);
     }
 
+    txtPaymentDate.setText(DefaultHelper.dateOnlyFormat(new Date()));
 
     listPaymentProduct.setAdapter(paymentProductListAdapter);
     listPaymentProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listPaymentProduct.setLayoutManager(layoutManager);
     listPaymentProduct.setItemAnimator(new DefaultItemAnimator());
-
 
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()

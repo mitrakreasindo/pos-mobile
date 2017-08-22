@@ -78,7 +78,7 @@
                         <com.journeyapps.barcodescanner.DecoratedBarcodeView
                             android:id="@+id/barcode_scanner"
                             android:layout_width="match_parent"
-                            android:layout_height="250dp"
+                            android:layout_height="200dp"
                             android:layout_above="@+id/buttonsLayout"
                             android:layout_alignParentTop="true">
 
