@@ -260,10 +260,14 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     // Stop the Bluetooth services
     if (DEBUG)
       Log.e(TAG, "--- ON DESTROY ---");
-    if (mBluetoothAdapter != null) {
-      mBluetoothAdapter.cancelDiscovery();
+    if(mBluetoothAdapter!=null)
+    {
+      if (mBluetoothAdapter != null) {
+        mBluetoothAdapter.cancelDiscovery();
+      }
+      this.unregisterReceiver(mReceiver2);
     }
-    this.unregisterReceiver(mReceiver2);
+    
   }
   
   @Override

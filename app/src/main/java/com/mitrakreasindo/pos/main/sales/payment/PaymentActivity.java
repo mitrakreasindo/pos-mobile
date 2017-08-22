@@ -201,15 +201,13 @@ public class PaymentActivity extends AppCompatActivity
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
-
-      salesId = bundle.getString("salesid");
+      salesId = bundle.getString("sales_id");
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
       viewsalesitems.containsAll(salesItemList);
 
 //      product = salesItemList.get(1).getProduct();
     }
-
     final ClosedCash closedCash = new ClosedCash();
     if (IDs.getLoginCloseCashID() == null)
     {
@@ -258,8 +256,7 @@ public class PaymentActivity extends AppCompatActivity
     {
       paymentProductListAdapter = new PaymentProductListAdapter(this, salesItemList);
     }
-
-
+    
     listPaymentProduct.setAdapter(paymentProductListAdapter);
     listPaymentProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
