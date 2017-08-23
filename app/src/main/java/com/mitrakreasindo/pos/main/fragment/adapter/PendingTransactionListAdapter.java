@@ -1,4 +1,4 @@
-package com.mitrakreasindo.pos.main.adapter;
+package com.mitrakreasindo.pos.main.fragment.adapter;
 
 import android.content.Context;
 import android.content.Intent;

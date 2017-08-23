@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,14 +34,14 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
-import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.adapter.PendingTransactionListAdapter;
+import com.mitrakreasindo.pos.main.fragment.adapter.PendingTransactionListAdapter;
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.model.Money;
 import com.mitrakreasindo.pos.model.ViewPendingTransaction;
+import com.mitrakreasindo.pos.service.DashboardService;
 import com.mitrakreasindo.pos.service.PendingTransactionService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -69,14 +72,19 @@ public class MainFragment extends Fragment
   PieChart itemRevenueMonthlyChart;
   @BindView(R.id.item_revenue_yearly_chart)
   PieChart itemRevenueYearlyChart;
+  @BindView(R.id.queue_dashboard_layout)
+  CardView queueDashboardLayout;
+  @BindView(R.id.revenue_dashboard_layout_today_week)
+  LinearLayout revenueTodayWeekDashboardLayout;
+  @BindView(R.id.revenue_dashboard_layout_month_year)
+  LinearLayout revenueMonthYearDashboardLayout;
+
   @BindView(R.id.txt_dashboard_chart_daily_revenue)
   TextView txtDashboardChartDailyRevenue;
   @BindView(R.id.txt_dashboard_chart_daily_cost)
   TextView txtDashboardChartDailyCost;
   @BindView(R.id.txt_dashboard_chart_daily_total)
   TextView txtDashboardChartDailyTotal;
-  @BindView(R.id.revenue_dashboard_layout)
-  CardView revenueDashboardLayout;
   @BindView(R.id.txt_dashboard_chart_weekly_revenue)
   TextView txtDashboardChartWeeklyRevenue;
   @BindView(R.id.txt_dashboard_chart_weekly_cost)
@@ -89,8 +97,6 @@ public class MainFragment extends Fragment
   TextView txtDashboardChartMonthlyCost;
   @BindView(R.id.txt_dashboard_chart_monthly_total)
   TextView txtDashboardChartMonthlyTotal;
-  @BindView(R.id.queue_dashboard_layout)
-  CardView queueDashboardLayout;
   @BindView(R.id.txt_dashboard_chart_yearly_revenue)
   TextView txtDashboardChartYearlyRevenue;
   @BindView(R.id.txt_dashboard_chart_yearly_cost)
@@ -99,21 +105,20 @@ public class MainFragment extends Fragment
   TextView txtDashboardChartYearlyTotal;
   @BindView(R.id.main_fragment)
   ScrollView mainFragment;
+
   private Unbinder unbinder;
   private List<ViewPendingTransaction> viewPendingTransactions;
   private RecyclerView listQueue;
   private PendingTransactionListAdapter pendingTransactionListAdapter;
-  //  private Queue queue;
   private Button menuSales, menuData, menuReceive, menuSetting, menuReport, menuExport;
   private View view;
-  private CardView revenueLayout, queueLayout;
-  private PendingTransactionService service;
-  private boolean shouldExecuteOnResume;
-  private String kodeMerchant;
+  private PendingTransactionService queueService;
+  private DashboardService dashboardService;
+  private boolean shouldExecuteOnResume, shouldExcecuteOnCreate;
   private ProgressDialog progressDialog;
   private Money revenue;
   private Money cost;
-
+  private String companyCode;
   private Bundle bundle;
 
 //  float floatData[] = {150000000, 126000000};
@@ -129,85 +134,45 @@ public class MainFragment extends Fragment
   private PieData dataMonthly;
   private PieData dataYearly;
 
-
-  private DefaultHelper defaultHelper = new DefaultHelper();
-
   private List<PieEntry> dailyEntries;
   private List<PieEntry> weeklyEntries;
   private List<PieEntry> monthlyEntries;
   private List<PieEntry> yearlyEntries;
 
-  private String companyCode;
-
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
-
     EventBus.getDefault().register(this);
 
+    queueService = ClientService.createService().create(PendingTransactionService.class);
+    dashboardService = ClientService.createService().create(DashboardService.class);
+
     companyCode = SharedPreferenceEditor.LoadPreferences(getContext(), "Company Code", "");
+    shouldExcecuteOnCreate = true;
+    shouldExecuteOnResume = false;
 
-
+    progressDialog = new ProgressDialog(getContext());
+    progressDialog.setMessage(this.getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
+    progressDialog.show();
   }
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
   {
-    shouldExecuteOnResume = false;
-    kodeMerchant = SharedPreferenceEditor.LoadPreferences(getContext(), "Company Code", "");
-
     view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
     unbinder = ButterKnife.bind(this, view);
 
-    if (!EventBus.getDefault().isRegistered(this))
-    {
-      Log.d("EVENT BUS", "not registered");
-      EventBus.getDefault().register(this);
-    } else
-      Log.d("EVENT BUS", "already registered");
-
-    service = ClientService.createService().create(PendingTransactionService.class);
-//    EventBus.getDefault().register(this);
-
-    revenueLayout = (CardView) view.findViewById(R.id.revenue_dashboard_layout);
-    queueLayout = (CardView) view.findViewById(R.id.queue_dashboard_layout);
-
-    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(getContext());
-    String role = tablePeopleHelper.getRoleID(IDs.getLoginUser());
-
-
-//    //Owner & Manager role
-//    if (role.equals("0") || role.equals("1"))
-//      queueLayout.setVisibility(View.GONE);
-//      //Cashier role
-//    else if (role.equals("2"))
-//      revenueLayout.setVisibility(View.GONE);
-//      //Stockist role
-//    else
-//    {
-//      revenueLayout.setVisibility(View.GONE);
-//      queueLayout.setVisibility(View.GONE);
-//    }
-//    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
-//
-//    pendingTransactionListAdapter = new PendingTransactionListAdapter(getContext(),
-//      new ArrayList<ViewPendingTransaction>());
-//
-//    listQueue.setAdapter(pendingTransactionListAdapter);
-//    listQueue.setHasFixedSize(true);
-//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-//    listQueue.setLayoutManager(layoutManager);
-//    listQueue.setItemAnimator(new DefaultItemAnimator());
-//    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
-//    queueListAdapter = new MainQueueListAdapter(getContext(), Queue.queueData());
-
-//    listQueue.setAdapter(queueListAdapter);
-//    listQueue.setHasFixedSize(true);
-//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
-//    listQueue.setLayoutManager(layoutManager);
-//    listQueue.setItemAnimator(new DefaultItemAnimator());
+    pendingTransactionListAdapter = new PendingTransactionListAdapter(getContext(),
+      new ArrayList<ViewPendingTransaction>());
+    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
+    listQueue.setAdapter(pendingTransactionListAdapter);
+    listQueue.setHasFixedSize(true);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+    listQueue.setLayoutManager(layoutManager);
+    listQueue.setItemAnimator(new DefaultItemAnimator());
 
     menuSales = (Button) view.findViewById(R.id.btn_menu_sales);
     menuData = (Button) view.findViewById(R.id.btn_menu_data);
@@ -243,17 +208,9 @@ public class MainFragment extends Fragment
       @Override
       public void onClick(View v)
       {
-//        ReportsDataFragment reportsDataFragment = new ReportsDataFragment();
-//        getActivity().getSupportFragmentManager().beginTransaction()
-//          .replace(R.id.main_content, reportsDataFragment, "ReportDataFragment")
-//          .addToBackStack("ReportDataFragment").commit();
-//        getActivity().getSupportFragmentManager().executePendingTransactions();
         startActivity(new Intent(getContext(), ReportActivity.class));
       }
     });
-
-//    Log.d("REVENUE", revenue.getMonth().toString());
-
 
     unbinder = ButterKnife.bind(this, view);
     return view;
@@ -263,22 +220,18 @@ public class MainFragment extends Fragment
   public void onResume()
   {
     super.onResume();
-
-    ((MainActivity) getContext()).getRevenue(companyCode, EventCode.EVENT_MONEY_GET);
-
-    ((MainActivity) getContext()).getCost(companyCode, EventCode.EVENT_MONEY_GET);
-
     if (shouldExecuteOnResume)
     {
       EventBus.getDefault().register(this);
-//      progressDialog = new ProgressDialog(getContext());
-//      progressDialog.setMessage(this.getString(R.string.progress_message));
-//      progressDialog.setCancelable(false);
-//      progressDialog.show();
+      progressDialog = new ProgressDialog(getContext());
+      progressDialog.setMessage(this.getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
+      progressDialog.show();
       Log.d("MAIN FRAGMENT", "RESUME");
-//      setupMenu();
-//      setupMainFragmentLayout();
-    } else
+      setupMenu();
+      setupMainFragmentLayout();
+    }
+    else
       shouldExecuteOnResume = true;
   }
 
@@ -289,62 +242,34 @@ public class MainFragment extends Fragment
     super.onStop();
   }
 
-  @Override
-  public void onPause()
-  {
-    EventBus.getDefault().unregister(this);
-    super.onPause();
-  }
-
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEvent(Event event)
   {
-    if (event.getId() == EventCode.EVENT_ROLE_GET)
-    {
-      if (event.getStatus() == Event.COMPLETE)
-      {
-//        setupMenu();
-        Log.d("fragment", "main fragment setup");
-      }
-    } else if (event.getId() == EventCode.EVENT_MONEY_GET)
-    {
-      if (event.getStatus() == Event.COMPLETE)
-      {
-        revenue = ((MainActivity) getContext()).revenue;
-        cost = ((MainActivity) getContext()).cost;
-
-        dailyRevenueChart();
-
-        weeklyRevenueChart();
-
-        monthlyRevenueChart();
-
-        yearlyRevenueChart();
-      }
-    }
     Log.d("EVENT BUS", "masuk");
     switch (event.getId())
     {
-      case EventCode.EVENT_PENDING_TRANSACTION_GET:
-        if (event.getStatus() == Event.COMPLETE)
+      case EventCode.EVENT_MONEY_GET:
+        if (event.getStatus() == Event.COMPLETE && revenue != null && cost != null)
         {
-          if (viewPendingTransactions != null)
-          {
-            pendingTransactionListAdapter.clear();
-            pendingTransactionListAdapter.addPendingTransaction(viewPendingTransactions);
-          }
+          dailyRevenueChart(revenue, cost);
+          weeklyRevenueChart(revenue, cost);
+          monthlyRevenueChart(revenue, cost);
+          yearlyRevenueChart(revenue, cost);
         }
         break;
       case EventCode.EVENT_ROLE_GET:
         if (event.getStatus() == Event.COMPLETE)
         {
-//          setupMenu();
-//          setupMainFragmentLayout();
-          Log.d("fragment", "main fragment setup");
+          if (shouldExcecuteOnCreate)
+          {
+            setupMenu();
+            setupMainFragmentLayout();
+            Log.d("fragment", "main fragment setup");
+            shouldExcecuteOnCreate = false;
+          }
         }
         break;
     }
-
   }
 
   private void setupMenu()
@@ -369,22 +294,27 @@ public class MainFragment extends Fragment
     //Owner & Manager role
     if (role.equals("0") || role.equals("1"))
     {
-      queueLayout.setVisibility(View.GONE);
+      queueDashboardLayout.setVisibility(View.GONE);
+      getRevenue(companyCode, EventCode.EVENT_MONEY_GET);
+      getCost(companyCode, EventCode.EVENT_MONEY_GET);
       progressDialog.dismiss();
     }
     //Cashier role
     else if (role.equals("2"))
     {
-      revenueLayout.setVisibility(View.GONE);
+      revenueMonthYearDashboardLayout.setVisibility(View.GONE);
+      revenueTodayWeekDashboardLayout.setVisibility(View.GONE);
       Log.d("ROLE", "CASHIER");
 //      new HttpRequestTask().execute();
-      downloadUnpaidPendingTransaction(kodeMerchant, EventCode.EVENT_PENDING_TRANSACTION_GET);
+      downloadUnpaidPendingTransaction(companyCode, EventCode.EVENT_PENDING_TRANSACTION_GET);
+      progressDialog.dismiss();
     }
     //Stockist role
     else
     {
-      revenueLayout.setVisibility(View.GONE);
-      queueLayout.setVisibility(View.GONE);
+      queueDashboardLayout.setVisibility(View.GONE);
+      revenueMonthYearDashboardLayout.setVisibility(View.GONE);
+      revenueTodayWeekDashboardLayout.setVisibility(View.GONE);
       progressDialog.dismiss();
     }
   }
@@ -396,7 +326,7 @@ public class MainFragment extends Fragment
     unbinder.unbind();
   }
 
-  private void dailyRevenueChart()
+  private void dailyRevenueChart(Money revenue, Money cost)
   {
 
     txtDashboardChartDailyRevenue.setText(DefaultHelper.decimalFormat(revenue.getDay()));
@@ -420,8 +350,8 @@ public class MainFragment extends Fragment
       dataSetDaily.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
       dataDaily = new PieData(dataSetDaily);
-
-    } else
+    }
+    else
     {
       dailyEntries = new ArrayList<PieEntry>();
 
@@ -447,17 +377,14 @@ public class MainFragment extends Fragment
     itemRevenueDailyChart.setDrawCenterText(true);
 
     itemRevenueDailyChart.setDrawEntryLabels(false);
-    String finalValue = defaultHelper
-      .decimalFormatToPercentage(
+    String finalValue = DefaultHelper.decimalFormatToPercentage(
         (dailyEntries.get(0).getValue() - dailyEntries.get(1).getValue()) / dailyEntries.get(1).getValue() * 100).split(",")[0];
     itemRevenueDailyChart.setCenterText(finalValue);
     itemRevenueDailyChart.setCenterTextColor(R.color.gray300);
-//    itemRevenueDailyChart.animateY(3000, Easing.EasingOption.EaseInOutQuad);
     itemRevenueDailyChart.invalidate();
-
   }
 
-  private void weeklyRevenueChart()
+  private void weeklyRevenueChart(Money revenue, Money cost)
   {
     txtDashboardChartWeeklyRevenue.setText(DefaultHelper.decimalFormat(revenue.getWeek()));
     txtDashboardChartWeeklyCost.setText(DefaultHelper.decimalFormat(cost.getWeek()));
@@ -480,7 +407,8 @@ public class MainFragment extends Fragment
 
       dataWeekly = new PieData(dataSetWeekly);
 
-    } else
+    }
+    else
     {
       weeklyEntries = new ArrayList<PieEntry>();
 
@@ -506,16 +434,14 @@ public class MainFragment extends Fragment
     itemRevenueWeeklyChart.setDrawCenterText(true);
 
     itemRevenueWeeklyChart.setDrawEntryLabels(false);
-    String finalValue = defaultHelper
-      .decimalFormatToPercentage(
+    String finalValue = DefaultHelper.decimalFormatToPercentage(
         (weeklyEntries.get(0).getValue() - weeklyEntries.get(1).getValue()) / weeklyEntries.get(1).getValue() * 100).split(",")[0];
     itemRevenueWeeklyChart.setCenterText(finalValue);
     itemRevenueWeeklyChart.setCenterTextColor(R.color.gray300);
     itemRevenueWeeklyChart.invalidate();
-
   }
 
-  private void monthlyRevenueChart()
+  private void monthlyRevenueChart(Money revenue, Money cost)
   {
 
     txtDashboardChartMonthlyRevenue.setText(DefaultHelper.decimalFormat(revenue.getMonth()));
@@ -536,8 +462,8 @@ public class MainFragment extends Fragment
       dataSetMonthly.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
       dataMonthly = new PieData(dataSetMonthly);
-
-    } else
+    }
+    else
     {
       monthlyEntries = new ArrayList<PieEntry>();
 
@@ -563,8 +489,7 @@ public class MainFragment extends Fragment
     itemRevenueMonthlyChart.setDrawCenterText(true);
 
     itemRevenueMonthlyChart.setDrawEntryLabels(false);
-    String finalValue = defaultHelper
-      .decimalFormatToPercentage(
+    String finalValue = DefaultHelper.decimalFormatToPercentage(
         (monthlyEntries.get(0).getValue() - monthlyEntries.get(1).getValue()) / monthlyEntries.get(1).getValue() * 100).split(",")[0];
     itemRevenueMonthlyChart.setCenterText(finalValue);
     itemRevenueMonthlyChart.setCenterTextColor(R.color.gray300);
@@ -572,7 +497,7 @@ public class MainFragment extends Fragment
 
   }
 
-  private void yearlyRevenueChart()
+  private void yearlyRevenueChart(Money revenue, Money cost)
   {
 
     txtDashboardChartYearlyRevenue.setText(DefaultHelper.decimalFormat(revenue.getYear()));
@@ -593,8 +518,8 @@ public class MainFragment extends Fragment
       dataSetYearly.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
       dataMonthly = new PieData(dataSetYearly);
-
-    } else
+    }
+    else
     {
       yearlyEntries = new ArrayList<PieEntry>();
 
@@ -620,8 +545,7 @@ public class MainFragment extends Fragment
     itemRevenueYearlyChart.setDrawCenterText(true);
 
     itemRevenueYearlyChart.setDrawEntryLabels(false);
-    String finalValue = defaultHelper
-      .decimalFormatToPercentage(
+    String finalValue = DefaultHelper.decimalFormatToPercentage(
         (yearlyEntries.get(0).getValue() - yearlyEntries.get(1).getValue()) / yearlyEntries.get(1).getValue() * 100).split(",")[0];
     itemRevenueYearlyChart.setCenterText(finalValue);
     itemRevenueYearlyChart.setCenterTextColor(R.color.gray300);
@@ -665,7 +589,7 @@ public class MainFragment extends Fragment
   public void downloadUnpaidPendingTransaction(final String kodeMerchant, final int id)
   {
     Log.d("GET API", "get unpaid trans");
-    final Call<List<ViewPendingTransaction>> call = service.getAllPendingTransaction(kodeMerchant);
+    final Call<List<ViewPendingTransaction>> call = queueService.getAllPendingTransaction(kodeMerchant);
     call.enqueue(new Callback<List<ViewPendingTransaction>>()
     {
       @Override
@@ -673,17 +597,63 @@ public class MainFragment extends Fragment
       {
         Log.d("COMPLETE GET API", "get unpaid trans done");
         viewPendingTransactions = response.body();
-        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+        if (viewPendingTransactions != null)
+        {
+          pendingTransactionListAdapter.clear();
+          pendingTransactionListAdapter.addPendingTransaction(viewPendingTransactions);
+        }
       }
 
       @Override
       public void onFailure(Call<List<ViewPendingTransaction>> call, Throwable t)
       {
-        progressDialog.dismiss();
         Log.d("COMPLETE GET API", "get unpaid trans failed");
         Toast.makeText(getContext(), getString(R.string.error_webservice), Toast.LENGTH_LONG).show();
       }
     });
   }
 
+  public void getRevenue(String kodeMerchant, final int id)
+  {
+    final Call<Money> call = dashboardService.getRevenue(kodeMerchant);
+    call.enqueue(new Callback<Money>()
+    {
+      @Override
+      public void onResponse(Call<Money> call, Response<Money> response)
+      {
+        revenue = response.body();
+        Log.d("REVENUE", revenue.getMonth().toString());
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+      }
+
+      @Override
+      public void onFailure(Call<Money> call, Throwable t)
+      {
+        Log.d("COMPLETE GET API", "get revenue failed");
+        Toast.makeText(getContext(), getString(R.string.error_webservice), Toast.LENGTH_LONG).show();
+      }
+    });
+  }
+
+  public void getCost(String kodeMerchant, final int id)
+  {
+    final Call<Money> call = dashboardService.getCost(kodeMerchant);
+    call.enqueue(new Callback<Money>()
+    {
+      @Override
+      public void onResponse(Call<Money> call, Response<Money> response)
+      {
+        cost = response.body();
+        Log.d("REVENUE", cost.getMonth().toString());
+        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+      }
+
+      @Override
+      public void onFailure(Call<Money> call, Throwable t)
+      {
+        Log.d("COMPLETE GET API", "get cost failed");
+        Toast.makeText(getContext(), getString(R.string.error_webservice), Toast.LENGTH_LONG).show();
+      }
+    });
+  }
 }
