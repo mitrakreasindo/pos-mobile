@@ -187,7 +187,7 @@ public class CategoryFormActivity extends AppCompatActivity
     progressDialog.show();
 
     Category parentCategory = new Category();
-    parentCategory.setId(null);
+    parentCategory.setId("663a30b3-fe7c-45e8-8061-9a98e9b23aae");
 
     final Category category = new Category();
     category.setId(categoryId);

@@ -152,7 +152,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
                         public void onClick(DialogInterface dialog, int whichButton)
                         {
                           deletePeople(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""),
-                            people.getId());
+                            people);
                         }
                       })
                       .setNegativeButton(android.R.string.no, null).show();
@@ -217,10 +217,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     }
   }
 
-  private void deletePeople(String kodeMerchant, final String id)
+  private void deletePeople(String kodeMerchant, final People p)
   {
     peopleService = ClientService.createService().create(PeopleService.class);
-    final Call<HashMap<Integer, String>> people = peopleService.deletePeople(kodeMerchant, id);
+    final Call<HashMap<Integer, String>> people = peopleService.deletePeople(kodeMerchant, p.getId());
     people.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -240,8 +240,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
           {
             TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(context);
             tablePeopleHelper.open();
-            tablePeopleHelper.delete(id);
+            tablePeopleHelper.delete(p.getId());
             tablePeopleHelper.close();
+
+            removePeople(p);
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }

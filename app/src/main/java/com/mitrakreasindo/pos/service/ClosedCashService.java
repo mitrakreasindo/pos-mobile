@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -18,18 +19,18 @@ import retrofit2.http.Path;
 
 public interface ClosedCashService
 {
-  @GET("closedcash/{kodeMerchant}")
-  Call<List<Viewclosedcash>> getClosedCashAll(@Path("kodeMerchant") String kodeMerchant);
+  @GET("closedcash/")
+  Call<List<Viewclosedcash>> getClosedCashAll(@Header("merchantCode") String kodeMerchant);
 
-  @GET("closedcash/{kodeMerchant}/money/{moneyId}")
-  Call<List<Viewclosedcash>> getClosedCashByMoney(@Path("kodeMerchant") String kodeMerchant,
+  @GET("closedcash/money/{moneyId}")
+  Call<List<Viewclosedcash>> getClosedCashByMoney(@Header("merchantCode") String kodeMerchant,
                                                   @Path("moneyId") String moneyId);
 
-  @GET("closedcash/{kodeMerchant}/{receipt_id}")
-  Call<List<Viewclosedcash>> getClosedCashByReceipt(@Path("kodeMerchant") String kodeMerchant,
+  @GET("closedcash/{receipt_id}")
+  Call<List<Viewclosedcash>> getClosedCashByReceipt(@Header("merchantCode") String kodeMerchant,
                                                     @Path("receipt_id") String receipt_id);
 
-  @POST("closedcashes/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postClosedCash(@Path("kodeMerchant") String kodeMerchant,
+  @POST("closedcashes/")
+  Call<HashMap<Integer, String>> postClosedCash(@Header("merchantCode") String kodeMerchant,
                                                 @Body ClosedCash closedCash);
 }

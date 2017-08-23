@@ -12,12 +12,17 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
+import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
 import com.mitrakreasindo.pos.model.TaxCusCategory;
 import com.mitrakreasindo.pos.service.TaxService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -236,8 +241,12 @@ public class TableTaxesHelper
         final String url = RestVariable.URL_GET_TAX;
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        Tax[] tax = restTemplate.getForObject(url, Tax[].class, kodeMerchant);
-        return tax;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("merchantCode", kodeMerchant);
+        HttpEntity<Tax[]> entity = new HttpEntity<Tax[]>(headers);
+//        Tax[] tax = restTemplate.getForObject(url, Tax[].class, entity);
+        ResponseEntity<Tax[]> tax = restTemplate.exchange(url, HttpMethod.GET, entity, Tax[].class);
+        return tax.getBody();
       }
       catch (Exception e)
       {

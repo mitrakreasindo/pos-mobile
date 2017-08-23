@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -19,15 +20,15 @@ import retrofit2.http.Path;
 
 public interface DiaryStockService
 {
-  @GET("stockcurrents/{kodeMerchant}/")
-  Call<List<StockDiary>> getstockcurrentsAll(@Path("kodeMerchant") String kodeMerchant);
+  @GET("stockcurrents/")
+  Call<List<StockDiary>> getstockcurrentsAll(@Header("merchantCode") String kodeMerchant);
 
-  @POST("stockcurrents/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> poststockcurrents(@Path("kodeMerchant") String kodeMerchant, @Body StockDiary stockDiary);
+  @POST("stockcurrents/")
+  Call<HashMap<Integer, String>> poststockcurrents(@Header("merchantCode") String kodeMerchant, @Body StockDiary stockDiary);
 
-  @PUT("stockcurrents/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> updatestockcurrents(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body StockDiary stockDiary);
+  @PUT("stockcurrents/{id}")
+  Call<HashMap<Integer, String>> updatestockcurrents(@Header("merchantCode") String kodeMerchant, @Path("id") String id, @Body StockDiary stockDiary);
 
-  @DELETE("stockcurrents/public/{id}")
-  Call<HashMap<Integer, String>> deletestockcurrents(@Path("id") String id);
+  @DELETE("stockcurrents/{id}")
+  Call<HashMap<Integer, String>> deletestockcurrents(@Path("id") String id, @Header("merchantCode") String kodeMerchant);
 }

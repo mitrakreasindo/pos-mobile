@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,10 +40,12 @@ import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.fragment.adapter.PendingTransactionListAdapter;
+import com.mitrakreasindo.pos.main.adapter.ListReportByCategoryAdapter;
+
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
-import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.model.Money;
+import com.mitrakreasindo.pos.model.ReportSelection;
 import com.mitrakreasindo.pos.model.ViewPendingTransaction;
 import com.mitrakreasindo.pos.service.DashboardService;
 import com.mitrakreasindo.pos.service.PendingTransactionService;
@@ -104,7 +110,11 @@ public class MainFragment extends Fragment
   @BindView(R.id.txt_dashboard_chart_yearly_total)
   TextView txtDashboardChartYearlyTotal;
   @BindView(R.id.main_fragment)
-  ScrollView mainFragment;
+  CoordinatorLayout mainFragment;
+  @BindView(R.id.bs_list_report_by_category)
+  RecyclerView bsListReportByCategory;
+  @BindView(R.id.bs_select)
+  NestedScrollView bsSelect;
 
   private Unbinder unbinder;
   private List<ViewPendingTransaction> viewPendingTransactions;
@@ -136,6 +146,11 @@ public class MainFragment extends Fragment
   private List<PieEntry> monthlyEntries;
   private List<PieEntry> yearlyEntries;
 
+  private BottomSheetBehavior bsSelectReport;
+
+  private ListReportByCategoryAdapter listReportByCategoryAdapter;
+
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState)
   {
@@ -162,6 +177,52 @@ public class MainFragment extends Fragment
     view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
     unbinder = ButterKnife.bind(this, view);
 
+    View bottomSheet = view.findViewById(R.id.bs_select);
+    bsSelectReport = BottomSheetBehavior.from(bottomSheet);
+    bsSelectReport.setHideable(true);
+    bsSelectReport.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+    if (!EventBus.getDefault().isRegistered(this))
+    {
+      Log.d("EVENT BUS", "not registered");
+      EventBus.getDefault().register(this);
+    } else
+      Log.d("EVENT BUS", "already registered");
+
+    TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(getContext());
+    String role = tablePeopleHelper.getRoleID(IDs.getLoginUser());
+
+
+//    //Owner & Manager role
+//    if (role.equals("0") || role.equals("1"))
+//      queueLayout.setVisibility(View.GONE);
+//      //Cashier role
+//    else if (role.equals("2"))
+//      revenueLayout.setVisibility(View.GONE);
+//      //Stockist role
+//    else
+//    {
+//      revenueLayout.setVisibility(View.GONE);
+//      queueLayout.setVisibility(View.GONE);
+//    }
+//    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
+//
+//    pendingTransactionListAdapter = new PendingTransactionListAdapter(getContext(),
+//      new ArrayList<ViewPendingTransaction>());
+//
+//    listQueue.setAdapter(pendingTransactionListAdapter);
+//    listQueue.setHasFixedSize(true);
+//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+//    listQueue.setLayoutManager(layoutManager);
+//    listQueue.setItemAnimator(new DefaultItemAnimator());
+//    listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
+//    queueListAdapter = new MainQueueListAdapter(getContext(), Queue.queueData());
+
+//    listQueue.setAdapter(queueListAdapter);
+//    listQueue.setHasFixedSize(true);
+//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
+//    listQueue.setLayoutManager(layoutManager);
+//    listQueue.setItemAnimator(new DefaultItemAnimator());
     pendingTransactionListAdapter = new PendingTransactionListAdapter(getContext(),
       new ArrayList<ViewPendingTransaction>());
     listQueue = (RecyclerView) view.findViewById(R.id.list_queue);
@@ -177,6 +238,7 @@ public class MainFragment extends Fragment
     menuSetting = (Button) view.findViewById(R.id.btn_menu_setting);
     menuReport = (Button) view.findViewById(R.id.btn_menu_report);
     menuExport = (Button) view.findViewById(R.id.btn_menu_export);
+
 
     menuSales.setOnClickListener(new View.OnClickListener()
     {
@@ -205,13 +267,38 @@ public class MainFragment extends Fragment
       @Override
       public void onClick(View v)
       {
-        startActivity(new Intent(getContext(), ReportActivity.class));
+//        SalesFragment salesFragment = new SalesFragment();
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//          .replace(R.id.main_content, salesFragment, "salesFragment")
+//          .addToBackStack("salesFragment").commit();
+//        getActivity().getSupportFragmentManager().executePendingTransactions();
+//        startActivity(new Intent(getContext(), ReportActivity.class));
+
+//        bsSelectReport.show();
+        if (bsSelectReport.getState() == BottomSheetBehavior.STATE_HIDDEN)
+        {
+          bsSelectReport.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else
+        {
+          bsSelectReport.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
       }
     });
 
+//    listReportByCategoryAdapter = new ListReportByCategoryAdapter(getContext(), new ArrayList<ReportSelection>());
+    listReportByCategoryAdapter = new ListReportByCategoryAdapter(getContext(), ReportSelection.data());
+    bsListReportByCategory.setAdapter(listReportByCategoryAdapter);
+    bsListReportByCategory.setHasFixedSize(true);
+    RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(getContext(), 4);
+//    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+    bsListReportByCategory.setLayoutManager(layoutManager1);
+    bsListReportByCategory.setItemAnimator(new DefaultItemAnimator());
+//    bsListReportByCategory.hasNestedScrollingParent();
+//    listReportByCategoryAdapter.addReportSelection();
     unbinder = ButterKnife.bind(this, view);
     return view;
   }
+
 
   @Override
   public void onResume()

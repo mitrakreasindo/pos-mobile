@@ -14,7 +14,7 @@
     <color name="gray700">#616161</color>
     <color name="white">#FFF</color>
 
-    <color name="red500">#F44336</color>
+    <color name="red500">#f44336</color>
     <color name="red400">#F44336</color>
 
     <color name="teal">#1DE9B6</color>
@@ -35,6 +35,18 @@
 
     <color name="test1">#FFD54F</color>
     <color name="test2">#FFA726</color>
+
+    <color name="lightgreen500">#8BC34A</color>
+    <color name="blue500">#2196F3</color>
+    <color name="lightblue500">#03A9F4</color>
+    <color name="indigo500">#3F51B5</color>
+    <color name="purple500">#9C27B0</color>
+    <color name="yellow500">#FFEB3B</color>
+    <color name="teal500">#009688</color>
+
+
+
+
 
 
 </resources>

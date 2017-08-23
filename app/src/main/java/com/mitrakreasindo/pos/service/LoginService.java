@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -16,6 +17,6 @@ import retrofit2.http.POST;
 public interface LoginService
 {
   @Headers("Content-type: application/json")
-  @POST("peoples/auth/public")
-  Call<HashMap<Integer,String>> postLogin(@Body Login login);
+  @POST("peoples/auth")
+  Call<HashMap<Integer,String>> postLogin(@Body Login login, @Header("merchantCode") String kodeMerchant);
 }

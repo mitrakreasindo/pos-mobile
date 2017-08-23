@@ -11,11 +11,16 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.model.People;
+import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import org.greenrobot.eventbus.EventBus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -330,8 +335,12 @@ public class TablePeopleHelper
         final String url = RestVariable.URL_GET_PEOPLE;
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        People[] people = restTemplate.getForObject(url, People[].class, kodeMerchant);
-        return people;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("merchantCode", kodeMerchant);
+        HttpEntity<People[]> entity = new HttpEntity<People[]>(headers);
+//        People[] people = restTemplate.getForObject(url, People[].class, entity);
+        ResponseEntity<People[]> people = restTemplate.exchange(url, HttpMethod.GET, entity, People[].class);
+        return people.getBody();
       }
       catch (Exception e)
       {
