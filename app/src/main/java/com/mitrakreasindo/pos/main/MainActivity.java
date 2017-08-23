@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
@@ -47,18 +46,12 @@ import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.main.stock.category.CategoryActivity;
 import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.ProductActivity;
-import com.mitrakreasindo.pos.model.Money;
-import com.mitrakreasindo.pos.service.DashboardService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener
@@ -72,7 +65,7 @@ public class MainActivity extends AppCompatActivity
   private TablePeopleHelper tablePeopleHelper;
   private TableRoleHelper tableRoleHelper;
   private ProgressDialog progressDialog;
-  private DashboardService dashboardService;
+
   private MainFragment mainFragment = new MainFragment();
 //  private PendingTransactionService service;
 
@@ -80,9 +73,6 @@ public class MainActivity extends AppCompatActivity
   TableProductHelper tableProductHelper;
   TableTaxesHelper tableTaxesHelper;
   TableSalesItemHelper tableSalesItemHelper;
-
-  public Money revenue;
-  public Money cost;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -94,49 +84,12 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    dashboardService = ClientService.createService().create(DashboardService.class);
-
     progressDialog = new ProgressDialog(this);
     progressDialog.setMessage(this.getString(R.string.progress_message));
     progressDialog.setCancelable(false);
     progressDialog.show();
 
-//    service = ClientService.createService().create(PendingTransactionService.class);
-
     EventBus.getDefault().register(this);
-
-    new Thread(new Runnable()
-    {
-      @Override
-      public void run()
-      {
-        tablePeopleHelper = new TablePeopleHelper(MainActivity.this);
-        tableRoleHelper = new TableRoleHelper(MainActivity.this);
-        tableCategoryHelper = new TableCategoryHelper(MainActivity.this);
-        tableProductHelper = new TableProductHelper(MainActivity.this);
-        tableTaxesHelper = new TableTaxesHelper(MainActivity.this);
-        tableSalesItemHelper = new TableSalesItemHelper(MainActivity.this);
-
-        tableTaxesHelper.downloadData(companyCode);
-        tableCategoryHelper.downloadData(companyCode);
-        tableProductHelper.downloadDataAlternate(companyCode);
-        tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-
-//        progressDialog.post(new Runnable() {
-//          public void run() {
-//            mImageView.setImageBitmap(bitmap);
-//          }
-//        });
-      }
-    }).start();
-
-//    tablePeopleHelper = new TablePeopleHelper(this);
-//    tableRoleHelper = new TableRoleHelper(this);
-//    tableCategoryHelper = new TableCategoryHelper(this);
-//    tableProductHelper = new TableProductHelper(this);
-//    tableTaxesHelper = new TableTaxesHelper(this);
-//    tableSalesItemHelper = new TableSalesItemHelper(this);
-
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -169,10 +122,6 @@ public class MainActivity extends AppCompatActivity
 
     companyCode = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
-    getRevenue(companyCode, EventCode.EVENT_MONEY_GET);
-
-    getCost(companyCode, EventCode.EVENT_MONEY_GET);
-
 //    Log.d("REVENUE", revenue.getMonth().toString());
 
     MainFragment mainFragment = new MainFragment();
@@ -180,10 +129,30 @@ public class MainActivity extends AppCompatActivity
       .replace(R.id.main_content, mainFragment, "MAIN_FRAGMENT").commit();
     getSupportFragmentManager().executePendingTransactions();
 
-//    tableTaxesHelper.downloadData(companyCode);
-//    tableCategoryHelper.downloadData(companyCode);
-//    tableProductHelper.downloadDataAlternate(companyCode);
-//    tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+    new Thread(new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        tablePeopleHelper = new TablePeopleHelper(MainActivity.this);
+        tableRoleHelper = new TableRoleHelper(MainActivity.this);
+        tableCategoryHelper = new TableCategoryHelper(MainActivity.this);
+        tableProductHelper = new TableProductHelper(MainActivity.this);
+        tableTaxesHelper = new TableTaxesHelper(MainActivity.this);
+        tableSalesItemHelper = new TableSalesItemHelper(MainActivity.this);
+
+        tableTaxesHelper.downloadData(companyCode);
+        tableCategoryHelper.downloadData(companyCode);
+        tableProductHelper.downloadDataAlternate(companyCode);
+        tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
+
+//        progressDialog.post(new Runnable() {
+//          public void run() {
+//            mImageView.setImageBitmap(bitmap);
+//          }
+//        });
+      }
+    }).start();
   }
 
   @Override
@@ -336,6 +305,7 @@ public class MainActivity extends AppCompatActivity
       case EventCode.EVENT_PEOPLE_GET:
         if (event.getStatus() == Event.COMPLETE)
         {
+          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_LONG).show();
           tableRoleHelper.downloadData(companyCode, EventCode.EVENT_ROLE_GET);
         }
         break;
@@ -343,23 +313,9 @@ public class MainActivity extends AppCompatActivity
         if (event.getStatus() == Event.COMPLETE)
         {
           setupNavigation();
-//          if (tablePeopleHelper.getRoleID(IDs.getLoginUser()).equals("2"))
-//          {
-//            downloadUnpaidPendingTransaction(companyCode , EventCode.EVENT_PENDING_TRANSACTION_GET);
-//          }
           progressDialog.dismiss();
-          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
         }
         break;
-//      case EventCode.EVENT_PENDING_TRANSACTION_GET:
-//        if (event.getStatus() == Event.COMPLETE)
-//        {
-//          mainFragment.pendingTransactionListAdapter.clear();
-//          Log.d("COMPLETE GET UNPAID", "clear done");
-//          mainFragment.pendingTransactionListAdapter.addPendingTransaction(mainFragment.viewPendingTransactions);
-//          Log.d("COMPLETE GET UNPAID", "add done");
-//        }
-//        break;
     }
   }
 
@@ -426,57 +382,5 @@ public class MainActivity extends AppCompatActivity
 //      }
 //    });
 //  }
-
-  public void getRevenue(String kodeMerchant, final int id)
-  {
-    final Call<Money> call = dashboardService.getRevenue(kodeMerchant);
-    call.enqueue(new Callback<Money>()
-    {
-      @Override
-      public void onResponse(Call<Money> call, Response<Money> response)
-      {
-        revenue = response.body();
-
-        Log.d("REVENUE", revenue.getMonth().toString());
-
-        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
-
-      }
-
-      @Override
-      public void onFailure(Call<Money> call, Throwable t)
-      {
-
-      }
-
-    });
-
-  }
-
-  public void getCost(String kodeMerchant, final int id)
-  {
-    final Call<Money> call = dashboardService.getCost(kodeMerchant);
-    call.enqueue(new Callback<Money>()
-    {
-      @Override
-      public void onResponse(Call<Money> call, Response<Money> response)
-      {
-        cost = response.body();
-
-        Log.d("REVENUE", cost.getMonth().toString());
-
-        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
-
-      }
-
-      @Override
-      public void onFailure(Call<Money> call, Throwable t)
-      {
-
-      }
-
-    });
-
-  }
 
 }

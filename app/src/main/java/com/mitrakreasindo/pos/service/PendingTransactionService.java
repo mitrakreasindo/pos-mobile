@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 /**
@@ -14,6 +15,6 @@ import retrofit2.http.Path;
 
 public interface PendingTransactionService
 {
-  @GET("viewunpaidtrans/{kodeMerchant}/")
-  Call<List<ViewPendingTransaction>> getAllPendingTransaction(@Path("kodeMerchant") String kodeMerchant);
+  @GET("viewunpaidtrans/")
+  Call<List<ViewPendingTransaction>> getAllPendingTransaction(@Header("merchantCode") String kodeMerchant);
 }

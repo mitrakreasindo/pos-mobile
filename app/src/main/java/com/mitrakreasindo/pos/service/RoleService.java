@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -20,16 +21,16 @@ import retrofit2.http.Path;
 public interface RoleService
 {
 
-  @GET("roles/{kodeMerchant}/")
-  Call<List<Role>> getRoleAll(@Path("kodeMerchant") String kodeMerchant);
+  @GET("roles/")
+  Call<List<Role>> getRoleAll(@Header("merchantCode") String kodeMerchant);
 
-  @POST("roles/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postRole(@Path("kodeMerchant") String kodeMerchant, @Body Role role);
+  @POST("roles/")
+  Call<HashMap<Integer, String>> postRole(@Header("merchantCode") String kodeMerchant, @Body Role role);
 
-  @DELETE("roles/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> deleteRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+  @DELETE("roles/{id}")
+  Call<HashMap<Integer, String>> deleteRole(@Header("merchantCode") String kodeMerchant, @Path("id") String id);
 
-  @PUT("roles/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> updateRole(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Role role);
+  @PUT("roles/{id}")
+  Call<HashMap<Integer, String>> updateRole(@Header("merchantCode") String kodeMerchant, @Path("id") String id, @Body Role role);
 
 }

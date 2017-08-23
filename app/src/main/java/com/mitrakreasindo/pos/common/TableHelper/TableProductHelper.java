@@ -15,6 +15,10 @@ import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.service.ProductService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -721,8 +725,12 @@ public class TableProductHelper
         final String url = RestVariable.URL_GET_PRODUCT;
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        Product[] product = restTemplate.getForObject(url, Product[].class, kodeMerchant);
-        return product;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("merchantCode", kodeMerchant);
+        HttpEntity<Product[]> entity = new HttpEntity<Product[]>(headers);
+//        Product[] product = restTemplate.getForObject(url, Product[].class);
+        ResponseEntity<Product[]> product = restTemplate.exchange(url, HttpMethod.GET, entity, Product[].class);
+        return product.getBody();
       }
       catch (Exception e)
       {

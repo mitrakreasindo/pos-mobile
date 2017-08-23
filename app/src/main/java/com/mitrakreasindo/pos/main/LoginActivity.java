@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   {
     final LoginService loginService = ClientService.createService().create(LoginService.class);
 
-    Call<HashMap<Integer, String>> call = loginService.postLogin(new Login(kodeMerchant, username, password));
+    Call<HashMap<Integer, String>> call = loginService.postLogin(new Login(kodeMerchant, username, password), "public");
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;

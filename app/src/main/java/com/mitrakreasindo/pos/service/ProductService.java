@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -21,18 +22,18 @@ import retrofit2.http.Path;
 public interface ProductService
 {
 
-  @POST("products/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postProduct(@Path("kodeMerchant") String kodeMerchant, @Body Product product);
+  @POST("products/")
+  Call<HashMap<Integer, String>> postProduct(@Header("merchantCode") String kodeMerchant, @Body Product product);
 
-  @PUT("products/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> updateProduct(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id, @Body Product product);
+  @PUT("products/{id}")
+  Call<HashMap<Integer, String>> updateProduct(@Header("merchantCode") String kodeMerchant, @Path("id") String id, @Body Product product);
 
-  @GET("products/{kodeMerchant}/")
-  Call<List<Product>> getProductAll(@Path("kodeMerchant") String kodeMerchant);
+  @GET("products/")
+  Call<List<Product>> getProductAll(@Header("merchantCode") String kodeMerchant);
 
-  @GET("products/{kodeMerchant}/{id}")
-  Call<List<Product>> getProductById(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+  @GET("products/{id}")
+  Call<List<Product>> getProductById(@Header("merchantCode") String kodeMerchant, @Path("id") String id);
 
-  @DELETE("products/{kodeMerchant}/{id}")
-  Call<HashMap<Integer, String>> deleteProduct(@Path("kodeMerchant") String kodeMerchant, @Path("id") String id);
+  @DELETE("products/{id}")
+  Call<HashMap<Integer, String>> deleteProduct(@Header("merchantCode") String kodeMerchant, @Path("id") String id);
 }

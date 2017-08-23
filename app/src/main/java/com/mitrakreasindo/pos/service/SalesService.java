@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -18,11 +19,11 @@ import retrofit2.http.Path;
 
 public interface SalesService
 {
-  @POST("sales/{kodeMerchant}/")
-  Call<HashMap<Integer, String>> postSales(@Path("kodeMerchant") String kodeMerchant,
+  @POST("sales/")
+  Call<HashMap<Integer, String>> postSales(@Header("merchantCode") String kodeMerchant,
                                            @Body SalesPack salesPack);
 
-  @GET("viewsales/{merchantCode}/{salesid}/salesitems")
-  Call<List<ViewSalesItem>> getSalesItemBySalesId(@Path("merchantCode") String merchantCode,
+  @GET("viewsales/{salesid}/salesitems")
+  Call<List<ViewSalesItem>> getSalesItemBySalesId(@Header("merchantCode") String kodeMerchant,
                                                   @Path("salesid") String salesId);
 }
