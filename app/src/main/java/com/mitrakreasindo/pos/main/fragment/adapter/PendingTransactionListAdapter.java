@@ -15,7 +15,6 @@ import com.mitrakreasindo.pos.main.sales.payment.PaymentActivity;
 import com.mitrakreasindo.pos.model.ViewPendingTransaction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -75,12 +74,6 @@ public class PendingTransactionListAdapter extends RecyclerView.Adapter<PendingT
   public void addPendingTransaction(List<ViewPendingTransaction> pendingTransactions)
   {
     this.pendingTransactions.addAll(pendingTransactions);
-    notifyDataSetChanged();
-  }
-
-  public void addPendingTransaction(ViewPendingTransaction[] pendingTransactions)
-  {
-    this.pendingTransactions.addAll(new ArrayList<>(Arrays.asList(pendingTransactions)));
     notifyDataSetChanged();
   }
 

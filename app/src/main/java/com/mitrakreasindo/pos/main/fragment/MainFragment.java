@@ -121,9 +121,6 @@ public class MainFragment extends Fragment
   private String companyCode;
   private Bundle bundle;
 
-//  float floatData[] = {150000000, 126000000};
-//  String stringData[] = {"profit", "loss"};
-
   private PieDataSet dataSetDaily;
   private PieDataSet dataSetWeekly;
   private PieDataSet dataSetMonthly;
