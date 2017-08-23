@@ -101,26 +101,29 @@ public class PaymentActivity extends AppCompatActivity
   public TextView salesPaymentTotal;
   @BindView(R.id.btn_payment_confirm)
   Button btnPaymentConfirm;
-
+  @BindView(R.id.textview_money)
+  TextView textviewMoney;
+  
   private DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
-
+  
   DefaultHelper defaultHelper = new DefaultHelper();
-
+  
   String example = "Convert Java String";
   byte[] bytes = example.getBytes();
-
+  
   private String originalString;
   private Long longval;
-
+  
   private Bundle bundle;
   private String salesId;
-
+  private boolean retur = false;
+  
   private TableSalesItemHelper tableSalesItemHelper;
-
+  
   private PaymentProductListAdapter paymentProductListAdapter;
-
+  
   private List<SalesItem> salesItemList;
-
+  
   private Sales sales;
   private Product product;
   private SalesPack salesPack;
@@ -133,19 +136,19 @@ public class PaymentActivity extends AppCompatActivity
   private People people;
   private Tax tax;
   private Location location;
-
+  
   private ViewSale viewsales;
   private ViewSalesItem viewsalesitem;
   private ViewReceipt viewreceipt;
   private ViewPayment viewpayment;
   private ViewStockDiary viewstockdiary;
   private ViewTaxLine viewtaxline;
-
+  
   private Collection<ViewSalesItem> viewsalesitems = new ArrayList<>();
   private Collection<ViewPayment> viewpayments = new ArrayList<>();
   private Collection<ViewStockDiary> viewstockdiaries = new ArrayList<>();
   private Collection<ViewTaxLine> viewtaxlines = new ArrayList<>();
-
+  
   private SalesService salesService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
@@ -156,14 +159,16 @@ public class PaymentActivity extends AppCompatActivity
   private Context mcontext;
   private static boolean PrinterMessage;
   
-  public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
+  public class PrinterCallback extends AidlPrinterStateChangeListener.Stub
+  {
     boolean message = true;
+    
     @Override
     public void onPrintError(int arg0) throws RemoteException
     {
       message = false;
       GetMessage(message);
-      showMessage(PaymentActivity.this,getString(R.string.text_suddenly) + arg0);
+      showMessage(PaymentActivity.this, getString(R.string.text_suddenly) + arg0);
       return;
     }
     
@@ -172,7 +177,7 @@ public class PaymentActivity extends AppCompatActivity
     {
       message = true;
       GetMessage(message);
-      showMessage(PaymentActivity.this,getString(R.string.text_PrintFinished));
+      showMessage(PaymentActivity.this, getString(R.string.text_PrintFinished));
     }
     
     @Override
@@ -180,28 +185,91 @@ public class PaymentActivity extends AppCompatActivity
     {
       message = false;
       GetMessage(message);
-      showMessage(PaymentActivity.this,getString(R.string.text_outOfPaper));
+      showMessage(PaymentActivity.this, getString(R.string.text_outOfPaper));
       return;
     }
   }
+  
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_payment);
     ButterKnife.bind(this);
-
+    
     salesService = ClientService.createService().create(SalesService.class);
-
+    
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-
+    
     tableSalesItemHelper = new TableSalesItemHelper(this);
-
+    
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
       salesId = bundle.getString("sales_id");
+      retur = bundle.getBoolean("retur");
+      if (retur)
+      {
+        edittextPaymentMoney.setVisibility(View.GONE);
+        textviewMoney.setVisibility(View.GONE);
+        edittextPaymentMoney.setText("0,0");
+      }
+      else
+      {
+  
+        edittextPaymentMoney.setText("0");
+        edittextPaymentMoney.addTextChangedListener(new TextWatcher()
+        {
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count)
+          {
+            if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
+            {
+        
+            }
+            else
+            {
+              edittextPaymentMoney.setText("0");
+            }
+      
+          }
+    
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after)
+          {
+      
+          }
+    
+          @Override
+          public void afterTextChanged(Editable s)
+          {
+      
+            try
+            {
+              edittextPaymentMoney.removeTextChangedListener(this);
+              String originalString = s.toString();
+        
+              if (originalString.contains(","))
+              {
+                originalString = originalString.replaceAll(",", "");
+              }
+              Long longval = Long.parseLong(originalString);
+        
+              DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+              edittextPaymentMoney.setText(decimalFormat.format(longval));
+              edittextPaymentMoney.setSelection(edittextPaymentMoney.getText().length());
+            }
+            catch (Exception e)
+            {
+              e.printStackTrace();
+            }
+      
+            edittextPaymentMoney.addTextChangedListener(this);
+      
+          }
+        });
+      }
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
       viewsalesitems.containsAll(salesItemList);
@@ -217,19 +285,19 @@ public class PaymentActivity extends AppCompatActivity
     }
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
-
+    
     customer = new Customer();
     customer.setId(null);
-
+    
     people = new People();
     people.setId("1111111");
-
+    
     location = new Location();
     location.setId(UUID.randomUUID().toString());
-
+    
     tax = new Tax();
     tax.setId("001");
-
+    
     receipt = new Receipt();
     receipt.setId(salesId);
     receipt.setAttributes(null);
@@ -239,7 +307,7 @@ public class PaymentActivity extends AppCompatActivity
     receipt.setPerson(IDs.getLoginUser());
     receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     receipt.setSflag(true);
-
+    
     sales = new Sales();
     sales.setId(salesId);
     sales.setSalesnum(1);
@@ -250,8 +318,8 @@ public class PaymentActivity extends AppCompatActivity
     sales.setCustomer(customer);
     sales.setPerson(people);
     sales.setReceipt(receipt);
-
-
+    
+    
     if (salesItemList != null)
     {
       paymentProductListAdapter = new PaymentProductListAdapter(this, salesItemList);
@@ -262,8 +330,8 @@ public class PaymentActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listPaymentProduct.setLayoutManager(layoutManager);
     listPaymentProduct.setItemAnimator(new DefaultItemAnimator());
-
-
+    
+    
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -273,57 +341,7 @@ public class PaymentActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-
-    edittextPaymentMoney.setText("0");
-    edittextPaymentMoney.addTextChangedListener(new TextWatcher()
-    {
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count)
-      {
-        if (s.length() > 0 && edittextPaymentMoney.getText().toString().length() > 0)
-        {
-
-        } else
-        {
-          edittextPaymentMoney.setText("0");
-        }
-
-      }
-
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after)
-      {
-
-      }
-
-      @Override
-      public void afterTextChanged(Editable s)
-      {
-
-        try
-        {
-          edittextPaymentMoney.removeTextChangedListener(this);
-          String originalString = s.toString();
-
-          if (originalString.contains(","))
-          {
-            originalString = originalString.replaceAll(",", "");
-          }
-          Long longval = Long.parseLong(originalString);
-
-          DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
-          edittextPaymentMoney.setText(decimalFormat.format(longval));
-          edittextPaymentMoney.setSelection(edittextPaymentMoney.getText().length());
-        } catch (Exception e)
-        {
-          e.printStackTrace();
-        }
-
-        edittextPaymentMoney.addTextChangedListener(this);
-        
-      }
-    });
-
+    
     btnPaymentConfirm.setOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -336,65 +354,19 @@ public class PaymentActivity extends AppCompatActivity
           final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
           confirmationDialog.setTitle(R.string.printOptions);
           confirmationDialog.setMessage(R.string.Qs_print);
-
+          
           confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-              if(manager!=null)
+              if (manager != null)
               {
                 cetak();
               }
               else
               {
-              if (mService == null) {
-                Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
-                  .show();
-                Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
-                startActivity(intent);
-                return;
-              }
-              else
-              {
-                if (mService.getState() == BluetoothService.STATE_CONNECTED)
-                {
-                  PrintReceipt.printReceipt(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),paymentProductListAdapter.grandTotal(),
-                    Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")));
-                  final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-                  confirmationDialog.setTitle(R.string.text_Change);
-                  confirmationDialog.setMessage(decimalFormat.format(
-                    Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")) - paymentProductListAdapter.grandTotal()
-                  ));
-                  confirmationDialog.setCancelable(false);
-                  confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
-                  {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                      data();
-                      salesPack = new SalesPack();
-                      salesPack.setSales(viewsales);
-                      salesPack.setReceipts(viewreceipt);
-                      salesPack.setSalesItems(viewsalesitems);
-                      salesPack.setPayments(viewpayments);
-                      salesPack.setStockdiary(viewstockdiaries);
-                      salesPack.setTaxlines(viewtaxlines);
-
-                      TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
-                      tableSalesHelper.open();
-                      tableSalesHelper.insertSales(sales);
-                      tableSalesHelper.close();
-
-                      postSales();
-                      SalesActivity.sActivity.finish();
-                      finish();
-                    }
-                  });
-                  confirmationDialog.show();
-                  return;
-              }
-                else
+                if (mService == null)
                 {
                   Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
                     .show();
@@ -402,11 +374,58 @@ public class PaymentActivity extends AppCompatActivity
                   startActivity(intent);
                   return;
                 }
-              }
+                else
+                {
+                  if (mService.getState() == BluetoothService.STATE_CONNECTED)
+                  {
+                    PrintReceipt.printReceipt(PaymentActivity.this, paymentProductListAdapter.getAllTickets(), paymentProductListAdapter.grandTotal(),
+                      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")));
+                    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+                    confirmationDialog.setTitle(R.string.text_Change);
+                    confirmationDialog.setMessage(decimalFormat.format(
+                      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
+                    ));
+                    confirmationDialog.setCancelable(false);
+                    confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
+                    {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                        data();
+                        salesPack = new SalesPack();
+                        salesPack.setSales(viewsales);
+                        salesPack.setReceipts(viewreceipt);
+                        salesPack.setSalesItems(viewsalesitems);
+                        salesPack.setPayments(viewpayments);
+                        salesPack.setStockdiary(viewstockdiaries);
+                        salesPack.setTaxlines(viewtaxlines);
+                        
+                        TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                        tableSalesHelper.open();
+                        tableSalesHelper.insertSales(sales);
+                        tableSalesHelper.close();
+                        
+                        postSales();
+                        SalesActivity.sActivity.finish();
+                        finish();
+                      }
+                    });
+                    confirmationDialog.show();
+                    return;
+                  }
+                  else
+                  {
+                    Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                      .show();
+                    Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                    startActivity(intent);
+                    return;
+                  }
+                }
               }
             }
           });
-
+          
           confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
           {
             @Override
@@ -423,7 +442,7 @@ public class PaymentActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which)
                 {
-
+                  
                   data();
                   salesPack = new SalesPack();
                   salesPack.setSales(viewsales);
@@ -432,13 +451,13 @@ public class PaymentActivity extends AppCompatActivity
                   salesPack.setPayments(viewpayments);
                   salesPack.setStockdiary(viewstockdiaries);
                   salesPack.setTaxlines(viewtaxlines);
-                  Log.d("TAX: ",salesPack.getTaxlines().toString());
-
+                  Log.d("TAX: ", salesPack.getTaxlines().toString());
+                  
                   TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
                   tableSalesHelper.open();
                   tableSalesHelper.insertSales(sales);
                   tableSalesHelper.close();
-
+                  
                   postSales();
                   SalesActivity.sActivity.finish();
                   finish();
@@ -453,28 +472,34 @@ public class PaymentActivity extends AppCompatActivity
         {
           Toast.makeText(PaymentActivity.this, R.string.text_notEnough, Toast.LENGTH_LONG).show();
         }
-
+        
       }
     });
-
+    
     salesPaymentTotal.setText(decimalFormat.format(paymentProductListAdapter.grandTotal()));
-
+    
   }
-
+  
   private double formatTotalPrice()
   {
-    originalString = edittextPaymentMoney.getText().toString();
-
-    if (originalString.contains(","))
+    double clearValue = 0.0;
+    if (retur)
     {
-      originalString = originalString.replaceAll(",", "");
+      clearValue = paymentProductListAdapter.grandTotal();
     }
-    Long longval = Long.parseLong(originalString);
-    double clearValue = Double.parseDouble(longval.toString());
+    else
+    {
+      originalString = edittextPaymentMoney.getText().toString();
+      if (originalString.contains(","))
+      {
+        originalString = originalString.replaceAll(",", "");
+      }
+      Long longval = Long.parseLong(originalString);
+      clearValue = Double.parseDouble(longval.toString());
+    }
     return clearValue;
-
   }
-
+  
   @Override
   public void onBackPressed()
   {
@@ -486,17 +511,17 @@ public class PaymentActivity extends AppCompatActivity
       @Override
       public void onClick(DialogInterface dialog, int which)
       {
-
+        
         TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(PaymentActivity.this);
         tableSalesItemHelper.open();
         tableSalesItemHelper.deleteSalesItem(salesItemList);
         tableSalesItemHelper.close();
-
+        
         finish();
-
+        
       }
     });
-
+    
     confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
     {
       @Override
@@ -505,11 +530,11 @@ public class PaymentActivity extends AppCompatActivity
         dialog.dismiss();
       }
     });
-
+    
     confirmationDialog.show();
-
+    
   }
-
+  
   public void data()
   {
 
@@ -535,14 +560,18 @@ public class PaymentActivity extends AppCompatActivity
 
 //    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //    String date = formater.format(new Date());
-
-
-
-
-
+    
+    
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
-    payment.setPayment("cash");
+    if (retur)
+    {
+      payment.setPayment("returns");
+    }
+    else
+    {
+      payment.setPayment("cash");
+    }
     payment.setTotal(paymentProductListAdapter.grandTotal());
     payment.setTransid("tesssssss");
     payment.setNotes("test notes");
@@ -553,7 +582,7 @@ public class PaymentActivity extends AppCompatActivity
     payment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     payment.setSflag(true);
     payment.setReceipt(receipt);
-
+    
     taxLine = new TaxLine();
     taxLine.setId(UUID.randomUUID().toString());
     taxLine.setBase(1000);
@@ -562,7 +591,7 @@ public class PaymentActivity extends AppCompatActivity
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
-
+    
     viewtaxline = new ViewTaxLine();
     viewtaxline.setId(taxLine.getId());
     viewtaxline.setReceipt(taxLine.getReceipt().getId());
@@ -572,7 +601,7 @@ public class PaymentActivity extends AppCompatActivity
     viewtaxline.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewtaxline.setSflag(taxLine.getSflag());
     viewtaxline.setTaxName(null);
-
+    
     viewsales = new ViewSale();
     viewsales.setId(receipt.getId());
     viewsales.setSalesnum(sales.getSalesnum());
@@ -585,11 +614,11 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setCustomerName(null);
     viewsales.setPersonName(null);
     viewsales.setDatenew(defaultHelper.dateFormat(new Date()));
-
-
+    
+    
     viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
-
+    
     if (IDs.getLoginCloseCashID() == null)
     {
       String id = UUID.randomUUID().toString();
@@ -598,14 +627,14 @@ public class PaymentActivity extends AppCompatActivity
     }
     else
       viewreceipt.setMoney(IDs.getLoginCloseCashID());
-
+    
     viewreceipt.setDatenew(defaultHelper.dateFormat(new Date()));
     viewreceipt.setPerson(receipt.getPerson());
     viewreceipt.setAttributes(null);
     viewreceipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewreceipt.setSflag(true);
     viewreceipt.setHost("");
-
+    
     viewpayment = new ViewPayment();
     viewpayment.setId(payment.getId());
     viewpayment.setReceipt(receipt.getId());
@@ -619,11 +648,11 @@ public class PaymentActivity extends AppCompatActivity
     viewpayment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     viewpayment.setSflag(payment.getSflag());
     viewpayment.setDatenew(defaultHelper.dateFormat(new Date()));
-
+    
     for (int i = 0; i < salesItemList.size(); i++)
     {
       product = salesItemList.get(i).getProduct();
-
+      
       salesItem = salesItemList.get(i);
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
@@ -632,7 +661,7 @@ public class PaymentActivity extends AppCompatActivity
       salesItem.setSalesId(sales);
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
-
+      
       viewsalesitem = new ViewSalesItem();
       viewsalesitem.setId(0);
       viewsalesitem.setSales_id(sales.getId());
@@ -650,7 +679,7 @@ public class PaymentActivity extends AppCompatActivity
       viewsalesitem.setTaxName(null);
       viewsalesitem.setRate(null);
       viewsalesitems.add(viewsalesitem);
-
+      
       stockDiary = new StockDiary();
       stockDiary.setId(UUID.randomUUID().toString());
       stockDiary.setReason(0);
@@ -662,7 +691,7 @@ public class PaymentActivity extends AppCompatActivity
       stockDiary.setAttributesetinstanceId(null);
       stockDiary.setLocation(location);
       stockDiary.setProduct(salesItem.getProduct());
-
+      
       viewstockdiary = new ViewStockDiary();
       viewstockdiary.setId(stockDiary.getId());
       viewstockdiary.setProduct(stockDiary.getProduct().getId());
@@ -677,26 +706,26 @@ public class PaymentActivity extends AppCompatActivity
       viewstockdiary.setLocation("0");
       viewstockdiaries.add(viewstockdiary);
     }
-
+    
     viewtaxlines.add(viewtaxline);
     viewpayments.add(viewpayment);
-
+    
   }
-
+  
   public void postSales()
   {
 //    final ProgressDialog progressDialog = new ProgressDialog(this);
 //    progressDialog.setCancelable(false);
 //    progressDialog.setMessage("Loading");
 //    progressDialog.show();
-
+    
     Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
     saveSales.enqueue(new Callback<HashMap<Integer, String>>()
     {
-
+      
       private int responseCode;
       private String responseMessage;
-
+      
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
@@ -705,7 +734,7 @@ public class PaymentActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
-
+          
           if (responseCode == 0)
           {
 //            progressDialog.dismiss();
@@ -714,11 +743,11 @@ public class PaymentActivity extends AppCompatActivity
           }
         }
       }
-
+      
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-
+        
       }
     });
   }
@@ -726,8 +755,8 @@ public class PaymentActivity extends AppCompatActivity
   public void cetak()
   {
     List<PrintDataObject> list = new ArrayList<PrintDataObject>();
-    Print.IsiStruk(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),
-      list,paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")));
+    Print.IsiStruk(PaymentActivity.this, paymentProductListAdapter.getAllTickets(),
+      list, paymentProductListAdapter.grandTotal(), Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")));
     try
     {
       this.printDev.printText(list, callback);
@@ -742,32 +771,38 @@ public class PaymentActivity extends AppCompatActivity
   protected void onResume()
   {
     super.onResume();
-    if(!this.getClass().getName().equals(MainActivity.class)){
+    if (!this.getClass().getName().equals(MainActivity.class))
+    {
       bindService();
     }
   }
   
-  public void bindService() {
+  public void bindService()
+  {
     Intent intent = new Intent();
     intent.setPackage("com.centerm.smartposservice");
     intent.setAction("com.centerm.smartpos.service.MANAGER_SERVICE");
     bindService(intent, conn, Context.BIND_AUTO_CREATE);
   }
   
-  public ServiceConnection conn = new ServiceConnection() {
+  public ServiceConnection conn = new ServiceConnection()
+  {
     @Override
-    public void onServiceDisconnected(ComponentName name) {
+    public void onServiceDisconnected(ComponentName name)
+    {
       manager = null;
       LogUtil.print("服务绑定失败");
       LogUtil.print("manager = " + manager);
     }
     
     @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
+    public void onServiceConnected(ComponentName name, IBinder service)
+    {
       manager = AidlDeviceManager.Stub.asInterface(service);
       LogUtil.print("服务绑定成功");
       LogUtil.print("manager = " + manager);
-      if (null != manager) {
+      if (null != manager)
+      {
         onDeviceConnected(manager);
       }
     }
@@ -777,7 +812,8 @@ public class PaymentActivity extends AppCompatActivity
   protected void onDestroy()
   {
     super.onDestroy();
-    if(!this.getClass().getName().equals(MainActivity.class)){
+    if (!this.getClass().getName().equals(MainActivity.class))
+    {
       unbindService(conn);
     }
   }
@@ -793,10 +829,12 @@ public class PaymentActivity extends AppCompatActivity
       e.printStackTrace();
     }
   }
- 
-  private Handler handler = new Handler() {
+  
+  private Handler handler = new Handler()
+  {
     @Override
-    public void handleMessage(Message msg) {
+    public void handleMessage(Message msg)
+    {
       // TODO Auto-generated method stub
       super.handleMessage(msg);
       Bundle bundle = msg.getData();
@@ -805,9 +843,11 @@ public class PaymentActivity extends AppCompatActivity
     }
   };
   
-  private Handler handler2 = new Handler() {
+  private Handler handler2 = new Handler()
+  {
     @Override
-    public void handleMessage(Message msg) {
+    public void handleMessage(Message msg)
+    {
       // TODO Auto-generated method stub
       super.handleMessage(msg);
       Bundle bundle = msg.getData();
@@ -835,12 +875,12 @@ public class PaymentActivity extends AppCompatActivity
             salesPack.setPayments(viewpayments);
             salesPack.setStockdiary(viewstockdiaries);
             salesPack.setTaxlines(viewtaxlines);
-      
+            
             TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
             tableSalesHelper.open();
             tableSalesHelper.insertSales(sales);
             tableSalesHelper.close();
-      
+            
             postSales();
             SalesActivity.sActivity.finish();
             finish();
@@ -861,7 +901,8 @@ public class PaymentActivity extends AppCompatActivity
     handler2.sendMessage(a);
   }
   
-  public void showMessage(Context context, final String msg1) {
+  public void showMessage(Context context, final String msg1)
+  {
     Message msg = new Message();
     Bundle bundle = new Bundle();
     bundle.putString("msg1", msg1);

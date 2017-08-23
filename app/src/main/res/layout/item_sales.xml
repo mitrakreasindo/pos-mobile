@@ -243,6 +243,16 @@
             android:orientation="horizontal">
 
             <ImageView
+              android:id="@+id/btn_sales_returns"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:background="?android:attr/selectableItemBackground"
+              android:clickable="true"
+              android:focusable="true"
+              android:src="@drawable/ic_undo_black_24dp"/>
+
+            <ImageView
                 android:id="@+id/btn_sales_checkout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

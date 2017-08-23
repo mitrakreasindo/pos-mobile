@@ -15,7 +15,7 @@ public class SalesPack
   private Collection<ViewPayment> payments;
   private Collection<ViewStockDiary> stockdiary;
   private Collection<ViewTaxLine> taxlines;
-
+  
   public ViewSale getSales()
   {
     return sales;
@@ -75,4 +75,5 @@ public class SalesPack
   {
     this.taxlines = taxlines;
   }
+  
 }
