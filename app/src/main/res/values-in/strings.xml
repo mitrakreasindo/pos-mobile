@@ -82,6 +82,7 @@
     <string name="button_create_acc">Buat Akun</string>
     <string name="error_empty_businessname">Nama Bisnis harus diisi</string>
     <string name="error_empty_businessshortname">Singkatan (Alias) harus diisi</string>
+    <string name="error_valid_businessshortname">Karakter pertama harus alfabet</string>
     <string name="error_empty_ownerfullname">Nama Lengkap harus diisi</string>
     <string name="error_empty_owneremail">E-mail harus diisi</string>
     <string name="error_valid_owneremail">E-mail tidak valid</string>

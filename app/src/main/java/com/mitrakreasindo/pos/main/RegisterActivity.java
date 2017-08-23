@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
+import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.model.Merchant;
 import com.mitrakreasindo.pos.model.MerchantCategories;
@@ -273,6 +274,11 @@ public class RegisterActivity extends AppCompatActivity
     return email.contains("@");
   }
 
+  public boolean isAlphabet(String s){
+    String pattern= "^[a-z]*$";
+    return s.matches(pattern);
+  }
+
   private boolean attemptRegister()
   {
     passwordValidator = new PasswordValidator();
@@ -296,6 +302,12 @@ public class RegisterActivity extends AppCompatActivity
     else if (TextUtils.isEmpty(shortname))
     {
       edittextBusinessShortname.setError(getString(R.string.error_empty_businessshortname));
+      focusView = edittextBusinessShortname;
+      return false;
+    }
+    else if (!isAlphabet(TextUtils.substring(shortname, 0, 1)))
+    {
+      edittextBusinessShortname.setError(getString(R.string.error_valid_businessshortname));
       focusView = edittextBusinessShortname;
       return false;
     }
@@ -324,7 +336,7 @@ public class RegisterActivity extends AppCompatActivity
   private void postMerchantRegistration(final MerchantRegistration merchantRegistration)
   {
     MerchantService merchantService = ClientService.createService().create(MerchantService.class);
-    Call<HashMap<Integer, String>> call = merchantService.postMerchantRegistration(merchantRegistration);
+    Call<HashMap<Integer, String>> call = merchantService.postMerchantRegistration(IDs.DEFAULT_SCHEMA, merchantRegistration);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -366,7 +378,7 @@ public class RegisterActivity extends AppCompatActivity
   private void getMerchantCategories(final int id)
   {
     MerchantService merchantService = ClientService.createService().create(MerchantService.class);
-    Call<List<MerchantCategories>> call = merchantService.getMerchantCategories();
+    Call<List<MerchantCategories>> call = merchantService.getMerchantCategories(IDs.DEFAULT_SCHEMA);
     call.enqueue(new Callback<List<MerchantCategories>>()
     {
       @Override
@@ -413,7 +425,7 @@ public class RegisterActivity extends AppCompatActivity
   private void getMerchantSubCategories(String categoryName, final int id)
   {
     final MerchantService merchantService = ClientService.createService().create(MerchantService.class);
-    Call<List<MerchantCategories>> call = merchantService.getMerchantSubCategories(categoryName);
+    Call<List<MerchantCategories>> call = merchantService.getMerchantSubCategories(IDs.DEFAULT_SCHEMA, categoryName);
     call.enqueue(new Callback<List<MerchantCategories>>()
     {
       @Override

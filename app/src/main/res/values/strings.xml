@@ -82,6 +82,7 @@
     <string name="button_create_acc">Create Account</string>
     <string name="error_empty_businessname">Business name required</string>
     <string name="error_empty_businessshortname">Business name (Alias) required</string>
+    <string name="error_valid_businessshortname">First character must be alphabet</string>
     <string name="error_empty_ownerfullname">Full name required</string>
     <string name="error_empty_owneremail">Email required</string>
     <string name="error_valid_owneremail">Email not valid</string>

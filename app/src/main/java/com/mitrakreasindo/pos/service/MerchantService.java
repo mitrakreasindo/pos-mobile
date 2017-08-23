@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -18,15 +19,15 @@ import retrofit2.http.Path;
 
 public interface MerchantService
 {
-  @POST("merchants/public")
-  Call<HashMap<Integer,String>> postMerchantRegistration(@Body MerchantRegistration merchantRegistration);
+  @POST("merchants/")
+  Call<HashMap<Integer,String>> postMerchantRegistration(@Header("merchantCode") String kodeMerchant,
+                                                         @Body MerchantRegistration merchantRegistration);
+  @GET("merchants/categories/name")
+  Call<List<MerchantCategories>> getMerchantCategories(@Header("merchantCode") String kodeMerchant);
 
-  @GET("merchants/public/categories/name")
-  Call<List<MerchantCategories>> getMerchantCategories();
-
-  @GET("merchants/public/categories/subname/{name}")
-  Call<List<MerchantCategories>> getMerchantSubCategories(@Path("name") String categoryName);
-
-  @GET("merchants/public/categories")
-  Call<List<MerchantCategories>> getAllMerchantCategories();
+  @GET("merchants/categories/subname/{name}")
+  Call<List<MerchantCategories>> getMerchantSubCategories(@Header("merchantCode") String kodeMerchant,
+                                                          @Path("name") String categoryName);
+  @GET("merchants/categories")
+  Call<List<MerchantCategories>> getAllMerchantCategories(@Header("merchantCode") String kodeMerchant);
 }
