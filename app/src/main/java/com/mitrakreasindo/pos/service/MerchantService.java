@@ -20,14 +20,14 @@ import retrofit2.http.Path;
 public interface MerchantService
 {
   @POST("merchants/")
-  Call<HashMap<Integer,String>> postMerchantRegistration(@Header("merchantCode") String kodeMerchant,
-                                                         @Body MerchantRegistration merchantRegistration);
+  Call<HashMap<Integer,String>> postMerchantRegistration(@Header("merchantCode") String kodeMerchant, @Body MerchantRegistration merchantRegistration);
+
   @GET("merchants/categories/name")
   Call<List<MerchantCategories>> getMerchantCategories(@Header("merchantCode") String kodeMerchant);
 
   @GET("merchants/categories/subname/{name}")
-  Call<List<MerchantCategories>> getMerchantSubCategories(@Header("merchantCode") String kodeMerchant,
-                                                          @Path("name") String categoryName);
-  @GET("merchants/categories")
-  Call<List<MerchantCategories>> getAllMerchantCategories(@Header("merchantCode") String kodeMerchant);
+  Call<List<MerchantCategories>> getMerchantSubCategories(@Header("merchantCode") String kodeMerchant, @Path("name") String categoryName);
+
+  @GET("merchants/public/categories")
+  Call<List<MerchantCategories>> getAllMerchantCategories();
 }
