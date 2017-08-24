@@ -1,10 +1,12 @@
 package com.mitrakreasindo.pos.model;
 
+import java.io.Serializable;
+
 /**
  * Created by hendric on 2017-05-19.
  */
 
-public class Role
+public class Role implements Serializable
 {
   private String id;
   private String name;

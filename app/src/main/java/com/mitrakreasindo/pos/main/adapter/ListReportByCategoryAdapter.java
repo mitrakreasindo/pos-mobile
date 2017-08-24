@@ -2,6 +2,8 @@ package com.mitrakreasindo.pos.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,14 +52,20 @@ public class ListReportByCategoryAdapter extends RecyclerView.Adapter<ListReport
   }
 
   @Override
-  public void onBindViewHolder(ListReportByCategoryAdapter.ViewHolder holder, int position)
+  public void onBindViewHolder(ViewHolder holder, int position)
   {
     ReportSelection reportSelection = reportSelections.get(position);
+//    holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleTitle.setText(reportSelection.getTitle());
 //    holder.txtSampleDescription.setText(reportSelection.getDescription());
+//    holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
     holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
-
+//    ColorStateList colorStateList = new ColorStateList
+//      (
+//        new int[][]{new int[0]}, new int[]{reportSelection.getColor()}
+//      );
+//    holder.reportCircleLayout.setBackgroundTintList(colorStateList);
     holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override

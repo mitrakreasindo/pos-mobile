@@ -289,7 +289,7 @@ public class MainFragment extends Fragment
     listReportByCategoryAdapter = new ListReportByCategoryAdapter(getContext(), ReportSelection.data());
     bsListReportByCategory.setAdapter(listReportByCategoryAdapter);
     bsListReportByCategory.setHasFixedSize(true);
-    RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(getContext(), 4);
+    RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
 //    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
     bsListReportByCategory.setLayoutManager(layoutManager1);
     bsListReportByCategory.setItemAnimator(new DefaultItemAnimator());

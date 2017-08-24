@@ -108,17 +108,19 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       holder.itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+          Log.d("IDPEOPLE", people.getId());
           Intent intent = new Intent(context, UserFormActivity.class);
-          intent.putExtra("id", people.getId());
-          intent.putExtra("name", people.getName());
-          intent.putExtra("password", people.getApppassword());
-          intent.putExtra("role", people.getRole().getId());
-          intent.putExtra("visible", people.isVisible());
-          intent.putExtra("image", people.getImage());
-          intent.putExtra("fullname", people.getFullname());
-          intent.putExtra("birthdate", people.getBirthdate());
-          intent.putExtra("gender", people.getGender());
-          intent.putExtra("phone", people.getPhoneNumber());
+          intent.putExtra("people", people);
+//          intent.putExtra("id", people.getId());
+//          intent.putExtra("name", people.getName());
+//          intent.putExtra("password", people.getApppassword());
+//          intent.putExtra("role", people.getRole().getId());
+//          intent.putExtra("visible", people.isVisible());
+//          intent.putExtra("image", people.getImage());
+//          intent.putExtra("fullname", people.getFullname());
+//          intent.putExtra("birthdate", people.getBirthdate());
+//          intent.putExtra("gender", people.getGender());
+//          intent.putExtra("phone", people.getPhoneNumber());
           context.startActivity(intent);
         }
       });

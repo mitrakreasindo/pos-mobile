@@ -261,7 +261,7 @@ public class ReportActivity extends AppCompatActivity
 
   public void getReport()
   {
-
+//    Log.d("GETREPORT")
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setCancelable(false);
     progressDialog.setMessage(getString(R.string.prepare_data));

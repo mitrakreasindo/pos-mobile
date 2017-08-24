@@ -26,9 +26,12 @@
 
                 <Button
                     android:id="@+id/btn_menu_sales"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/red400"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:layout_height="70dp"
+                    android:paddingTop="8dp"
+                    android:background="@color/red400"
                     android:drawableTop="@drawable/ic_carts"
                     android:text="@string/sales"
                     android:textColor="@color/white"/>
@@ -36,18 +39,24 @@
 
                 <Button
                     android:id="@+id/btn_menu_data"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/teal"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:layout_height="70dp"
+                    android:paddingTop="8dp"
+                    android:background="@color/teal"
                     android:drawableTop="@drawable/data"
                     android:text="@string/data"
                     android:textColor="@color/white"/>
 
                 <Button
                     android:id="@+id/btn_menu_receive"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/light_green"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:paddingTop="8dp"
+                    android:layout_height="70dp"
+                    android:background="@color/light_green"
                     android:drawableTop="@drawable/receipt"
                     android:text="@string/receive"
                     android:textColor="@color/white"/>
@@ -63,27 +72,36 @@
 
                 <Button
                     android:id="@+id/btn_menu_setting"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/blue"
+                    android:layout_width="0dp"
+                    android:paddingTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:layout_height="70dp"
+                    android:background="@color/blue"
                     android:drawableTop="@drawable/settings"
                     android:text="@string/action_settings"
                     android:textColor="@color/white"/>
 
                 <Button
                     android:id="@+id/btn_menu_report"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/blue_gray"
+                    android:layout_width="0dp"
+                    android:paddingTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="70dp"
+                    android:layout_margin="4dp"
+                    android:background="@color/blue_gray"
                     android:drawableTop="@drawable/chart"
                     android:text="@string/reports"
                     android:textColor="@color/white"/>
 
                 <Button
                     android:id="@+id/btn_menu_export"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:backgroundTint="@color/deep_purple"
+                    android:layout_width="0dp"
+                    android:paddingTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="70dp"
+                    android:layout_margin="4dp"
+                    android:background="@color/deep_purple"
                     android:drawableTop="@drawable/data_export"
                     android:text="@string/export"
                     android:textColor="@color/white"/>

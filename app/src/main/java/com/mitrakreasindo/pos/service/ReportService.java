@@ -21,10 +21,10 @@ import retrofit2.http.Streaming;
 public interface ReportService
 {
 
-  @GET("reports/multi")
+  @GET("reports/sales/")
   Call<Report> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
-  @GET("reports/multi/download/pdf")
+  @GET("reports/sales/download/pdf")
   @Streaming
   Call<ResponseBody> downloadPDF(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 

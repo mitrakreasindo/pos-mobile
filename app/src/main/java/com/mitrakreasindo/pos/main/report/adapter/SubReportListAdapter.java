@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   public void onBindViewHolder(SubReportListAdapter.ViewHolder holder, int position)
   {
     final SubReport subReport = subReports.get(position);
+    Log.d("SUBREPORT", subReport.getPeopleName());
     holder.itemReportSalesName.setText(subReport.getPeopleName());
     holder.itemReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
     holder.itemReportTotalTransaction.setText("Rp. " + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
