@@ -336,7 +336,7 @@
     <string name="text_pair">Pair</string>
     <string name="text_cancelPayment">Cancel Payment ?</string>
     <string name="Qs_payment">Are you sure want to cancel the payment ?</string>
-
+    <string name="text_retur">Sales returns</string>
     <string name="text_print_demo">Print Demo</string>
     <string name="text_print_barcode">Print Barcode</string>
     <string name="text_print_image">Print Image</string>

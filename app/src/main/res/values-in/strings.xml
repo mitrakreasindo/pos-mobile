@@ -305,6 +305,7 @@
     <string name="button_scan">Memindai perangkat</string>
 
     <!--  Message -->
+    <string name="text_retur">Retur Penjualan</string>
     <string name="not_connected">Sambungkan printer Bluetooth</string>
     <string name="bt_not_enabled_leaving">Bluetooth tidak dimulai, keluar dari program</string>
     <string name="connecting_message">Menghubungkan…</string>

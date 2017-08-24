@@ -55,6 +55,11 @@ public class Print
       printDataObject3.setBold(false);
       list.add(printDataObject3);
   
+      PrintDataObject printTitle = new PrintDataObject(context.getString(R.string.text_retur));
+      printTitle.setBold(true);
+      printTitle.setAlign(PrintDataObject.ALIGN.CENTER);
+      list.add((printTitle));
+      
       for (int i = 0; i < salesItemList.size(); i++)
       {
         SalesItem tiket = salesItemList.get(i);
@@ -94,10 +99,11 @@ public class Print
         {
           TotalHarga = Integer.toString(Total);
         }
+               
         String nama = String.format("%-32s", ProductName).replace(' ', ' ');
-        String quantity = String.format("%-3s", Qty).replace(' ', ' ');
+        String quantity = String.format("%-6s","(-)"+ Qty).replace(' ', ' ');
         String prise = String.format("%11s", Harga).replace(' ', ' ');
-        String total = String.format("%12s", TotalHarga).replace(' ', ' ');
+        String total = String.format("%15s","(-)" + TotalHarga).replace(' ', ' ');
         String str = String.format(nama + "\n" + quantity + " x " + prise + " = " + total);
   
         PrintDataObject printDataObject = new PrintDataObject(str);
