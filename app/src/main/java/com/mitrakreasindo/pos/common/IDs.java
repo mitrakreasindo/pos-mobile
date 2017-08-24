@@ -17,6 +17,8 @@ public class IDs
 
   public static final String SITE_GUID = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
 
+  public static final String DEFAULT_SCHEMA = "public";
+
   public static String getLoginUser()
   {
     return loginUser;

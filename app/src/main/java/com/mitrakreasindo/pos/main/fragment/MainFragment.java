@@ -306,7 +306,12 @@ public class MainFragment extends Fragment
     super.onResume();
     if (shouldExecuteOnResume)
     {
-      EventBus.getDefault().register(this);
+      if (!EventBus.getDefault().isRegistered(this))
+      {
+        Log.d("EVENT BUS", "not registered");
+        EventBus.getDefault().register(this);
+      } else
+        Log.d("EVENT BUS", "already registered");
       progressDialog = new ProgressDialog(getContext());
       progressDialog.setMessage(this.getString(R.string.progress_message));
       progressDialog.setCancelable(false);

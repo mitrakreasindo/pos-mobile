@@ -56,7 +56,7 @@ public class ListReportByCategoryAdapter extends RecyclerView.Adapter<ListReport
     holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleTitle.setText(reportSelection.getTitle());
 //    holder.txtSampleDescription.setText(reportSelection.getDescription());
-    holder.reportCircleLayout.setDrawingCacheBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
+    holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
 
     holder.itemView.setOnClickListener(new View.OnClickListener()
     {

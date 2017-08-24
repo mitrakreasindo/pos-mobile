@@ -56,9 +56,10 @@
                 android:id="@+id/merchant_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
                 android:hint="@string/prompt_merchant_code"
                 android:inputType="text"
-                android:maxLines="1"/>
+                android:maxLength="4"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

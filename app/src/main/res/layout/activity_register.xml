@@ -61,6 +61,7 @@
             android:layout_weight="1"
             android:hint="@string/business_shortname"
             android:maxLength="4"
+            android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
             android:inputType="text"/>
 
         <EditText
