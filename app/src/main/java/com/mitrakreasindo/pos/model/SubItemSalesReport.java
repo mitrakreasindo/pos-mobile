@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by lisa on 07/08/17.
  */
 
-public class SubProductReport implements Serializable
+public class SubItemSalesReport implements Serializable
 {
 
   private String productId;

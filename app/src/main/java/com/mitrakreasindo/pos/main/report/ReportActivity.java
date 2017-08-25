@@ -3,17 +3,13 @@ package com.mitrakreasindo.pos.main.report;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,9 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
@@ -38,27 +32,18 @@ import com.mitrakreasindo.pos.common.DownloadService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
-import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.model.Download;
-import com.mitrakreasindo.pos.model.Report;
-import com.mitrakreasindo.pos.model.SubReport;
+import com.mitrakreasindo.pos.model.SalesReport;
+import com.mitrakreasindo.pos.model.SubSalesReport;
 import com.mitrakreasindo.pos.service.ReportService;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,6 +74,8 @@ public class ReportActivity extends AppCompatActivity
 
   public static final String MESSAGE_PROGRESS = "message_progress";
   private static final int PERMISSION_REQUEST_CODE = 1;
+
+  private SalesReport data;
 
 
   @Override
@@ -212,7 +199,9 @@ public class ReportActivity extends AppCompatActivity
       }
     });
 
-    reportListAdapter = new SubReportListAdapter(this, new ArrayList<SubReport>());
+    reportListAdapter = new SubReportListAdapter(this, new ArrayList<SubSalesReport>());
+//    reportListAdapter = new SubReportListAdapter(this, SubReport.data());
+
     listReport.setAdapter(reportListAdapter);
     listReport.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -225,8 +214,8 @@ public class ReportActivity extends AppCompatActivity
     }
 
     registerReceiver();
-
     getReport();
+
   }
 
   @Override
@@ -261,35 +250,33 @@ public class ReportActivity extends AppCompatActivity
 
   public void getReport()
   {
-//    Log.d("GETREPORT")
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setCancelable(false);
     progressDialog.setMessage(getString(R.string.prepare_data));
     progressDialog.show();
 
-    final Call<Report> reportCall = reportService
+    final Call<SalesReport> reportCall = reportService
       .getReportAll(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    reportCall.enqueue(new Callback<Report>()
+    reportCall.enqueue(new Callback<SalesReport>()
     {
       @Override
-      public void onResponse(Call<Report> call, Response<Report> response)
+      public void onResponse(Call<SalesReport> call, Response<SalesReport> response)
       {
-        Report data = response.body();
+        SalesReport data = response.body();
         reportListAdapter.clear();
         reportListAdapter.addSubReports(data.getSubReports());
       }
 
       @Override
-      public void onFailure(Call<Report> call, Throwable t)
+      public void onFailure(Call<SalesReport> call, Throwable t)
       {
-
       }
-
 
     });
 
+    Log.d("ESTES", "TEST");
     progressDialog.dismiss();
   }
 

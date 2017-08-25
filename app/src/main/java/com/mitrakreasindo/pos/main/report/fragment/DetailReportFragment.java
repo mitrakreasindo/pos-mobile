@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.model.SubReport;
+import com.mitrakreasindo.pos.model.SubSalesReport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +38,7 @@ public class DetailReportFragment extends Fragment
   Unbinder unbinder;
   private SubProductAdapter subProductAdapter;
   private Bundle bundle;
-  private SubReport subReport;
+  private SubSalesReport subReport;
   private DefaultHelper defaultHelper = new DefaultHelper();
   private boolean twoPane = false;
 
@@ -58,7 +57,7 @@ public class DetailReportFragment extends Fragment
     bundle = getArguments();
     if (bundle != null)
     {
-      subReport = (SubReport) bundle.getSerializable("subReport");
+      subReport = (SubSalesReport) bundle.getSerializable("subReport");
       twoPane = bundle.getBoolean("twoPane");
     }
 
@@ -66,7 +65,7 @@ public class DetailReportFragment extends Fragment
     itemSubReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
     itemSubReportSales.setText(subReport.getPeopleName());
 
-    subProductAdapter = new SubProductAdapter(getContext(), subReport.getSubProductReports());
+    subProductAdapter = new SubProductAdapter(getContext(), subReport.getSubItems());
 
     subProductAdapter.twoPane = twoPane;
 

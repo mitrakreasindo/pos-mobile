@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.model.SubProductReport;
-import com.mitrakreasindo.pos.model.SubReport;
+import com.mitrakreasindo.pos.model.SubItemSalesReport;
+import com.mitrakreasindo.pos.model.SubSalesReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +42,9 @@ public class SubReportActivity extends AppCompatActivity
   TextView itemSubReportDate;
 
   private SubProductAdapter subProductAdapter;
-  private List<SubProductReport> subProductReportList = new ArrayList<SubProductReport>();
+  private List<SubItemSalesReport> subProductReportList = new ArrayList<SubItemSalesReport>();
   private Bundle bundle;
-  private SubReport subReport;
+  private SubSalesReport subReport;
   private boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
@@ -69,7 +69,7 @@ public class SubReportActivity extends AppCompatActivity
     if (bundle != null)
     {
 
-      subReport = (SubReport) bundle.getSerializable("listProduct");
+      subReport = (SubSalesReport) bundle.getSerializable("listProduct");
       twoPane = bundle.getBoolean("twoPane");
 
       Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));
@@ -80,7 +80,7 @@ public class SubReportActivity extends AppCompatActivity
     itemSubReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
     itemSubReportSales.setText(subReport.getPeopleName());
 
-    subProductAdapter = new SubProductAdapter(this, subReport.getSubProductReports());
+    subProductAdapter = new SubProductAdapter(this, subReport.getSubItems());
     subProductAdapter.twoPane = twoPane;
 
     listSubProduct.setAdapter(subProductAdapter);

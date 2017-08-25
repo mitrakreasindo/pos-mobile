@@ -2,8 +2,6 @@ package com.mitrakreasindo.pos.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,14 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
-import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
 import com.mitrakreasindo.pos.model.ReportSelection;
-import com.mitrakreasindo.pos.model.SubProductReport;
-import com.mitrakreasindo.pos.model.SubReport;
 
 import java.util.ArrayList;
 import java.util.List;

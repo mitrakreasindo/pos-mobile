@@ -1,17 +1,18 @@
 package com.mitrakreasindo.pos.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lisa on 07/08/17.
  */
 
-public class Report
+public class SalesReport implements Serializable
 {
   private String merchantName;
   private String merchantAddress;
   private String merchantNpwp;
-  private List<SubReport> subReports;
+  private List<SubSalesReport> subReports;
   private double totalTax;
   private double totalTransaction;
 
@@ -45,12 +46,12 @@ public class Report
     this.merchantNpwp = merchantNpwp;
   }
 
-  public List<SubReport> getSubReports()
+  public List<SubSalesReport> getSubReports()
   {
     return subReports;
   }
 
-  public void setSubReports(List<SubReport> subReports)
+  public void setSubReports(List<SubSalesReport> subReports)
   {
     this.subReports = subReports;
   }

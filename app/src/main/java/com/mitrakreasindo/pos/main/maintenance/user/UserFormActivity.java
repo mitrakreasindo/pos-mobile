@@ -607,10 +607,13 @@ public class UserFormActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
-//            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(UserFormActivity.this);
-//            tablePeopleHelper.open();
-//            tablePeopleHelper.update(people);
-//            tablePeopleHelper.close();
+            TablePeopleHelper tablePeopleHelper = new TablePeopleHelper(UserFormActivity.this);
+            tablePeopleHelper.open();
+            tablePeopleHelper.update(people);
+            tablePeopleHelper.close();
+
+            userListAdapter.addUser(people);
+            userListAdapter.notifyDataSetChanged();
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
