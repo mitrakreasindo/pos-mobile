@@ -301,7 +301,7 @@ public class SalesActivity extends AppCompatActivity
         {
           TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
           tableSalesItemHelper.open();
-          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems,true);
+          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
     
           Intent intent = new Intent(SalesActivity.this, PaymentActivity.class);
@@ -327,7 +327,7 @@ public class SalesActivity extends AppCompatActivity
         {
           TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
           tableSalesItemHelper.open();
-          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems,false);
+          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
           
           Intent intent = new Intent(SalesActivity.this, PaymentActivity.class);
@@ -359,7 +359,7 @@ public class SalesActivity extends AppCompatActivity
           
           TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
           tableSalesItemHelper.open();
-          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems,false);
+          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
           tableSalesItemHelper.close();
           
           data();
@@ -499,15 +499,6 @@ public class SalesActivity extends AppCompatActivity
     
     Location location = new Location();
     location.setId(UUID.randomUUID().toString());
-    
-    salesItem = new SalesItem();
-    salesItem.setProduct(product);
-    salesItem.setAttributes(bytes);
-    salesItem.setUnits(1);
-    salesItem.setPrice(product.getPricesell());
-    salesItem.setSalesId(sales);
-    salesItem.setSflag(true);
-    salesItem.setTaxid(tax);
     
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());

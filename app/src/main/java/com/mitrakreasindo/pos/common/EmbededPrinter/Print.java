@@ -29,8 +29,10 @@ public class Print
     String date = tanggal;
     String separator = "--------------------------------";
     String cashier = "";
+    
     if (Cash == 0)
     {
+      
       if (IDs.getLoginUserFullname().length() <= 20)
       {
         cashier = IDs.getLoginUserFullname();
@@ -58,28 +60,28 @@ public class Print
       PrintDataObject printTitle = new PrintDataObject(context.getString(R.string.text_retur));
       printTitle.setBold(true);
       printTitle.setAlign(PrintDataObject.ALIGN.CENTER);
+      printTitle.setUnderline(true);
       list.add((printTitle));
       
       for (int i = 0; i < salesItemList.size(); i++)
       {
         SalesItem tiket = salesItemList.get(i);
         String name = tiket.getProduct().getName();
-        int Qty = (int) tiket.getUnits();
-        int price = tiket.getProduct().getPricesell().intValue();
-        int Total = price * Qty;
+        long Qty = (long) tiket.getUnits();
+        long price = tiket.getProduct().getPricesell().intValue();
+        long Total = price * Qty;
   
         String ProductName;
-        int Quantity;
         String Harga;
         String TotalHarga;
   
-        if (name.length() <= 30)
+        if (name.length() <= 32)
         {
           ProductName = name;
         }
         else
         {
-          ProductName = name.substring(0, 30);
+          ProductName = name.substring(0, 32);
         }
   
         if ((decimalFormat.format(price)).length() <= 12)
@@ -88,7 +90,7 @@ public class Print
         }
         else
         {
-          Harga = Integer.toString(price);
+          Harga = Long.toString(price);
         }
   
         if (decimalFormat.format(Total).length() <= 12)
@@ -97,24 +99,23 @@ public class Print
         }
         else
         {
-          TotalHarga = Integer.toString(Total);
+          TotalHarga = Long.toString(Total);
         }
-               
+                
         String nama = String.format("%-32s", ProductName).replace(' ', ' ');
-        String quantity = String.format("%-6s","(-)"+ Qty).replace(' ', ' ');
+        String quantity = String.format("%-3s",(String.format(""+Qty).replace("-","")).replace(' ', ' '));
         String prise = String.format("%11s", Harga).replace(' ', ' ');
-        String total = String.format("%15s","(-)" + TotalHarga).replace(' ', ' ');
-        String str = String.format(nama + "\n" + quantity + " x " + prise + " = " + total);
+        String total = String.format("%12s",(String.format(""+TotalHarga).replace("-","")).replace(' ', ' '));
+        String str = String.format(nama + "\n" + quantity +" x " + prise + " = " + total);
   
         PrintDataObject printDataObject = new PrintDataObject(str);
         printDataObject.setIsLittleSize(false);
-        printDataObject.setFontSize(-1);
-        printDataObject.getFontSize();
         printDataObject.setBold(false);
         list.add(printDataObject);
       }
+      String GrandTotal = decimalFormat.format(grandTotal).replace('.', ',');
       String Total = String.format("%-17s", context.getString(R.string.text_total));
-      String Total2 = String.format("%15s", decimalFormat.format(grandTotal).replace('.', ',')).replace(' ', ' ');
+      String Total2 = String.format("%15s", String.format(""+GrandTotal).replace("-","")).replace(' ', ' ');
       String footer = context.getString(R.string.text_ucapan);
       String str2 = separator + "\n" + Total + Total2 + "\n";
       PrintDataObject printDataObject2 = new PrintDataObject(str2);
@@ -157,22 +158,22 @@ public class Print
       {
         SalesItem tiket = salesItemList.get(i);
         String name = tiket.getProduct().getName();
-        int Qty = (int) tiket.getUnits();
-        int price = tiket.getProduct().getPricesell().intValue();
-        int Total = price * Qty;
+        long Qty = (long) tiket.getUnits();
+        long price = tiket.getProduct().getPricesell().intValue();
+        long Total = price * Qty;
     
         String ProductName;
         int Quantity;
         String Harga;
         String TotalHarga;
     
-        if (name.length() <= 30)
+        if (name.length() <= 32)
         {
           ProductName = name;
         }
         else
         {
-          ProductName = name.substring(0, 30);
+          ProductName = name.substring(0, 32);
         }
     
         if ((decimalFormat.format(price)).length() <= 12)
@@ -181,7 +182,7 @@ public class Print
         }
         else
         {
-          Harga = Integer.toString(price);
+          Harga = Long.toString(price);
         }
     
         if (decimalFormat.format(Total).length() <= 12)
@@ -190,7 +191,7 @@ public class Print
         }
         else
         {
-          TotalHarga = Integer.toString(Total);
+          TotalHarga = Long.toString(Total);
         }
         String nama = String.format("%-32s", ProductName).replace(' ', ' ');
         String quantity = String.format("%-3s", Qty).replace(' ', ' ');

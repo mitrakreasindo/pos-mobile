@@ -106,25 +106,10 @@ public class TableSalesItemHelper
 //    return 0;
 //  }
 
-  public long insertSalesItem(List<SalesItem> salesItems, boolean operation)
+  public long insertSalesItem(List<SalesItem> salesItems)
   {
     ContentValues initialValues = new ContentValues();
-    if(operation)
-    {
-      for (int position = 0; position < salesItems.size(); position++)
-      {
-        initialValues.put(SALES_ID, salesItems.get(position).getSalesId().getId());
-        initialValues.put(LINE, salesItems.get(position).getLine());
-        initialValues.put(PRODUCT, salesItems.get(position).getProduct().getId());
-        initialValues.put(UNITS, salesItems.get(position).getUnits()*-1);
-        initialValues.put(PRICE, salesItems.get(position).getPrice());
-        initialValues.put(TAX_ID, salesItems.get(position).getTaxid().getId());
-        initialValues.put(REFUND_QTY, salesItems.get(position).getRefundqty());
-        db.insert(DATABASE_TABLE, null, initialValues);
-      }
-    }
-    else
-    {
+    
       for (int position = 0; position < salesItems.size(); position++)
       {
         initialValues.put(SALES_ID, salesItems.get(position).getSalesId().getId());
@@ -136,7 +121,6 @@ public class TableSalesItemHelper
         initialValues.put(REFUND_QTY, salesItems.get(position).getRefundqty());
         db.insert(DATABASE_TABLE, null, initialValues);
       }
-    }
 
 //    return db.insert(DATABASE_TABLE, null, initialValues);
     return 0;
@@ -311,7 +295,7 @@ public class TableSalesItemHelper
       {
         List<ViewSalesItem> list = response.body();
         open();
-        insertSalesItem(convertViewSalesItem(list),false);
+        insertSalesItem(convertViewSalesItem(list));
         close();
 
         EventBus.getDefault().post(new Event(id, Event.COMPLETE));

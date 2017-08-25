@@ -306,7 +306,7 @@
     <string name="button_scan">Memindai perangkat</string>
 
     <!--  Message -->
-    <string name="text_retur">Retur Penjualan</string>
+    <string name="text_retur">Retur Barang</string>
     <string name="not_connected">Sambungkan printer Bluetooth</string>
     <string name="bt_not_enabled_leaving">Bluetooth tidak dimulai, keluar dari program</string>
     <string name="connecting_message">Menghubungkan…</string>
@@ -344,7 +344,7 @@
     <string name="text_Change">Kembali</string>
     <string name="Qs_print">Cetak Struk?</string>
     <string name="text_notEnough">Uang tidak cukup</string>
-    <string name="cashier">KASIR: </string>
+    <string name="cashier">Kasir: </string>
     <string name="text_suddenly">Printer mencetak tiba-tiba</string>
     <string name="text_PrintFinished">Data cetak selesai</string>
     <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>

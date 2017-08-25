@@ -337,7 +337,7 @@
     <string name="text_pair">Pair</string>
     <string name="text_cancelPayment">Cancel Payment ?</string>
     <string name="Qs_payment">Are you sure want to cancel the payment ?</string>
-    <string name="text_retur">Sales returns</string>
+    <string name="text_retur">Goods returns</string>
     <string name="text_print_demo">Print Demo</string>
     <string name="text_print_barcode">Print Barcode</string>
     <string name="text_print_image">Print Image</string>
@@ -349,7 +349,7 @@
     <string name="text_ucapan">THANK YOU</string>
     <string name="printOptions">Print Options</string>
     <string name="Qs_print">Print Receipt?</string>
-    <string name="cashier">CASHIER: </string>
+    <string name="cashier">Cashier: </string>
     <string name="phone">PHONE: </string>
     <string name="text_suddenly">The printer is looking abruptly</string>
     <string name="text_PrintFinished">Printing is completed</string>

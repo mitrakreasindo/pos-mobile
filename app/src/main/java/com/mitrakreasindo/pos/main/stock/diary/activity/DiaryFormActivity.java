@@ -25,11 +25,10 @@ import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.stock.product.ProductFormActivity;
-import com.mitrakreasindo.pos.service.DiaryStockService;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
+import com.mitrakreasindo.pos.service.DiaryStockService;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -419,12 +418,10 @@ public class DiaryFormActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
-
             TableProductHelper tableProductHelper = new TableProductHelper(DiaryFormActivity.this);
             tableProductHelper.open();
             tableProductHelper.updateProductStock(stockDiary.getProduct(), stockDiary.getReason());
             tableProductHelper.close();
-
           }
           Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }

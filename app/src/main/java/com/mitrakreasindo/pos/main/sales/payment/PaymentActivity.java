@@ -37,6 +37,7 @@ import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.EmbededPrinter.Print;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.WirelessPrinter.BluetoothService;
@@ -65,6 +66,7 @@ import com.mitrakreasindo.pos.model.ViewSale;
 import com.mitrakreasindo.pos.model.ViewSalesItem;
 import com.mitrakreasindo.pos.model.ViewStockDiary;
 import com.mitrakreasindo.pos.model.ViewTaxLine;
+import com.mitrakreasindo.pos.service.DiaryStockService;
 import com.mitrakreasindo.pos.service.SalesService;
 
 import java.text.DecimalFormat;
@@ -113,16 +115,19 @@ public class PaymentActivity extends AppCompatActivity
   
   private String originalString;
   private Long longval;
-  
+  private double changeMoney;
   private Bundle bundle;
   private String salesId;
   private boolean retur = false;
   
   private TableSalesItemHelper tableSalesItemHelper;
-  
+  private DiaryStockService diaryStockService;
   private PaymentProductListAdapter paymentProductListAdapter;
   
   private List<SalesItem> salesItemList;
+  private List<Product> products = new ArrayList<>();
+  private List<Integer> reason = new ArrayList<>();
+  
   
   private Sales sales;
   private Product product;
@@ -151,6 +156,7 @@ public class PaymentActivity extends AppCompatActivity
   
   private SalesService salesService;
   private SharedPreferenceEditor sharedPreferenceEditor;
+  private TableProductHelper tableProductHelper;
   private String kodeMerchant;
   
   private AidlPrinter printDev = null;
@@ -198,10 +204,9 @@ public class PaymentActivity extends AppCompatActivity
     ButterKnife.bind(this);
     
     salesService = ClientService.createService().create(SalesService.class);
-    
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-    
+    tableProductHelper = new TableProductHelper(this);
     tableSalesItemHelper = new TableSalesItemHelper(this);
     
     bundle = getIntent().getExtras();
@@ -217,7 +222,6 @@ public class PaymentActivity extends AppCompatActivity
       }
       else
       {
-  
         edittextPaymentMoney.setText("0");
         edittextPaymentMoney.addTextChangedListener(new TextWatcher()
         {
@@ -273,7 +277,6 @@ public class PaymentActivity extends AppCompatActivity
       Log.d("SALES_ID", salesId);
       salesItemList = tableSalesItemHelper.getSalesItems(salesId);
       viewsalesitems.containsAll(salesItemList);
-
 //      product = salesItemList.get(1).getProduct();
     }
     final ClosedCash closedCash = new ClosedCash();
@@ -331,7 +334,6 @@ public class PaymentActivity extends AppCompatActivity
     listPaymentProduct.setLayoutManager(layoutManager);
     listPaymentProduct.setItemAnimator(new DefaultItemAnimator());
     
-    
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -341,7 +343,6 @@ public class PaymentActivity extends AppCompatActivity
         onBackPressed();
       }
     });
-    
     btnPaymentConfirm.setOnClickListener(new View.OnClickListener()
     {
       @Override
@@ -382,9 +383,8 @@ public class PaymentActivity extends AppCompatActivity
                       Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")));
                     final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
                     confirmationDialog.setTitle(R.string.text_Change);
-                    confirmationDialog.setMessage(decimalFormat.format(
-                      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
-                    ));
+                    changeMoney();
+                    confirmationDialog.setMessage(decimalFormat.format(changeMoney));
                     confirmationDialog.setCancelable(false);
                     confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
                     {
@@ -433,9 +433,8 @@ public class PaymentActivity extends AppCompatActivity
             {
               final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
               confirmationDialog.setTitle(R.string.text_Change);
-              confirmationDialog.setMessage(decimalFormat.format(
-                formatTotalPrice() - paymentProductListAdapter.grandTotal()
-              ));
+              changeMoney();
+              confirmationDialog.setMessage(decimalFormat.format(changeMoney));
               confirmationDialog.setCancelable(false);
               confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
               {
@@ -564,19 +563,27 @@ public class PaymentActivity extends AppCompatActivity
     
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
+    String Payment = "";
+    double Total = 0.0;
+    double Tendered = 0.0;
     if (retur)
     {
-      payment.setPayment("returns");
+      Payment = "returns";
+      Total = -paymentProductListAdapter.grandTotal();
+      Tendered = -paymentProductListAdapter.grandTotal();
     }
     else
     {
-      payment.setPayment("cash");
+      Payment = "cash";
+      Total = paymentProductListAdapter.grandTotal();
+      Tendered = formatTotalPrice();
     }
-    payment.setTotal(paymentProductListAdapter.grandTotal());
+    payment.setPayment(Payment);
+    payment.setTotal(Total);
     payment.setTransid("tesssssss");
     payment.setNotes("test notes");
 //    payment.setTendered(Double.parseDouble(edittextPaymentMoney.getText().toString()));
-    payment.setTendered(formatTotalPrice());
+    payment.setTendered(Tendered);
     payment.setCardname("CardName");
     payment.setReturnmsg(null);
     payment.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -615,7 +622,6 @@ public class PaymentActivity extends AppCompatActivity
     viewsales.setPersonName(null);
     viewsales.setDatenew(defaultHelper.dateFormat(new Date()));
     
-    
     viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
     
@@ -652,7 +658,12 @@ public class PaymentActivity extends AppCompatActivity
     for (int i = 0; i < salesItemList.size(); i++)
     {
       product = salesItemList.get(i).getProduct();
+      salesItem = salesItemList.get(i);
+      product.setStockunits(salesItem.getUnits());
       
+      Log.d("productId: ",product.getId());
+      Log.d("ProductStock: ", String.valueOf(product.getStockunits()));
+      Log.d("location: ", String.valueOf(location.getId()));
       salesItem = salesItemList.get(i);
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
@@ -662,6 +673,39 @@ public class PaymentActivity extends AppCompatActivity
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
       
+      stockDiary = new StockDiary();
+      stockDiary.setId(UUID.randomUUID().toString());
+      if (retur)
+      {
+        stockDiary.setReason(1);
+      }
+      else
+      {
+        stockDiary.setReason(-1);
+      }
+      stockDiary.setUnits(salesItem.getUnits());
+      stockDiary.setPrice(salesItem.getProduct().getPricesell());
+      stockDiary.setAppuser(IDs.getLoginUser());
+      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      stockDiary.setSflag(true);
+      stockDiary.setAttributesetinstanceId(null);
+      stockDiary.setLocation(location);
+      stockDiary.setProduct(product);
+
+      viewstockdiary = new ViewStockDiary();
+      viewstockdiary.setId(stockDiary.getId());
+      viewstockdiary.setProduct(stockDiary.getProduct().getId());
+      viewstockdiary.setDatenew(defaultHelper.dateFormat(new Date()));
+      viewstockdiary.setReason(stockDiary.getReason());
+      viewstockdiary.setUnits(stockDiary.getUnits());
+      viewstockdiary.setPrice(stockDiary.getPrice());
+      viewstockdiary.setAppuser(stockDiary.getAppuser());
+      viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+      viewstockdiary.setSflag(true);
+      viewstockdiary.setAttributesetinstanceId(null);
+      viewstockdiary.setLocation("0");
+      viewstockdiaries.add(viewstockdiary);
+
       viewsalesitem = new ViewSalesItem();
       viewsalesitem.setId(0);
       viewsalesitem.setSales_id(sales.getId());
@@ -679,32 +723,11 @@ public class PaymentActivity extends AppCompatActivity
       viewsalesitem.setTaxName(null);
       viewsalesitem.setRate(null);
       viewsalesitems.add(viewsalesitem);
+      int reasons = stockDiary.getReason();
+      product = salesItemList.get(i).getProduct();
+      products.add(product);
+      reason.add(reasons);
       
-      stockDiary = new StockDiary();
-      stockDiary.setId(UUID.randomUUID().toString());
-      stockDiary.setReason(0);
-      stockDiary.setUnits(1);
-      stockDiary.setPrice(salesItem.getProduct().getPricesell());
-      stockDiary.setAppuser(IDs.getLoginUser());
-      stockDiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-      stockDiary.setSflag(true);
-      stockDiary.setAttributesetinstanceId(null);
-      stockDiary.setLocation(location);
-      stockDiary.setProduct(salesItem.getProduct());
-      
-      viewstockdiary = new ViewStockDiary();
-      viewstockdiary.setId(stockDiary.getId());
-      viewstockdiary.setProduct(stockDiary.getProduct().getId());
-      viewstockdiary.setDatenew(defaultHelper.dateFormat(new Date()));
-      viewstockdiary.setReason(stockDiary.getReason());
-      viewstockdiary.setUnits(stockDiary.getUnits());
-      viewstockdiary.setPrice(stockDiary.getPrice());
-      viewstockdiary.setAppuser(stockDiary.getAppuser());
-      viewstockdiary.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
-      viewstockdiary.setSflag(true);
-      viewstockdiary.setAttributesetinstanceId(null);
-      viewstockdiary.setLocation("0");
-      viewstockdiaries.add(viewstockdiary);
     }
     
     viewtaxlines.add(viewtaxline);
@@ -737,6 +760,10 @@ public class PaymentActivity extends AppCompatActivity
           
           if (responseCode == 0)
           {
+            TableProductHelper tableProductHelper = new TableProductHelper(PaymentActivity.this);
+            tableProductHelper.open();
+            tableProductHelper.updateProductStockBylist(products, reason);
+            tableProductHelper.close();
 //            progressDialog.dismiss();
             Log.d("SUCCESS", "SSSSUUCCCEESSSS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -858,9 +885,7 @@ public class PaymentActivity extends AppCompatActivity
       {
         final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
         confirmationDialog.setTitle("Change money");
-        confirmationDialog.setMessage(decimalFormat.format(
-          Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
-        ));
+        confirmationDialog.setMessage(decimalFormat.format(changeMoney));
         confirmationDialog.setCancelable(false);
         confirmationDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener()
         {
@@ -911,5 +936,18 @@ public class PaymentActivity extends AppCompatActivity
     handler.sendMessage(msg);
   }
   
+  private double changeMoney()
+  {
+    double change = 0;
+    if(retur)
+    {
+      change = paymentProductListAdapter.grandTotal();
+    }else
+    {
+      change = Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal();
+    }
+    this.changeMoney = change;
+    return changeMoney;
+  }
   
 }

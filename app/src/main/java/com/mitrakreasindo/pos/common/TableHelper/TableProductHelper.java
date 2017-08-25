@@ -293,6 +293,22 @@ public class TableProductHelper
         p.getStockunits() - product.getStockunits());
     return db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{product.getId()});
   }
+  
+  public void updateProductStockBylist(List<Product> products, List<Integer> reason)
+  {
+      ContentValues initialValues = new ContentValues();
+      for (int i = 0; i < products.size() ; i++)
+      {
+        Product p = getProductById(products.get(i).getId());
+        if (reason.get(i) == 1)
+          initialValues.put(context.getString(R.string.tproduct_stockunits),
+            p.getStockunits() + products.get(i).getStockunits());
+        else
+          initialValues.put(context.getString(R.string.tproduct_stockunits),
+            p.getStockunits() - products.get(i).getStockunits());
+        db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{products.get(i).getId()});
+      }
+  }
 
   public int deleteAll()
   {
