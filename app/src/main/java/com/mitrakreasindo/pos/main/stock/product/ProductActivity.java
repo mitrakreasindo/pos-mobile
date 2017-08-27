@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,8 @@ public class ProductActivity extends AppCompatActivity
   private ProductListAdapter productListAdapter;
   private TableProductHelper tableProductHelper;
   public boolean is_action_mode = false;
+
+  private boolean grid_mode = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -142,6 +145,22 @@ public class ProductActivity extends AppCompatActivity
     {
 //      productListAdapter.deleteMultipleProduct();
     }
+    else if (id == R.id.action_select_view_type)
+    {
+      if (!grid_mode)
+      {
+        Log.d("SELECTED1", "ITEM SELECTES");
+        item.setIcon(R.drawable.ic_view_module_menu);
+        grid_mode = true;
+      }
+      else
+      {
+        Log.d("SELECTED2", "ITEM SELECTES");
+        item.setIcon(R.drawable.ic_view_list_menu);
+        grid_mode = false;
+      }
+    }
+
     return super.onOptionsItemSelected(item);
   }
 }

@@ -395,4 +395,5 @@
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Host</string>
     <string name="revenue">Revenue</string>
+    <string name="view_list">View List</string>
 </resources>
