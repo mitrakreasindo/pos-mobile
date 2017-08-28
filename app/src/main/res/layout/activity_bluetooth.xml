@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include layout="@layout/include_toolbar" />
+  </android.support.design.widget.AppBarLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1.1">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/lnrSwitch"
+        android:visibility="gone"
+        android:layout_weight="0.1"
+        android:background="@color/zxing_possible_result_points">
+        <Switch
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_gravity="center_horizontal"
+          android:layout_marginRight="@dimen/activity_horizontal_margin"
+          android:layout_marginLeft="@dimen/activity_horizontal_margin"
+          android:textColor="@color/white"
+          android:textSize="17dp"
+          android:id="@+id/btn_switch" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/LnrBluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+          android:id="@+id/title_paired_devices"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_marginTop="15dp"
+          android:layout_weight="0.15"
+          android:paddingLeft="@dimen/activity_horizontal_margin"
+          android:text="@string/title_paired_devices"
+          android:textColor="@color/colorPrimary" />
+
+        <ListView
+          android:id="@+id/paired_devices"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_marginLeft="@dimen/activity_horizontal_margin"
+          android:layout_marginRight="@dimen/activity_horizontal_margin"
+          android:layout_weight="0.85"
+          android:layout_marginBottom="@dimen/activity_horizontal_margin" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/lnrPaired"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="0.1"
+          android:orientation="horizontal"
+          android:weightSum="1">
+
+          <TextView
+            android:id="@+id/title_new_devices"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.85"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/title_other_devices"
+            android:textColor="@color/colorPrimary" />
+
+          <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_weight="0.15" />
+        </LinearLayout>
+
+      <ListView
+        android:id="@+id/new_devices"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_weight="0.9" />
+    </LinearLayout>
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_gravity="center"
+      android:layout_weight="1"
+      android:visibility="gone"
+      android:id="@+id/lnrTexInfo">
+        <TextView
+          android:id="@+id/txInfo"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:textAlignment="center"
+          android:textStyle="bold"
+          android:textSize="20dp"
+          android:gravity="center"
+          android:textColor="@color/colorPrimary"
+          android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:id="@+id/lnrRefresh"
+      android:layout_gravity="end|bottom"
+      android:layout_weight="0.1"
+      android:divider="@color/colorPrimary"
+      android:orientation="vertical">
+
+      <ImageButton
+        android:id="@+id/btn_refresh"
+        android:layout_gravity="center"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_refresh_black_24dp" />
+
+      <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/txt_refresh"
+        android:textAlignment="center"
+        android:textSize="10dp" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>
