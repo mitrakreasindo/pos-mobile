@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -139,6 +140,7 @@ public class SalesActivity extends AppCompatActivity
   private List<ViewPayment> viewpayments = new ArrayList<>();
   private List<ViewStockDiary> viewstockdiaries = new ArrayList<>();
   private List<ViewTaxLine> viewtaxlines = new ArrayList<>();
+  private EditText editTextExtraSalesInfo;
 
 //  String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
 
@@ -147,7 +149,6 @@ public class SalesActivity extends AppCompatActivity
     @Override
     public void barcodeResult(BarcodeResult result)
     {
-
       Product productByCode = tableProductHelper.getProduct(result.getText());
 
       if (productByCode != null)
@@ -221,6 +222,8 @@ public class SalesActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_sales);
     ButterKnife.bind(this);
+
+    editTextExtraSalesInfo = new EditText(this);
 
     salesService = ClientService.createService().create(SalesService.class);
 
@@ -309,8 +312,6 @@ public class SalesActivity extends AppCompatActivity
           intent.putExtra("sales_id", sales.getId());
           startActivity(intent);
         }
-
-
       }
     });
 
@@ -319,44 +320,59 @@ public class SalesActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
-        } else
+        }
+        else
         {
 //          TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
 //          tableSalesHelper.open();
 //          tableSalesHelper.insertSales(sales);
 //          tableSalesHelper.close();
 
-          TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
-          tableSalesItemHelper.open();
-          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
-          tableSalesItemHelper.close();
+          editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
+          new AlertDialog.Builder(SalesActivity.this)
+            .setTitle(R.string.additional_sales_info)
+            .setView(editTextExtraSalesInfo)
+            .setCancelable(false)
+            .setPositiveButton
+            (
+              R.string.yes, new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                  TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
+                  tableSalesItemHelper.open();
+                  tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
+                  tableSalesItemHelper.close();
 
-          data();
-          salesPack = new SalesPack();
-          salesPack.setSales(viewsales);
-          salesPack.setReceipts(viewreceipt);
-          salesPack.setSalesItems(viewsalesitems);
-          salesPack.setPayments(viewpayments);
-          salesPack.setStockdiary(viewstockdiaries);
-          salesPack.setTaxlines(viewtaxlines);
+                  data();
+                  salesPack = new SalesPack();
+                  salesPack.setSales(viewsales);
+                  salesPack.setReceipts(viewreceipt);
+                  salesPack.setSalesItems(viewsalesitems);
+                  salesPack.setPayments(viewpayments);
+                  salesPack.setStockdiary(viewstockdiaries);
+                  salesPack.setTaxlines(viewtaxlines);
 
-          TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
-          tableSalesHelper.open();
-          tableSalesHelper.insertSales(sales);
-          tableSalesHelper.close();
+                  TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
+                  tableSalesHelper.open();
+                  tableSalesHelper.insertSales(sales);
+                  tableSalesHelper.close();
 
-          postSales(kodeMerchant, salesPack);
+                  postSales(kodeMerchant, salesPack);
 
-          finish();
+                  finish();
+                }
+              }
+            )
+            .setNegativeButton(R.string.no, null)
+            .show();
         }
-
       }
     });
-
 
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
     edittextSearchProduct.setAdapter(adapter);
@@ -472,21 +488,21 @@ public class SalesActivity extends AppCompatActivity
     Location location = new Location();
     location.setId(UUID.randomUUID().toString());
 
-    salesItem = new SalesItem();
-    salesItem.setProduct(product);
-    salesItem.setAttributes(bytes);
-    salesItem.setUnits(1);
-    salesItem.setPrice(product.getPricesell());
-    salesItem.setSalesId(sales);
-    salesItem.setSflag(true);
-    salesItem.setTaxid(tax);
+//    salesItem = new SalesItem();
+//    salesItem.setProduct(product);
+//    salesItem.setAttributes(bytes);
+//    salesItem.setUnits(1);
+//    salesItem.setPrice(product.getPricesell());
+//    salesItem.setSalesId(sales);
+//    salesItem.setSflag(true);
+//    salesItem.setTaxid(tax);
 
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
     payment.setPayment("cash");
     payment.setTotal(formatTotalPrice());
     payment.setTransid(null);
-    payment.setNotes(null);
+    payment.setNotes(editTextExtraSalesInfo.getText().toString());
     payment.setTendered(0);
     payment.setCardname(null);
     payment.setReturnmsg(null);
@@ -503,17 +519,17 @@ public class SalesActivity extends AppCompatActivity
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
 
-    stockDiary = new StockDiary();
-    stockDiary.setId(randomUUID().toString());
-    stockDiary.setReason(0);
-    stockDiary.setUnits(1);
-    stockDiary.setPrice(salesItem.getProduct().getPricesell());
-    stockDiary.setAppuser(IDs.getLoginUser());
-    stockDiary.setSiteguid(IDs.SITE_GUID);
-    stockDiary.setSflag(true);
-    stockDiary.setAttributesetinstanceId(null);
-    stockDiary.setLocation(location);
-    stockDiary.setProduct(salesItem.getProduct());
+//    stockDiary = new StockDiary();
+//    stockDiary.setId(randomUUID().toString());
+//    stockDiary.setReason(0);
+//    stockDiary.setUnits(1);
+//    stockDiary.setPrice(salesItem.getProduct().getPricesell());
+//    stockDiary.setAppuser(IDs.getLoginUser());
+//    stockDiary.setSiteguid(IDs.SITE_GUID);
+//    stockDiary.setSflag(true);
+//    stockDiary.setAttributesetinstanceId(null);
+//    stockDiary.setLocation(location);
+//    stockDiary.setProduct(salesItem.getProduct());
 
     viewtaxline = new ViewTaxLine();
     viewtaxline.setId(taxLine.getId());

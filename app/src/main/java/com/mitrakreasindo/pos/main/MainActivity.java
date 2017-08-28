@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity
   private ProgressDialog progressDialog;
 
   private MainFragment mainFragment = new MainFragment();
-//  private PendingTransactionService service;
 
   TableCategoryHelper tableCategoryHelper;
   TableProductHelper tableProductHelper;
@@ -145,12 +144,6 @@ public class MainActivity extends AppCompatActivity
         tableCategoryHelper.downloadData(companyCode);
         tableProductHelper.downloadDataAlternate(companyCode);
         tablePeopleHelper.downloadDataAlternate(companyCode, EventCode.EVENT_PEOPLE_GET);
-
-//        progressDialog.post(new Runnable() {
-//          public void run() {
-//            mImageView.setImageBitmap(bitmap);
-//          }
-//        });
       }
     }).start();
   }

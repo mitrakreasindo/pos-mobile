@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.common;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +34,14 @@ public class DefaultHelper
     String dateString = formater.format(date);
 
     return dateString;
+  }
+
+  public static Date stringFormatToDate(String str) throws ParseException
+  {
+    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+    Date stringDate = formater.parse(str);
+
+    return stringDate;
   }
 
   public static String dateFormat(long date)

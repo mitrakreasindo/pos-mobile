@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +41,6 @@ import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -79,14 +78,6 @@ public class UserFormActivity extends AppCompatActivity
   TextView textviewRole;
   @BindView(R.id.spinner_role)
   Spinner spinnerRole;
-  @BindView(R.id.textview_visibility)
-  TextView textviewVisibility;
-  @BindView(R.id.radiobutton_visible)
-  RadioButton radiobuttonVisible;
-  @BindView(R.id.radiobutton_invisible)
-  RadioButton radiobuttonInvisible;
-  @BindView(R.id.radiogroup_visibility)
-  RadioGroup radiogroupVisibility;
   @BindView(R.id.textview_image)
   TextView textviewImage;
   @BindView(R.id.button_imageselect)
@@ -105,6 +96,22 @@ public class UserFormActivity extends AppCompatActivity
   Spinner spinnerSex;
   @BindView(R.id.edittext_phone)
   EditText edittextPhone;
+  @BindView(R.id.appbar)
+  AppBarLayout appbar;
+  @BindView(R.id.textview_fullname)
+  TextView textviewFullname;
+  @BindView(R.id.textview_birth_date)
+  TextView textviewBirthDate;
+  @BindView(R.id.textview_sex)
+  TextView textviewSex;
+  @BindView(R.id.layout_people_id)
+  LinearLayout layoutPeopleId;
+  @BindView(R.id.textview_phone)
+  TextView textviewPhone;
+  @BindView(R.id.textview_old_pass)
+  TextView textviewOldPass;
+  @BindView(R.id.edittext_old_password)
+  EditText edittextOldPass;
 
   private int RESULT_TAKE_PHOTO = 0;
   private int RESULT_PICK_GALLERY = 1;
@@ -117,9 +124,8 @@ public class UserFormActivity extends AppCompatActivity
   private List<Role> data;
   private String kodeMerchant, peopleId, oldPassword;
   private String name, pass, repass;
-  private boolean visibility;
   private Bundle bundle;
-  private PasswordValidator passwordValidator;
+  private boolean isNeedPassResetter;
   private View focusView;
   private UserListAdapter userListAdapter;
   private byte[] imageInByte;
@@ -134,24 +140,12 @@ public class UserFormActivity extends AppCompatActivity
     setContentView(R.layout.activity_user_form);
     ButterKnife.bind(this);
 
-    Calendar c = Calendar.getInstance();
-
     peopleService = ClientService.createService().create(PeopleService.class);
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-    radiobuttonVisible.setChecked(true);
-    edittextBirthDate.setText(df.format(c.getTime()));
-
-    TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
-    data = tableRoleHelper.getData();
-    rolesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
-    userListAdapter = new UserListAdapter(this, new ArrayList<People>());
-    rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spinnerRole.setAdapter(rolesArrayAdapter);
 
     setSupportActionBar(toolbar);
 
-    bundle = getIntent().getExtras();
-    SetupEditMode();
+    SetupCreateEditMode();
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -163,59 +157,67 @@ public class UserFormActivity extends AppCompatActivity
     });
   }
 
-  private void SetupEditMode()
+  private void SetupCreateEditMode()
   {
-    if (bundle != null)
+    bundle = getIntent().getExtras();
+
+    // Create mode
+    if (bundle == null)
     {
-      final People people = (People) bundle.getSerializable("people");
-      peopleId = people.getId();
-      oldPassword = people.getOldPassword();
-      String roleId = people.getRole().getId();
-      byte[] image = people.getImage();
+      textviewOldPass.setVisibility(View.GONE);
+      edittextOldPass.setVisibility(View.GONE);
 
-      edittextFullname.setText(people.getFullname());
-      if (people.getBirthdate() != null)
-        edittextBirthDate.setText(df.format(people.getBirthdate()));
+      Calendar c = Calendar.getInstance();
+      edittextBirthDate.setText(df.format(c.getTime()));
 
-      String compareValue = people.getGender();
-      ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-        R.array.spinner_sex, android.R.layout.simple_spinner_item);
-      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-      spinnerSex.setAdapter(adapter);
-      if (compareValue != null)
+      TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
+      data = tableRoleHelper.getData();
+      rolesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+      userListAdapter = new UserListAdapter(this, new ArrayList<People>());
+      rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      spinnerRole.setAdapter(rolesArrayAdapter);
+
+      getSupportActionBar().setTitle(R.string.action_bar_userform_create);
+    }
+    // Edit mode
+    else
+    {
+      textviewBirthDate.setVisibility(View.GONE);
+      edittextBirthDate.setVisibility(View.GONE);
+      textviewSex.setVisibility(View.GONE);
+      spinnerSex.setVisibility(View.GONE);
+      textviewRole.setVisibility(View.GONE);
+      spinnerRole.setVisibility(View.GONE);
+
+      if (bundle.getBoolean("isNeedPasswordResetter"))
       {
-        int spinnerPosition = adapter.getPosition(compareValue);
-        spinnerSex.setSelection(spinnerPosition);
-      }
+        textviewUsername.setVisibility(View.GONE);
+        edittextUsername.setVisibility(View.GONE);
+        textviewPhone.setVisibility(View.GONE);
+        edittextPhone.setVisibility(View.GONE);
+        textviewFullname.setVisibility(View.GONE);
+        edittextFullname.setVisibility(View.GONE);
+        textviewImage.setVisibility(View.GONE);
+        buttonImageselect.setVisibility(View.GONE);
+        imageviewImageSelect.setVisibility(View.GONE);
 
-      edittextPhone.setText(people.getPhoneNumber());
-      edittextUsername.setText(people.getName());
-      edittextPass.setText(people.getApppassword());
-      if (people.isVisible())
-      {
-        radiobuttonVisible.setChecked(true);
+        getSupportActionBar().setTitle(R.string.action_bar_userform_edit_pass);
       }
       else
       {
-        radiobuttonInvisible.setChecked(true);
+        getSupportActionBar().setTitle(R.string.action_bar_userform_edit);
       }
 
-      int spinnerPosition = 0;
+      final People people = (People) bundle.getSerializable("people");
+      isNeedPassResetter = people.isVisible();
+      peopleId = people.getId();
+      oldPassword = people.getOldPassword();
+      byte[] image = people.getImage();
 
-      if (!roleId.equals(null))
-      {
-        int i = 0;
-        while (i < data.size())
-        {
-          if (data.get(i).getId().equals(roleId))
-          {
-            spinnerPosition = i;
-            break;
-          }
-          i++;
-        }
-        spinnerRole.setSelection(spinnerPosition);
-      }
+      edittextFullname.setText(people.getFullname());
+      edittextPhone.setText(people.getPhoneNumber());
+      edittextUsername.setText(people.getName());
+      edittextPass.setText(people.getApppassword());
 
       if (image != null)
       {
@@ -238,16 +240,10 @@ public class UserFormActivity extends AppCompatActivity
       {
         imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
-      getSupportActionBar().setTitle(R.string.action_bar_userform_edit);
 
       Log.d("PEOPLE_ID", peopleId);
       Log.d("USERNAME", edittextUsername.getText().toString());
       Log.d("APPPASS", edittextPass.getText().toString());
-      Log.d("visibility", String.valueOf(visibility));
-    }
-    else
-    {
-      getSupportActionBar().setTitle(R.string.action_bar_userform_create);
     }
   }
 
@@ -366,8 +362,6 @@ public class UserFormActivity extends AppCompatActivity
 
   private boolean attemptCreate()
   {
-    passwordValidator = new PasswordValidator();
-
     edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
@@ -388,7 +382,7 @@ public class UserFormActivity extends AppCompatActivity
       focusView = edittextPass;
       return false;
     }
-    else if (!passwordValidator.validate(pass))
+    else if (!PasswordValidator.validate(pass))
     {
       edittextPass.setError(getString(R.string.error_password_invalid));
       focusView = edittextPass;
@@ -414,8 +408,6 @@ public class UserFormActivity extends AppCompatActivity
   {
     boolean flag;
 
-    passwordValidator = new PasswordValidator();
-
     edittextUsername.setError(null);
     edittextPass.setError(null);
     edittextRepass.setError(null);
@@ -432,7 +424,8 @@ public class UserFormActivity extends AppCompatActivity
     }
     else if (!TextUtils.isEmpty(pass))
     {
-      if (!passwordValidator.validate(pass))
+      Log.d("PASSWORD", pass);
+      if (!PasswordValidator.validate(pass))
       {
         edittextPass.setError(getString(R.string.error_password_invalid));
         focusView = edittextPass;
@@ -453,6 +446,17 @@ public class UserFormActivity extends AppCompatActivity
       else
         flag = true;
     }
+    else if (TextUtils.isEmpty(pass))
+    {
+      if (isNeedPassResetter)
+      {
+        edittextPass.setError(getString(R.string.error_field_required));
+        focusView = edittextPass;
+        flag = false;
+      }
+      else
+        flag = true;
+    }
     else
       flag = true;
     return flag;
@@ -462,34 +466,53 @@ public class UserFormActivity extends AppCompatActivity
   {
     try
     {
-      if (radiobuttonVisible.isChecked())
-      {
-        visibility = true;
-      }
-      else if (radiobuttonInvisible.isChecked())
-      {
-        visibility = false;
-      }
-
-      role = new Role();
-      role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
-
       people = new People();
+      // Create mode
       if (bundle == null)
       {
         people.setId(UUID.randomUUID().toString());
+
+        role = new Role();
+        role.setId(data.get(spinnerRole.getSelectedItemPosition()).getId());
+        people.setRole(role);
+
+        people.setBirthdate(df.parse(edittextBirthDate.getText().toString()));
+        people.setGender(spinnerSex.getSelectedItem().toString());
+
+        // For self user created password, there's no need show resetter in the future
+        people.setVisible(false);
       }
+      // Edit mode
       else
       {
         people.setId(peopleId);
-//        people.setOldPassword(oldPassword);
-//        Log.d("OLDPASS", oldPassword);
+        if (isNeedPassResetter)
+        {
+          if (edittextPass.getText().equals("") && edittextRepass.getText().equals(""))
+          {
+            // Password not changed and still need resetter in the future login
+            people.setVisible(true);
+          }
+          else
+          {
+            // Password will changed and no need resetter in the future login
+            people.setOldPassword(edittextOldPass.getText().toString());
+            people.setApppassword(edittextPass.getText().toString());
+            people.setVisible(false);
+          }
+        }
+        else
+        {
+          // Once password already changed, there's no need show resetter again in the future
+          people.setVisible(false);
+        }
       }
 
       people.setName(edittextUsername.getText().toString());
-      people.setApppassword(edittextPass.getText().toString());
-      people.setCard("KARTTTTUUUUUU");
-      people.setVisible(visibility);
+      people.setEmail(null);
+      people.setFullname(edittextFullname.getText().toString());
+      people.setPhoneNumber(edittextPhone.getText().toString());
+      people.setCard(null);
 
       if (imageviewImageSelect.getVisibility() == View.VISIBLE)
       {
@@ -506,12 +529,6 @@ public class UserFormActivity extends AppCompatActivity
       people.setImage(imageInByte);
       people.setSiteguid(null);
       people.setSflag(true);
-      people.setEmail(null);
-      people.setRole(role);
-      people.setFullname(edittextFullname.getText().toString());
-      people.setPhoneNumber(edittextPhone.getText().toString());
-      people.setBirthdate(df.parse(edittextBirthDate.getText().toString()));
-      people.setGender(spinnerSex.getSelectedItem().toString());
     }
     catch (Exception e)
     {
@@ -588,7 +605,6 @@ public class UserFormActivity extends AppCompatActivity
 
   private void updatePeople(final People people)
   {
-
     Call<HashMap<Integer, String>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {

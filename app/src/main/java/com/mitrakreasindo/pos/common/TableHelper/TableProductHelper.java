@@ -744,7 +744,10 @@ public class TableProductHelper
     {
       open();
       deleteAll();
-      insert(list);
+      if (list != null)
+      {
+        insert(list);
+      }
       close();
     }
   }
@@ -765,7 +768,10 @@ public class TableProductHelper
         final List<Product> list = response.body();
         open();
         deleteAll();
-        insert(list);
+        if (list != null)
+        {
+          insert(list);
+        }
         close();
       }
 

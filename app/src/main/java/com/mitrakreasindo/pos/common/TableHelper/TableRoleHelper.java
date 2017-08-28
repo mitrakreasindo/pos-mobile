@@ -251,10 +251,12 @@ public class TableRoleHelper
         final List<Role> list = response.body();
         open();
         deleteAll();
-        insert(list);
+        if (list != null)
+        {
+          insert(list);
+          EventBus.getDefault().post(new Event(id, Event.COMPLETE));
+        }
         close();
-
-        EventBus.getDefault().post(new Event(id, Event.COMPLETE));
       }
 
       @Override

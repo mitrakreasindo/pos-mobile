@@ -354,7 +354,7 @@ public class PaymentActivity extends AppCompatActivity
           confirmationDialog.setTitle(R.string.printOptions);
           confirmationDialog.setMessage(R.string.Qs_print);
 
-          confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+          confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)

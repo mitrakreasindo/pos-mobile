@@ -167,8 +167,6 @@ public class CategoryFormActivity extends AppCompatActivity
       } else
       {
         postCategory();
-
-//        jobManager
       }
     }
     return super.onOptionsItemSelected(item);

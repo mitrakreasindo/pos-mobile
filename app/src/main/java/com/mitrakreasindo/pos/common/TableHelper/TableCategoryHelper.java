@@ -260,7 +260,10 @@ public class TableCategoryHelper
         final List<Category> list = response.body();
         open();
         deleteAll();
-        insert(list);
+        if (list != null)
+        {
+          insert(list);
+        }
         close();
       }
 

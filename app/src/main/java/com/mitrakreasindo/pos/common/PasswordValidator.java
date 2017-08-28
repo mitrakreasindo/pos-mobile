@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 public class PasswordValidator
 {
-    private Pattern pattern;
-    private Matcher matcher;
+    private static Pattern pattern;
+    private static Matcher matcher;
 
     /**
      * ^                 # start-of-string
@@ -26,18 +26,14 @@ public class PasswordValidator
     private static final String PASSWORD_PATTERN =
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=\\S+$).{8,10}$";
 
-    public PasswordValidator()
-    {
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-    }
-
     /**
      * Validate password with regular expression
      * @param password password for validation
      * @return true valid password, false invalid password
      */
-    public boolean validate(final String password)
+    public static boolean validate(final String password)
     {
+        pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
         return matcher.matches();
     }
