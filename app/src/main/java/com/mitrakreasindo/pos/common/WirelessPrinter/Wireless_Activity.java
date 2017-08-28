@@ -138,7 +138,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
       @Override
       public void onClick(View v)
       {
-        mNewDevicesArrayAdapter.clear();
         doDiscovery();
       }
     });
@@ -235,7 +234,7 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     }
     else
     {
-      mNewDevicesArrayAdapter.clear();
+      
       doDiscovery();
     }
   }
@@ -404,7 +403,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
             msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
             .show();
           progressDialog.dismiss();
-          mNewDevicesArrayAdapter.clear();
           break;
         case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
           Toast.makeText(getApplicationContext(), getText(R.string.Connection_lost),
@@ -414,8 +412,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
           progressDialog.dismiss();
           Toast.makeText(getApplicationContext(), getText(R.string.unable_connect),
             Toast.LENGTH_SHORT).show();
-          mNewDevicesArrayAdapter.clear();
-          doDiscovery();
           break;
       }
     }
@@ -458,14 +454,16 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   
   private void doDiscovery()
   {
-    mNewDevicesArrayAdapter.clear();
-    mNewDevicesArrayAdapter.notifyDataSetChanged();
+    
     // If we're already discovering, stop it
     if (mBluetoothAdapter.isDiscovering())
     {
       mBluetoothAdapter.cancelDiscovery();
       mNewDevicesArrayAdapter.clear();
+      mNewDevicesArrayAdapter.notifyDataSetChanged();
     }
+    mNewDevicesArrayAdapter.clear();
+    mNewDevicesArrayAdapter.notifyDataSetChanged();
     mBluetoothAdapter.startDiscovery();
   }
   
@@ -476,21 +474,18 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     {
       String action = intent.getAction();
       progress.setVisibility(View.VISIBLE);
+      mNewDevicesArrayAdapter.notifyDataSetChanged();
       // When discovery finds a device
       if (BluetoothDevice.ACTION_FOUND.equals(action))
       {
         // Get the BluetoothDevice object from the Intent
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-        
         // If it's already paired, skip it, because it's been listed already
         if (device.getBondState() != BluetoothDevice.BOND_BONDED)
         {
-          mNewDevicesArrayAdapter.clear();
-          mNewDevicesArrayAdapter.notifyDataSetChanged();
           mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
           mNewDevicesArrayAdapter.notifyDataSetChanged();
         }
-        
       }
       else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
       {
@@ -501,6 +496,7 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
           mNewDevicesArrayAdapter.notifyDataSetChanged();
           String noDevices = getResources().getText(R.string.none_found).toString();
           mNewDevicesArrayAdapter.add(noDevices);
+          mNewDevicesArrayAdapter.notifyDataSetChanged();
         }
       }
     
@@ -605,7 +601,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     lnrPaired.setVisibility(View.VISIBLE);
     lnrRefresh.setVisibility(View.VISIBLE);
     LnrBluetooth.setVisibility(View.VISIBLE);
-    mNewDevicesArrayAdapter.clear();
     doDiscovery();
     KeyListenerInit();
   }
