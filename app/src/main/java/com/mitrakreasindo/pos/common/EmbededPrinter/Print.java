@@ -57,10 +57,9 @@ public class Print
       printDataObject3.setBold(false);
       list.add(printDataObject3);
   
-      PrintDataObject printTitle = new PrintDataObject(context.getString(R.string.text_retur));
+      PrintDataObject printTitle = new PrintDataObject(context.getString(R.string.text_retur)+"\n");
       printTitle.setBold(true);
       printTitle.setAlign(PrintDataObject.ALIGN.CENTER);
-      printTitle.setUnderline(true);
       list.add((printTitle));
       
       for (int i = 0; i < salesItemList.size(); i++)

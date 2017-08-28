@@ -359,6 +359,8 @@
     <string name="total_units_sold">Total Barang yang Terjual</string>
     <string name="transaction_id">ID Transaksi :</string>
     <string name="payment">Pembayaran :</string>
+    <string name="payments">Payment</string>
+    <string name="returns">Retur</string>
     <string name="cash">Kas :</string>
     <string name="units_sold">Barang Terjual :</string>
     <string name="close_cash">Tutup Kas</string>

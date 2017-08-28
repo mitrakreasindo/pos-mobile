@@ -368,6 +368,8 @@
     <string name="total_units_sold">Total Units Sold</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="payment">Payment :</string>
+    <string name="payments">Payment</string>
+    <string name="returns">Returns</string>
     <string name="cash">Cash :</string>
     <string name="units_sold">Units Sold :</string>
     <string name="close_cash">Close Cash</string>
