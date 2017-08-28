@@ -9,21 +9,21 @@ import java.util.List;
  * Created by lisa on 07/08/17.
  */
 
-public class SubSalesReport implements Serializable
+public class ReportSalesSub implements Serializable
 {
 
-  private List<SubItemSalesReport> subItems;
+  private List<ReportSalesSubItem> subItems;
   private String peopleName;
   private double totaltax;
   private double totalTransaction;
   private Date date;
 
-  public List<SubItemSalesReport> getSubItems()
+  public List<ReportSalesSubItem> getSubItems()
   {
     return subItems;
   }
 
-  public void setSubItems(List<SubItemSalesReport> subItems)
+  public void setSubItems(List<ReportSalesSubItem> subItems)
   {
     this.subItems = subItems;
   }
@@ -68,18 +68,18 @@ public class SubSalesReport implements Serializable
     this.date = date;
   }
 
-  public static List<SubSalesReport> data()
+  public static List<ReportSalesSub> data()
   {
-    List<SubSalesReport> subReports = new ArrayList<>();
+    List<ReportSalesSub> subReports = new ArrayList<>();
 
-    SubSalesReport subReport = new SubSalesReport();
+    ReportSalesSub subReport = new ReportSalesSub();
     subReport.setPeopleName("YArrooo");
     subReport.setDate(new Date());
     subReport.setTotaltax(150);
     subReport.setTotalTransaction(10000000);
     subReports.add(subReport);
 
-    SubSalesReport subReport2 = new SubSalesReport();
+    ReportSalesSub subReport2 = new ReportSalesSub();
     subReport2.setPeopleName("YArrooo");
     subReport2.setDate(new Date());
     subReport2.setTotaltax(150);

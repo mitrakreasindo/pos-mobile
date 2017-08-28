@@ -31,6 +31,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
@@ -114,6 +115,7 @@ public class SalesActivity extends AppCompatActivity
   private SalesListAdapter salesListAdapter;
 
   private TableProductHelper tableProductHelper;
+  private TablePeopleHelper tablePeopleHelper;
 
   private Sales sales;
   private Product product;
@@ -223,6 +225,9 @@ public class SalesActivity extends AppCompatActivity
     salesService = ClientService.createService().create(SalesService.class);
 
     tableProductHelper = new TableProductHelper(this);
+    tablePeopleHelper = new TablePeopleHelper(this);
+
+    Log.d("PERSONID", tablePeopleHelper.getPeopleID(IDs.getLoginUser()));
 
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
@@ -242,7 +247,7 @@ public class SalesActivity extends AppCompatActivity
     tax.setId("001");
 
     people = new People();
-    people.setId("1111111");
+    people.setId(tablePeopleHelper.getPeopleID(IDs.getLoginUser()));
 
     customer = new Customer();
     customer.setId(null);
@@ -523,7 +528,7 @@ public class SalesActivity extends AppCompatActivity
     viewsales = new ViewSale();
     viewsales.setId(receipt.getId());
     viewsales.setSalesnum(sales.getSalesnum());
-    viewsales.setPerson("0");
+    viewsales.setPerson(sales.getPerson().getId());
     viewsales.setCustomer(null);
     viewsales.setSalestype(sales.getSalestype());
     viewsales.setStatus(viewsales.getStatus());

@@ -16,8 +16,8 @@ import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.main.report.SubReportActivity;
 import com.mitrakreasindo.pos.main.report.fragment.DetailReportFragment;
-import com.mitrakreasindo.pos.model.SubItemSalesReport;
-import com.mitrakreasindo.pos.model.SubSalesReport;
+import com.mitrakreasindo.pos.model.ReportSalesSubItem;
+import com.mitrakreasindo.pos.model.ReportSalesSub;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +29,16 @@ import java.util.List;
 public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdapter.ViewHolder>
 {
 
-  private List<SubSalesReport> subReports = new ArrayList<SubSalesReport>();
+  private List<ReportSalesSub> subReports = new ArrayList<ReportSalesSub>();
   private Context context;
   private LayoutInflater inflater;
-  private SubSalesReport subReport;
+  private ReportSalesSub subReport;
   private DefaultHelper defaultHelper = new DefaultHelper();
   private SubProductAdapter subProductAdapter;
-  private List<SubItemSalesReport> productReportList = new ArrayList<>();
+  private List<ReportSalesSubItem> productReportList = new ArrayList<>();
   public boolean twoPane = false;
 
-  public SubReportListAdapter(Context context, List<SubSalesReport> subReports)
+  public SubReportListAdapter(Context context, List<ReportSalesSub> subReports)
   {
     this.context = context;
     this.subReports = subReports;
@@ -57,7 +57,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   @Override
   public void onBindViewHolder(SubReportListAdapter.ViewHolder holder, int position)
   {
-    final SubSalesReport subReport = subReports.get(position);
+    final ReportSalesSub subReport = subReports.get(position);
     Log.d("SUBREPORT", subReport.getPeopleName());
     holder.itemReportSalesName.setText(subReport.getPeopleName());
     holder.itemReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
@@ -81,7 +81,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
         }
         else
         {
-          List<SubItemSalesReport> list = new ArrayList<SubItemSalesReport>();
+          List<ReportSalesSubItem> list = new ArrayList<ReportSalesSubItem>();
           list.addAll(subReport.getSubItems());
           Intent intent = new Intent(context, SubReportActivity.class);
           intent.putExtra("listProduct", subReport);
@@ -94,7 +94,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
 
 
 
-  public List<SubItemSalesReport> listSubProduct()
+  public List<ReportSalesSubItem> listSubProduct()
   {
     return productReportList;
   }
@@ -105,7 +105,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
     notifyDataSetChanged();
   }
 
-  public void addSubReports(List<SubSalesReport> subReports)
+  public void addSubReports(List<ReportSalesSub> subReports)
   {
     this.subReports.addAll(subReports);
     notifyDataSetChanged();

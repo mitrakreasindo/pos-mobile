@@ -7,12 +7,12 @@ import java.util.List;
  * Created by lisa on 07/08/17.
  */
 
-public class SalesReport implements Serializable
+public class Report<T> implements Serializable
 {
   private String merchantName;
   private String merchantAddress;
   private String merchantNpwp;
-  private List<SubSalesReport> subReports;
+  private List<T> subReports;
   private double totalTax;
   private double totalTransaction;
 
@@ -46,12 +46,12 @@ public class SalesReport implements Serializable
     this.merchantNpwp = merchantNpwp;
   }
 
-  public List<SubSalesReport> getSubReports()
+  public List<T> getSubReports()
   {
     return subReports;
   }
 
-  public void setSubReports(List<SubSalesReport> subReports)
+  public void setSubReports(List<T> subReports)
   {
     this.subReports = subReports;
   }

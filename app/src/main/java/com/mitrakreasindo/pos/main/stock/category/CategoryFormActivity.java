@@ -1,35 +1,35 @@
 package com.mitrakreasindo.pos.main.stock.category;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.birbit.android.jobqueue.JobManager;
 import com.mitrakreasindo.pos.common.ClientService;
-import com.mitrakreasindo.pos.common.FormMode;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
-import com.mitrakreasindo.pos.common.job.PostCategoryJob;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.stock.category.controller.CategoryListAdapter;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.service.CategoryService;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -48,6 +48,12 @@ public class CategoryFormActivity extends AppCompatActivity
   CoordinatorLayout mainContent;
   @BindView(R.id.category_field)
   EditText categoryField;
+  @BindView(R.id.add_parent_category_switch)
+  SwitchCompat addParentCategorySwitch;
+  @BindView(R.id.parent_category_spinner)
+  Spinner parentCategorySpinner;
+  @BindView(R.id.parent_category_form)
+  CardView parentCategoryForm;
 
   private CategoryService categoryService;
   private CategoryListAdapter categoryListAdapter;
@@ -55,6 +61,11 @@ public class CategoryFormActivity extends AppCompatActivity
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant, name, categoryId;
   private JobManager jobManager;
+
+  private TableCategoryHelper tableCategoryHelper;
+  private List<Category> dataCategory;
+  private ArrayAdapter<Category> categoryArrayAdapter;
+  private Category category = new Category();
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -68,6 +79,8 @@ public class CategoryFormActivity extends AppCompatActivity
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
+    Log.d("SWITCH", String.valueOf(addParentCategorySwitch.getSplitTrack()));
+
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -78,13 +91,61 @@ public class CategoryFormActivity extends AppCompatActivity
       }
     });
 
+
+    tableCategoryHelper = new TableCategoryHelper(this);
+    dataCategory = tableCategoryHelper.getData();
+    categoryArrayAdapter = new ArrayAdapter<>(CategoryFormActivity.this, android.R.layout.simple_spinner_dropdown_item, dataCategory);
+    parentCategorySpinner.setAdapter(categoryArrayAdapter);
+
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
-      categoryId = bundle.getString("id");
-      name = bundle.getString("name");
+      Category c = (Category) bundle.getSerializable("category");
+      categoryId = c.getId();
+      name = c.getName();
       categoryField.setText(name);
+
+      System.out.println(c.getParentid().getId());
+
+      int spinnerPosition = 0;
+      if (!c.getParentid().getId().equals(""))
+      {
+        addParentCategorySwitch.setChecked(true);
+        parentCategoryForm.setVisibility(View.VISIBLE);
+        int i = 0;
+        System.out.println("KOSONG");
+        while (i < dataCategory.size())
+        {
+          if (dataCategory.get(i).getId().equals(c.getParentid().getId()))
+          {
+            spinnerPosition = i;
+            break;
+          }
+          i++;
+        }
+        Log.d("ROLE_ID", String.valueOf(spinnerPosition));
+        parentCategorySpinner.setSelection(spinnerPosition);
+      }
+      else
+      {
+        addParentCategorySwitch.setChecked(false);
+        parentCategoryForm.setVisibility(View.GONE);
+        System.out.println("ADA");
+      }
+
     }
+
+    addParentCategorySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+    {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+      {
+        if (isChecked)
+          parentCategoryForm.setVisibility(View.VISIBLE);
+        else
+          parentCategoryForm.setVisibility(View.GONE);
+      }
+    });
   }
 
   @Override
@@ -103,8 +164,7 @@ public class CategoryFormActivity extends AppCompatActivity
       if (bundle != null)
       {
         updateCategory();
-      }
-      else
+      } else
       {
         postCategory();
 
@@ -130,7 +190,12 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setTexttip("");
     category.setCatshowname(true);
     category.setImage(null);
-    category.setParentid(null);
+
+    if (!addParentCategorySwitch.getSplitTrack())
+      category.setParentid(dataCategory.get(parentCategorySpinner.getSelectedItemPosition()));
+    else
+      category.setParentid(null);
+
     category.setColour("");
     category.setCatorder(11);
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -156,6 +221,7 @@ public class CategoryFormActivity extends AppCompatActivity
           Log.e("RESPONSE ", responseMessage);
           if (responseCode == 0)
           {
+
             TableCategoryHelper tableCategoryHelper = new TableCategoryHelper(CategoryFormActivity.this);
             tableCategoryHelper.open();
             tableCategoryHelper.insert(category);
@@ -163,6 +229,7 @@ public class CategoryFormActivity extends AppCompatActivity
 
             categoryListAdapter.addCategory(category);
             categoryListAdapter.notifyDataSetChanged();
+
             finish();
           }
         }
@@ -176,7 +243,11 @@ public class CategoryFormActivity extends AppCompatActivity
         t.printStackTrace();
         Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
       }
+
     });
+
+    progressDialog.dismiss();
+
   }
 
   private void updateCategory()
@@ -195,7 +266,12 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setTexttip("");
     category.setCatshowname(true);
     category.setImage(null);
-    category.setParentid(parentCategory);
+
+    if (!addParentCategorySwitch.getSplitTrack())
+      category.setParentid(dataCategory.get(parentCategorySpinner.getSelectedItemPosition()));
+    else
+      category.setParentid(null);
+
     category.setColour("");
     category.setCatorder(11);
     category.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
@@ -225,6 +301,8 @@ public class CategoryFormActivity extends AppCompatActivity
             tableCategoryHelper.open();
             tableCategoryHelper.update(category);
             tableCategoryHelper.close();
+
+            progressDialog.dismiss();
 
             finish();
           }

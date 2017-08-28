@@ -39,6 +39,7 @@ import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
 import com.mitrakreasindo.pos.common.WirelessPrinter.BluetoothService;
@@ -161,6 +162,8 @@ public class PaymentActivity extends AppCompatActivity
   private Context mcontext;
   private static boolean PrinterMessage;
 
+  private TablePeopleHelper tablePeopleHelper;
+
   public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
     boolean message = true;
     @Override
@@ -203,6 +206,7 @@ public class PaymentActivity extends AppCompatActivity
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
 
     tableSalesItemHelper = new TableSalesItemHelper(this);
+    tablePeopleHelper = new TablePeopleHelper(this);
 
     bundle = getIntent().getExtras();
     if (bundle != null)
@@ -234,7 +238,7 @@ public class PaymentActivity extends AppCompatActivity
     customer.setId(null);
 
     people = new People();
-    people.setId("1111111");
+    people.setId(tablePeopleHelper.getPeopleID(IDs.getLoginUser()));
 
     location = new Location();
     location.setId(UUID.randomUUID().toString());
@@ -630,7 +634,7 @@ public class PaymentActivity extends AppCompatActivity
     viewsales = new ViewSale();
     viewsales.setId(receipt.getId());
     viewsales.setSalesnum(sales.getSalesnum());
-    viewsales.setPerson("0");
+    viewsales.setPerson(people.getId());
     viewsales.setCustomer(null);
     viewsales.setSalestype(sales.getSalestype());
     viewsales.setStatus(viewsales.getStatus());
