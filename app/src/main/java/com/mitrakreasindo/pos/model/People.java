@@ -1,16 +1,18 @@
 package com.mitrakreasindo.pos.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lisa on 24/05/17.
  */
 
-public class People
+public class People implements Serializable
 {
   private String id;
   private String name;
   private transient String apppassword;
+  private String oldPassword;
   private String card;
   private boolean visible;
   private byte[] image;
@@ -25,6 +27,16 @@ public class People
   private String phoneNumber;
   private String gender;
   private Date birthdate;
+
+  public String getOldPassword()
+  {
+    return oldPassword;
+  }
+
+  public void setOldPassword(String oldPassword)
+  {
+    this.oldPassword = oldPassword;
+  }
 
   public String getId()
   {

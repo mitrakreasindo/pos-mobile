@@ -11,14 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
-import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
 import com.mitrakreasindo.pos.model.ReportSelection;
-import com.mitrakreasindo.pos.model.SubProductReport;
-import com.mitrakreasindo.pos.model.SubReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +45,20 @@ public class ListReportByCategoryAdapter extends RecyclerView.Adapter<ListReport
   }
 
   @Override
-  public void onBindViewHolder(ListReportByCategoryAdapter.ViewHolder holder, int position)
+  public void onBindViewHolder(ViewHolder holder, int position)
   {
     ReportSelection reportSelection = reportSelections.get(position);
+//    holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleTitle.setText(reportSelection.getTitle());
 //    holder.txtSampleDescription.setText(reportSelection.getDescription());
+//    holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
     holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
-
+//    ColorStateList colorStateList = new ColorStateList
+//      (
+//        new int[][]{new int[0]}, new int[]{reportSelection.getColor()}
+//      );
+//    holder.reportCircleLayout.setBackgroundTintList(colorStateList);
     holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override

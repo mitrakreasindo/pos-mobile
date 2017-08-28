@@ -41,6 +41,7 @@ import com.mitrakreasindo.pos.service.PeopleService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,7 +115,7 @@ public class UserFormActivity extends AppCompatActivity
   private PeopleService peopleService;
   private ArrayAdapter<Role> rolesArrayAdapter;
   private List<Role> data;
-  private String kodeMerchant, peopleId;
+  private String kodeMerchant, peopleId, oldPassword;
   private String name, pass, repass;
   private boolean visibility;
   private Bundle bundle;
@@ -166,15 +167,17 @@ public class UserFormActivity extends AppCompatActivity
   {
     if (bundle != null)
     {
-      peopleId = bundle.getString("id");
-      String roleId = bundle.getString("role");
-      byte[] image = bundle.getByteArray("image");
+      final People people = (People) bundle.getSerializable("people");
+      peopleId = people.getId();
+      oldPassword = people.getOldPassword();
+      String roleId = people.getRole().getId();
+      byte[] image = people.getImage();
 
-      edittextFullname.setText(bundle.getString("fullname"));
-      if (bundle.get("birthdate") != null)
-        edittextBirthDate.setText(df.format(bundle.get("birthdate")));
+      edittextFullname.setText(people.getFullname());
+      if (people.getBirthdate() != null)
+        edittextBirthDate.setText(df.format(people.getBirthdate()));
 
-      String compareValue = bundle.getString("gender");
+      String compareValue = people.getGender();
       ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.spinner_sex, android.R.layout.simple_spinner_item);
       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -185,10 +188,10 @@ public class UserFormActivity extends AppCompatActivity
         spinnerSex.setSelection(spinnerPosition);
       }
 
-      edittextPhone.setText(bundle.getString("phone"));
-      edittextUsername.setText(bundle.getString("name"));
-      edittextPass.setText(bundle.getString("password"));
-      if (bundle.getBoolean("visible"))
+      edittextPhone.setText(people.getPhoneNumber());
+      edittextUsername.setText(people.getName());
+      edittextPass.setText(people.getApppassword());
+      if (people.isVisible())
       {
         radiobuttonVisible.setChecked(true);
       }
@@ -236,6 +239,11 @@ public class UserFormActivity extends AppCompatActivity
         imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
       getSupportActionBar().setTitle(R.string.action_bar_userform_edit);
+
+      Log.d("PEOPLE_ID", peopleId);
+      Log.d("USERNAME", edittextUsername.getText().toString());
+      Log.d("APPPASS", edittextPass.getText().toString());
+      Log.d("visibility", String.valueOf(visibility));
     }
     else
     {
@@ -468,12 +476,19 @@ public class UserFormActivity extends AppCompatActivity
 
       people = new People();
       if (bundle == null)
+      {
         people.setId(UUID.randomUUID().toString());
+      }
       else
+      {
         people.setId(peopleId);
+//        people.setOldPassword(oldPassword);
+//        Log.d("OLDPASS", oldPassword);
+      }
+
       people.setName(edittextUsername.getText().toString());
       people.setApppassword(edittextPass.getText().toString());
-      people.setCard(null);
+      people.setCard("KARTTTTUUUUUU");
       people.setVisible(visibility);
 
       if (imageviewImageSelect.getVisibility() == View.VISIBLE)
@@ -573,6 +588,7 @@ public class UserFormActivity extends AppCompatActivity
 
   private void updatePeople(final People people)
   {
+
     Call<HashMap<Integer, String>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
@@ -595,6 +611,9 @@ public class UserFormActivity extends AppCompatActivity
             tablePeopleHelper.open();
             tablePeopleHelper.update(people);
             tablePeopleHelper.close();
+
+            userListAdapter.addUser(people);
+            userListAdapter.notifyDataSetChanged();
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }

@@ -3,12 +3,11 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.mitrakreasindo.pos.main.stock.product.ProductFormActivity">
 
-    <!--<item-->
-        <!--android:id="@+id/action_search"-->
-        <!--android:title="@string/add"-->
-        <!--app:showAsAction="ifRoom|collapseActionView"-->
-        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
-        <!--android:icon="@drawable/ic_search"/>-->
+    <item
+        android:id="@+id/action_select_view_type"
+        android:title="@string/view_list"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_view_list_menu"/>
 
     <item
         android:id="@+id/action_add"

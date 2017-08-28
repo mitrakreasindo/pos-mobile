@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/fab_margin"
     android:layout_marginRight="@dimen/fab_margin"
+    android:focusableInTouchMode="true"
     android:orientation="horizontal">
 
     <EditText
@@ -14,6 +15,7 @@
         android:layout_marginTop="10dp"
         android:layout_weight=".75"
         android:hint="Filter"
+        android:focusable="true"
         android:inputType="textFilter"/>
 
     <Button

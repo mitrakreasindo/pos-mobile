@@ -386,7 +386,6 @@ public class SalesActivity extends AppCompatActivity
     
     
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
-    Log.d("NAME", tableProductHelper.getData().get(2).getName());
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()

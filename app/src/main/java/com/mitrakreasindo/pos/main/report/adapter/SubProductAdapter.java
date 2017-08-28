@@ -1,7 +1,6 @@
 package com.mitrakreasindo.pos.main.report.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,13 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.DefaultHelper;
-import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.report.ReportActivity;
-import com.mitrakreasindo.pos.main.report.SubReportActivity;
 import com.mitrakreasindo.pos.main.report.fragment.DetailReportFragment;
-import com.mitrakreasindo.pos.model.SubProductReport;
-import com.mitrakreasindo.pos.model.SubReport;
+import com.mitrakreasindo.pos.model.SubItemSalesReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +23,14 @@ import java.util.List;
 public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.ViewHolder>
 {
 
-  private List<SubProductReport> subProductReports = new ArrayList<SubProductReport>();
+  private List<SubItemSalesReport> subProductReports = new ArrayList<SubItemSalesReport>();
   private Context context;
   private LayoutInflater inflater;
-  private SubProductReport subProductReport;
+  private SubItemSalesReport subProductReport;
   public boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
-  public SubProductAdapter(Context context, List<SubProductReport> subProductReports)
+  public SubProductAdapter(Context context, List<SubItemSalesReport> subProductReports)
   {
     this.context = context;
     this.subProductReports = subProductReports;
@@ -84,7 +79,7 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
     notifyDataSetChanged();
   }
 
-  public void addSubReports(List<SubProductReport> subProductReports)
+  public void addSubReports(List<SubItemSalesReport> subProductReports)
   {
     this.subProductReports.addAll(subProductReports);
     notifyDataSetChanged();

@@ -112,7 +112,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     {
                       public void onClick(DialogInterface dialog, int whichButton)
                       {
-                        deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), p.getId());
+                        deleteProduct(SharedPreferenceEditor.LoadPreferences(context, "Company Code", ""), p);
                       }
                     })
                     .setNegativeButton(android.R.string.no, null).show();
@@ -201,10 +201,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
   }
 
-  private void deleteProduct(String kodeMerchant, final String id)
+  private void deleteProduct(String kodeMerchant, final Product p)
   {
     productService = ClientService.createService().create(ProductService.class);
-    Call<HashMap<Integer, String>> call = productService.deleteProduct(kodeMerchant, id);
+    Call<HashMap<Integer, String>> call = productService.deleteProduct(kodeMerchant, p.getId());
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
       private int responseCode;
@@ -224,8 +224,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
           {
             TableProductHelper tableProductHelper = new TableProductHelper(context);
             tableProductHelper.open();
-            tableProductHelper.delete(id);
+            tableProductHelper.delete(p.getId());
             tableProductHelper.close();
+
+            removeProduct(p);
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();
         }
