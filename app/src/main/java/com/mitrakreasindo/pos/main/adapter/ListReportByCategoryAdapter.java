@@ -47,24 +47,19 @@ public class ListReportByCategoryAdapter extends RecyclerView.Adapter<ListReport
   @Override
   public void onBindViewHolder(ViewHolder holder, int position)
   {
-    ReportSelection reportSelection = reportSelections.get(position);
-//    holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
+    final ReportSelection reportSelection = reportSelections.get(position);
     holder.txtSampleSrc.setImageDrawable(ContextCompat.getDrawable(context, reportSelection.getSrc()));
     holder.txtSampleTitle.setText(reportSelection.getTitle());
-//    holder.txtSampleDescription.setText(reportSelection.getDescription());
-//    holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
     holder.reportCircleLayout.setBackgroundColor(ContextCompat.getColor(context, reportSelection.getColor()));
-//    ColorStateList colorStateList = new ColorStateList
-//      (
-//        new int[][]{new int[0]}, new int[]{reportSelection.getColor()}
-//      );
-//    holder.reportCircleLayout.setBackgroundTintList(colorStateList);
+
     holder.itemView.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-        context.startActivity(new Intent(context, ReportActivity.class));
+        Intent intent = new Intent(context, ReportActivity.class);
+        intent.putExtra("tag", reportSelection.getTAG());
+        context.startActivity(intent);
       }
     });
   }

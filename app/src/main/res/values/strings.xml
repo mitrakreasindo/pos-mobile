@@ -16,7 +16,7 @@
         <item>English</item>
     </string-array>
 
-    <string name="error_webservice">There is something wrong. Please contact administrator.</string>
+    <string name="error_webservice">There is something wrong. Please try again after a while.</string>
     <string name="error_general">There is something wrong</string>
 
     <!-- Strings related to login -->
@@ -405,4 +405,6 @@
     <string name="parent_category">Parent Category</string>
     <string name="add_parent_category">Add parent category ?</string>
     <string name="view_list">View List</string>
+    <string name="change_money">Change Money</string>
+    <string name="day">Day</string>
 </resources>

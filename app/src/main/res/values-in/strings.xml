@@ -16,7 +16,7 @@
         <item>Inggris</item>
     </string-array>
 
-    <string name="error_webservice">Terdapat kesalahan sistem. Silahkan hubungi administrator.</string>
+    <string name="error_webservice">Terdapat kesalahan sistem. Silahkan coba lagi dalam beberapa saat.</string>
     <string name="error_general">Terdapat kesalahan aplikasi</string>
 
     <!-- Strings related to login -->
@@ -53,7 +53,7 @@
     <string name="confirm">Simpan</string>
     <string name="cancel">Batal</string>
     <string name="title_activity_main">Menu Utama POS++</string>
-    <string name="error_incorrect_reinput_password">Kata sandi tidak valid</string>
+    <string name="error_incorrect_reinput_password">Kata sandi tidak cocok</string>
     <string name="error_empty_name">Nama harus diisi</string>
     <string name="error_empty_pass">Kata sandi harus diisi</string>
     <string name="error_empty_repass">Masukan ulang kata sandi harus diisi</string>
@@ -397,4 +397,6 @@
     <string name="parent_category">Parent Category</string>
     <string name="add_parent_category">Add parent category ?</string>
     <string name="view_list">View List</string>
+    <string name="change_money">Uang Kembalian</string>
+    <string name="day">Day</string>
 </resources>

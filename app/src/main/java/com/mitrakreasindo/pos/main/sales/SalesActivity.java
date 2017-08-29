@@ -152,7 +152,6 @@ public class SalesActivity extends AppCompatActivity
     @Override
     public void barcodeResult(BarcodeResult result)
     {
-
       Product productByCode = tableProductHelper.getProduct(result.getText());
 
       if (productByCode != null)
@@ -268,7 +267,7 @@ public class SalesActivity extends AppCompatActivity
     receipt.setMoney(closedCash);
     receipt.setDatenew(new Date());
     receipt.setPerson(IDs.getLoginUser());
-    receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    receipt.setSiteguid(IDs.SITE_GUID);
     receipt.setSflag(true);
 
     sales = new Sales();
@@ -276,7 +275,7 @@ public class SalesActivity extends AppCompatActivity
     sales.setSalesnum(1);
     sales.setSalestype(1);
     sales.setStatus(1);
-    sales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    sales.setSiteguid(IDs.SITE_GUID);
     sales.setSflag(true);
     sales.setCustomer(customer);
     sales.setPerson(people);
@@ -363,10 +362,10 @@ public class SalesActivity extends AppCompatActivity
 //          tableSalesHelper.open();
 //          tableSalesHelper.insertSales(sales);
 //          tableSalesHelper.close();
-  
+
           if(editTextExtraSalesInfo.getParent() != null)
             ((ViewGroup)editTextExtraSalesInfo.getParent()).removeView(editTextExtraSalesInfo);
-          
+
           editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
           new AlertDialog.Builder(SalesActivity.this)
             .setTitle(R.string.additional_sales_info)
@@ -374,7 +373,7 @@ public class SalesActivity extends AppCompatActivity
             .setCancelable(false)
             .setPositiveButton
             (
-              R.string.ok, new DialogInterface.OnClickListener()
+              R.string.yes, new DialogInterface.OnClickListener()
               {
                 @Override
                 public void onClick(DialogInterface dialog, int which)
@@ -397,17 +396,17 @@ public class SalesActivity extends AppCompatActivity
                   tableSalesHelper.open();
                   tableSalesHelper.insertSales(sales);
                   tableSalesHelper.close();
+
                   postSales(kodeMerchant, salesPack);
+
                   finish();
                 }
               }
-            );
-            
+            )
+            .show();
         }
-
       }
     });
-
 
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
     edittextSearchProduct.setAdapter(adapter);

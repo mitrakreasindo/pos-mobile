@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   EditText merchantCode;
   @BindView(R.id.spinner_language)
   Spinner spinnerLanguage;
+  @BindView(R.id.email_sign_in_button)
+  Button emailSignInButton;
   /**
    * Keep track of the login task to ensure we can cancel it if requested.
    */
@@ -146,6 +148,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       merchantCode.setText(companyCode);
     }
     progressDialog = new ProgressDialog(this);
+
+    mPasswordView.setOnEditorActionListener(new EditText.OnEditorActionListener()
+    {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+      {
+        if (actionId == EditorInfo.IME_ACTION_DONE)
+        {
+          emailSignInButton.performClick();
+          return true;
+        }
+        return false;
+      }
+    });
   }
 
   public void onClick(View view)
@@ -329,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             intent.putExtra("COMPANYNAME", parts[1]);
             intent.putExtra("COMPANYADDRESS", parts[2]);
             intent.putExtra("COMPANYPHONE", parts[3]);
-            if(parts.length == 5)
+            if (parts.length == 5)
             {
               intent.putExtra("CLOSECASH_ID", parts[4]);
             }

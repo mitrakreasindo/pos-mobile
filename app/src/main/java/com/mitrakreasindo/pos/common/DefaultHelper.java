@@ -20,6 +20,23 @@ public class DefaultHelper
     return dateString;
   }
 
+  public static String dateDayFormat(long date)
+  {
+    SimpleDateFormat formater = new SimpleDateFormat("EEEE");
+    String dateString = formater.format(date);
+
+    return dateString;
+  }
+
+  public static String dateDayFormat(Date date)
+  {
+    SimpleDateFormat formater = new SimpleDateFormat("EEEE");
+    String dateString = formater.format(date);
+
+    return dateString;
+  }
+
+
   public static String dateOnlyFormat(long date)
   {
     SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");

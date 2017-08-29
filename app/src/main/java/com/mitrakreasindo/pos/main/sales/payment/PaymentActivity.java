@@ -176,6 +176,8 @@ public class PaymentActivity extends AppCompatActivity
 
   private TablePeopleHelper tablePeopleHelper;
 
+  private TablePeopleHelper tablePeopleHelper;
+
   public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
     boolean message = true;
     @Override
@@ -510,7 +512,8 @@ public class PaymentActivity extends AppCompatActivity
                   tableSalesHelper.close();
           
                   postSales();
-                  SalesActivity.sActivity.finish();
+                  if (SalesActivity.sActivity != null)
+                    SalesActivity.sActivity.finish();
                   finish();
                 }
               });
@@ -622,7 +625,7 @@ public class PaymentActivity extends AppCompatActivity
 
 //    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //    String date = formater.format(new Date());
-    
+
     
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
