@@ -172,9 +172,6 @@ public class PaymentActivity extends AppCompatActivity
   public AidlDeviceManager manager = null;
   private AidlPrinterStateChangeListener callback = new PrinterCallback();
   private Context mcontext;
-  
-
-  private TablePeopleHelper tablePeopleHelper;
 
   private TablePeopleHelper tablePeopleHelper;
 
@@ -268,9 +265,9 @@ public class PaymentActivity extends AppCompatActivity
               edittextPaymentMoney.removeTextChangedListener(this);
               String originalString = s.toString();
         
-              if (originalString.contains(","))
+              if (originalString.contains(",") || originalString.contains("."))
               {
-                originalString = originalString.replaceAll(",", "");
+                originalString = originalString.replaceAll("[,.]", "");
               }
               Long longval = Long.parseLong(originalString);
         
@@ -452,8 +449,7 @@ public class PaymentActivity extends AppCompatActivity
                         tableSalesHelper.close();
                 
                         postSales();
-                        SalesActivity.sActivity.finish();
-                        finish();
+
                       }
                     });
                     confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -512,9 +508,6 @@ public class PaymentActivity extends AppCompatActivity
                   tableSalesHelper.close();
           
                   postSales();
-                  if (SalesActivity.sActivity != null)
-                    SalesActivity.sActivity.finish();
-                  finish();
                 }
               });
               confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -555,9 +548,9 @@ public class PaymentActivity extends AppCompatActivity
     else
     {
       originalString = edittextPaymentMoney.getText().toString();
-      if (originalString.contains(","))
+      if (originalString.contains(",") || originalString.contains("."))
       {
-        originalString = originalString.replaceAll(",", "");
+        originalString = originalString.replaceAll("[,.]", "");
       }
       Long longval = Long.parseLong(originalString);
       clearValue = Double.parseDouble(longval.toString());
@@ -834,6 +827,10 @@ public class PaymentActivity extends AppCompatActivity
 //            progressDialog.dismiss();
             Log.d("SUCCESS", "SUCCESS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
+
+            if (SalesActivity.sActivity != null)
+              SalesActivity.sActivity.finish();
+            finish();
           }
         }
       }
@@ -996,8 +993,6 @@ public class PaymentActivity extends AppCompatActivity
           tableSalesHelper.close();
     
           postSales();
-          SalesActivity.sActivity.finish();
-          finish();
         }
       });
         confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
