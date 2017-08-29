@@ -13,6 +13,18 @@ public class RestVariable
     public static final String URL_GET_TAX = "http://192.168.1.113:8082/api/taxes/";
     public static final String URL_GET_UNPAID_TRANSACTION = "http://192.168.1.113:8082/api/viewunpaidtrans/{kodeMerchant}/";
 
+//    public static final String SERVER_URL = "http://192.168.4.113:8082/api/";
+//    public static final String URL_GET_PRODUCT = "http://192.168.4.113:8082/api/products/";
+//    public static final String URL_GET_PEOPLE = "http://192.168.4.113:8082/api/peoples/";
+//    public static final String URL_GET_TAX = "http://192.168.4.113:8082/api/taxes/";
+//    public static final String URL_GET_UNPAID_TRANSACTION = "http://192.168.4.113:8082/api/viewunpaidtrans/{kodeMerchant}/";
+
+//    public static final String SERVER_URL = "http://192.168.43.169:8082/api/";
+//    public static final String URL_GET_PRODUCT = "http://192.168.43.169:8082/api/products/";
+//    public static final String URL_GET_PEOPLE = "http://192.168.43.169:8082/api/peoples/";
+//    public static final String URL_GET_TAX = "http://192.168.43.169:8082/api/taxes/";
+//    public static final String URL_GET_UNPAID_TRANSACTION = "http://192.168.43.169:8082/api/viewunpaidtrans/{kodeMerchant}/";
+
 //    public static final String SERVER_URL = "http://192.168.4.126:8082/api/";
 //    public static final String URL_GET_PRODUCT = "http://192.168.4.126:8082/api/products/";
 //    public static final String URL_GET_PEOPLE = "http://192.168.4.126:8082/api/peoples/";
