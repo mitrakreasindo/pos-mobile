@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.report.adapter.SubReportCategoryAdapter;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.model.ReportSalesSubItem;
+import com.mitrakreasindo.pos.model.ReportCategorySub;
 import com.mitrakreasindo.pos.model.ReportSalesSub;
+import com.mitrakreasindo.pos.model.ReportSalesSubItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +42,15 @@ public class SubReportActivity extends AppCompatActivity
   TextView itemSubReportSales;
   @BindView(R.id.item_sub_report_date)
   TextView itemSubReportDate;
+  @BindView(R.id.item_text_sales_or_day)
+  TextView itemTextSalesOrDay;
 
   private SubProductAdapter subProductAdapter;
+  private SubReportCategoryAdapter reportSubCategoryAdapter;
   private List<ReportSalesSubItem> subProductReportList = new ArrayList<ReportSalesSubItem>();
   private Bundle bundle;
-  private ReportSalesSub subReport;
+  private ReportSalesSub reportSalesSub;
+  private ReportCategorySub reportCategorySub;
   private boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
@@ -68,22 +74,46 @@ public class SubReportActivity extends AppCompatActivity
     bundle = getIntent().getExtras();
     if (bundle != null)
     {
-
-      subReport = (ReportSalesSub) bundle.getSerializable("listProduct");
       twoPane = bundle.getBoolean("twoPane");
+      if (bundle.getSerializable("listCategory") != null)
+      {
+        itemTextSalesOrDay.setText(getString(R.string.day));
+        reportCategorySub = (ReportCategorySub) bundle.getSerializable("listCategory");
+        Log.d("CATEGORY", "LIST");
+        reportSubCategoryAdapter = new SubReportCategoryAdapter(this, reportCategorySub.getSubItems());
+        reportSubCategoryAdapter.twoPane = twoPane;
 
-      Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));
+        itemSubReportTotalTransaction.setText("Rp." + defaultHelper.decimalFormat(reportCategorySub.getTotalTransaction()));
+        itemSubReportDate.setText(defaultHelper.dateOnlyFormat(reportCategorySub.getDate()));
+        itemSubReportSales.setText(DefaultHelper.dateDayFormat(reportCategorySub.getDate()));
+        listSubProduct.setAdapter(reportSubCategoryAdapter);
+
+      } else if (bundle.getSerializable("listProduct") != null)
+      {
+        itemTextSalesOrDay.setText(getString(R.string.sales));
+        reportSalesSub = (ReportSalesSub) bundle.getSerializable("listProduct");
+        Log.d("SALES", "LIST");
+        subProductAdapter = new SubProductAdapter(this, reportSalesSub.getSubItems());
+        subProductAdapter.twoPane = twoPane;
+
+        itemSubReportTotalTransaction.setText("Rp." + defaultHelper.decimalFormat(reportSalesSub.getTotalTransaction()));
+        itemSubReportDate.setText(defaultHelper.dateOnlyFormat(reportSalesSub.getDate()));
+        itemSubReportSales.setText(reportSalesSub.getPeopleName());
+        listSubProduct.setAdapter(subProductAdapter);
+      }
 
     }
 
-    itemSubReportTotalTransaction.setText("Rp." + defaultHelper.decimalFormat(subReport.getTotalTransaction()));
-    itemSubReportDate.setText(defaultHelper.dateOnlyFormat(subReport.getDate()));
-    itemSubReportSales.setText(subReport.getPeopleName());
+//    if (reportCategorySub != null)
+//    {
+//
+//    }
+//    else if (reportSalesSub != null)
+//    {
+//
+//    }
 
-    subProductAdapter = new SubProductAdapter(this, subReport.getSubItems());
-    subProductAdapter.twoPane = twoPane;
 
-    listSubProduct.setAdapter(subProductAdapter);
     listSubProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listSubProduct.setLayoutManager(layoutManager);

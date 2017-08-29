@@ -8,11 +8,11 @@ import java.util.List;
  * Created by lisa on 29/08/17.
  */
 
-public class ReportSubDate<T> implements Serializable
+public class ReportSubDate implements Serializable
 {
 
   private Date date;
-  private List<T> subReport;
+  private List<ReportSubCategorySub> subReport;
 
   public Date getDate()
   {
@@ -24,13 +24,23 @@ public class ReportSubDate<T> implements Serializable
     this.date = date;
   }
 
-  public List<T> getSubReport()
+  public List<ReportSubCategorySub> getSubReport()
   {
     return subReport;
   }
 
-  public void setSubReport(List<T> subReport)
+  public void setSubReport(List<ReportSubCategorySub> subReport)
   {
     this.subReport = subReport;
   }
+
+  //  public List<T> getSubReport()
+//  {
+//    return subReport;
+//  }
+//
+//  public void setSubReport(List<T> subReport)
+//  {
+//    this.subReport = subReport;
+//  }
 }

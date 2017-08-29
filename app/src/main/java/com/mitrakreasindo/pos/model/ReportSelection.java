@@ -2,6 +2,7 @@ package com.mitrakreasindo.pos.model;
 
 import com.mitrakreasindo.pos.main.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +10,13 @@ import java.util.List;
  * Created by lisa on 23/08/17.
  */
 
-public class ReportSelection
+public class ReportSelection implements Serializable
 {
   private int src;
   private int color;
   private String title;
   private String description;
+  private String TAG;
 
   public int getColor()
   {
@@ -56,6 +58,16 @@ public class ReportSelection
     this.description = description;
   }
 
+  public String getTAG()
+  {
+    return TAG;
+  }
+
+  public void setTAG(String TAG)
+  {
+    this.TAG = TAG;
+  }
+
   public static List<ReportSelection> data()
   {
 
@@ -66,6 +78,7 @@ public class ReportSelection
     reportSelection.setColor(R.color.blue500);
     reportSelection.setTitle("Category");
     reportSelection.setDescription("Category");
+    reportSelection.setTAG("CATEGORY");
     reportSelections.add(reportSelection);
 
     ReportSelection reportSelection1 = new ReportSelection();
@@ -73,13 +86,15 @@ public class ReportSelection
     reportSelection1.setColor(R.color.lightblue500);
     reportSelection1.setTitle("Sub Category");
     reportSelection1.setDescription("Category");
+    reportSelection1.setTAG("SUBCATEGORY");
     reportSelections.add(reportSelection1);
 
     ReportSelection reportSelection2 = new ReportSelection();
     reportSelection2.setSrc(R.mipmap.ic_apps_white);
     reportSelection2.setColor(R.color.indigo500);
-    reportSelection2.setTitle("Stock");
+    reportSelection2.setTitle("Sales");
     reportSelection2.setDescription("Category");
+    reportSelection2.setTAG("SALES");
     reportSelections.add(reportSelection2);
 
     ReportSelection reportSelection3 = new ReportSelection();
@@ -87,6 +102,7 @@ public class ReportSelection
     reportSelection3.setColor(R.color.purple500);
     reportSelection3.setTitle("Item");
     reportSelection3.setDescription("Category");
+    reportSelection3.setTAG("CATEGORY");
     reportSelections.add(reportSelection3);
 
     ReportSelection reportSelection4 = new ReportSelection();
@@ -94,6 +110,7 @@ public class ReportSelection
     reportSelection4.setColor(R.color.yellow500);
     reportSelection4.setTitle("Debt");
     reportSelection4.setDescription("Category");
+    reportSelection4.setTAG("CATEGORY");
     reportSelections.add(reportSelection4);
 
     ReportSelection reportSelection5 = new ReportSelection();
@@ -101,6 +118,7 @@ public class ReportSelection
     reportSelection5.setColor(R.color.lightgreen500);
     reportSelection5.setTitle("Claim");
     reportSelection5.setDescription("Category");
+    reportSelection5.setTAG("CATEGORY");
     reportSelections.add(reportSelection5);
 
     ReportSelection reportSelection6 = new ReportSelection();
@@ -108,6 +126,7 @@ public class ReportSelection
     reportSelection6.setColor(R.color.teal500);
     reportSelection6.setTitle("Payment");
     reportSelection6.setDescription("Category");
+    reportSelection6.setTAG("CATEGORY");
     reportSelections.add(reportSelection6);
 
     return reportSelections;

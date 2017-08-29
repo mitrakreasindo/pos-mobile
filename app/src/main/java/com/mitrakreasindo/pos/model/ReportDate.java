@@ -13,7 +13,7 @@ public class ReportDate<T> implements Serializable
   private String merchantName;
   private String merchantAddress;
   private String merchantNpwp;
-  private List<ReportSubDate<T>> subReportDate;
+  private List<ReportSubDate> subReportDate;
   private double totalTax;
   private double totalTransaction;
 
@@ -47,12 +47,12 @@ public class ReportDate<T> implements Serializable
     this.merchantNpwp = merchantNpwp;
   }
 
-  public List<ReportSubDate<T>> getSubReportDate()
+  public List<ReportSubDate> getSubReportDate()
   {
     return subReportDate;
   }
 
-  public void setSubReportDate(List<ReportSubDate<T>> subReportDate)
+  public void setSubReportDate(List<ReportSubDate> subReportDate)
   {
     this.subReportDate = subReportDate;
   }

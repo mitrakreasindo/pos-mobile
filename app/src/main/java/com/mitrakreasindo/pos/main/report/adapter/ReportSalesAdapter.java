@@ -26,7 +26,7 @@ import java.util.List;
  * Created by lisa on 05/08/17.
  */
 
-public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdapter.ViewHolder>
+public class ReportSalesAdapter extends RecyclerView.Adapter<ReportSalesAdapter.ViewHolder>
 {
 
   private List<ReportSalesSub> subReports = new ArrayList<ReportSalesSub>();
@@ -38,7 +38,7 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   private List<ReportSalesSubItem> productReportList = new ArrayList<>();
   public boolean twoPane = false;
 
-  public SubReportListAdapter(Context context, List<ReportSalesSub> subReports)
+  public ReportSalesAdapter(Context context, List<ReportSalesSub> subReports)
   {
     this.context = context;
     this.subReports = subReports;
@@ -46,16 +46,16 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
   }
 
   @Override
-  public SubReportListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+  public ReportSalesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
   {
     View itemView = LayoutInflater.from(parent.getContext())
       .inflate(R.layout.adapter_subreport, parent, false);
 
-    return new SubReportListAdapter.ViewHolder(itemView);
+    return new ReportSalesAdapter.ViewHolder(itemView);
   }
 
   @Override
-  public void onBindViewHolder(SubReportListAdapter.ViewHolder holder, int position)
+  public void onBindViewHolder(ReportSalesAdapter.ViewHolder holder, int position)
   {
     final ReportSalesSub subReport = subReports.get(position);
     Log.d("SUBREPORT", subReport.getPeopleName());
@@ -77,7 +77,6 @@ public class SubReportListAdapter extends RecyclerView.Adapter<SubReportListAdap
           ((ReportActivity)context).getSupportFragmentManager()
             .beginTransaction()
             .replace(R.id.detail_report, detailReportFragment).commit();
-          Toast.makeText(context, "Test Click", Toast.LENGTH_SHORT).show();
         }
         else
         {

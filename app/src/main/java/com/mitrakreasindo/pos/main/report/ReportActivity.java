@@ -31,16 +31,24 @@ import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.DownloadService;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
+import com.mitrakreasindo.pos.main.report.adapter.ReportCategoryAdapter;
+import com.mitrakreasindo.pos.main.report.adapter.ReportSalesAdapter;
+import com.mitrakreasindo.pos.main.report.adapter.ReportSubCategoryAdapter;
 import com.mitrakreasindo.pos.model.Download;
 import com.mitrakreasindo.pos.model.Report;
+import com.mitrakreasindo.pos.model.ReportCategory;
+import com.mitrakreasindo.pos.model.ReportCategorySub;
+import com.mitrakreasindo.pos.model.ReportDate;
 import com.mitrakreasindo.pos.model.ReportSalesSub;
+import com.mitrakreasindo.pos.model.ReportSubCategorySub;
+import com.mitrakreasindo.pos.model.ReportSubDate;
 import com.mitrakreasindo.pos.service.ReportService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +72,10 @@ public class ReportActivity extends AppCompatActivity
   @BindView(R.id.filter_report_to_date)
   TextView filterReportToDate;
 
-  private SubReportListAdapter reportListAdapter;
+  private ReportSalesAdapter reportListAdapter;
+  private ReportCategoryAdapter reportCategoryAdapter;
+  private ReportSubCategoryAdapter reportSubCategoryAdapter;
+
   private ReportService reportService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
@@ -76,6 +87,10 @@ public class ReportActivity extends AppCompatActivity
   private static final int PERMISSION_REQUEST_CODE = 1;
 
   private Report data;
+
+  private Bundle bundle;
+
+  String TAG;
 
 
   @Override
@@ -103,7 +118,6 @@ public class ReportActivity extends AppCompatActivity
     cal.setTime(new Date());
     cal.add(Calendar.DAY_OF_YEAR, -7);
     Date aWeekDateBefore = cal.getTime();
-
 
     filterReportFromDate.setText(defaultHelper.dateOnlyFormat(aWeekDateBefore));
     filterReportToDate.setText(defaultHelper.dateOnlyFormat(new Date()));
@@ -146,7 +160,20 @@ public class ReportActivity extends AppCompatActivity
             }
 
             filterReportFromDate.setText(year + "-" + month + "-" + day);
-            getReport();
+
+            switch (TAG)
+            {
+              case "SALES":
+                getReportSales();
+                break;
+
+              case "CATEGORY":
+                getReportCategories();
+                break;
+              case "SUBCATEGORY":
+                getReportSubCategories();
+                break;
+            }
           }
         }, mYear, mMonth, mDay);
 
@@ -191,7 +218,19 @@ public class ReportActivity extends AppCompatActivity
             }
 
             filterReportToDate.setText(year + "-" + month + "-" + day);
-            getReport();
+            switch (TAG)
+            {
+              case "SALES":
+                getReportSales();
+                break;
+
+              case "CATEGORY":
+                getReportCategories();
+                break;
+              case "SUBCATEGORY":
+                getReportSubCategories();
+                break;
+            }
           }
         }, mYear, mMonth, mDay);
 
@@ -199,22 +238,41 @@ public class ReportActivity extends AppCompatActivity
       }
     });
 
-    reportListAdapter = new SubReportListAdapter(this, new ArrayList<ReportSalesSub>());
-//    reportListAdapter = new SubReportListAdapter(this, SubReport.data());
+    bundle = getIntent().getExtras();
+    if (bundle != null)
+    {
+      TAG = bundle.getString("tag");
+      switch (TAG)
+      {
+        case "SALES":
+          reportListAdapter = new ReportSalesAdapter(this, new ArrayList<ReportSalesSub>());
+          if (findViewById(R.id.detail_report) != null) {reportListAdapter.twoPane = true;}
+          listReport.setAdapter(reportListAdapter);
+          getReportSales();
+          break;
 
-    listReport.setAdapter(reportListAdapter);
+        case "CATEGORY":
+          reportCategoryAdapter = new ReportCategoryAdapter(this, new ArrayList<ReportCategorySub>());
+          if (findViewById(R.id.detail_report) != null) {reportCategoryAdapter.twoPane = true;}
+          listReport.setAdapter(reportCategoryAdapter);
+          getReportCategories();
+          break;
+        case "SUBCATEGORY":
+          reportSubCategoryAdapter = new ReportSubCategoryAdapter(this, new ArrayList<ReportSubDate>());
+          if (findViewById(R.id.detail_report) != null) {reportSubCategoryAdapter.twoPane = true;}
+          listReport.setAdapter(reportSubCategoryAdapter);
+          getReportSubCategories();
+          break;
+      }
+
+    }
+
     listReport.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listReport.setLayoutManager(layoutManager);
     listReport.setItemAnimator(new DefaultItemAnimator());
 
-    if (findViewById(R.id.detail_report) != null)
-    {
-      reportListAdapter.twoPane = true;
-    }
-
     registerReceiver();
-    getReport();
 
   }
 
@@ -248,30 +306,107 @@ public class ReportActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  public void getReport()
+  public void getReportSales()
   {
     final ProgressDialog progressDialog = new ProgressDialog(this);
     progressDialog.setCancelable(false);
     progressDialog.setMessage(getString(R.string.prepare_data));
     progressDialog.show();
 
-    final Call<Report> reportCall = reportService
+    final Call<Report<ReportSalesSub>> reportCall = reportService
       .getReportAll(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    reportCall.enqueue(new Callback<Report>()
+    reportCall.enqueue(new Callback<Report<ReportSalesSub>>()
     {
       @Override
-      public void onResponse(Call<Report> call, Response<Report> response)
+      public void onResponse(Call<Report<ReportSalesSub>> call, Response<Report<ReportSalesSub>> response)
       {
         Report data = response.body();
-        reportListAdapter.clear();
-        reportListAdapter.addSubReports(data.getSubReports());
+        if (data != null)
+        {
+          reportListAdapter.clear();
+          reportListAdapter.addSubReports(data.getSubReports());
+        }
       }
 
       @Override
-      public void onFailure(Call<Report> call, Throwable t)
+      public void onFailure(Call<Report<ReportSalesSub>> call, Throwable t)
       {
+      }
+
+    });
+
+    Log.d("ESTES", "TEST");
+    progressDialog.dismiss();
+  }
+
+  public void getReportCategories()
+  {
+    final ProgressDialog progressDialog = new ProgressDialog(this);
+    progressDialog.setCancelable(false);
+    progressDialog.setMessage(getString(R.string.prepare_data));
+    progressDialog.show();
+
+    final Call<Report<ReportCategorySub>> reportCall = reportService
+      .getReportCategoryAll(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
+        filterReportToDate.getText().toString() + " 00:00:00");
+
+    reportCall.enqueue(new Callback<Report<ReportCategorySub>>()
+    {
+      @Override
+      public void onResponse(Call<Report<ReportCategorySub>> call, Response<Report<ReportCategorySub>> response)
+      {
+        Report data = response.body();
+        if (data != null)
+        {
+          reportCategoryAdapter.clear();
+          reportCategoryAdapter.addSubReports(data.getSubReports());
+        }
+      }
+
+      @Override
+      public void onFailure(Call<Report<ReportCategorySub>> call, Throwable t)
+      {
+        Log.d("FAILUREREPORT", "FAILURE");
+      }
+
+    });
+
+    Log.d("ESTES", "TEST");
+    progressDialog.dismiss();
+  }
+
+  public void getReportSubCategories()
+  {
+    final ProgressDialog progressDialog = new ProgressDialog(this);
+    progressDialog.setCancelable(false);
+    progressDialog.setMessage(getString(R.string.prepare_data));
+    progressDialog.show();
+
+    final Call<ReportDate<ReportSubDate>> reportCall = reportService
+      .getReportSubCategoryAll(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
+        filterReportToDate.getText().toString() + " 00:00:00");
+
+    reportCall.enqueue(new Callback<ReportDate<ReportSubDate>>()
+    {
+      @Override
+      public void onResponse(Call<ReportDate<ReportSubDate>> call, Response<ReportDate<ReportSubDate>> response)
+      {
+        ReportDate<ReportSubDate> data = response.body();
+//        List<ReportSubCategorySub> reportSubCategorySubs = data.getSubReportDate().;
+        Log.d("GET0", data.getSubReportDate().get(0).getDate().toString());
+        if (data != null)
+        {
+          reportSubCategoryAdapter.clear();
+          reportSubCategoryAdapter.addSubReports(data.getSubReportDate());
+        }
+      }
+
+      @Override
+      public void onFailure(Call<ReportDate<ReportSubDate>> call, Throwable t)
+      {
+        Log.d("FAILUREREPORT", t.getMessage());
       }
 
     });

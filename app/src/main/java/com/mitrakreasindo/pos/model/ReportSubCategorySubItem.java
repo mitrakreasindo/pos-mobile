@@ -3,14 +3,14 @@ package com.mitrakreasindo.pos.model;
 import java.io.Serializable;
 
 /**
- * Created by lisa on 25/08/17.
+ * Created by lisa on 29/08/17.
  */
 
-public class ReportCategorySubItem implements Serializable
+public class ReportSubCategorySubItem implements Serializable
 {
 
-  private String categoryId;
-  private String categoryName;
+  private String productId;
+  private String productName;
   private double qty;
   private double price;
   private double subTotal;
@@ -18,24 +18,24 @@ public class ReportCategorySubItem implements Serializable
   private double tax;
   private double total;
 
-  public String getCategoryId()
+  public String getProductId()
   {
-    return categoryId;
+    return productId;
   }
 
-  public void setCategoryId(String categoryId)
+  public void setProductId(String productId)
   {
-    this.categoryId = categoryId;
+    this.productId = productId;
   }
 
-  public String getCategoryName()
+  public String getProductName()
   {
-    return categoryName;
+    return productName;
   }
 
-  public void setCategoryName(String categoryName)
+  public void setProductName(String productName)
   {
-    this.categoryName = categoryName;
+    this.productName = productName;
   }
 
   public double getQty()

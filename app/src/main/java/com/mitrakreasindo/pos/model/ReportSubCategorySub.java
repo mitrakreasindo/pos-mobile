@@ -5,25 +5,47 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by lisa on 25/08/17.
+ * Created by lisa on 29/08/17.
  */
 
-public class ReportCategorySub implements Serializable
+public class ReportSubCategorySub implements Serializable
 {
 
-  private List<ReportCategorySubItem> subItems;
+  private List<ReportSubCategorySubItem> subItems;
+  private String categoryName;
+  private String subCategoryName;
   private Date date;
   private double totaltax;
   private double totalTransaction;
 
-  public List<ReportCategorySubItem> getSubItems()
+  public List<ReportSubCategorySubItem> getSubItems()
   {
     return subItems;
   }
 
-  public void setSubItems(List<ReportCategorySubItem> subItems)
+  public void setSubItems(List<ReportSubCategorySubItem> subItems)
   {
     this.subItems = subItems;
+  }
+
+  public String getCategoryName()
+  {
+    return categoryName;
+  }
+
+  public void setCategoryName(String categoryName)
+  {
+    this.categoryName = categoryName;
+  }
+
+  public String getSubCategoryName()
+  {
+    return subCategoryName;
+  }
+
+  public void setSubCategoryName(String subCategoryName)
+  {
+    this.subCategoryName = subCategoryName;
   }
 
   public Date getDate()

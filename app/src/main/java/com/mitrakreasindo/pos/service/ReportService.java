@@ -1,6 +1,12 @@
 package com.mitrakreasindo.pos.service;
 
 import com.mitrakreasindo.pos.model.Report;
+import com.mitrakreasindo.pos.model.ReportCategory;
+import com.mitrakreasindo.pos.model.ReportCategorySub;
+import com.mitrakreasindo.pos.model.ReportDate;
+import com.mitrakreasindo.pos.model.ReportSalesSub;
+import com.mitrakreasindo.pos.model.ReportSubCategorySub;
+import com.mitrakreasindo.pos.model.ReportSubDate;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,7 +23,13 @@ public interface ReportService
 {
 
   @GET("reports/sales/")
-  Call<Report> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+  Call<Report<ReportSalesSub>> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+
+  @GET("reports/category/")
+  Call<Report<ReportCategorySub>> getReportCategoryAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+
+  @GET("reports/subcategory/")
+  Call<ReportDate<ReportSubDate>> getReportSubCategoryAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
   @GET("reports/sales/download/pdf")
   @Streaming

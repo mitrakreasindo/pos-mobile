@@ -403,4 +403,5 @@
     <string name="parent_category">Parent Category</string>
     <string name="add_parent_category">Add parent category ?</string>
     <string name="view_list">View List</string>
+    <string name="day">Day</string>
 </resources>
