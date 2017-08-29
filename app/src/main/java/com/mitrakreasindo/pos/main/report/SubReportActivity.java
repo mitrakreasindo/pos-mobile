@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.model.SubItemSalesReport;
-import com.mitrakreasindo.pos.model.SubSalesReport;
+import com.mitrakreasindo.pos.model.ReportSalesSubItem;
+import com.mitrakreasindo.pos.model.ReportSalesSub;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +42,9 @@ public class SubReportActivity extends AppCompatActivity
   TextView itemSubReportDate;
 
   private SubProductAdapter subProductAdapter;
-  private List<SubItemSalesReport> subProductReportList = new ArrayList<SubItemSalesReport>();
+  private List<ReportSalesSubItem> subProductReportList = new ArrayList<ReportSalesSubItem>();
   private Bundle bundle;
-  private SubSalesReport subReport;
+  private ReportSalesSub subReport;
   private boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
@@ -69,7 +69,7 @@ public class SubReportActivity extends AppCompatActivity
     if (bundle != null)
     {
 
-      subReport = (SubSalesReport) bundle.getSerializable("listProduct");
+      subReport = (ReportSalesSub) bundle.getSerializable("listProduct");
       twoPane = bundle.getBoolean("twoPane");
 
       Log.d("NEXT", String.valueOf(subReport.getTotalTransaction()));

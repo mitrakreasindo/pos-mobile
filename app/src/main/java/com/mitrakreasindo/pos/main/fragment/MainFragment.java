@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +38,10 @@ import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.common.XMLHelper;
 import com.mitrakreasindo.pos.main.R;
-import com.mitrakreasindo.pos.main.fragment.adapter.PendingTransactionListAdapter;
 import com.mitrakreasindo.pos.main.adapter.ListReportByCategoryAdapter;
-
+import com.mitrakreasindo.pos.main.fragment.adapter.PendingTransactionListAdapter;
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
 import com.mitrakreasindo.pos.model.Money;
 import com.mitrakreasindo.pos.model.ReportSelection;
@@ -130,6 +129,7 @@ public class MainFragment extends Fragment
   private Money cost;
   private String companyCode;
   private Bundle bundle;
+  private TablePeopleHelper tablePeopleHelper;
 
   private PieDataSet dataSetDaily;
   private PieDataSet dataSetWeekly;
@@ -159,6 +159,8 @@ public class MainFragment extends Fragment
 
     queueService = ClientService.createService().create(PendingTransactionService.class);
     dashboardService = ClientService.createService().create(DashboardService.class);
+
+    tablePeopleHelper = new TablePeopleHelper(getContext());
 
     companyCode = SharedPreferenceEditor.LoadPreferences(getContext(), "Company Code", "");
     shouldExcecuteOnCreate = true;
@@ -329,36 +331,6 @@ public class MainFragment extends Fragment
   {
     EventBus.getDefault().unregister(this);
     super.onStop();
-  }
-
-  @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(Event event)
-  {
-    Log.d("EVENT BUS", "masuk");
-    switch (event.getId())
-    {
-      case EventCode.EVENT_MONEY_GET:
-        if (event.getStatus() == Event.COMPLETE && revenue != null && cost != null)
-        {
-          dailyRevenueChart(revenue, cost);
-          weeklyRevenueChart(revenue, cost);
-          monthlyRevenueChart(revenue, cost);
-          yearlyRevenueChart(revenue, cost);
-        }
-        break;
-      case EventCode.EVENT_ROLE_GET:
-        if (event.getStatus() == Event.COMPLETE)
-        {
-          if (shouldExcecuteOnCreate)
-          {
-            setupMenu();
-            setupMainFragmentLayout();
-            Log.d("fragment", "main fragment setup");
-            shouldExcecuteOnCreate = false;
-          }
-        }
-        break;
-    }
   }
 
   private void setupMenu()
@@ -642,6 +614,21 @@ public class MainFragment extends Fragment
 
   }
 
+  private void CheckIsNeededPasswordResetter()
+  {
+    if (tablePeopleHelper.getVisibility(IDs.getLoginUser()))
+    {
+      Log.d("VISIBILITY", "true");
+      Intent intent = new Intent(getContext(), UserFormActivity.class);
+      intent.putExtra("isNeedPasswordResetter", true);
+      intent.putExtra("people", tablePeopleHelper.getPeople(IDs.getLoginUser()));
+      startActivity(intent);
+    }
+    else
+    {
+      Log.d("VISIBILITY", "false");
+    }
+  }
 
 //  private class HttpRequestTask extends AsyncTask<Void, Void, ViewPendingTransaction[]>
 //  {
@@ -744,5 +731,36 @@ public class MainFragment extends Fragment
         Toast.makeText(getContext(), getString(R.string.error_webservice), Toast.LENGTH_LONG).show();
       }
     });
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onEvent(Event event)
+  {
+    Log.d("EVENT BUS", "masuk");
+    switch (event.getId())
+    {
+      case EventCode.EVENT_MONEY_GET:
+        if (event.getStatus() == Event.COMPLETE && revenue != null && cost != null)
+        {
+          dailyRevenueChart(revenue, cost);
+          weeklyRevenueChart(revenue, cost);
+          monthlyRevenueChart(revenue, cost);
+          yearlyRevenueChart(revenue, cost);
+        }
+        break;
+      case EventCode.EVENT_ROLE_GET:
+        if (event.getStatus() == Event.COMPLETE)
+        {
+          if (shouldExcecuteOnCreate)
+          {
+            setupMenu();
+            setupMainFragmentLayout();
+            Log.d("fragment", "main fragment setup");
+            shouldExcecuteOnCreate = false;
+            CheckIsNeededPasswordResetter();
+          }
+        }
+        break;
+    }
   }
 }

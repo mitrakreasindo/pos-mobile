@@ -8,10 +8,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.RestVariable;
 import com.mitrakreasindo.pos.model.People;
-import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.PeopleService;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -24,8 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +61,6 @@ public class TablePeopleHelper
   private DatabaseHelper DBHelper;
   private SQLiteDatabase db;
   private PeopleService service;
-  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   private int id;
 
   public TablePeopleHelper(Context context)
@@ -136,7 +133,7 @@ public class TablePeopleHelper
       initialValues.put(KEY_GENDER, list[i].getGender());
       if (list[i].getBirthdate() != null)
       {
-        initialValues.put(KEY_BIRTHDATE, dateFormat.format(list[i].getBirthdate()));
+        initialValues.put(KEY_BIRTHDATE, DefaultHelper.dateFormat((list[i].getBirthdate())));
       }
       response += db.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -147,7 +144,7 @@ public class TablePeopleHelper
   {
     ContentValues initialValues = new ContentValues();
 
-    for(int i=0; i<list.size(); i++)
+    for (int i = 0; i < list.size(); i++)
     {
       initialValues.put(KEY_ID, list.get(i).getId());
       initialValues.put(KEY_NAME, list.get(i).getName());
@@ -162,7 +159,7 @@ public class TablePeopleHelper
       initialValues.put(KEY_NPWP, list.get(i).getNpwpPribadi());
       initialValues.put(KEY_PHONE, list.get(i).getPhoneNumber());
       initialValues.put(KEY_GENDER, list.get(i).getGender());
-      initialValues.put(KEY_BIRTHDATE, dateFormat.format(list.get(i).getBirthdate()));
+      initialValues.put(KEY_BIRTHDATE, DefaultHelper.dateFormat(list.get(i).getBirthdate()));
 
       db.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -186,7 +183,7 @@ public class TablePeopleHelper
     initialValues.put(KEY_NPWP, people.getNpwpPribadi());
     initialValues.put(KEY_PHONE, people.getPhoneNumber());
     initialValues.put(KEY_GENDER, people.getGender());
-    initialValues.put(KEY_BIRTHDATE, dateFormat.format(people.getBirthdate()));
+    initialValues.put(KEY_BIRTHDATE, DefaultHelper.dateFormat(people.getBirthdate()));
 
     return db.insert(DATABASE_TABLE, null, initialValues);
   }
@@ -197,9 +194,9 @@ public class TablePeopleHelper
 
     initialValues.put(KEY_ID, people.getId());
     initialValues.put(KEY_NAME, people.getName());
-    initialValues.put(KEY_APPPASSWORD, people.getApppassword());
+//    initialValues.put(KEY_APPPASSWORD, people.getApppassword());
     initialValues.put(KEY_CARD, people.getCard());
-    initialValues.put(KEY_ROLE, people.getRole().getId());
+//    initialValues.put(KEY_ROLE, people.getRole().getId());
     initialValues.put(KEY_VISIBLE, people.isVisible());
     initialValues.put(KEY_IMAGE, people.getImage());
     initialValues.put(KEY_FULLNAME, people.getFullname());
@@ -207,8 +204,8 @@ public class TablePeopleHelper
     initialValues.put(KEY_PERSONAL_ID, people.getPersonalId());
     initialValues.put(KEY_NPWP, people.getNpwpPribadi());
     initialValues.put(KEY_PHONE, people.getPhoneNumber());
-    initialValues.put(KEY_GENDER, people.getGender());
-    initialValues.put(KEY_BIRTHDATE, dateFormat.format(people.getBirthdate()));
+//    initialValues.put(KEY_GENDER, people.getGender());
+//    initialValues.put(KEY_BIRTHDATE, DefaultHelper.dateFormat(people.getBirthdate()));
 
     return db.update(DATABASE_TABLE, initialValues, "id=?", new String[]{people.getId()});
   }
@@ -227,12 +224,56 @@ public class TablePeopleHelper
   {
     open();
     List<People> list = populatePeople(db.query(DATABASE_TABLE,
-      new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
         KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
       null, null, null, null, null));
     close();
 
     return list;
+  }
+
+  public People populateSinglePeople(Cursor cursor)
+  {
+    try
+    {
+      int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
+      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int roleIndex = cursor.getColumnIndexOrThrow(KEY_ROLE);
+      int visibleIndex = cursor.getColumnIndexOrThrow(KEY_VISIBLE);
+      int imageIndex = cursor.getColumnIndexOrThrow(KEY_IMAGE);
+      int fullnameIndex = cursor.getColumnIndexOrThrow(KEY_FULLNAME);
+      int phoneIndex = cursor.getColumnIndexOrThrow(KEY_PHONE);
+      int genderIndex = cursor.getColumnIndexOrThrow(KEY_GENDER);
+      int birthdateIndex = cursor.getColumnIndexOrThrow(KEY_BIRTHDATE);
+
+      People people = new People();
+
+      if (cursor.moveToFirst())
+      {
+        String role = cursor.getString(roleIndex);
+        Role r = new Role();
+        r.setId(role);
+
+        people.setId(cursor.getString(idIndex));
+        people.setName(cursor.getString(nameIndex));
+        people.setRole(r);
+        people.setVisible(cursor.getInt(visibleIndex) > 0);
+        people.setImage(cursor.getBlob(imageIndex));
+        people.setFullname(cursor.getString(fullnameIndex));
+        people.setPhoneNumber(cursor.getString(phoneIndex));
+        people.setGender(cursor.getString(genderIndex));
+        if (cursor.getString(birthdateIndex) != null)
+        {
+          people.setBirthdate(DefaultHelper.stringFormatToDate(cursor.getString(birthdateIndex)));
+        }
+      }
+      return people;
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public List<People> populatePeople(Cursor cursor)
@@ -268,7 +309,7 @@ public class TablePeopleHelper
         people.setGender(cursor.getString(genderIndex));
         if (cursor.getString(birthdateIndex) != null)
         {
-          people.setBirthdate(dateFormat.parse(cursor.getString(birthdateIndex)));
+          people.setBirthdate(DefaultHelper.stringFormatToDate(cursor.getString(birthdateIndex)));
         }
         list.add(people);
       }
@@ -285,12 +326,31 @@ public class TablePeopleHelper
   {
     open();
     List<People> list = populatePeople(db.query(DATABASE_TABLE,
-      new String[] {KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
         KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
-      KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
+      KEY_NAME + " LIKE '%" + name + "%'", null, null, null, null));
     close();
 
     return list;
+  }
+
+  public boolean getVisibility(String username)
+  {
+    boolean visibility;
+
+    open();
+    Cursor cursor = db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+        KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
+      KEY_NAME + " = '" + username + "'", null, null, null, null);
+
+    if (cursor.moveToFirst())
+      visibility = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_VISIBLE)) > 0;
+    else
+      visibility = false;
+
+    close();
+    return visibility;
   }
 
   public String getRoleID(String username)
@@ -310,6 +370,37 @@ public class TablePeopleHelper
 
     close();
     return role;
+  }
+
+  public String getPeopleID(String username)
+  {
+    String id;
+
+    open();
+    Cursor cursor = db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+        KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
+      KEY_NAME + " = '" + username + "'", null, null, null, null);
+
+    if (cursor.moveToFirst())
+      id = cursor.getString(cursor.getColumnIndexOrThrow(KEY_ID));
+    else
+      id = "";
+
+    close();
+    return id;
+  }
+
+  public People getPeople(String username)
+  {
+    open();
+    People people = populateSinglePeople(db.query(DATABASE_TABLE,
+      new String[]{KEY_ID, KEY_NAME, KEY_APPPASSWORD, KEY_CARD, KEY_ROLE, KEY_VISIBLE, KEY_IMAGE,
+        KEY_FULLNAME, KEY_PERSONAL_ID_TYPE, KEY_PERSONAL_ID, KEY_NPWP, KEY_PHONE, KEY_GENDER, KEY_BIRTHDATE},
+      KEY_NAME + " = '" + username + "'", null, null, null, null));
+    close();
+
+    return people;
   }
 
   public void downloadDataAlternate(String kodeMerchant, final int id)
@@ -354,7 +445,10 @@ public class TablePeopleHelper
     {
       open();
       deleteAll();
-      insert(list);
+      if (list != null)
+      {
+        insert(list);
+      }
       close();
 
       EventBus.getDefault().post(new Event(id, Event.COMPLETE));

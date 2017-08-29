@@ -40,8 +40,9 @@
     <string name="person_id_type">ID Type</string>
     <string name="person_id_number">ID Number</string>
     <string name="person_username">Username</string>
-    <string name="person_pass">Password</string>
-    <string name="reinput_pass">Re-input Password</string>
+    <string name="person_old_pass">Old Password</string>
+    <string name="person_pass">New Password</string>
+    <string name="reinput_pass">Re-input New Password</string>
     <string name="card_no">Card No</string>
     <string name="person_role">Role</string>
     <string name="visibility">Visibility</string>
@@ -280,10 +281,11 @@
     <string name="error_get_category">Get category failed</string>
     <string name="error_get_subcategory">Get subcategory failed</string>
     <string name="money">Money</string>
-    <string name="has_no_product">Put stuff first</string>
+    <string name="has_no_product">Please put stuff first</string>
 
     <string name="action_bar_userform_create">Create User</string>
     <string name="action_bar_userform_edit">Edit User</string>
+    <string name="action_bar_userform_edit_pass">Please Change Your Password</string>
     <string name="dialog_pick_image_title">Pick Image Options</string>
     <string name="dialog_pick_image_camera">Take a Photo (Camera)</string>
     <string name="dialog_pick_image_gallery">Pick from Gallery</string>
@@ -349,7 +351,8 @@
     <string name="text_ucapan">THANK YOU</string>
     <string name="printOptions">Print Options</string>
     <string name="Qs_print">Print Receipt?</string>
-    <string name="cashier">Cashier: </string>
+    <string name="cashier">Cashier</string>
+    <string name="consumer">Customer name</string>
     <string name="phone">PHONE: </string>
     <string name="text_suddenly">The printer is looking abruptly</string>
     <string name="text_PrintFinished">Printing is completed</string>
@@ -395,5 +398,10 @@
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Host</string>
     <string name="revenue">Revenue</string>
+    <string name="additional_sales_info">Additional Info</string>
+    <string name="hint_sales_extra_info">Customer Name / Table Number Info</string>
+
+    <string name="parent_category">Parent Category</string>
+    <string name="add_parent_category">Add parent category ?</string>
     <string name="view_list">View List</string>
 </resources>

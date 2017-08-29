@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.fragment.DetailReportFragment;
-import com.mitrakreasindo.pos.model.SubItemSalesReport;
+import com.mitrakreasindo.pos.model.ReportSalesSubItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +23,14 @@ import java.util.List;
 public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.ViewHolder>
 {
 
-  private List<SubItemSalesReport> subProductReports = new ArrayList<SubItemSalesReport>();
+  private List<ReportSalesSubItem> subProductReports = new ArrayList<ReportSalesSubItem>();
   private Context context;
   private LayoutInflater inflater;
-  private SubItemSalesReport subProductReport;
+  private ReportSalesSubItem subProductReport;
   public boolean twoPane = false;
   private DefaultHelper defaultHelper = new DefaultHelper();
 
-  public SubProductAdapter(Context context, List<SubItemSalesReport> subProductReports)
+  public SubProductAdapter(Context context, List<ReportSalesSubItem> subProductReports)
   {
     this.context = context;
     this.subProductReports = subProductReports;
@@ -79,7 +79,7 @@ public class SubProductAdapter extends RecyclerView.Adapter<SubProductAdapter.Vi
     notifyDataSetChanged();
   }
 
-  public void addSubReports(List<SubItemSalesReport> subProductReports)
+  public void addSubReports(List<ReportSalesSubItem> subProductReports)
   {
     this.subProductReports.addAll(subProductReports);
     notifyDataSetChanged();

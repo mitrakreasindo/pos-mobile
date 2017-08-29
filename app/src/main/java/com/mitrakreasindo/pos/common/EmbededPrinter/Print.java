@@ -20,7 +20,7 @@ public class Print
 {
   
   public static void IsiStruk(Context context, List<SalesItem> salesItemList,
-                              List<PrintDataObject> list, double grandTotal, Double Cash)
+                              List<PrintDataObject> list, double grandTotal, Double Cash,String consumerName)
   {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss ");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
@@ -28,7 +28,7 @@ public class Print
     String tanggal = formatter.format(curDate);
     String date = tanggal;
     String separator = "--------------------------------";
-    String cashier = "";
+    String cashier,consumer = "";
     
     if (Cash == 0)
     {
@@ -41,7 +41,14 @@ public class Print
       {
         cashier = IDs.getLoginUserFullname().substring(0, 20);
       }
-  
+      if (consumerName.length() <= 11)
+      {
+        consumer = consumerName;
+      }
+      else
+      {
+        consumer = consumerName.substring(0, 11);
+      }
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
       PrintDataObject printDataObject1 = new PrintDataObject(strHeader, 8, true, PrintDataObject.ALIGN.CENTER);
@@ -50,8 +57,9 @@ public class Print
       list.add(printDataObject1);
   
       String tgl = String.format("%-23s", date);
-      String kasir = String.format(context.getString(R.string.cashier) + " " + cashier);
-      String strDC = tgl + "\n" + kasir + "\n" + separator;
+      String kasir = String.format("%-16s",context.getString(R.string.cashier));
+      String customer = String.format("%-16s",context.getString(R.string.consumer));
+      String strDC = tgl + "\n" + kasir + ": " + cashier + "\n" + customer +": " + consumer + "\n" + separator;
       PrintDataObject printDataObject3 = new PrintDataObject(strDC);
       printDataObject3.setIsLittleSize(false);
       printDataObject3.setBold(false);
@@ -137,6 +145,14 @@ public class Print
       {
         cashier = IDs.getLoginUserFullname().substring(0, 20);
       }
+      if (consumerName.length() <= 11)
+      {
+        consumer = consumerName;
+      }
+      else
+      {
+        consumer = consumerName.substring(0, 11);
+      }
   
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
@@ -146,8 +162,9 @@ public class Print
       list.add(printDataObject1);
   
       String tgl = String.format("%-23s", date);
-      String kasir = String.format(context.getString(R.string.cashier) + " " + cashier);
-      String strDC = tgl + "\n" + kasir + "\n" + separator;
+      String kasir = String.format("%-16s",context.getString(R.string.cashier));
+      String customer = String.format("%-16s",context.getString(R.string.consumer));
+      String strDC = tgl + "\n" + kasir + ": " + cashier + "\n" + customer +": " + consumer + "\n" + separator;
       PrintDataObject printDataObject3 = new PrintDataObject(strDC);
       printDataObject3.setIsLittleSize(false);
       printDataObject3.setBold(false);

@@ -42,6 +42,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   private CategoryService categoryService;
   private Category category;
   private List<String> inactive;
+  private TableCategoryHelper tableCategoryHelper;
 
   public CategoryListAdapter(Context context, List<Category> categories)
   {
@@ -63,7 +64,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
   @Override
   public void onBindViewHolder(CategoryListAdapter.ViewHolder holder, int position)
   {
+    tableCategoryHelper = new TableCategoryHelper(context);
+
     final Category c = categories.get(position);
+//    final Category category1 = tableCategoryHelper.getCategoryById(c.getId());
     holder.txtCategory.setText(c.getName());
 
     if (!inactive.contains(MenuIds.rp_stk_category_action_update))
@@ -75,8 +79,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         public void onClick(View view)
         {
           Intent intent = new Intent(context, CategoryFormActivity.class);
-          intent.putExtra("id", c.getId());
-          intent.putExtra("name", c.getName());
+          intent.putExtra("category", c);
           context.startActivity(intent);
         }
       });
@@ -198,6 +201,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             tableCategoryHelper.open();
             tableCategoryHelper.delete(c.getId());
             tableCategoryHelper.close();
+
+            removeCategory(c);
 
           }
           Toast.makeText(context, responseMessage, Toast.LENGTH_SHORT).show();

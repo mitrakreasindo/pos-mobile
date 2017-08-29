@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubProductAdapter;
-import com.mitrakreasindo.pos.model.SubSalesReport;
+import com.mitrakreasindo.pos.model.ReportSalesSub;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +38,7 @@ public class DetailReportFragment extends Fragment
   Unbinder unbinder;
   private SubProductAdapter subProductAdapter;
   private Bundle bundle;
-  private SubSalesReport subReport;
+  private ReportSalesSub subReport;
   private DefaultHelper defaultHelper = new DefaultHelper();
   private boolean twoPane = false;
 
@@ -57,7 +57,7 @@ public class DetailReportFragment extends Fragment
     bundle = getArguments();
     if (bundle != null)
     {
-      subReport = (SubSalesReport) bundle.getSerializable("subReport");
+      subReport = (ReportSalesSub) bundle.getSerializable("subReport");
       twoPane = bundle.getBoolean("twoPane");
     }
 

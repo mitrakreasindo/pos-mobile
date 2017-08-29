@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.DefaultHelper;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
+import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableSalesItemHelper;
@@ -76,9 +78,9 @@ import static java.util.UUID.randomUUID;
 
 public class SalesActivity extends AppCompatActivity
 {
-  
+
   private static final String TAG = SalesActivity.class.getSimpleName();
-  
+
   public static Activity sActivity;
   private final String siteguid = "a73c83f2-3c42-42a7-8f19-7d7cbea17286";
   @BindView(R.id.toolbar)
@@ -101,22 +103,23 @@ public class SalesActivity extends AppCompatActivity
   ImageView btnSalesReturns;
   
   private DecimalFormat decimalFormat;
-  
+
   String example = "Convert Java String";
   byte[] bytes = example.getBytes();
-  
+
   private DecoratedBarcodeView barcodeView;
   private BeepManager beepManager;
   private String lastText;
-  
+
   private SalesService salesService;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
-  
+
   private SalesListAdapter salesListAdapter;
-  
+
   private TableProductHelper tableProductHelper;
-  
+  private TablePeopleHelper tablePeopleHelper;
+
   private Sales sales;
   private Product product;
   private SalesPack salesPack;
@@ -127,39 +130,40 @@ public class SalesActivity extends AppCompatActivity
   private TaxLine taxLine;
   private Customer customer;
   private People people;
-  
+
   private ViewSale viewsales;
   private ViewSalesItem viewsalesitem;
   private ViewReceipt viewreceipt;
   private ViewPayment viewpayment;
   private ViewStockDiary viewstockdiary;
   private ViewTaxLine viewtaxline;
-  
+
   private List<ViewSalesItem> viewsalesitems = new ArrayList<>();
   private List<ViewPayment> viewpayments = new ArrayList<>();
   private List<ViewStockDiary> viewstockdiaries = new ArrayList<>();
   private List<ViewTaxLine> viewtaxlines = new ArrayList<>();
+  private EditText editTextExtraSalesInfo;
 
 //  String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
-  
+
   private BarcodeCallback callback = new BarcodeCallback()
   {
     @Override
     public void barcodeResult(BarcodeResult result)
     {
-      
+
       Product productByCode = tableProductHelper.getProduct(result.getText());
-      
+
       if (productByCode != null)
       {
 
 //        data();
-        
+
         Tax tax = new Tax();
         tax.setId("001");
-        
+
         Log.d("PRODUCTOPER", productByCode.getName());
-        
+
         SalesItem itemByBarcode = new SalesItem();
         itemByBarcode.setProduct(productByCode);
         itemByBarcode.setAttributes(bytes);
@@ -168,7 +172,7 @@ public class SalesActivity extends AppCompatActivity
         itemByBarcode.setSalesId(sales);
         itemByBarcode.setSflag(true);
         itemByBarcode.setTaxid(tax);
-        
+
         salesListAdapter.addSalesItem(itemByBarcode);
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
         
@@ -177,15 +181,15 @@ public class SalesActivity extends AppCompatActivity
       {
         Toast.makeText(SalesActivity.this, "Product not found!", Toast.LENGTH_LONG).show();
       }
-      
-      
+
+
       if (result.getText() != null || result.getText().equals(lastText))
       {
         barcodeScanner.pause();
-        
+
         new CountDownTimer(1000, 1000)
         {
-          
+
           public void onTick(long millisUntilFinished)
           {
 //            salesProductTotal.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -198,40 +202,45 @@ public class SalesActivity extends AppCompatActivity
         }.start();
         // Prevent duplicate scans
       }
-      
+
       lastText = result.getText();
       barcodeView.setStatusText(result.getText());
       beepManager.playBeepSoundAndVibrate();
-      
+
       //Added preview of scanned barcode
       ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
       imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
       salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-      
+
     }
-    
+
     @Override
     public void possibleResultPoints(List<ResultPoint> resultPoints)
     {
     }
   };
-  
+
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_sales);
     ButterKnife.bind(this);
-    
+
+    editTextExtraSalesInfo = new EditText(this);
+
     salesService = ClientService.createService().create(SalesService.class);
-    
+
     tableProductHelper = new TableProductHelper(this);
-    
+    tablePeopleHelper = new TablePeopleHelper(this);
+
+    Log.d("PERSONID", tablePeopleHelper.getPeopleID(IDs.getLoginUser()));
+
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
-    
+
     salesListAdapter = new SalesListAdapter(this, new ArrayList<SalesItem>());
-    
+
     final ClosedCash closedCash = new ClosedCash();
     if (IDs.getLoginCloseCashID() == null)
     {
@@ -241,16 +250,16 @@ public class SalesActivity extends AppCompatActivity
     }
     else
       closedCash.setMoney(IDs.getLoginCloseCashID());
-    
+
     Tax tax = new Tax();
     tax.setId("001");
-    
+
     people = new People();
-    people.setId("1111111");
-    
+    people.setId(tablePeopleHelper.getPeopleID(IDs.getLoginUser()));
+
     customer = new Customer();
     customer.setId(null);
-    
+
     receipt = new Receipt();
     receipt.setId(randomUUID().toString());
     receipt.setAttributes(null);
@@ -260,7 +269,7 @@ public class SalesActivity extends AppCompatActivity
     receipt.setPerson(IDs.getLoginUser());
     receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
     receipt.setSflag(true);
-    
+
     sales = new Sales();
     sales.setId(receipt.getId());
     sales.setSalesnum(1);
@@ -271,13 +280,13 @@ public class SalesActivity extends AppCompatActivity
     sales.setCustomer(customer);
     sales.setPerson(people);
     sales.setReceipt(receipt);
-    
+
     listSalesProduct.setAdapter(salesListAdapter);
     listSalesProduct.setHasFixedSize(true);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     listSalesProduct.setLayoutManager(layoutManager);
     listSalesProduct.setItemAnimator(new DefaultItemAnimator());
-    
+
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
     {
@@ -318,7 +327,7 @@ public class SalesActivity extends AppCompatActivity
       @Override
       public void onClick(View v)
       {
-        
+
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
@@ -335,17 +344,14 @@ public class SalesActivity extends AppCompatActivity
           intent.putExtra("sales_id", sales.getId());
           startActivity(intent);
         }
-        
-        
       }
     });
-    
+
     btnSalesSave.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View v)
       {
-        
         if (salesListAdapter.salesItems.size() == 0)
         {
           Toast.makeText(SalesActivity.this, R.string.has_no_product, Toast.LENGTH_LONG).show();
@@ -356,53 +362,70 @@ public class SalesActivity extends AppCompatActivity
 //          tableSalesHelper.open();
 //          tableSalesHelper.insertSales(sales);
 //          tableSalesHelper.close();
-          
-          TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
-          tableSalesItemHelper.open();
-          tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
-          tableSalesItemHelper.close();
-          
-          data();
-          salesPack = new SalesPack();
-          salesPack.setSales(viewsales);
-          salesPack.setReceipts(viewreceipt);
-          salesPack.setSalesItems(viewsalesitems);
-          salesPack.setPayments(viewpayments);
-          salesPack.setStockdiary(viewstockdiaries);
-          salesPack.setTaxlines(viewtaxlines);
-          
-          TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
-          tableSalesHelper.open();
-          tableSalesHelper.insertSales(sales);
-          tableSalesHelper.close();
-          
-          postSales(kodeMerchant, salesPack);
-          
-          finish();
+
+          editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
+          new AlertDialog.Builder(SalesActivity.this)
+            .setTitle(R.string.additional_sales_info)
+            .setView(editTextExtraSalesInfo)
+            .setCancelable(false)
+            .setPositiveButton
+            (
+              R.string.yes, new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                  TableSalesItemHelper tableSalesItemHelper = new TableSalesItemHelper(SalesActivity.this);
+                  tableSalesItemHelper.open();
+                  tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
+                  tableSalesItemHelper.close();
+
+                  data();
+                  salesPack = new SalesPack();
+                  salesPack.setSales(viewsales);
+                  salesPack.setReceipts(viewreceipt);
+                  salesPack.setSalesItems(viewsalesitems);
+                  salesPack.setPayments(viewpayments);
+                  salesPack.setStockdiary(viewstockdiaries);
+                  salesPack.setTaxlines(viewtaxlines);
+
+                  TableSalesHelper tableSalesHelper = new TableSalesHelper(SalesActivity.this);
+                  tableSalesHelper.open();
+                  tableSalesHelper.insertSales(sales);
+                  tableSalesHelper.close();
+
+                  postSales(kodeMerchant, salesPack);
+
+                  finish();
+                }
+              }
+            )
+            .setNegativeButton(R.string.no, null)
+            .show();
         }
-        
+
       }
     });
-    
-    
+
+
     final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tableProductHelper.getData());
     edittextSearchProduct.setAdapter(adapter);
     edittextSearchProduct.setDropDownBackgroundResource(R.color.white);
     edittextSearchProduct.setOnItemClickListener(new AdapterView.OnItemClickListener()
     {
-      
+
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-        
+
         Product productBySearch = (Product) adapter.getItem(position);
         adapter.getItem(position);
-        
+
         Tax tax = new Tax();
         tax.setId("001");
 
 //        data();
-        
+
         SalesItem itemBySearch = new SalesItem();
         itemBySearch.setId(0);
         itemBySearch.setProduct(productBySearch);
@@ -412,57 +435,57 @@ public class SalesActivity extends AppCompatActivity
         itemBySearch.setSalesId(sales);
         itemBySearch.setSflag(true);
         itemBySearch.setTaxid(tax);
-        
+
         salesListAdapter.addSalesItem(itemBySearch);
         edittextSearchProduct.setText("");
         salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-        
+
       }
-      
+
     });
-    
+
     salesListAdapter.notifyDataSetChanged();
-    
+
     decimalFormat = new DecimalFormat("###,###.###");
-    
+
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
-    
+
     barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
     barcodeView.decodeContinuous(callback);
     beepManager = new BeepManager(this);
-    
-    
+
+
     sActivity = this;
   }
-  
-  
+
+
   @Override
   protected void onResume()
   {
     super.onResume();
-    
+
     barcodeView.resume();
   }
-  
+
   @Override
   protected void onPause()
   {
     super.onPause();
-    
+
     barcodeView.pause();
   }
-  
+
   public void triggerScan(View view)
   {
     barcodeView.decodeSingle(callback);
   }
-  
+
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event)
   {
     return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
   }
-  
+
   @Override
   public void onBackPressed()
   {
@@ -477,7 +500,7 @@ public class SalesActivity extends AppCompatActivity
         finish();
       }
     });
-    
+
     confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
     {
       @Override
@@ -486,32 +509,41 @@ public class SalesActivity extends AppCompatActivity
         dialog.dismiss();
       }
     });
-    
+
     confirmationDialog.show();
-    
+
   }
-  
+
   public void data()
   {
     Tax tax = new Tax();
     tax.setId("001");
-    
+
     Location location = new Location();
     location.setId(UUID.randomUUID().toString());
-    
+
+//    salesItem = new SalesItem();
+//    salesItem.setProduct(product);
+//    salesItem.setAttributes(bytes);
+//    salesItem.setUnits(1);
+//    salesItem.setPrice(product.getPricesell());
+//    salesItem.setSalesId(sales);
+//    salesItem.setSflag(true);
+//    salesItem.setTaxid(tax);
+
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
     payment.setPayment("cash");
     payment.setTotal(formatTotalPrice());
     payment.setTransid(null);
-    payment.setNotes(null);
+    payment.setNotes(editTextExtraSalesInfo.getText().toString());
     payment.setTendered(0);
     payment.setCardname(null);
     payment.setReturnmsg(null);
     payment.setSiteguid(IDs.SITE_GUID);
     payment.setSflag(true);
     payment.setReceipt(receipt);
-    
+
     taxLine = new TaxLine();
     taxLine.setId(UUID.randomUUID().toString());
     taxLine.setBase(1000);
@@ -520,19 +552,19 @@ public class SalesActivity extends AppCompatActivity
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
     taxLine.setTaxid(tax);
-    
-    stockDiary = new StockDiary();
-    stockDiary.setId(randomUUID().toString());
-    stockDiary.setReason(0);
-    stockDiary.setUnits(1);
-    stockDiary.setPrice(salesItem.getProduct().getPricesell());
-    stockDiary.setAppuser(IDs.getLoginUser());
-    stockDiary.setSiteguid(IDs.SITE_GUID);
-    stockDiary.setSflag(true);
-    stockDiary.setAttributesetinstanceId(null);
-    stockDiary.setLocation(location);
-    stockDiary.setProduct(salesItem.getProduct());
-    
+
+//    stockDiary = new StockDiary();
+//    stockDiary.setId(randomUUID().toString());
+//    stockDiary.setReason(0);
+//    stockDiary.setUnits(1);
+//    stockDiary.setPrice(salesItem.getProduct().getPricesell());
+//    stockDiary.setAppuser(IDs.getLoginUser());
+//    stockDiary.setSiteguid(IDs.SITE_GUID);
+//    stockDiary.setSflag(true);
+//    stockDiary.setAttributesetinstanceId(null);
+//    stockDiary.setLocation(location);
+//    stockDiary.setProduct(salesItem.getProduct());
+
     viewtaxline = new ViewTaxLine();
     viewtaxline.setId(taxLine.getId());
     viewtaxline.setReceipt(taxLine.getReceipt().getId());
@@ -542,11 +574,11 @@ public class SalesActivity extends AppCompatActivity
     viewtaxline.setSiteguid(IDs.SITE_GUID);
     viewtaxline.setSflag(taxLine.getSflag());
     viewtaxline.setTaxName(null);
-    
+
     viewsales = new ViewSale();
     viewsales.setId(receipt.getId());
     viewsales.setSalesnum(sales.getSalesnum());
-    viewsales.setPerson("0");
+    viewsales.setPerson(sales.getPerson().getId());
     viewsales.setCustomer(null);
     viewsales.setSalestype(sales.getSalestype());
     viewsales.setStatus(viewsales.getStatus());
@@ -555,10 +587,10 @@ public class SalesActivity extends AppCompatActivity
     viewsales.setCustomerName(null);
     viewsales.setPersonName(null);
     viewsales.setDatenew(DefaultHelper.dateFormat(new Date()));
-    
+
     viewreceipt = new ViewReceipt();
     viewreceipt.setId(receipt.getId());
-    
+
     if (IDs.getLoginCloseCashID() == null)
     {
       String id = UUID.randomUUID().toString();
@@ -567,14 +599,14 @@ public class SalesActivity extends AppCompatActivity
     }
     else
       viewreceipt.setMoney(IDs.getLoginCloseCashID());
-    
+
     viewreceipt.setDatenew(DefaultHelper.dateFormat(new Date()));
     viewreceipt.setPerson(receipt.getPerson());
     viewreceipt.setAttributes(null);
     viewreceipt.setSiteguid(IDs.SITE_GUID);
     viewreceipt.setSflag(true);
     viewreceipt.setHost("");
-    
+
     viewpayment = new ViewPayment();
     viewpayment.setId(payment.getId());
     viewpayment.setReceipt(receipt.getId());
@@ -588,11 +620,11 @@ public class SalesActivity extends AppCompatActivity
     viewpayment.setSiteguid(IDs.SITE_GUID);
     viewpayment.setSflag(payment.getSflag());
     viewpayment.setDatenew(DefaultHelper.dateFormat(new Date()));
-    
+
     for (int i = 0; i < salesListAdapter.salesItems.size(); i++)
     {
       product = salesListAdapter.salesItems.get(i).getProduct();
-      
+
       salesItem = salesListAdapter.salesItems.get(i);
       salesItem.setProduct(product);
       salesItem.setAttributes(bytes);
@@ -601,7 +633,7 @@ public class SalesActivity extends AppCompatActivity
       salesItem.setSalesId(sales);
       salesItem.setSflag(true);
       salesItem.setTaxid(tax);
-      
+
       viewsalesitem = new ViewSalesItem();
       viewsalesitem.setId(0);
       viewsalesitem.setSales_id(sales.getId());
@@ -619,7 +651,7 @@ public class SalesActivity extends AppCompatActivity
       viewsalesitem.setTaxName(null);
       viewsalesitem.setRate(null);
       viewsalesitems.add(viewsalesitem);
-      
+
       stockDiary = new StockDiary();
       stockDiary.setId(UUID.randomUUID().toString());
       stockDiary.setReason(0);
@@ -631,7 +663,7 @@ public class SalesActivity extends AppCompatActivity
       stockDiary.setAttributesetinstanceId(null);
       stockDiary.setLocation(location);
       stockDiary.setProduct(salesItem.getProduct());
-      
+
       viewstockdiary = new ViewStockDiary();
       viewstockdiary.setId(stockDiary.getId());
       viewstockdiary.setProduct(stockDiary.getProduct().getId());
@@ -649,17 +681,17 @@ public class SalesActivity extends AppCompatActivity
     viewtaxlines.add(viewtaxline);
     viewpayments.add(viewpayment);
   }
-  
+
   public void refreshData()
   {
     salesProductTotal.setText(decimalFormat.format(salesListAdapter.grandTotal()));
   }
-  
+
   public void setTextTotal(double total)
   {
     salesProductTotal.setText(decimalFormat.format(total));
   }
-  
+
   public void postSales(String kodeMerchant, SalesPack salesPack)
   {
     Call<HashMap<Integer, String>> saveSales = salesService.postSales(kodeMerchant, salesPack);
@@ -667,7 +699,7 @@ public class SalesActivity extends AppCompatActivity
     {
       private int responseCode;
       private String responseMessage;
-      
+
       @Override
       public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
       {
@@ -676,7 +708,7 @@ public class SalesActivity extends AppCompatActivity
         {
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
-          
+
           if (responseCode == 0)
           {
 //            progressDialog.dismiss();
@@ -685,7 +717,7 @@ public class SalesActivity extends AppCompatActivity
           }
         }
       }
-      
+
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
@@ -695,11 +727,11 @@ public class SalesActivity extends AppCompatActivity
       }
     });
   }
-  
+
   private double formatTotalPrice()
   {
     String originalString = salesProductTotal.getText().toString();
-    
+
     if (originalString.contains(",") || originalString.contains("."))
     {
       originalString = originalString.replaceAll("[,.]", "");

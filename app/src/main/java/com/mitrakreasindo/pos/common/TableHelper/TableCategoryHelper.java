@@ -123,7 +123,12 @@ public class TableCategoryHelper
 
     initialValues.put(KEY_ID, category.getId());
     initialValues.put(KEY_NAME, category.getName());
-    initialValues.put(KEY_PARENTID, category.getParentid().getId());
+
+    if (category.getParentid() != null)
+      initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    else
+      initialValues.put(KEY_PARENTID, "");
+
     initialValues.put(KEY_TEXTTIP, category.getTexttip());
     initialValues.put(KEY_IMAGE, category.getImage());
     initialValues.put(KEY_COLOUR, category.getColour());
@@ -132,28 +137,67 @@ public class TableCategoryHelper
     return db.update(DATABASE_TABLE, initialValues, "id=?", new String[] {category.getId()});
   }
 
-  public List<Category> populateCategory(Cursor cursor)
+  public List<Category> populateCategories(Cursor cursor)
   {
     try
     {
       List<Category> list = new ArrayList<>();
 
+      int parentIdIndex = cursor.getColumnIndexOrThrow(KEY_PARENTID);
       int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
       int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
       for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
       {
         String name = cursor.getString(nameIndex);
         String id = cursor.getString(idIndex);
+        String parentId = cursor.getString(parentIdIndex);
+
+        Category parent = new Category();
+        parent.setId(parentId);
 
         Category category = new Category();
         category.setId(id);
         category.setName(name);
+        category.setParentid(parent);
         list.add(category);
       }
 
       return list;
     }
     catch (Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public Category populateCategory(Cursor cursor)
+  {
+    try
+    {
+      Category category = new Category();
+
+      int idIndex = cursor.getColumnIndexOrThrow(KEY_ID);
+      int nameIndex = cursor.getColumnIndexOrThrow(KEY_NAME);
+      int parentIdIndex = cursor.getColumnIndexOrThrow(KEY_PARENTID);
+
+      for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
+      {
+        String id = cursor.getString(idIndex);
+        String name = cursor.getString(nameIndex);
+        String parentId = cursor.getString(parentIdIndex);
+
+        Category parent = new Category();
+        parent.setId(parentId);
+
+        category = new Category();
+        category.setId(id);
+        category.setName(name);
+        category.setParentid(parent);
+      }
+
+      return category;
+    } catch (Exception e)
     {
       e.printStackTrace();
       return null;
@@ -180,17 +224,27 @@ public class TableCategoryHelper
   public List<Category> getData()
   {
     open();
-    List<Category> list = populateCategory(db.query(DATABASE_TABLE,
+    List<Category> list = populateCategories(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
       null, null, null, null, null));
     close();
     return list;
   }
 
+  public Category getCategoryById(String id)
+  {
+    open();
+    Category category = populateCategory(db.query(DATABASE_TABLE,
+      new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
+      null, null, null, null, null));
+    close();
+    return category;
+  }
+
   public List<Category> getData(String name)
   {
     open();
-    List<Category> list = populateCategory(db.query(DATABASE_TABLE,
+    List<Category> list = populateCategories(db.query(DATABASE_TABLE,
       new String[] {KEY_ID, KEY_NAME, KEY_PARENTID, KEY_TEXTTIP, KEY_IMAGE, KEY_COLOUR, KEY_CATORDER},
       KEY_NAME + " LIKE '%"+name+"%'", null, null, null, null));
     close();
@@ -208,7 +262,10 @@ public class TableCategoryHelper
         final List<Category> list = response.body();
         open();
         deleteAll();
-        insert(list);
+        if (list != null)
+        {
+          insert(list);
+        }
         close();
       }
 

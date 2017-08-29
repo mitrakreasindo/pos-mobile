@@ -40,8 +40,9 @@
     <string name="person_id_type">Tipe ID</string>
     <string name="person_id_number">Nomor ID</string>
     <string name="person_username">Nama Pengguna (Alias)</string>
-    <string name="person_pass">Kata Sandi</string>
-    <string name="reinput_pass">Masukan Ulang Kata Sandi</string>
+    <string name="person_old_pass">Kata Sandi Lama</string>
+    <string name="person_pass">Kata Sandi Baru</string>
+    <string name="reinput_pass">Masukan Ulang Kata Sandi Baru</string>
     <string name="card_no">Nomor Kartu</string>
     <string name="person_role">Jabatan</string>
     <string name="visibility">Visibilitas</string>
@@ -282,6 +283,7 @@
 
     <string name="action_bar_userform_create">Tambah Pengguna</string>
     <string name="action_bar_userform_edit">Edit Pengguna</string>
+    <string name="action_bar_userform_edit_pass">Mohon Ubah Kata Sandi Anda</string>
     <string name="dialog_pick_image_title">Opsi Pilih Gambar</string>
     <string name="dialog_pick_image_camera">Ambil Foto (Kamera)</string>
     <string name="dialog_pick_image_gallery">Pilih dari Galeri</string>
@@ -344,7 +346,8 @@
     <string name="text_Change">Kembali</string>
     <string name="Qs_print">Cetak Struk?</string>
     <string name="text_notEnough">Uang tidak cukup</string>
-    <string name="cashier">Kasir: </string>
+    <string name="cashier">Kasir </string>
+    <string name="consumer">Nama Pelanggan</string>
     <string name="text_suddenly">Printer mencetak tiba-tiba</string>
     <string name="text_PrintFinished">Data cetak selesai</string>
     <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>
@@ -385,5 +388,12 @@
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Penyedia</string>
     <string name="revenue">Revenue</string>
+    <string name="additional_sales_info">Informasi Tambahan</string>
+    <string name="has_no_product">Mohon input barang terlebih dahulu</string>
+    <string name="hint_sales_extra_info">Info Nama Pelanggan / Nomor Meja</string>
+    <string name="file_downloaded"></string>
+
+    <string name="parent_category">Parent Category</string>
+    <string name="add_parent_category">Add parent category ?</string>
     <string name="view_list">View List</string>
 </resources>

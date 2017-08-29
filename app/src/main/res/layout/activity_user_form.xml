@@ -125,10 +125,26 @@
                 android:inputType="textPersonName"/>
 
             <TextView
-                android:id="@+id/textview_pass"
+                android:id="@+id/textview_old_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edittext_username"
+                android:text="@string/person_old_pass"/>
+
+            <EditText
+                android:id="@+id/edittext_old_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_old_pass"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="@drawable/ic_phonelink_lock"
+                android:inputType="textPassword"/>
+
+            <TextView
+                android:id="@+id/textview_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittext_old_password"
                 android:text="@string/person_pass"/>
 
             <EditText
@@ -177,6 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spinner_role"
+                android:visibility="gone"
                 android:text="@string/visibility"/>
 
             <RadioGroup
@@ -185,6 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textview_visibility"
                 android:layout_marginBottom="5dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <RadioButton

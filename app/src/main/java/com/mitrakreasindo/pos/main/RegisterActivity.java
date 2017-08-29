@@ -257,6 +257,7 @@ public class RegisterActivity extends AppCompatActivity
       people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
       people.setEmail(edittextOwnerEmail.getText().toString());
       people.setPhoneNumber(edittextOwnerPhone.getText().toString());
+      //Need Password Resetter on first login
       people.setVisible(true);
 
       merchantRegistration.setMerchant(merchant);

@@ -7,12 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.RestVariable;
-import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.Tax;
 import com.mitrakreasindo.pos.model.TaxCategory;
 import com.mitrakreasindo.pos.model.TaxCusCategory;
@@ -260,7 +256,10 @@ public class TableTaxesHelper
     {
       open();
       deleteAll();
-      insert(list);
+      if (list != null)
+      {
+        insert(list);
+      }
       close();
     }
   }

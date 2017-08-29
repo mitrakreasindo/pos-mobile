@@ -33,8 +33,8 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.adapter.SubReportListAdapter;
 import com.mitrakreasindo.pos.model.Download;
-import com.mitrakreasindo.pos.model.SalesReport;
-import com.mitrakreasindo.pos.model.SubSalesReport;
+import com.mitrakreasindo.pos.model.Report;
+import com.mitrakreasindo.pos.model.ReportSalesSub;
 import com.mitrakreasindo.pos.service.ReportService;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class ReportActivity extends AppCompatActivity
   public static final String MESSAGE_PROGRESS = "message_progress";
   private static final int PERMISSION_REQUEST_CODE = 1;
 
-  private SalesReport data;
+  private Report data;
 
 
   @Override
@@ -199,7 +199,7 @@ public class ReportActivity extends AppCompatActivity
       }
     });
 
-    reportListAdapter = new SubReportListAdapter(this, new ArrayList<SubSalesReport>());
+    reportListAdapter = new SubReportListAdapter(this, new ArrayList<ReportSalesSub>());
 //    reportListAdapter = new SubReportListAdapter(this, SubReport.data());
 
     listReport.setAdapter(reportListAdapter);
@@ -255,22 +255,22 @@ public class ReportActivity extends AppCompatActivity
     progressDialog.setMessage(getString(R.string.prepare_data));
     progressDialog.show();
 
-    final Call<SalesReport> reportCall = reportService
+    final Call<Report> reportCall = reportService
       .getReportAll(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    reportCall.enqueue(new Callback<SalesReport>()
+    reportCall.enqueue(new Callback<Report>()
     {
       @Override
-      public void onResponse(Call<SalesReport> call, Response<SalesReport> response)
+      public void onResponse(Call<Report> call, Response<Report> response)
       {
-        SalesReport data = response.body();
+        Report data = response.body();
         reportListAdapter.clear();
         reportListAdapter.addSubReports(data.getSubReports());
       }
 
       @Override
-      public void onFailure(Call<SalesReport> call, Throwable t)
+      public void onFailure(Call<Report> call, Throwable t)
       {
       }
 

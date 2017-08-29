@@ -1,6 +1,6 @@
 package com.mitrakreasindo.pos.service;
 
-import com.mitrakreasindo.pos.model.SalesReport;
+import com.mitrakreasindo.pos.model.Report;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,7 +17,7 @@ public interface ReportService
 {
 
   @GET("reports/sales/")
-  Call<SalesReport> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+  Call<Report> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
   @GET("reports/sales/download/pdf")
   @Streaming
