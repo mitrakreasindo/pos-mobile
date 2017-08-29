@@ -173,9 +173,6 @@ public class PaymentActivity extends AppCompatActivity
   private AidlPrinterStateChangeListener callback = new PrinterCallback();
   private Context mcontext;
   
-
-  private TablePeopleHelper tablePeopleHelper;
-
   private TablePeopleHelper tablePeopleHelper;
 
   public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
