@@ -126,6 +126,8 @@ public class TableCategoryHelper
 
     if (category.getParentid() != null)
       initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    else
+      initialValues.put(KEY_PARENTID, "");
 
     initialValues.put(KEY_TEXTTIP, category.getTexttip());
     initialValues.put(KEY_IMAGE, category.getImage());

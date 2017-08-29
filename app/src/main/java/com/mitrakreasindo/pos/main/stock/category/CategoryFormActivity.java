@@ -144,6 +144,7 @@ public class CategoryFormActivity extends AppCompatActivity
           parentCategoryForm.setVisibility(View.VISIBLE);
         else
           parentCategoryForm.setVisibility(View.GONE);
+
       }
     });
   }
@@ -189,7 +190,7 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setCatshowname(true);
     category.setImage(null);
 
-    if (!addParentCategorySwitch.getSplitTrack())
+    if (addParentCategorySwitch.isChecked())
       category.setParentid(dataCategory.get(parentCategorySpinner.getSelectedItemPosition()));
     else
       category.setParentid(null);
@@ -265,7 +266,7 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setCatshowname(true);
     category.setImage(null);
 
-    if (!addParentCategorySwitch.getSplitTrack())
+    if (addParentCategorySwitch.isChecked())
       category.setParentid(dataCategory.get(parentCategorySpinner.getSelectedItemPosition()));
     else
       category.setParentid(null);
@@ -299,6 +300,9 @@ public class CategoryFormActivity extends AppCompatActivity
             tableCategoryHelper.open();
             tableCategoryHelper.update(category);
             tableCategoryHelper.close();
+
+            categoryListAdapter.addCategory(category);
+            categoryListAdapter.notifyDataSetChanged();
 
             progressDialog.dismiss();
 
