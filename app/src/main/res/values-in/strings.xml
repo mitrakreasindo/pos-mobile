@@ -274,6 +274,7 @@
     <string name="register_question">Keluar Registrasi</string>
     <string name="register_question_message">Apakah anda yakin ingin keluar dari halaman registrasi?</string>
     <string name="yes">Ya</string>
+    <string name="ok">Ok</string>
     <string name="no">Tidak</string>
 
     <string name="progress_message">Harap tunggu</string>

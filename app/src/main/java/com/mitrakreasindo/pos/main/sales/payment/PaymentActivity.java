@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -125,6 +126,8 @@ public class PaymentActivity extends AppCompatActivity
   private Bundle bundle;
   private String salesId;
   private boolean retur = false;
+  private static boolean PrinterMessage;
+  private String consumerName;
   
   private TableSalesItemHelper tableSalesItemHelper;
   private DiaryStockService diaryStockService;
@@ -169,7 +172,7 @@ public class PaymentActivity extends AppCompatActivity
   public AidlDeviceManager manager = null;
   private AidlPrinterStateChangeListener callback = new PrinterCallback();
   private Context mcontext;
-  private static boolean PrinterMessage;
+  
 
   private TablePeopleHelper tablePeopleHelper;
 
@@ -369,130 +372,157 @@ public class PaymentActivity extends AppCompatActivity
     Log.d("price", String.valueOf(formatTotalPrice()));
     if (paymentProductListAdapter.grandTotal() <= formatTotalPrice())
     {
-      final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-      confirmationDialog.setTitle(R.string.printOptions);
-      confirmationDialog.setMessage(R.string.Qs_print);
+      if(editTextExtraSalesInfo.getParent() != null)
+        ((ViewGroup)editTextExtraSalesInfo.getParent()).removeView(editTextExtraSalesInfo);
       
-      confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+      editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
+      final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+      confirmationDialog.setTitle(R.string.additional_sales_info);
+      confirmationDialog.setView(editTextExtraSalesInfo);
+      confirmationDialog.setCancelable(false);
+      
+      confirmationDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
       {
         @Override
         public void onClick(DialogInterface dialog, int which)
         {
-      if (manager != null)
-      {
-        cetak();
-      }
-      else
-      {
-        if (mService == null)
-        {
-          Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
-            .show();
-          Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
-          startActivity(intent);
-          return;
-        }
-        else
-        {
-          if (mService.getState() == BluetoothService.STATE_CONNECTED)
+          Log.d( "name: ", String.valueOf(editTextExtraSalesInfo.getText().length()));
+          if (editTextExtraSalesInfo.getText().length() == 0)
           {
-            PrintReceipt.printReceipt(PaymentActivity.this, paymentProductListAdapter.getAllTickets(), paymentProductListAdapter.grandTotal(),
-              Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")),editTextExtraSalesInfo.getText().toString());
-            final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-            confirmationDialog.setTitle(R.string.text_Change);
-            changeMoney();
-            confirmationDialog.setMessage(decimalFormat.format(changeMoney));
-            confirmationDialog.setCancelable(false);
-            confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
-            {
-              @Override
-              public void onClick(DialogInterface dialog, int which)
-              {
-                data();
-                salesPack = new SalesPack();
-                salesPack.setSales(viewsales);
-                salesPack.setReceipts(viewreceipt);
-                salesPack.setSalesItems(viewsalesitems);
-                salesPack.setPayments(viewpayments);
-                salesPack.setStockdiary(viewstockdiaries);
-                salesPack.setTaxlines(viewtaxlines);
-                
-                TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
-                tableSalesHelper.open();
-                tableSalesHelper.insertSales(sales);
-                tableSalesHelper.close();
-                
-                postSales();
-                SalesActivity.sActivity.finish();
-                finish();
-              }
-            });
-            confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-            {
-              @Override
-              public void onClick(DialogInterface dialog, int which)
-              {
-                dialog.dismiss();
-              }
-            });
-            confirmationDialog.show();
-            return;
+            consumerName = "-";
           }
           else
           {
-            Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
-              .show();
-            Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
-            startActivity(intent);
-            return;
+            consumerName = editTextExtraSalesInfo.getText().toString();
           }
-        }
-      }
-        }
-      });
-      
-      confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
-      {
-        @Override
-        public void onClick(DialogInterface dialog, int which)
-        {
-        final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-          confirmationDialog.setTitle(R.string.text_Change);
-          changeMoney();
-          confirmationDialog.setMessage(decimalFormat.format(changeMoney));
+          Log.d("consumerName1: ",consumerName);
+          final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+          confirmationDialog.setTitle(R.string.printOptions);
+          confirmationDialog.setMessage(R.string.Qs_print);
           confirmationDialog.setCancelable(false);
-          confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
+          confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-      
-              data();
-              salesPack = new SalesPack();
-              salesPack.setSales(viewsales);
-              salesPack.setReceipts(viewreceipt);
-              salesPack.setSalesItems(viewsalesitems);
-              salesPack.setPayments(viewpayments);
-              salesPack.setStockdiary(viewstockdiaries);
-              salesPack.setTaxlines(viewtaxlines);
-              Log.d("TAX: ", salesPack.getTaxlines().toString());
-      
-              TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
-              tableSalesHelper.open();
-              tableSalesHelper.insertSales(sales);
-              tableSalesHelper.close();
-      
-              postSales();
-              SalesActivity.sActivity.finish();
-              finish();
+              if (manager != null)
+              {
+                cetak();
+              }
+              else
+              {
+                if (mService == null)
+                {
+                  Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+                  Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                  startActivity(intent);
+                  return;
+                }
+                else
+                {
+                  if (mService.getState() == BluetoothService.STATE_CONNECTED)
+                  {
+                    PrintReceipt.printReceipt(PaymentActivity.this, paymentProductListAdapter.getAllTickets(), paymentProductListAdapter.grandTotal(),
+                      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")),consumerName);
+                    final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+                    confirmationDialog.setTitle(R.string.text_Change);
+                    changeMoney();
+                    confirmationDialog.setMessage(decimalFormat.format(changeMoney));
+                    confirmationDialog.setCancelable(false);
+                    confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
+                    {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                        data();
+                        salesPack = new SalesPack();
+                        salesPack.setSales(viewsales);
+                        salesPack.setReceipts(viewreceipt);
+                        salesPack.setSalesItems(viewsalesitems);
+                        salesPack.setPayments(viewpayments);
+                        salesPack.setStockdiary(viewstockdiaries);
+                        salesPack.setTaxlines(viewtaxlines);
+                
+                        TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                        tableSalesHelper.open();
+                        tableSalesHelper.insertSales(sales);
+                        tableSalesHelper.close();
+                
+                        postSales();
+                        SalesActivity.sActivity.finish();
+                        finish();
+                      }
+                    });
+                    confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+                    {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                        dialog.dismiss();
+                      }
+                    });
+                    confirmationDialog.show();
+                    return;
+                  }
+                  else
+                  {
+                    Toast.makeText(PaymentActivity.this, R.string.not_connected, Toast.LENGTH_SHORT)
+                      .show();
+                    Intent intent = new Intent(PaymentActivity.this, Wireless_Activity.class);
+                    startActivity(intent);
+                    return;
+                  }
+                }
+              }
             }
           });
-          confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+  
+          confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-              dialog.dismiss();
+              final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
+              confirmationDialog.setTitle(R.string.text_Change);
+              changeMoney();
+              confirmationDialog.setMessage(decimalFormat.format(changeMoney));
+              confirmationDialog.setCancelable(false);
+              confirmationDialog.setPositiveButton(R.string.text_finish, new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+          
+                  data();
+                  salesPack = new SalesPack();
+                  salesPack.setSales(viewsales);
+                  salesPack.setReceipts(viewreceipt);
+                  salesPack.setSalesItems(viewsalesitems);
+                  salesPack.setPayments(viewpayments);
+                  salesPack.setStockdiary(viewstockdiaries);
+                  salesPack.setTaxlines(viewtaxlines);
+                  Log.d("TAX: ", salesPack.getTaxlines().toString());
+          
+                  TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+                  tableSalesHelper.open();
+                  tableSalesHelper.insertSales(sales);
+                  tableSalesHelper.close();
+          
+                  postSales();
+                  SalesActivity.sActivity.finish();
+                  finish();
+                }
+              });
+              confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+              {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                  dialog.dismiss();
+                }
+              });
+              confirmationDialog.show();
             }
           });
           confirmationDialog.show();
@@ -838,7 +868,7 @@ public class PaymentActivity extends AppCompatActivity
   {
     List<PrintDataObject> list = new ArrayList<PrintDataObject>();
     Print.IsiStruk(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),
-      list,paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")),editTextExtraSalesInfo.getText().toString());
+      list,paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")),consumerName);
     try
     {
       this.printDev.printText(list, callback);

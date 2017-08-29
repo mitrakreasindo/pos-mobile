@@ -33,21 +33,21 @@ public class Print
     if (Cash == 0)
     {
       
-      if (IDs.getLoginUserFullname().length() <= 20)
+      if (IDs.getLoginUserFullname().length() <= 14)
       {
         cashier = IDs.getLoginUserFullname();
       }
       else
       {
-        cashier = IDs.getLoginUserFullname().substring(0, 20);
+        cashier = IDs.getLoginUserFullname().substring(0, 14);
       }
-      if (consumerName.length() <= 11)
+      if (consumerName.length() <= 14)
       {
         consumer = consumerName;
       }
       else
       {
-        consumer = consumerName.substring(0, 11);
+        consumer = consumerName.substring(0, 14);
       }
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
@@ -137,21 +137,21 @@ public class Print
     }
     else
     {
-      if (IDs.getLoginUserFullname().length() <= 20)
+      if (IDs.getLoginUserFullname().length() <= 14)
       {
         cashier = IDs.getLoginUserFullname();
       }
       else
       {
-        cashier = IDs.getLoginUserFullname().substring(0, 20);
+        cashier = IDs.getLoginUserFullname().substring(0, 14);
       }
-      if (consumerName.length() <= 11)
+      if (consumerName.length() <= 14)
       {
         consumer = consumerName;
       }
       else
       {
-        consumer = consumerName.substring(0, 11);
+        consumer = consumerName.substring(0, 14);
       }
   
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +

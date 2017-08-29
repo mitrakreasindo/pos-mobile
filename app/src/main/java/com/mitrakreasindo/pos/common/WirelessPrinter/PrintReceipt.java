@@ -18,6 +18,7 @@ import java.util.List;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataByte;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.SendDataString;
 import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.mService;
+
 /**
   * Created by MK-fepriyadi on 7/31/2017.*/
 
@@ -61,22 +62,22 @@ public class PrintReceipt
           try
           {
             String cashier,consumer = "";
-            if (IDs.getLoginUserFullname().length() <= 11)
+            if (IDs.getLoginUserFullname().length() <= 23)
             {
               cashier = IDs.getLoginUserFullname();
             }
             else
             {
-              cashier = IDs.getLoginUserFullname().substring(0, 11);
+              cashier = IDs.getLoginUserFullname().substring(0, 23);
             }
             
-            if (consumerName.length() <= 11)
+            if (consumerName.length() <= 23)
             {
               consumer = consumerName;
             }
             else
             {
-              consumer = consumerName.substring(0, 11);
+              consumer = consumerName.substring(0, 23);
             }
             SendDataByte(context, Command.ESC_Init);
             SendDataByte(context, Command.ESC_Three);
@@ -90,22 +91,14 @@ public class PrintReceipt
             Command.ESC_Align[2] = 0x01;
             SendDataByte(context, Command.ESC_Align);
             SendDataByte(context, String.format(IDs.getLoginCompanyAddress() + "\n" + (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n\n").getBytes("GBK"));
-            
-            Command.ESC_Align[2] = 0x00;
-            SendDataByte(context, Command.ESC_Align);
-            SendDataByte(context, String.format((date) + " " + (context.getString(R.string.cashier))).getBytes("GBK"));
-            
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":"+ " " + cashier + "\n");
   
             Command.ESC_Align[2] = 0x00;
             SendDataByte(context, Command.ESC_Align);
-            SendDataByte(context, String.format(context.getString(R.string.consumer)).getBytes("GBK"));
-  
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":"+ " " + consumer + "\n");
+            String tgl = String.format("%-23s", date);
+            String kasir = String.format("%-16s",context.getString(R.string.cashier));
+            String customer = String.format("%-16s",context.getString(R.string.consumer));
+            String strDC = tgl + "\n" + kasir + ": " + cashier + "\n" + customer +": " + consumer + "\n" + "------------------------------------------\n";
+            SendDataByte(context,(strDC).getBytes("GBK"));
             
             Command.ESC_Align[2] = 0x01;
             SendDataByte(context, Command.ESC_Align);
@@ -262,22 +255,22 @@ public class PrintReceipt
           try
           {
             String cashier,consumer = "";
-            if (IDs.getLoginUserFullname().length() <= 11)
+            if (IDs.getLoginUserFullname().length() <= 23)
             {
               cashier = IDs.getLoginUserFullname();
             }
             else
             {
-              cashier = IDs.getLoginUserFullname().substring(0, 11);
+              cashier = IDs.getLoginUserFullname().substring(0, 23);
             }
   
-            if (consumerName.length() <= 11)
+            if (consumerName.length() <= 23)
             {
               consumer = consumerName;
             }
             else
             {
-              consumer = consumerName.substring(0, 11);
+              consumer = consumerName.substring(0, 23);
             }
             SendDataByte(context, Command.ESC_Init);
             SendDataByte(context, Command.ESC_Three);
@@ -295,19 +288,11 @@ public class PrintReceipt
   
             Command.ESC_Align[2] = 0x00;
             SendDataByte(context, Command.ESC_Align);
-            SendDataByte(context, String.format((date) + " " + (context.getString(R.string.cashier))).getBytes("GBK"));
-  
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":"+ " " + cashier + "\n");
-  
-            Command.ESC_Align[2] = 0x00;
-            SendDataByte(context, Command.ESC_Align);
-            SendDataByte(context, String.format(context.getString(R.string.consumer)).getBytes("GBK"));
-  
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":"+ " " + consumer + "\n");
+            String tgl = String.format("%-23s", date);
+            String kasir = String.format("%-16s",context.getString(R.string.cashier));
+            String customer = String.format("%-16s",context.getString(R.string.consumer));
+            String strDC = tgl + "\n" + kasir + ": " + cashier + "\n" + customer +": " + consumer + "\n" + "------------------------------------------\n";
+            SendDataByte(context,(strDC).getBytes("GBK"));
             
             for (int i = 0; i < ticketLinelist.size(); i++)
             {

@@ -274,6 +274,7 @@
     <string name="register_question">Cancel Registration</string>
     <string name="register_question_message">Are you sure back to login screen?</string>
     <string name="yes">Yes</string>
+    <string name="ok">Ok</string>
     <string name="no">No</string>
 
     <string name="progress_message">Please wait</string>

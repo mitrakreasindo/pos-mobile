@@ -406,13 +406,8 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     if (mBluetoothAdapter.isDiscovering())
     {
       mBluetoothAdapter.cancelDiscovery();
-      mNewDevicesArrayAdapter.clear();
-      mBluetoothAdapter.startDiscovery();
     }
-    else
-    {
-      mBluetoothAdapter.startDiscovery();
-    }
+    mBluetoothAdapter.startDiscovery();
   }
   
   private final BroadcastReceiver mReceiver2 = new BroadcastReceiver()
