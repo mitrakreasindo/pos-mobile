@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -262,7 +263,7 @@ public class SalesActivity extends AppCompatActivity
     receipt.setMoney(closedCash);
     receipt.setDatenew(new Date());
     receipt.setPerson(IDs.getLoginUser());
-    receipt.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    receipt.setSiteguid(IDs.SITE_GUID);
     receipt.setSflag(true);
 
     sales = new Sales();
@@ -270,7 +271,7 @@ public class SalesActivity extends AppCompatActivity
     sales.setSalesnum(1);
     sales.setSalestype(1);
     sales.setStatus(1);
-    sales.setSiteguid("a73c83f2-3c42-42a7-8f19-7d7cbea17286");
+    sales.setSiteguid(IDs.SITE_GUID);
     sales.setSflag(true);
     sales.setCustomer(customer);
     sales.setPerson(people);
@@ -331,6 +332,9 @@ public class SalesActivity extends AppCompatActivity
 //          tableSalesHelper.insertSales(sales);
 //          tableSalesHelper.close();
 
+          if(editTextExtraSalesInfo.getParent() != null)
+            ((ViewGroup)editTextExtraSalesInfo.getParent()).removeView(editTextExtraSalesInfo);
+
           editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
           new AlertDialog.Builder(SalesActivity.this)
             .setTitle(R.string.additional_sales_info)
@@ -368,7 +372,6 @@ public class SalesActivity extends AppCompatActivity
                 }
               }
             )
-            .setNegativeButton(R.string.no, null)
             .show();
         }
       }

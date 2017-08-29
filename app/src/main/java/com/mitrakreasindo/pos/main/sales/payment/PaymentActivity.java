@@ -322,9 +322,9 @@ public class PaymentActivity extends AppCompatActivity
           edittextPaymentMoney.removeTextChangedListener(this);
           String originalString = s.toString();
 
-          if (originalString.contains(","))
+          if (originalString.contains(",") || originalString.contains("."))
           {
-            originalString = originalString.replaceAll(",", "");
+            originalString = originalString.replaceAll("[,.]", "");
           }
           Long longval = Long.parseLong(originalString);
 
@@ -445,7 +445,8 @@ public class PaymentActivity extends AppCompatActivity
                       tableSalesHelper.close();
 
                       postSales();
-                      SalesActivity.sActivity.finish();
+                      if (SalesActivity.sActivity != null)
+                        SalesActivity.sActivity.finish();
                       finish();
                     }
                   });
@@ -498,7 +499,8 @@ public class PaymentActivity extends AppCompatActivity
                   tableSalesHelper.close();
 
                   postSales();
-                  SalesActivity.sActivity.finish();
+                  if (SalesActivity.sActivity != null)
+                    SalesActivity.sActivity.finish();
                   finish();
                 }
               });
@@ -523,9 +525,9 @@ public class PaymentActivity extends AppCompatActivity
   {
     originalString = edittextPaymentMoney.getText().toString();
 
-    if (originalString.contains(","))
+    if (originalString.contains(",") || originalString.contains("."))
     {
-      originalString = originalString.replaceAll(",", "");
+      originalString = originalString.replaceAll("[,.]", "");
     }
     Long longval = Long.parseLong(originalString);
     double clearValue = Double.parseDouble(longval.toString());
@@ -593,10 +595,6 @@ public class PaymentActivity extends AppCompatActivity
 
 //    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //    String date = formater.format(new Date());
-
-
-
-
 
     payment = new Payment();
     payment.setId(UUID.randomUUID().toString());
@@ -765,6 +763,7 @@ public class PaymentActivity extends AppCompatActivity
 
           if (responseCode == 0)
           {
+
 //            progressDialog.dismiss();
             Log.d("SUCCESS", "SUCCESS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -895,7 +894,7 @@ public class PaymentActivity extends AppCompatActivity
       if (PrinterMessage)
       {
         final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-        confirmationDialog.setTitle("Change money");
+        confirmationDialog.setTitle(R.string.change_money);
         confirmationDialog.setMessage(decimalFormat.format(
           Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
         ));
@@ -920,7 +919,8 @@ public class PaymentActivity extends AppCompatActivity
             tableSalesHelper.close();
 
             postSales();
-            SalesActivity.sActivity.finish();
+            if (SalesActivity.sActivity != null)
+              SalesActivity.sActivity.finish();
             finish();
           }
         });
@@ -951,7 +951,7 @@ public class PaymentActivity extends AppCompatActivity
   public void ChangeMoney(final Context context)
   {
     final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(context);
-    confirmationDialog.setTitle("Change money");
+    confirmationDialog.setTitle(R.string.change_money);
     confirmationDialog.setMessage(decimalFormat.format(
       Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal()
     ));
