@@ -78,7 +78,6 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
       {
         @Override
         public void onClick(View view) {
-          Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show();
           Intent intent = new Intent(context, RolePermissionActivity.class);
           intent.putExtra("id", role.getId());
           intent.putExtra("name", role.getName());
@@ -100,8 +99,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
         public boolean onLongClick(final View v)
         {
           final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-          builder.setTitle("Options");
-          builder.setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener()
+          builder.setTitle(R.string.options);
+          builder.setItems(new String[]{context.getString(R.string.delete)}, new DialogInterface.OnClickListener()
           {
             @Override
             public void onClick(DialogInterface dialog, int which)
