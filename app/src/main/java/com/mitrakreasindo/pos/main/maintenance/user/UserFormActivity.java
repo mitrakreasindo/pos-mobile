@@ -142,9 +142,9 @@ public class UserFormActivity extends AppCompatActivity
 
     peopleService = ClientService.createService().create(PeopleService.class);
     kodeMerchant = SharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
+    userListAdapter = new UserListAdapter(this, new ArrayList<People>());
 
     setSupportActionBar(toolbar);
-
     SetupCreateEditMode();
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener()
@@ -173,7 +173,6 @@ public class UserFormActivity extends AppCompatActivity
       TableRoleHelper tableRoleHelper = new TableRoleHelper(this);
       data = tableRoleHelper.getData();
       rolesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
-      userListAdapter = new UserListAdapter(this, new ArrayList<People>());
       rolesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       spinnerRole.setAdapter(rolesArrayAdapter);
 
@@ -240,10 +239,6 @@ public class UserFormActivity extends AppCompatActivity
       {
         imageviewImageSelect.setVisibility(View.INVISIBLE);
       }
-
-      Log.d("PEOPLE_ID", peopleId);
-      Log.d("USERNAME", edittextUsername.getText().toString());
-      Log.d("APPPASS", edittextPass.getText().toString());
     }
   }
 
@@ -630,11 +625,8 @@ public class UserFormActivity extends AppCompatActivity
             tablePeopleHelper.update(people);
             tablePeopleHelper.close();
 
-            if (people != null)
-            {
-              userListAdapter.addUser(people);
-              userListAdapter.notifyDataSetChanged();
-            }
+            userListAdapter.addUser(people);
+            userListAdapter.notifyDataSetChanged();
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
