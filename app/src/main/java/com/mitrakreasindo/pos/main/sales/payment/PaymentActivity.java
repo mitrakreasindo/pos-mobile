@@ -172,7 +172,7 @@ public class PaymentActivity extends AppCompatActivity
   public AidlDeviceManager manager = null;
   private AidlPrinterStateChangeListener callback = new PrinterCallback();
   private Context mcontext;
-  
+
   private TablePeopleHelper tablePeopleHelper;
 
   public class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
@@ -265,9 +265,9 @@ public class PaymentActivity extends AppCompatActivity
               edittextPaymentMoney.removeTextChangedListener(this);
               String originalString = s.toString();
         
-              if (originalString.contains(","))
+              if (originalString.contains(",") || originalString.contains("."))
               {
-                originalString = originalString.replaceAll(",", "");
+                originalString = originalString.replaceAll("[,.]", "");
               }
               Long longval = Long.parseLong(originalString);
         
@@ -423,7 +423,7 @@ public class PaymentActivity extends AppCompatActivity
                   if (mService.getState() == BluetoothService.STATE_CONNECTED)
                   {
                     PrintReceipt.printReceipt(PaymentActivity.this, paymentProductListAdapter.getAllTickets(), paymentProductListAdapter.grandTotal(),
-                      Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")),consumerName);
+                      formatPayment(),consumerName);
                     final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
                     confirmationDialog.setTitle(R.string.text_Change);
                     changeMoney();
@@ -449,8 +449,7 @@ public class PaymentActivity extends AppCompatActivity
                         tableSalesHelper.close();
                 
                         postSales();
-                        SalesActivity.sActivity.finish();
-                        finish();
+
                       }
                     });
                     confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -509,9 +508,6 @@ public class PaymentActivity extends AppCompatActivity
                   tableSalesHelper.close();
           
                   postSales();
-                  if (SalesActivity.sActivity != null)
-                    SalesActivity.sActivity.finish();
-                  finish();
                 }
               });
               confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -552,16 +548,27 @@ public class PaymentActivity extends AppCompatActivity
     else
     {
       originalString = edittextPaymentMoney.getText().toString();
-      if (originalString.contains(","))
+      if (originalString.contains(",") || originalString.contains("."))
       {
-        originalString = originalString.replaceAll(",", "");
+        originalString = originalString.replaceAll("[,.]", "");
       }
       Long longval = Long.parseLong(originalString);
       clearValue = Double.parseDouble(longval.toString());
     }
     return clearValue;
   }
-
+  
+  private double formatPayment()
+  {
+    originalString = edittextPaymentMoney.getText().toString();
+    if (originalString.contains(",") || originalString.contains("."))
+    {
+      originalString = originalString.replaceAll("[,.]", "");
+    }
+    Long longval = Long.parseLong(originalString);
+    double clearValue = Double.parseDouble(longval.toString());
+    return clearValue;
+  }
   @Override
   public void onBackPressed()
   {
@@ -831,6 +838,10 @@ public class PaymentActivity extends AppCompatActivity
 //            progressDialog.dismiss();
             Log.d("SUCCESS", "SUCCESS");
             Toast.makeText(PaymentActivity.this, "success", Toast.LENGTH_LONG).show();
+
+            if (SalesActivity.sActivity != null)
+              SalesActivity.sActivity.finish();
+            finish();
           }
         }
       }
@@ -866,9 +877,9 @@ public class PaymentActivity extends AppCompatActivity
 
   public void cetak()
   {
-    List<PrintDataObject> list = new ArrayList<PrintDataObject>();
+    List<PrintDataObject> list = new ArrayList<>();
     Print.IsiStruk(PaymentActivity.this,paymentProductListAdapter.getAllTickets(),
-      list,paymentProductListAdapter.grandTotal(),Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",","")),consumerName);
+      list,paymentProductListAdapter.grandTotal(),formatPayment(),consumerName);
     try
     {
       this.printDev.printText(list, callback);
@@ -993,8 +1004,6 @@ public class PaymentActivity extends AppCompatActivity
           tableSalesHelper.close();
     
           postSales();
-          SalesActivity.sActivity.finish();
-          finish();
         }
       });
         confirmationDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -1038,7 +1047,7 @@ public class PaymentActivity extends AppCompatActivity
       change = paymentProductListAdapter.grandTotal();
     }else
     {
-      change = Double.parseDouble(edittextPaymentMoney.getText().toString().replaceAll(",", "")) - paymentProductListAdapter.grandTotal();
+      change = formatPayment() - paymentProductListAdapter.grandTotal();
     }
     this.changeMoney = change;
     return changeMoney;

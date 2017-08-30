@@ -2,7 +2,6 @@ package com.mitrakreasindo.pos.common.WirelessPrinter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.IDs;
@@ -21,9 +20,6 @@ import static com.mitrakreasindo.pos.common.WirelessPrinter.Wireless_Activity.mS
 
 /**
   * Created by MK-fepriyadi on 7/31/2017.*/
-
- 
-
 
 public class PrintReceipt
 {
@@ -57,28 +53,29 @@ public class PrintReceipt
         String str = formatter.format(curDate);
         String date = str;
   
+        String cashier,consumer = "";
+        if (IDs.getLoginUserFullname().length() <= 23)
+        {
+          cashier = IDs.getLoginUserFullname();
+        }
+        else
+        {
+          cashier = IDs.getLoginUserFullname().substring(0, 23);
+        }
+  
+        if (consumerName.length() <= 23)
+        {
+          consumer = consumerName;
+        }
+        else
+        {
+          consumer = consumerName.substring(0, 23);
+        }
         if ((int) Cash == 0)
         {
           try
           {
-            String cashier,consumer = "";
-            if (IDs.getLoginUserFullname().length() <= 23)
-            {
-              cashier = IDs.getLoginUserFullname();
-            }
-            else
-            {
-              cashier = IDs.getLoginUserFullname().substring(0, 23);
-            }
             
-            if (consumerName.length() <= 23)
-            {
-              consumer = consumerName;
-            }
-            else
-            {
-              consumer = consumerName.substring(0, 23);
-            }
             SendDataByte(context, Command.ESC_Init);
             SendDataByte(context, Command.ESC_Three);
             Command.ESC_ExclamationMark[2] = 0x01;
@@ -103,139 +100,72 @@ public class PrintReceipt
             Command.ESC_Align[2] = 0x01;
             SendDataByte(context, Command.ESC_Align);
             SendDataByte(context, String.format(context.getString(R.string.text_retur)+"\n\n").getBytes("GBK"));
+            
             for (int i = 0; i < ticketLinelist.size(); i++)
             {
               SalesItem tiket = ticketLinelist.get(i);
-              Log.d("Nama product: ", (tiket.getProduct().getName()));
-      
               String name = tiket.getProduct().getName();
               int Qty = (int) tiket.getUnits();
-              Log.d("Jlh product: ", Integer.toString(Qty));
               int price = tiket.getProduct().getPricesell().intValue();
-              Log.d("printReceipt: ", decimalFormat.format(price));
               int Total = price * Qty;
       
               String ProductName;
-              int Quantity;
-              String Harga;
-              String TotalHarga;
-      
-              if (name.length() <= 14)
+              if (name.length() <= 42)
               {
                 ProductName = name;
               }
               else
               {
-                ProductName = name.substring(0, 14);
+                ProductName = name.substring(0, 42);
               }
-              if (Integer.toString(Qty).length() <= 4)
-              {
-                Quantity = Qty;
-              }
-              else
-              {
-                Quantity = Integer.parseInt(Integer.toString(Qty).substring(0, 4));
-              }
-      
-      
-              if ((decimalFormat.format(price)).length() <= 10)
-              {
-                Harga = decimalFormat.format(price).replace('.', ',');
-              }
-              else
-              {
-                Harga = Integer.toString(price);
-              }
-      
-              if (decimalFormat.format(Total).length() <= 10)
-              {
-                TotalHarga = decimalFormat.format(Total).replace('.', ',');
-              }
-              else
-              {
-                TotalHarga = Integer.toString(Total);
-              }
-      
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[3] = 0x00;
-              SendDataByte(context, Command.ESC_Relative);
-      
-              Command.ESC_Relative[2] = 1;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format(ProductName, "").getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = (byte) 140;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%4s", Qty).replace(' ', ' ').getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = (byte) 190;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%10s", Harga).replace(' ', ' ').getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[2] = 0x25;
-              Command.ESC_Relative[3] = 0x01;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%11s", TotalHarga + "\n").replace(' ', ' ').getBytes("GBK"));
+              String Harga = decimalFormat.format(price).replace('.', ',');
+              String TotalHarga = decimalFormat.format(Total).replace('.', ',');
+              
+              String nama = String.format("%-42s", ProductName);
+              String quantity = String.format("%-3s",(String.format(String.valueOf(Qty))).replace(' ', ' '));
+              String prise = String.format("%16s", Harga).replace(' ', ' ');
+              String total = String.format("%17s",(String.format(""+TotalHarga)).replace(' ', ' '));
+              String sales = String.format(nama + "\n" + quantity +" x " + prise + " = " + total);
+  
+              Command.ESC_Align[2] = 0x00;
+              SendDataByte(context, Command.ESC_Align);
+              SendDataString(context,sales);
+
+//              Command.ESC_Relative[2] = 0x79;
+//              Command.ESC_Relative[3] = 0x00;
+//              SendDataByte(context, Command.ESC_Relative);
+//
+//              Command.ESC_Relative[2] = 1;
+//              SendDataByte(context, Command.ESC_Relative);
+//              SendDataByte(context, String.format(ProductName, "").getBytes("GBK"));
+//
+//              Command.ESC_Relative[2] = (byte) 140;
+//              SendDataByte(context, Command.ESC_Relative);
+//              SendDataByte(context, String.format("%4s", Qty).replace(' ', ' ').getBytes("GBK"));
+//
+//              Command.ESC_Relative[2] = (byte) 190;
+//              SendDataByte(context, Command.ESC_Relative);
+//              SendDataByte(context, String.format("%10s", Harga).replace(' ', ' ').getBytes("GBK"));
+//
+//              Command.ESC_Relative[2] = 0x79;
+//              Command.ESC_Relative[2] = 0x79;
+//              Command.ESC_Relative[2] = 0x25;
+//              Command.ESC_Relative[3] = 0x01;
+//              SendDataByte(context, Command.ESC_Relative);
+//              SendDataByte(context, String.format("%11s", TotalHarga + "\n").replace(' ', ' ').getBytes("GBK"));
             }
             Command.ESC_Align[2] = 0x00;
             SendDataByte(context, Command.ESC_Align);
             SendDataString(context, "------------------------------------------\n");
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 0;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, String.format(context.getString(R.string.text_total)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%15s", decimalFormat.format(grandTotal).replace('.', ',') + "\n").replace(' ', ' ').getBytes("GBK"));
-     /*
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 1;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, (context.getString(R.string.text_tunai)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%15s", decimalFormat.format(Cash).replace('.', ',') + "\n").replace(' ', ' ').getBytes("GBK"));
-   
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 1;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, (context.getString(R.string.text_kembali)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%16s", decimalFormat.format(Cash - grandTotal).replace('.', ',') + "\n\n").replace(' ', ' ').getBytes("GBK"));
-    */
+  
+            String Total = String.format("%-15s", context.getString(R.string.text_total));
+            String Total2 = String.format("%27s", decimalFormat.format(grandTotal).replace('.', ',')).replace(' ', ' ');
+            
+            String str2 = Total + Total2 + "\n\n";
+            Command.ESC_Align[2] = 0x00;
+            SendDataByte(context, Command.ESC_Align);
+            SendDataString(context, String.format(str2));
+            
             Command.ESC_Align[2] = 0x01;
             SendDataByte(context, Command.ESC_Align);
             Command.GS_ExclamationMark[2] = 0x00;
@@ -254,24 +184,6 @@ public class PrintReceipt
         {
           try
           {
-            String cashier,consumer = "";
-            if (IDs.getLoginUserFullname().length() <= 23)
-            {
-              cashier = IDs.getLoginUserFullname();
-            }
-            else
-            {
-              cashier = IDs.getLoginUserFullname().substring(0, 23);
-            }
-  
-            if (consumerName.length() <= 23)
-            {
-              consumer = consumerName;
-            }
-            else
-            {
-              consumer = consumerName.substring(0, 23);
-            }
             SendDataByte(context, Command.ESC_Init);
             SendDataByte(context, Command.ESC_Three);
             Command.ESC_ExclamationMark[2] = 0x01;
@@ -297,136 +209,51 @@ public class PrintReceipt
             for (int i = 0; i < ticketLinelist.size(); i++)
             {
               SalesItem tiket = ticketLinelist.get(i);
-              Log.d("Nama product: ", (tiket.getProduct().getName()));
-      
               String name = tiket.getProduct().getName();
               int Qty = (int) tiket.getUnits();
-              Log.d("Jlh product: ", Integer.toString(Qty));
               int price = tiket.getProduct().getPricesell().intValue();
-              Log.d("printReceipt: ", decimalFormat.format(price));
               int Total = price * Qty;
-      
+  
               String ProductName;
-              int Quantity;
-              String Harga;
-              String TotalHarga;
-      
-              if (name.length() <= 14)
+              if (name.length() <= 42)
               {
                 ProductName = name;
               }
               else
               {
-                ProductName = name.substring(0, 14);
+                ProductName = name.substring(0, 42);
               }
-              if (Integer.toString(Qty).length() <= 4)
-              {
-                Quantity = Qty;
-              }
-              else
-              {
-                Quantity = Integer.parseInt(Integer.toString(Qty).substring(0, 4));
-              }
-      
-      
-              if ((decimalFormat.format(price)).length() <= 10)
-              {
-                Harga = decimalFormat.format(price).replace('.', ',');
-              }
-              else
-              {
-                Harga = Integer.toString(price);
-              }
-      
-              if (decimalFormat.format(Total).length() <= 10)
-              {
-                TotalHarga = decimalFormat.format(Total).replace('.', ',');
-              }
-              else
-              {
-                TotalHarga = Integer.toString(Total);
-              }
-      
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[3] = 0x00;
-              SendDataByte(context, Command.ESC_Relative);
-      
-              Command.ESC_Relative[2] = 1;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format(ProductName, "").getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = (byte) 140;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%4s", Qty).replace(' ', ' ').getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = (byte) 190;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%10s", Harga).replace(' ', ' ').getBytes("GBK"));
-      
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[2] = 0x79;
-              Command.ESC_Relative[2] = 0x25;
-              Command.ESC_Relative[3] = 0x01;
-              SendDataByte(context, Command.ESC_Relative);
-              SendDataByte(context, String.format("%11s", TotalHarga + "\n").replace(' ', ' ').getBytes("GBK"));
+              String Harga = decimalFormat.format(price).replace('.', ',');
+              String TotalHarga = decimalFormat.format(Total).replace('.', ',');
+  
+              String nama = String.format("%-42s", ProductName);
+              String quantity = String.format("%-3s",(String.format(String.valueOf(Qty))).replace(' ', ' '));
+              String prise = String.format("%16s", Harga).replace(' ', ' ');
+              String total = String.format("%17s",(String.format(""+TotalHarga)).replace(' ', ' '));
+              String sales = String.format(nama + "\n" + quantity +" x " + prise + " = " + total);
+  
+              Command.ESC_Align[2] = 0x00;
+              SendDataByte(context, Command.ESC_Align);
+              SendDataString(context,sales);
             }
             Command.ESC_Align[2] = 0x00;
             SendDataByte(context, Command.ESC_Align);
             SendDataString(context, "------------------------------------------\n");
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 0;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, String.format(context.getString(R.string.text_total)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%15s", decimalFormat.format(grandTotal).replace('.', ',') + "\n").replace(' ', ' ').getBytes("GBK"));
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 1;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, (context.getString(R.string.text_tunai)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%15s", decimalFormat.format(Cash).replace('.', ',') + "\n").replace(' ', ' ').getBytes("GBK"));
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[3] = 0x00;
-            SendDataByte(context, Command.ESC_Relative);
-    
-            Command.ESC_Relative[2] = 1;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, (context.getString(R.string.text_kembali)));
-    
-            Command.ESC_Relative[2] = (byte) 100;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataString(context, ":");
-    
-            Command.ESC_Relative[2] = 0x79;
-            Command.ESC_Relative[2] = 0x00;
-            Command.ESC_Relative[3] = 0x01;
-            SendDataByte(context, Command.ESC_Relative);
-            SendDataByte(context, String.format("%16s", decimalFormat.format(Cash - grandTotal).replace('.', ',') + "\n\n").replace(' ', ' ').getBytes("GBK"));
-    
+            
+            String Total = String.format("%-15s", context.getString(R.string.text_total));
+            String Total2 = String.format("%27s", decimalFormat.format(grandTotal).replace('.', ',')).replace(' ', ' ');
+  
+            String payment = String.format("%-15s", context.getString(R.string.text_tunai));
+            String payment2 = String.format("%27s", decimalFormat.format(Cash).replace('.', ',')).replace(' ', ' ');
+            
+            String Change = String.format("%-15s", context.getString(R.string.text_kembali));
+            String Change2 = String.format("%27s", decimalFormat.format(Cash - grandTotal).replace('.', ',')).replace(' ', ' ');
+            String str2 = Total + Total2 + "\n" + payment + payment2 + "\n" + Change + Change2 + "\n\n";
+            
+            Command.ESC_Align[2] = 0x00;
+            SendDataByte(context, Command.ESC_Align);
+            SendDataString(context, String.format(str2));
+            
             Command.ESC_Align[2] = 0x01;
             SendDataByte(context, Command.ESC_Align);
             Command.GS_ExclamationMark[2] = 0x00;

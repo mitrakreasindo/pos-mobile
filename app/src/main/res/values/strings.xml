@@ -354,8 +354,8 @@
     <string name="Qs_print">Print Receipt?</string>
     <string name="cashier">Cashier</string>
     <string name="consumer">Customer name</string>
-    <string name="phone">PHONE: </string>
-    <string name="text_suddenly">The printer is looking abruptly</string>
+    <string name="phone">Phone: </string>
+    <string name="text_suddenly">Printer error</string>
     <string name="text_PrintFinished">Printing is completed</string>
     <string name="text_outOfPaper">Printer is out of paper, Load paper. Try again</string>
     <string name="Qs_bluetooth">Are you sure want to disconnect?</string>

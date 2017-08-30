@@ -30,25 +30,25 @@ public class Print
     String separator = "--------------------------------";
     String cashier,consumer = "";
     
+    if (IDs.getLoginUserFullname().length() <= 14)
+    {
+      cashier = IDs.getLoginUserFullname();
+    }
+    else
+    {
+      cashier = IDs.getLoginUserFullname().substring(0, 14);
+    }
+    if (consumerName.length() <= 14)
+    {
+      consumer = consumerName;
+    }
+    else
+    {
+      consumer = consumerName.substring(0, 14);
+    }
+    
     if (Cash == 0)
     {
-      
-      if (IDs.getLoginUserFullname().length() <= 14)
-      {
-        cashier = IDs.getLoginUserFullname();
-      }
-      else
-      {
-        cashier = IDs.getLoginUserFullname().substring(0, 14);
-      }
-      if (consumerName.length() <= 14)
-      {
-        consumer = consumerName;
-      }
-      else
-      {
-        consumer = consumerName.substring(0, 14);
-      }
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
       PrintDataObject printDataObject1 = new PrintDataObject(strHeader, 8, true, PrintDataObject.ALIGN.CENTER);
@@ -110,9 +110,9 @@ public class Print
         }
                 
         String nama = String.format("%-32s", ProductName).replace(' ', ' ');
-        String quantity = String.format("%-3s",(String.format(""+Qty).replace("-","")).replace(' ', ' '));
+        String quantity = String.format("%-3s",(String.format(""+Qty)).replace(' ', ' '));
         String prise = String.format("%11s", Harga).replace(' ', ' ');
-        String total = String.format("%12s",(String.format(""+TotalHarga).replace("-","")).replace(' ', ' '));
+        String total = String.format("%12s",(String.format(""+TotalHarga)).replace(' ', ' '));
         String str = String.format(nama + "\n" + quantity +" x " + prise + " = " + total);
   
         PrintDataObject printDataObject = new PrintDataObject(str);
@@ -137,23 +137,6 @@ public class Print
     }
     else
     {
-      if (IDs.getLoginUserFullname().length() <= 14)
-      {
-        cashier = IDs.getLoginUserFullname();
-      }
-      else
-      {
-        cashier = IDs.getLoginUserFullname().substring(0, 14);
-      }
-      if (consumerName.length() <= 14)
-      {
-        consumer = consumerName;
-      }
-      else
-      {
-        consumer = consumerName.substring(0, 14);
-      }
-  
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
       PrintDataObject printDataObject1 = new PrintDataObject(strHeader, 8, true, PrintDataObject.ALIGN.CENTER);
