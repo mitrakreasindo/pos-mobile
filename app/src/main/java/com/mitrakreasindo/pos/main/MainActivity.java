@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity
       case EventCode.EVENT_PEOPLE_GET:
         if (event.getStatus() == Event.COMPLETE)
         {
-          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_LONG).show();
+          Toast.makeText(MainActivity.this, getString(R.string.login_message, valueFullname), Toast.LENGTH_SHORT).show();
           tableRoleHelper.downloadData(companyCode, EventCode.EVENT_ROLE_GET);
         }
         break;

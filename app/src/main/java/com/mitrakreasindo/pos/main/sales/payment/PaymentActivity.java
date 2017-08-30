@@ -376,7 +376,7 @@ public class PaymentActivity extends AppCompatActivity
       
       editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
       final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(PaymentActivity.this);
-      confirmationDialog.setTitle(R.string.additional_sales_info);
+      confirmationDialog.setTitle(R.string.additional_info);
       confirmationDialog.setView(editTextExtraSalesInfo);
       confirmationDialog.setCancelable(false);
       

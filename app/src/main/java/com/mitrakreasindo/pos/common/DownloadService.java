@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
-import com.mitrakreasindo.pos.main.MainActivity;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.report.ReportActivity;
 import com.mitrakreasindo.pos.model.Download;
@@ -61,7 +60,7 @@ public class DownloadService extends IntentService
 
     reportService = ClientService.createService().create(ReportService.class);
 
-    Call<ResponseBody> request = reportService.downloadPDF("public", "2017-07-08 17:47:00.0", "2017-08-09 00:00:00.0");
+    Call<ResponseBody> request = reportService.downloadReportSales("public", "2017-07-08 17:47:00.0", "2017-08-09 00:00:00.0");
     try {
 
       downloadFile(request.execute().body());
