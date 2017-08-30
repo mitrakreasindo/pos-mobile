@@ -265,8 +265,9 @@ public class UserFormActivity extends AppCompatActivity
           case 0:
             Toast.makeText(UserFormActivity.this, getString(R.string.dialog_pick_image_camera),
               Toast.LENGTH_LONG).show();
-            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePicture, RESULT_TAKE_PHOTO);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+              startActivityForResult(takePictureIntent, RESULT_TAKE_PHOTO);
             break;
 
           case 1:
@@ -274,7 +275,8 @@ public class UserFormActivity extends AppCompatActivity
               Toast.LENGTH_LONG).show();
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
               MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
+            if (photoPickerIntent.resolveActivity(getPackageManager()) != null)
+              startActivityForResult(photoPickerIntent, RESULT_PICK_GALLERY);
             break;
         }
       }
@@ -335,7 +337,7 @@ public class UserFormActivity extends AppCompatActivity
         {
           case 0:
             Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("PrepareData");
+            Bitmap bitmap = (Bitmap) extras.get("data");
             imageviewImageSelect.setImageBitmap(bitmap);
             imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
@@ -496,7 +498,6 @@ public class UserFormActivity extends AppCompatActivity
           else
           {
             // Password will changed and no need resetter in the future login
-            people.setOldPassword(edittextOldPass.getText().toString());
             people.setVisible(false);
           }
         }
@@ -511,6 +512,7 @@ public class UserFormActivity extends AppCompatActivity
       people.setEmail(null);
       people.setFullname(edittextFullname.getText().toString());
       people.setPhoneNumber(edittextPhone.getText().toString());
+      people.setOldPassword(edittextOldPass.getText().toString());
       people.setApppassword(edittextPass.getText().toString());
       people.setCard(null);
 
@@ -628,8 +630,11 @@ public class UserFormActivity extends AppCompatActivity
             tablePeopleHelper.update(people);
             tablePeopleHelper.close();
 
-            userListAdapter.addUser(people);
-            userListAdapter.notifyDataSetChanged();
+            if (people != null)
+            {
+              userListAdapter.addUser(people);
+              userListAdapter.notifyDataSetChanged();
+            }
           }
           Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
