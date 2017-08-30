@@ -137,7 +137,7 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
 
   public void removeTax(Tax tax)
   {
-    taxes.remove(tax);
+    this.taxes.remove(tax);
     notifyDataSetChanged();
   }
 

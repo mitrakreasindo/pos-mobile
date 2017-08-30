@@ -328,7 +328,7 @@ public class ProductFormActivity extends AppCompatActivity
         {
           case 0:
             Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("PrepareData");
+            Bitmap bitmap = (Bitmap) extras.get("data");
             imageviewProduct.setImageBitmap(bitmap);
             imageviewProduct.setVisibility(View.VISIBLE);
             break;

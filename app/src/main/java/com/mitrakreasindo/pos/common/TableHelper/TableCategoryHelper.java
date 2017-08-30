@@ -107,8 +107,12 @@ public class TableCategoryHelper
 
     initialValues.put(KEY_ID, category.getId());
     initialValues.put(KEY_NAME, category.getName());
-//    initialValues.put(KEY_PARENTID, category.getParentid().getId());
-    initialValues.put(KEY_PARENTID, UUID.randomUUID().toString());
+
+    if (category.getParentid() != null)
+      initialValues.put(KEY_PARENTID, category.getParentid().getId());
+    else
+      initialValues.put(KEY_PARENTID, "");
+
     initialValues.put(KEY_TEXTTIP, category.getTexttip());
     initialValues.put(KEY_IMAGE, category.getImage());
     initialValues.put(KEY_COLOUR, category.getColour());

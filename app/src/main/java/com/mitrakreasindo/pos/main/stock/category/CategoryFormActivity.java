@@ -189,6 +189,7 @@ public class CategoryFormActivity extends AppCompatActivity
     category.setTexttip("");
     category.setCatshowname(true);
     category.setImage(null);
+    Log.d("SWITCHSTATUS", addParentCategorySwitch.isChecked()+"");
 
     if (addParentCategorySwitch.isChecked())
       category.setParentid(dataCategory.get(parentCategorySpinner.getSelectedItemPosition()));
