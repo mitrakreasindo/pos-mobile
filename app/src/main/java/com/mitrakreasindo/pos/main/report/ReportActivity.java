@@ -114,15 +114,6 @@ public class ReportActivity extends AppCompatActivity
     setContentView(R.layout.activity_report);
     ButterKnife.bind(this);
 
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    notificationBuilder = new NotificationCompat.Builder(this)
-      .setSmallIcon(R.drawable.ic_file_download_black_24dp)
-      .setContentTitle("Download")
-      .setContentText("Downloading File")
-      .setAutoCancel(true);
-    notificationManager.notify(0, notificationBuilder.build());
-
     reportService = ClientService.createService().create(ReportService.class);
     sharedPreferenceEditor = new SharedPreferenceEditor();
     kodeMerchant = sharedPreferenceEditor.LoadPreferences(this, "Company Code", "");
@@ -325,6 +316,16 @@ public class ReportActivity extends AppCompatActivity
 
       if (checkPermission())
       {
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationBuilder = new NotificationCompat.Builder(this)
+          .setSmallIcon(R.drawable.ic_file_download_black_24dp)
+          .setContentTitle("Download")
+          .setContentText("Downloading File")
+          .setAutoCancel(true);
+        notificationManager.notify(0, notificationBuilder.build());
+
         switch (TAG)
         {
           case "SALES":
@@ -458,102 +459,122 @@ public class ReportActivity extends AppCompatActivity
   public void downloadSalesReport()
   {
 
-    String title = "REPORT SALES - "
+    final String title = "REPORT SALES - "
       + filterReportFromDate.getText().toString()
       + " - "
       + filterReportToDate.getText().toString();
-
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage(getString(R.string.prepare_data));
-    progressDialog.show();
 
     final Call<ResponseBody> downloadReportCall = reportService
       .downloadReportSales(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    try
-    {
-      downloadFile(downloadReportCall.execute().body(), title);
-    } catch (IOException e)
-    {
-      e.printStackTrace();
-    }
-
-//    downloadReportCall.enqueue(new Callback<ResponseBody>()
+//    try
 //    {
-//      @Override
-//      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
-//      {
-//
-//        writeResponseBodyToDisk(response.body());
-//        Log.d("FILESIZE", String.valueOf(response.body().contentLength()));
-//        Toast.makeText(ReportActivity.this, "SUCCESS", Toast.LENGTH_LONG).show();
-//      }
-//
-//      @Override
-//      public void onFailure(Call<ResponseBody> call, Throwable t)
-//      {
-//        Toast.makeText(ReportActivity.this, "FAILED", Toast.LENGTH_LONG).show();
-//      }
-//    });
+//      downloadFile(downloadReportCall.execute().body(), title);
+//    } catch (IOException e)
+//    {
+//      e.printStackTrace();
+//    }
 
-    progressDialog.dismiss();
+    downloadReportCall.enqueue(new Callback<ResponseBody>()
+    {
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+      {
+
+        try
+        {
+          downloadFile(response.body(), title);
+        } catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+
+        Toast.makeText(ReportActivity.this, R.string.success_download_report, Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t)
+      {
+        Toast.makeText(ReportActivity.this, R.string.unsuccess_download_report, Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
   public void downloadCategoryReport()
   {
 
-    String title = "REPORT CATEGORY - "
+    final String title = "REPORT CATEGORY - "
       + filterReportFromDate.getText().toString()
       + " - "
       + filterReportToDate.getText().toString();
-
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage(getString(R.string.prepare_data));
-    progressDialog.show();
 
     final Call<ResponseBody> downloadReportCall = reportService
       .downloadReportCategories(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    try
+    downloadReportCall.enqueue(new Callback<ResponseBody>()
     {
-      downloadFile(downloadReportCall.execute().body(), title);
-    } catch (IOException e)
-    {
-      e.printStackTrace();
-    }
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+      {
 
-    progressDialog.dismiss();
+        try
+        {
+          downloadFile(response.body(), title);
+        } catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+
+        Toast.makeText(ReportActivity.this, R.string.success_download_report, Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t)
+      {
+        Toast.makeText(ReportActivity.this, R.string.unsuccess_download_report, Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
   public void downloadSubCategoryReport()
   {
-    String title = "REPORT SUB CATEGORY - "
+    final String title = "REPORT SUB CATEGORY - "
       + filterReportFromDate.getText().toString()
       + " - "
       + filterReportToDate.getText().toString();
-
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setCancelable(false);
-    progressDialog.setMessage(getString(R.string.prepare_data));
-    progressDialog.show();
 
     final Call<ResponseBody> downloadReportCall = reportService
       .downloadReportSubCategories(kodeMerchant, filterReportFromDate.getText().toString() + " 00:00:00",
         filterReportToDate.getText().toString() + " 00:00:00");
 
-    try
+    downloadReportCall.enqueue(new Callback<ResponseBody>()
     {
-      downloadFile(downloadReportCall.execute().body(), title);
-    } catch (IOException e)
-    {
-      e.printStackTrace();
-    }
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+      {
 
-    progressDialog.dismiss();
+        try
+        {
+          downloadFile(response.body(), title);
+        } catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+
+        Toast.makeText(ReportActivity.this, R.string.success_download_report, Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t)
+      {
+        Toast.makeText(ReportActivity.this, R.string.unsuccess_download_report, Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
 
