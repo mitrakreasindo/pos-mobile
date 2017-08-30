@@ -303,20 +303,20 @@
     <string name="select_device">Pilih perangkat</string>
     <string name="none_paired">Tidak ada perangkat yang cocok</string>
     <string name="none_found">Perangkat tidak ditemukan</string>
-    <string name="title_paired_devices">Perangkat dipasangkan</string>
+    <string name="title_paired_devices">Perangkat terpasang</string>
     <string name="title_other_devices">Perangkat yang tersedia</string>
     <string name="button_scan">Memindai perangkat</string>
 
     <!--  Message -->
     <string name="text_retur">Retur Barang</string>
     <string name="not_connected">Sambungkan printer Bluetooth</string>
-    <string name="bt_not_enabled_leaving">Bluetooth tidak dimulai, keluar dari program</string>
+    <string name="bt_not_enabled_leaving">Bluetooth tidak dijalankan, keluar dari program</string>
     <string name="connecting_message">Menghubungkan…</string>
-    <string name="title_connected_to">Terhubung ke </string>
+    <string name="title_connected_to">Terhubung</string>
     <string name="Connecting">Terhubung ke printer Bluetooth</string>
     <string name="bluetooth_not_available">Bluetooth tidak tersedia</string>
     <string name="bluetooth_connected">Bluetooth terhubung</string>
-    <string name="Connection_lost">Sambungan perangkat putus</string>
+    <string name="Connection_lost">Sambungan perangkat terputus</string>
     <string name="unable_connect">Tidak dapat menyambungkan perangkat</string>
     <string name="SalesEmpty">Penjualan kosong</string>
     <string name="text_cancelPayment">Batal pembayaran?</string>
@@ -327,15 +327,15 @@
     <string name="text_connect">Menghubungkan</string>
     <string name="text_disconnect">Memutuskan</string>
     <string name="text_switchOn">Aktif</string>
-    <string name="text_switchOff">Non Aktif</string>
+    <string name="text_switchOff">Nonaktif</string>
     <string name="text_info">Saat Bluetooth aktif, perangkat dapat berkomunikasi dengan perangkat Bluetooth terdekat lainnya</string>
     <string name="text_enable_bluetooth">Aktifkan Bluetooth</string>
     <string name="text_disable_bluetooth">Nonaktifkan Bluetooth</string>
-    <string name="text_scan_devices">Perangkat Pindai</string>
-    <string name="text_stop_scan">Perangkat Pindai</string>
+    <string name="text_scan_devices">Memindai Perangkat</string>
+    <string name="text_stop_scan">Pemindaian selesai</string>
     <string name="text_list_paired_devices">Perangkat Terpasang</string>
     <string name="text_list_devices">Daftar Perangkat</string>
-    <string name="text_pair">Pasangan</string>
+    <string name="text_pair">Terpasang</string>
     <string name="text_total">TOTAL</string>
     <string name="text_tunai">BAYAR</string>
     <string name="text_kembali">KEMBALI</string>
@@ -348,12 +348,11 @@
     <string name="text_notEnough">Uang tidak cukup</string>
     <string name="cashier">Kasir </string>
     <string name="consumer">Nama Pelanggan</string>
-    <string name="text_suddenly">Printer mencetak tiba-tiba</string>
+    <string name="text_suddenly">Printer error</string>
     <string name="text_PrintFinished">Data cetak selesai</string>
     <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>
     <string name="prepare_data">Menyiapkan data anda</string>
-
-    <string name="phone">TELEPON: </string>
+    <string name="phone">Telepon: </string>
 
     <!-- Close Cash -->
     <string name="start_date">Tanggal Mulai Buka Kas</string>
