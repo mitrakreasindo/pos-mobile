@@ -33,8 +33,15 @@ public interface ReportService
 
   @GET("reports/sales/download/pdf")
   @Streaming
-  Call<ResponseBody> downloadPDF(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+  Call<ResponseBody> downloadReportSales(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
+  @GET("reports/category/download/pdf")
+  @Streaming
+  Call<ResponseBody> downloadReportCategories(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+
+  @GET("reports/subcategory/download/pdf")
+  @Streaming
+  Call<ResponseBody> downloadReportSubCategories(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 //  @GET("reports/sales/")
 //  Call<SalesReport> getReportAll(@Header("merchantCode") String kodeMerchant, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 //
