@@ -240,6 +240,7 @@ public class PrintReceipt
             SendDataByte(context, Command.ESC_Align);
             SendDataString(context, "------------------------------------------\n");
             
+            
             String Total = String.format("%-15s", context.getString(R.string.text_total));
             String Total2 = String.format("%27s", decimalFormat.format(grandTotal).replace('.', ',')).replace(' ', ' ');
   
