@@ -40,15 +40,13 @@ import butterknife.ButterKnife;
 
 public class Wireless_Activity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener
 {
-  /******************************************************************************************************/
-  // Debugging
+  
   private static final String TAG = "Wireless_Activity";
   private static final boolean DEBUG = true;
   public static int x = 0;
   public static int y = 0;
   public static int z = 0;
-  /******************************************************************************************************/
-  // Message types sent from the BluetoothService Handler
+
   public static final int MESSAGE_STATE_CHANGE = 1;
   public static final int MESSAGE_READ = 2;
   public static final int MESSAGE_WRITE = 3;
@@ -58,12 +56,9 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   public static final int MESSAGE_UNABLE_CONNECT = 7;
   public static String KEY_NAMA = "";
   
-  /*******************************************************************************************************/
-  // Key names received from the BluetoothService Handler
   public static final String DEVICE_NAME = "device_name";
   public static final String TOAST = "toast";
   
-  // Intent request codes
   private static final int REQUEST_CONNECT_DEVICE = 1;
   private static final int REQUEST_ENABLE_BT = 2;
   private static final int REQUEST_CHOSE_BMP = 3;
@@ -79,8 +74,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   LinearLayout lnrRefresh;
   @BindView(R.id.lnrTexInfo)
   LinearLayout lnrTexInfo;
-  private ArrayAdapter<String> mNewDevicesArrayAdapter;
-  private ArrayAdapter<String> mPairedDevicesArrayAdapter;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.appbar)
@@ -101,20 +94,16 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   TextView txInfo;
   @BindView(R.id.btn_refresh)
   ImageButton btnRefresh;
-  /*********************************************************************************/
+  
+  private ArrayAdapter<String> mNewDevicesArrayAdapter;
+  private ArrayAdapter<String> mPairedDevicesArrayAdapter;
   private ProgressDialog progressDialog;
   
-  /******************************************************************************************************/
-  // Name of the connected device
   private String mConnectedDeviceName = null;
-  // Local Bluetooth adapter
   private BluetoothAdapter mBluetoothAdapter = null;
-  // Member object for the services
   public static BluetoothService mService;
-  static BluetoothDevice prev_device = null;
   public static GlobalVariable globalVariable = new GlobalVariable();
   
-  /******************************************************************************************************/
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
@@ -164,7 +153,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
         txInfo.setText(getText(R.string.title_connected_to) + " " + deviceName);
         Toast.makeText(this, getText(R.string.bluetooth_connected),
           Toast.LENGTH_SHORT).show();
-        // Start the Bluetooth services
         return;
       }
       else if (mService.getState() != BluetoothService.STATE_CONNECTED)
@@ -178,7 +166,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
       Log.d("mServie: ", String.valueOf(mService));
       KeyListenerInit();
     }
-    
   }
   
   @Override
@@ -188,21 +175,17 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
     mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
     
-    // Find and set up the ListView for paired devices
     ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
     pairedListView.setAdapter(mPairedDevicesArrayAdapter);
     pairedListView.setOnItemClickListener(mDeviceClickListener);
     
-    // Find and set up the ListView for newly discovered devices
     ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
     newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
     newDevicesListView.setOnItemClickListener(mDeviceClickListener);
     
-    // Register for broadcasts when a device is discovered
     IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_FOUND);
     this.registerReceiver(mReceiver2, filter2);
     
-    // Register for broadcasts when discovery has finished
     filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
     this.registerReceiver(mReceiver2, filter2);
     Recovery();
@@ -228,7 +211,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     {
       if (mService.getState() == BluetoothService.STATE_NONE)
       {
-        // Start the Bluetooth services
         mService.start();
       }
     }
@@ -258,7 +240,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   public void onDestroy()
   {
     super.onDestroy();
-    // Stop the Bluetooth services
     if (DEBUG)
       Log.e(TAG, "--- ON DESTROY ---");
     if(mBluetoothAdapter!=null)
@@ -280,7 +261,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     {
       case REQUEST_ENABLE_BT:
       {
-        // When the request to enable Bluetooth returns
         if (resultCode == Activity.RESULT_OK)
         {
           SwitchOff();
@@ -323,9 +303,7 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
               progressDialog.show();
               break;
             case BluetoothService.STATE_LISTEN:
-            
             case BluetoothService.STATE_NONE:
-              
               break;
           }
           break;
@@ -336,7 +314,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
           
           break;
         case MESSAGE_DEVICE_NAME:
-          // save the connected device's name
           mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
           globalVariable.setDeviceName(mConnectedDeviceName);
           Toast.makeText(getApplicationContext(), getText(R.string.title_connected_to) + " " + mConnectedDeviceName,
@@ -350,11 +327,11 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
             .show();
           progressDialog.dismiss();
           break;
-        case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
+        case MESSAGE_CONNECTION_LOST:
           Toast.makeText(getApplicationContext(), getText(R.string.Connection_lost),
             Toast.LENGTH_SHORT).show();
           break;
-        case MESSAGE_UNABLE_CONNECT:     //无法连接设备
+        case MESSAGE_UNABLE_CONNECT:
           progressDialog.dismiss();
           Toast.makeText(getApplicationContext(), getText(R.string.unable_connect),
             Toast.LENGTH_SHORT).show();
@@ -402,7 +379,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   {
     mNewDevicesArrayAdapter.clear();
     mNewDevicesArrayAdapter.notifyDataSetChanged();
-    // If we're already discovering, stop it
     if (mBluetoothAdapter.isDiscovering())
     {
       mBluetoothAdapter.cancelDiscovery();
@@ -417,19 +393,15 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     {
       String action = intent.getAction();
       progress.setVisibility(View.VISIBLE);
-      // When discovery finds a device
       if (BluetoothDevice.ACTION_FOUND.equals(action))
       {
-        // Get the BluetoothDevice object from the Intent
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         
-        // If it's already paired, skip it, because it's been listed already
         if (device.getBondState() != BluetoothDevice.BOND_BONDED)
         {
           mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
           mNewDevicesArrayAdapter.notifyDataSetChanged();
         }
-        // When discovery is finished, change the Activity title
       }
       else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
       {
@@ -452,10 +424,8 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     @Override
     public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3)
     {
-      // Cancel discovery because it's costly and we're about to connect
       mBluetoothAdapter.cancelDiscovery();
       
-      // Get the device MAC address, which is the last 17 chars in the View
       String info = ((TextView) v).getText().toString();
       String noDevices = getResources().getText(R.string.none_paired).toString();
       String noNewDevice = getResources().getText(R.string.none_found).toString();
@@ -464,16 +434,12 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
       if (!info.equals(noDevices) && !info.equals(noNewDevice))
       {
         String address = info.substring(info.length() - 17);
-        // Create the result Intent and include the MAC address
         if (BluetoothAdapter.checkBluetoothAddress(address))
         {
           BluetoothDevice device = mBluetoothAdapter
             .getRemoteDevice(address);
-          // Attempt to connect to the device
           mService.start();
           mService.connect(device);
-            /*Intent intent = new Intent(this, BluetoothService.class);
-            bindService(intent,mConnection,Context.BIND_AUTO_CREATE);*/
         }
       }
     }
@@ -482,7 +448,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   public void Recovery()
   {
     Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-    // If there are paired devices, add each one to the ArrayAdapter
     if (pairedDevices.size() > 0)
     {
       mPairedDevicesArrayAdapter.clear();

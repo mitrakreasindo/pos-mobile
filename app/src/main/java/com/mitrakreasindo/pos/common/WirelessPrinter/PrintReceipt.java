@@ -105,9 +105,9 @@ public class PrintReceipt
             {
               SalesItem tiket = ticketLinelist.get(i);
               String name = tiket.getProduct().getName();
-              int Qty = (int) tiket.getUnits();
-              int price = tiket.getProduct().getPricesell().intValue();
-              int Total = price * Qty;
+              long Qty = (long) tiket.getUnits();
+              long price = tiket.getProduct().getPricesell().longValue();
+              long Total = price * Qty;
       
               String ProductName;
               if (name.length() <= 42)
@@ -130,29 +130,7 @@ public class PrintReceipt
               Command.ESC_Align[2] = 0x00;
               SendDataByte(context, Command.ESC_Align);
               SendDataString(context,sales);
-
-//              Command.ESC_Relative[2] = 0x79;
-//              Command.ESC_Relative[3] = 0x00;
-//              SendDataByte(context, Command.ESC_Relative);
-//
-//              Command.ESC_Relative[2] = 1;
-//              SendDataByte(context, Command.ESC_Relative);
-//              SendDataByte(context, String.format(ProductName, "").getBytes("GBK"));
-//
-//              Command.ESC_Relative[2] = (byte) 140;
-//              SendDataByte(context, Command.ESC_Relative);
-//              SendDataByte(context, String.format("%4s", Qty).replace(' ', ' ').getBytes("GBK"));
-//
-//              Command.ESC_Relative[2] = (byte) 190;
-//              SendDataByte(context, Command.ESC_Relative);
-//              SendDataByte(context, String.format("%10s", Harga).replace(' ', ' ').getBytes("GBK"));
-//
-//              Command.ESC_Relative[2] = 0x79;
-//              Command.ESC_Relative[2] = 0x79;
-//              Command.ESC_Relative[2] = 0x25;
-//              Command.ESC_Relative[3] = 0x01;
-//              SendDataByte(context, Command.ESC_Relative);
-//              SendDataByte(context, String.format("%11s", TotalHarga + "\n").replace(' ', ' ').getBytes("GBK"));
+              
             }
             Command.ESC_Align[2] = 0x00;
             SendDataByte(context, Command.ESC_Align);
@@ -210,9 +188,9 @@ public class PrintReceipt
             {
               SalesItem tiket = ticketLinelist.get(i);
               String name = tiket.getProduct().getName();
-              int Qty = (int) tiket.getUnits();
-              int price = tiket.getProduct().getPricesell().intValue();
-              int Total = price * Qty;
+              long Qty = (long) tiket.getUnits();
+              long price = tiket.getProduct().getPricesell().longValue();
+              long Total = price * Qty;
   
               String ProductName;
               if (name.length() <= 42)

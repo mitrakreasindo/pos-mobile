@@ -9,10 +9,10 @@ import android.app.Application;
 public class GlobalVariable extends Application
 {
   String deviceName = "";
+  
   public String getDeviceName(){
     return deviceName;
   }
-  
   public void setDeviceName(String p){
     deviceName = p;
   }

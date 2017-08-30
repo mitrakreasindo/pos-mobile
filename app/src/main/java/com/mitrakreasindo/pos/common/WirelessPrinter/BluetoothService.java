@@ -231,12 +231,7 @@ public class BluetoothService extends Service
         bundle.putString(Wireless_Activity.TOAST, mcontext.getString(R.string.Connection_lost));
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-    
-      /*  Intent i = getBaseContext().getPackageManager()
-          .getLaunchIntentForPackage(getBaseContext().getPackageName() );
-    
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK );
-        startActivity(i);*/
+      
     }
   
     

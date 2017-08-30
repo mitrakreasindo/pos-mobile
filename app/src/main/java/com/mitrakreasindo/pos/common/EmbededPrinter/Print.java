@@ -24,7 +24,7 @@ public class Print
   {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss ");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+    Date curDate = new Date(System.currentTimeMillis());
     String tanggal = formatter.format(curDate);
     String date = tanggal;
     String separator = "--------------------------------";
@@ -49,6 +49,7 @@ public class Print
     
     if (Cash == 0)
     {
+      
       String strHeader = IDs.getLoginCompanyName().toUpperCase() + "\n" + IDs.getLoginCompanyAddress() + "\n" +
         (context.getString(R.string.phone)) + IDs.getLoginCompanyPhone() + "\n" + separator;
       PrintDataObject printDataObject1 = new PrintDataObject(strHeader, 8, true, PrintDataObject.ALIGN.CENTER);
@@ -72,10 +73,11 @@ public class Print
       
       for (int i = 0; i < salesItemList.size(); i++)
       {
+        
         SalesItem tiket = salesItemList.get(i);
         String name = tiket.getProduct().getName();
         long Qty = (long) tiket.getUnits();
-        long price = tiket.getProduct().getPricesell().intValue();
+        long price = tiket.getProduct().getPricesell().longValue();
         long Total = price * Qty;
   
         String ProductName;
@@ -119,6 +121,7 @@ public class Print
         printDataObject.setIsLittleSize(false);
         printDataObject.setBold(false);
         list.add(printDataObject);
+        
       }
       String GrandTotal = decimalFormat.format(grandTotal).replace('.', ',');
       String Total = String.format("%-17s", context.getString(R.string.text_total));
@@ -134,6 +137,7 @@ public class Print
       printDataObject4.setIsLittleSize(false);
       printDataObject4.setBold(false);
       list.add(printDataObject4);
+      
     }
     else
     {
@@ -158,7 +162,7 @@ public class Print
         SalesItem tiket = salesItemList.get(i);
         String name = tiket.getProduct().getName();
         long Qty = (long) tiket.getUnits();
-        long price = tiket.getProduct().getPricesell().intValue();
+        long price = tiket.getProduct().getPricesell().longValue();
         long Total = price * Qty;
     
         String ProductName;
@@ -204,12 +208,15 @@ public class Print
         printDataObject.getFontSize();
         printDataObject.setBold(false);
         list.add(printDataObject);
+        
       }
+      
       String Total = String.format("%-17s", context.getString(R.string.text_total));
       String Total2 = String.format("%15s", decimalFormat.format(grandTotal).replace('.', ',')).replace(' ', ' ');
-  
+      
       String payment = String.format("%-17s", context.getString(R.string.text_tunai));
       String payment2 = String.format("%15s", decimalFormat.format(Cash).replace('.', ',')).replace(' ', ' ');
+      
       String Change = String.format("%-17s", context.getString(R.string.text_kembali));
       String footer = context.getString(R.string.text_ucapan);
       String Change2 = String.format("%15s", decimalFormat.format(Cash - grandTotal).replace('.', ',')).replace(' ', ' ');
