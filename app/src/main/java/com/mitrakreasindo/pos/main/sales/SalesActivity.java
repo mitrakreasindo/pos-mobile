@@ -157,7 +157,7 @@ public class SalesActivity extends AppCompatActivity
       if (productByCode != null)
       {
 
-//        data();
+//        PrepareData();
 
         Tax tax = new Tax();
         tax.setId("001");
@@ -368,12 +368,12 @@ public class SalesActivity extends AppCompatActivity
 
           editTextExtraSalesInfo.setHint(R.string.hint_sales_extra_info);
           new AlertDialog.Builder(SalesActivity.this)
-            .setTitle(R.string.additional_sales_info)
+            .setTitle(R.string.additional_info)
             .setView(editTextExtraSalesInfo)
             .setCancelable(false)
             .setPositiveButton
             (
-              R.string.yes, new DialogInterface.OnClickListener()
+              R.string.ok, new DialogInterface.OnClickListener()
               {
                 @Override
                 public void onClick(DialogInterface dialog, int which)
@@ -383,7 +383,7 @@ public class SalesActivity extends AppCompatActivity
                   tableSalesItemHelper.insertSalesItem(salesListAdapter.salesItems);
                   tableSalesItemHelper.close();
 
-                  data();
+                  PrepareData();
                   salesPack = new SalesPack();
                   salesPack.setSales(viewsales);
                   salesPack.setReceipts(viewreceipt);
@@ -424,7 +424,7 @@ public class SalesActivity extends AppCompatActivity
         Tax tax = new Tax();
         tax.setId("001");
 
-//        data();
+//        PrepareData();
 
         SalesItem itemBySearch = new SalesItem();
         itemBySearch.setId(0);
@@ -490,9 +490,9 @@ public class SalesActivity extends AppCompatActivity
   public void onBackPressed()
   {
     final AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-    confirmationDialog.setTitle("Cancel Transaction ?");
-    confirmationDialog.setMessage("Are you sure want to cancel the transaction ?");
-    confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+    confirmationDialog.setTitle(R.string.cancel_sales);
+    confirmationDialog.setMessage(R.string.cancel_sales_message);
+    confirmationDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
     {
       @Override
       public void onClick(DialogInterface dialog, int which)
@@ -501,7 +501,7 @@ public class SalesActivity extends AppCompatActivity
       }
     });
 
-    confirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+    confirmationDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
     {
       @Override
       public void onClick(DialogInterface dialog, int which)
@@ -514,7 +514,7 @@ public class SalesActivity extends AppCompatActivity
 
   }
 
-  public void data()
+  public void PrepareData()
   {
     Tax tax = new Tax();
     tax.setId("001");
@@ -546,8 +546,8 @@ public class SalesActivity extends AppCompatActivity
 
     taxLine = new TaxLine();
     taxLine.setId(UUID.randomUUID().toString());
-    taxLine.setBase(1000);
-    taxLine.setAmount(100);
+    taxLine.setBase(0);
+    taxLine.setAmount(0);
     taxLine.setSiteguid(IDs.SITE_GUID);
     taxLine.setSflag(true);
     taxLine.setReceipt(receipt);
@@ -585,7 +585,7 @@ public class SalesActivity extends AppCompatActivity
     viewsales.setSiteguid(IDs.SITE_GUID);
     viewsales.setSflag(sales.getSflag());
     viewsales.setCustomerName(null);
-    viewsales.setPersonName(null);
+    viewsales.setPersonName(IDs.getLoginUserFullname());
     viewsales.setDatenew(DefaultHelper.dateFormat(new Date()));
 
     viewreceipt = new ViewReceipt();
@@ -605,7 +605,7 @@ public class SalesActivity extends AppCompatActivity
     viewreceipt.setAttributes(null);
     viewreceipt.setSiteguid(IDs.SITE_GUID);
     viewreceipt.setSflag(true);
-    viewreceipt.setHost("");
+    viewreceipt.setHost(IDs.getLoginUser());
 
     viewpayment = new ViewPayment();
     viewpayment.setId(payment.getId());
@@ -713,7 +713,7 @@ public class SalesActivity extends AppCompatActivity
           {
 //            progressDialog.dismiss();
             Log.d("SUCCESS", "SUCCESS");
-            Toast.makeText(SalesActivity.this, "success", Toast.LENGTH_LONG).show();
+            Toast.makeText(SalesActivity.this, responseMessage, Toast.LENGTH_LONG).show();
           }
         }
       }

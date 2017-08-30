@@ -203,7 +203,6 @@
     <string name="receive">Receive</string>
     <string name="export">Export</string>
     <string name="logout">Logout</string>
-    <string name="today_s_revenue">Today\'s Revenue</string>
     <string name="product">Product</string>
     <string name="scan">Scan</string>
     <string name="select">Select</string>
@@ -399,7 +398,7 @@
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Host</string>
     <string name="revenue">Revenue</string>
-    <string name="additional_sales_info">Additional Info</string>
+    <string name="additional_info">Additional Information</string>
     <string name="hint_sales_extra_info">Customer Name / Table Number Info</string>
 
     <string name="parent_category">Parent Category</string>
@@ -407,6 +406,9 @@
     <string name="view_list">View List</string>
     <string name="change_money">Change Money</string>
     <string name="day">Day</string>
+    <string name="cancel_sales">Cancel Transaction ?</string>
+    <string name="cancel_sales_message">Are you sure want to cancel the transaction ?</string>
     <string name="success_download_report">Successfully Download Report !</string>
     <string name="unsuccess_download_report">Unsuccessfully Download Report !</string>
+    <string name="product_name">Product Name</string>
 </resources>

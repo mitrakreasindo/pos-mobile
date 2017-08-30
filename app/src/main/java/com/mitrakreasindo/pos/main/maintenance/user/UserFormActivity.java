@@ -335,7 +335,7 @@ public class UserFormActivity extends AppCompatActivity
         {
           case 0:
             Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
+            Bitmap bitmap = (Bitmap) extras.get("PrepareData");
             imageviewImageSelect.setImageBitmap(bitmap);
             imageviewImageSelect.setVisibility(View.VISIBLE);
             break;
@@ -497,7 +497,6 @@ public class UserFormActivity extends AppCompatActivity
           {
             // Password will changed and no need resetter in the future login
             people.setOldPassword(edittextOldPass.getText().toString());
-            people.setApppassword(edittextPass.getText().toString());
             people.setVisible(false);
           }
         }
@@ -512,6 +511,7 @@ public class UserFormActivity extends AppCompatActivity
       people.setEmail(null);
       people.setFullname(edittextFullname.getText().toString());
       people.setPhoneNumber(edittextPhone.getText().toString());
+      people.setApppassword(edittextPass.getText().toString());
       people.setCard(null);
 
       if (imageviewImageSelect.getVisibility() == View.VISIBLE)

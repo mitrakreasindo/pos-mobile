@@ -43,6 +43,7 @@ import com.mitrakreasindo.pos.main.fragment.adapter.PendingTransactionListAdapte
 import com.mitrakreasindo.pos.main.fragment.menu.MasterDataFragment;
 import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.sales.SalesActivity;
+import com.mitrakreasindo.pos.main.stock.diary.activity.DiaryFormActivity;
 import com.mitrakreasindo.pos.model.Money;
 import com.mitrakreasindo.pos.model.ReportSelection;
 import com.mitrakreasindo.pos.model.ViewPendingTransaction;
@@ -261,6 +262,15 @@ public class MainFragment extends Fragment
           .replace(R.id.main_content, masterDataFragment, "MasterDataFragment")
           .addToBackStack("MasterDataFragment").commit();
         getActivity().getSupportFragmentManager().executePendingTransactions();
+      }
+    });
+
+    menuReceive.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View view)
+      {
+        startActivity(new Intent(getActivity(), DiaryFormActivity.class));
       }
     });
 

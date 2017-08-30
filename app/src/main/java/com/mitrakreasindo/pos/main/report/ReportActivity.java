@@ -435,7 +435,7 @@ public class ReportActivity extends AppCompatActivity
       public void onResponse(Call<ReportDate<ReportSubDate>> call, Response<ReportDate<ReportSubDate>> response)
       {
         ReportDate<ReportSubDate> data = response.body();
-//        List<ReportSubCategorySub> reportSubCategorySubs = data.getSubReportDate().;
+//        List<ReportSubCategorySub> reportSubCategorySubs = PrepareData.getSubReportDate().;
         Log.d("GET0", data.getSubReportDate().get(0).getDate().toString());
         if (data != null)
         {

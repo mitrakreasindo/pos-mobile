@@ -84,7 +84,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.ViewHolder>
           intent.putExtra("name", role.getName());
           intent.putExtra("permission", role.getPermissions());
 
-          Log.d(getClass().getSimpleName(), " data edit " + role.getName() + " " + role.getPermissions());
+          Log.d(getClass().getSimpleName(), " PrepareData edit " + role.getName() + " " + role.getPermissions());
 
           context.startActivity(intent);
         }

@@ -76,6 +76,8 @@ public class DiaryFormActivity extends AppCompatActivity
   Spinner diaryProductReasonSpinner;
   @BindView(R.id.diary_product_total)
   TextView diaryProductTotal;
+  @BindView(R.id.text_diary_additional_info)
+  EditText textDiaryAdditionalInfo;
 
   private int mYear, mMonth, mDay, mHour, mMinute, mSecond;
   private Bundle bundle;
@@ -230,10 +232,12 @@ public class DiaryFormActivity extends AppCompatActivity
           diaryProductTotal.setText("0");
         }
       }
+
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)
       {
       }
+
       @Override
       public void afterTextChanged(Editable s)
       {
@@ -265,6 +269,7 @@ public class DiaryFormActivity extends AppCompatActivity
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
       {
       }
+
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
       {
@@ -277,6 +282,7 @@ public class DiaryFormActivity extends AppCompatActivity
           diaryProductTotal.setText("0");
         }
       }
+
       @Override
       public void afterTextChanged(Editable editable)
       {
@@ -288,7 +294,8 @@ public class DiaryFormActivity extends AppCompatActivity
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
       {
-        if (diaryProductReasonSpinner.getSelectedItem().toString().contains("(-)"))
+        if (diaryProductReasonSpinner.getSelectedItem().toString().contains("(-)") &&
+          !diaryUnitField.getText().toString().equals(""))
         {
           if (Double.valueOf(diaryUnitField.getText().toString()) > inStock)
           {
@@ -296,7 +303,6 @@ public class DiaryFormActivity extends AppCompatActivity
           }
         }
       }
-
       @Override
       public void onNothingSelected(AdapterView<?> parent)
       {
@@ -389,7 +395,7 @@ public class DiaryFormActivity extends AppCompatActivity
       stockDiary.setUnits(Double.valueOf(diaryUnitField.getText().toString()));
       stockDiary.setPrice(Double.valueOf(diaryProductBuyPriceField.getText().toString()));
       stockDiary.setAppuser(IDs.getLoginUser());
-      stockDiary.setSiteguid(null);
+      stockDiary.setSiteguid(textDiaryAdditionalInfo.getText().toString());
       stockDiary.setSflag(true);
       stockDiary.setAttributesetinstanceId(null);
       stockDiary.setLocation(location);
