@@ -136,6 +136,8 @@ public class RegisterActivity extends AppCompatActivity
       {
       }
     });
+
+    edittextOwnerBirthDate.setText("1900-01-01");
   }
 
   @Override
@@ -256,10 +258,7 @@ public class RegisterActivity extends AppCompatActivity
       people.setId(UUID.randomUUID().toString());
       people.setFullname(edittextOwnerFullName.getText().toString());
       people.setGender(spinnerOwnerSex.getSelectedItem().toString());
-      if (!edittextOwnerBirthDate.getText().toString().equals(""))
-        people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
-      else
-        people.setBirthdate(null);
+      people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
       people.setEmail(edittextOwnerEmail.getText().toString());
       people.setPhoneNumber(edittextOwnerPhone.getText().toString());
       //Need Password Resetter on first login
@@ -326,16 +325,11 @@ public class RegisterActivity extends AppCompatActivity
       focusView = edittextBusinessShortname;
       return false;
     }
-    else if (!TextUtils.isEmpty(businessphone))
+    else if (!TextUtils.isEmpty(businessphone) && !isPhoneValid(businessphone))
     {
-      boolean stat = true;
-      if (!isPhoneValid(businessphone))
-      {
-        edittextBusinessPhone.setError(getString(R.string.error_valid_owneremail));
-        focusView = edittextBusinessPhone;
-        stat = false;
-      }
-      return stat;
+      edittextBusinessPhone.setError(getString(R.string.error_valid_owneremail));
+      focusView = edittextBusinessPhone;
+      return false;
     }
     else if (TextUtils.isEmpty(ownerfullname))
     {

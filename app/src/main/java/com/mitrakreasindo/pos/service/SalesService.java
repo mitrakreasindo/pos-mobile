@@ -26,4 +26,5 @@ public interface SalesService
   @GET("viewsales/{salesid}/salesitems")
   Call<List<ViewSalesItem>> getSalesItemBySalesId(@Header("merchantCode") String kodeMerchant,
                                                   @Path("salesid") String salesId);
+
 }
