@@ -145,21 +145,21 @@ public class ProductActivity extends AppCompatActivity
     {
 //      productListAdapter.deleteMultipleProduct();
     }
-    else if (id == R.id.action_select_view_type)
-    {
-      if (!grid_mode)
-      {
-        Log.d("SELECTED1", "ITEM SELECTES");
-        item.setIcon(R.drawable.ic_view_module_menu);
-        grid_mode = true;
-      }
-      else
-      {
-        Log.d("SELECTED2", "ITEM SELECTES");
-        item.setIcon(R.drawable.ic_view_list_menu);
-        grid_mode = false;
-      }
-    }
+//    else if (id == R.id.action_select_view_type)
+//    {
+//      if (!grid_mode)
+//      {
+//        Log.d("SELECTED1", "ITEM SELECTES");
+//        item.setIcon(R.drawable.ic_view_module_menu);
+//        grid_mode = true;
+//      }
+//      else
+//      {
+//        Log.d("SELECTED2", "ITEM SELECTES");
+//        item.setIcon(R.drawable.ic_view_list_menu);
+//        grid_mode = false;
+//      }
+//    }
 
     return super.onOptionsItemSelected(item);
   }

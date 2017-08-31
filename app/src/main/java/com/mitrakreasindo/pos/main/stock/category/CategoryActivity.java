@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -34,8 +35,10 @@ public class CategoryActivity extends AppCompatActivity
   RecyclerView listCategory;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
-  @BindView(R.id.edit_text_filter)
-  EditText editTextFilter;
+  @BindView(R.id.edit_filter)
+  EditText editFilter;
+  @BindView(R.id.button_filter)
+  Button buttonFilter;
 
   private CategoryListAdapter categoryListAdapter;
   private TableCategoryHelper tableCategoryHelper;
@@ -65,13 +68,13 @@ public class CategoryActivity extends AppCompatActivity
     listCategory.setLayoutManager(layoutManager);
 
     tableCategoryHelper = new TableCategoryHelper(this);
-    editTextFilter.addTextChangedListener(new TextWatcher()
+    editFilter.addTextChangedListener(new TextWatcher()
     {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
         categoryListAdapter.clear();
-        categoryListAdapter.addCategory(tableCategoryHelper.getData(editTextFilter.getText().toString()));
+        categoryListAdapter.addCategory(tableCategoryHelper.getData(editFilter.getText().toString()));
       }
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after)
@@ -82,6 +85,16 @@ public class CategoryActivity extends AppCompatActivity
       {
       }
     });
+
+    buttonFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        editFilter.setText("");
+      }
+    });
+
     categoryListAdapter.clear();
     categoryListAdapter.addCategory(tableCategoryHelper.getData());
   }

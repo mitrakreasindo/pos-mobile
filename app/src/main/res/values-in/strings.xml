@@ -88,11 +88,11 @@
     <string name="error_empty_owneremail">E-mail harus diisi</string>
     <string name="error_valid_owneremail">E-mail tidak valid</string>
     <string name="error_password_invalid">
-        - Panjang minimum 8 dan maksimum 10
-        - Harus berisi minimal 1 digit
-        - Minimal 1 huruf besar
-        - Minimal 1 huruf kecil
-        - Minimal 1 karakter khusus
+        - Panjang minimum 8 dan maksimum 10\n
+        - Harus berisi minimal 1 digit\n
+        - Minimal 1 huruf besar\n
+        - Minimal 1 huruf kecil\n
+        - Minimal 1 karakter khusus\n
         - Tanpa spasi
     </string>
 

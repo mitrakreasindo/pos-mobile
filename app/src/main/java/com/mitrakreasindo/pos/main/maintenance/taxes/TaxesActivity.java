@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -21,8 +22,8 @@ import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
 import com.mitrakreasindo.pos.main.maintenance.taxes.controller.TaxesListAdapter;
-import com.mitrakreasindo.pos.service.TaxService;
 import com.mitrakreasindo.pos.model.Tax;
+import com.mitrakreasindo.pos.service.TaxService;
 
 import java.util.ArrayList;
 
@@ -37,8 +38,10 @@ public class TaxesActivity extends AppCompatActivity
   RecyclerView listCategory;
   @BindView(R.id.main_content)
   LinearLayout mainContent;
-  @BindView(R.id.edit_text_filter)
-  EditText editTextFilter;
+  @BindView(R.id.edit_filter)
+  EditText editFilter;
+  @BindView(R.id.button_filter)
+  Button buttonFilter;
 
   private Tax tax;
   private TaxService taxService;
@@ -82,13 +85,13 @@ public class TaxesActivity extends AppCompatActivity
     taxesListAdapter.clear();
     taxesListAdapter.addTax(tableTaxesHelper.getData());
 
-    editTextFilter.addTextChangedListener(new TextWatcher()
+    editFilter.addTextChangedListener(new TextWatcher()
     {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count)
       {
         taxesListAdapter.clear();
-        taxesListAdapter.addTax(tableTaxesHelper.getData(editTextFilter.getText().toString()));
+        taxesListAdapter.addTax(tableTaxesHelper.getData(editFilter.getText().toString()));
       }
 
       @Override
@@ -101,6 +104,15 @@ public class TaxesActivity extends AppCompatActivity
       public void afterTextChanged(Editable s)
       {
 
+      }
+    });
+
+    buttonFilter.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        editFilter.setText("");
       }
     });
 

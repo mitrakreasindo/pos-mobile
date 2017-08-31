@@ -419,6 +419,7 @@ public class RegisterActivity extends AppCompatActivity
       {
         arrayBusinessCategory = null;
         Toast.makeText(RegisterActivity.this, R.string.error_get_category, Toast.LENGTH_SHORT).show();
+        finish();
       }
     });
   }
@@ -469,6 +470,7 @@ public class RegisterActivity extends AppCompatActivity
       {
         arrayBusinessSubCategory = null;
         Toast.makeText(RegisterActivity.this, R.string.error_get_subcategory, Toast.LENGTH_SHORT).show();
+        finish();
       }
     });
   }
