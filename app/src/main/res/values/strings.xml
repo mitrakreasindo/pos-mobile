@@ -393,7 +393,7 @@
     <string name="monthly_revenue">Monthly Revenue</string>
     <string name="weekly_revenue">Weekly Revenue</string>
     <string name="pending_transaction_no">No</string>
-    <string name="pending_transaction_customer">Customer</string>
+    <string name="pending_transaction_info">Info</string>
     <string name="pending_transaction_time">Transaction Time</string>
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Host</string>

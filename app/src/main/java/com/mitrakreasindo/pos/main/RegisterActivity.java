@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,6 @@ import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.PasswordValidator;
-import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
 import com.mitrakreasindo.pos.model.Merchant;
 import com.mitrakreasindo.pos.model.MerchantCategories;
 import com.mitrakreasindo.pos.model.MerchantRegistration;
@@ -98,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity
   Button buttonCreateAcc;
 
   private int mYear, mMonth, mDay;
-  private String businessname, shortname, ownerfullname, owneremail;
+  private String businessname, shortname, ownerfullname, owneremail, businessphone, ownerphone;
   private View focusView = null;
   private PasswordValidator passwordValidator;
   private String[] arrayBusinessCategory;
@@ -256,7 +256,10 @@ public class RegisterActivity extends AppCompatActivity
       people.setId(UUID.randomUUID().toString());
       people.setFullname(edittextOwnerFullName.getText().toString());
       people.setGender(spinnerOwnerSex.getSelectedItem().toString());
-      people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
+      if (!edittextOwnerBirthDate.getText().toString().equals(""))
+        people.setBirthdate(df.parse(edittextOwnerBirthDate.getText().toString()));
+      else
+        people.setBirthdate(null);
       people.setEmail(edittextOwnerEmail.getText().toString());
       people.setPhoneNumber(edittextOwnerPhone.getText().toString());
       //Need Password Resetter on first login
@@ -274,7 +277,12 @@ public class RegisterActivity extends AppCompatActivity
 
   private boolean isEmailValid(String email)
   {
-    return email.contains("@");
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+  }
+
+  private boolean isPhoneValid(String phone)
+  {
+    return Patterns.PHONE.matcher(phone).matches();
   }
 
   public boolean isAlphabet(String s){
@@ -290,11 +298,15 @@ public class RegisterActivity extends AppCompatActivity
     edittextBusinessShortname.setError(null);
     edittextOwnerFullName.setError(null);
     edittextOwnerEmail.setError(null);
+    edittextBusinessPhone.setError(null);
+    edittextOwnerPhone.setError(null);
 
     businessname = edittextBusinessName.getText().toString();
     shortname = edittextBusinessShortname.getText().toString();
     ownerfullname = edittextOwnerFullName.getText().toString();
     owneremail = edittextOwnerEmail.getText().toString();
+    businessphone = edittextBusinessPhone.getText().toString();
+    ownerphone = edittextOwnerPhone.getText().toString();
 
     if (TextUtils.isEmpty(businessname))
     {
@@ -314,6 +326,17 @@ public class RegisterActivity extends AppCompatActivity
       focusView = edittextBusinessShortname;
       return false;
     }
+    else if (!TextUtils.isEmpty(businessphone))
+    {
+      boolean stat = true;
+      if (!isPhoneValid(businessphone))
+      {
+        edittextBusinessPhone.setError(getString(R.string.error_valid_owneremail));
+        focusView = edittextBusinessPhone;
+        stat = false;
+      }
+      return stat;
+    }
     else if (TextUtils.isEmpty(ownerfullname))
     {
       edittextOwnerFullName.setError(getString(R.string.error_empty_ownerfullname));
@@ -330,6 +353,18 @@ public class RegisterActivity extends AppCompatActivity
     {
       edittextOwnerEmail.setError(getString(R.string.error_valid_owneremail));
       focusView = edittextOwnerEmail;
+      return false;
+    }
+    else if (TextUtils.isEmpty(ownerphone))
+    {
+      edittextOwnerPhone.setError(getString(R.string.owner_email));
+      focusView = edittextOwnerPhone;
+      return false;
+    }
+    else if (!isPhoneValid(ownerphone))
+    {
+      edittextOwnerPhone.setError(getString(R.string.error_valid_owneremail));
+      focusView = edittextOwnerPhone;
       return false;
     }
     else

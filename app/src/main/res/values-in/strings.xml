@@ -265,7 +265,7 @@
     <string name="rp_menu">Menu</string>
     <string name="create">Tambah</string>
     <string name="update">Update</string>
-    <string name="insert">Masuk</string>
+    <string name="insert">Tambah</string>
 
     <string name="maintenance">Maintenance</string>
     <string name="logout_question">Keluar ?</string>
@@ -381,7 +381,7 @@
     <string name="yearly_revenue">Yearly Revenue</string>
     <string name="monthly_revenue">Monthly Revenue</string>
     <string name="weekly_revenue">Weekly Revenue</string>
-    <string name="pending_transaction_customer">Pelanggan</string>
+    <string name="pending_transaction_info">Info</string>
     <string name="pending_transaction_no">No</string>
     <string name="pending_transaction_time">Waktu Transaksi</string>
     <string name="pending_transaction_total">Total</string>
