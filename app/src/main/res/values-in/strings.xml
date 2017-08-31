@@ -324,6 +324,8 @@
     <string name="text_bluetooth_off">Bluetooth tidak aktif</string>
     <string name="text_bluetooth_on">Bluetooth aktif</string>
     <string name="txt_refresh">Segarkan</string>
+    <string name="refresh">Bluetooth sedang mencari</string>
+
     <string name="text_connect">Menghubungkan</string>
     <string name="text_disconnect">Memutuskan</string>
     <string name="text_switchOn">Aktif</string>

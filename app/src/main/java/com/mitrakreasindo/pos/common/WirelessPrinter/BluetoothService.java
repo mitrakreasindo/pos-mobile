@@ -347,7 +347,7 @@ public class BluetoothService extends Service
             // Always cancel discovery because it will slow down a connection
           
           mAdapter.cancelDiscovery();
-          mAdapter.startDiscovery();
+//          mAdapter.startDiscovery();
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a

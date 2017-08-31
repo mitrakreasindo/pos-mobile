@@ -172,6 +172,7 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   public void onStart()
   {
     super.onStart();
+    
     mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
     mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
     
@@ -188,7 +189,6 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     
     filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
     this.registerReceiver(mReceiver2, filter2);
-    Recovery();
     if (!mBluetoothAdapter.isEnabled())
     {
       Intent enableIntent = new Intent(
@@ -197,6 +197,7 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     }
     else
     {
+      Recovery();
       doDiscovery();
     }
   }
@@ -377,13 +378,24 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
   
   private void doDiscovery()
   {
-    mNewDevicesArrayAdapter.clear();
-    mNewDevicesArrayAdapter.notifyDataSetChanged();
-    if (mBluetoothAdapter.isDiscovering())
+    if (!mBluetoothAdapter.isDiscovering())
     {
-      mBluetoothAdapter.cancelDiscovery();
+        mNewDevicesArrayAdapter.clear();
+        mBluetoothAdapter.startDiscovery();
+        progress.setVisibility(View.VISIBLE);
     }
-    mBluetoothAdapter.startDiscovery();
+    
+    else
+    {
+      Toast.makeText(this, R.string.refresh,Toast.LENGTH_SHORT).show();
+    }
+//    mNewDevicesArrayAdapter.clear();
+//    mNewDevicesArrayAdapter.notifyDataSetChanged();
+//    if (mBluetoothAdapter.isDiscovering())
+//    {
+//      mBluetoothAdapter.cancelDiscovery();
+//    }
+//    mBluetoothAdapter.startDiscovery();
   }
   
   private final BroadcastReceiver mReceiver2 = new BroadcastReceiver()
@@ -424,8 +436,8 @@ public class Wireless_Activity extends AppCompatActivity implements CompoundButt
     @Override
     public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3)
     {
-      mBluetoothAdapter.cancelDiscovery();
       
+      mBluetoothAdapter.cancelDiscovery();
       String info = ((TextView) v).getText().toString();
       String noDevices = getResources().getText(R.string.none_paired).toString();
       String noNewDevice = getResources().getText(R.string.none_found).toString();
