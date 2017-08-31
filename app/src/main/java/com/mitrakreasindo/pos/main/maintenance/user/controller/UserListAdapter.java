@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -111,16 +112,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
           Log.d("IDPEOPLE", people.getId());
           Intent intent = new Intent(context, UserFormActivity.class);
           intent.putExtra("people", people);
-//          intent.putExtra("id", people.getId());
-//          intent.putExtra("name", people.getName());
-//          intent.putExtra("password", people.getApppassword());
-//          intent.putExtra("role", people.getRole().getId());
-//          intent.putExtra("visible", people.isVisible());
-//          intent.putExtra("image", people.getImage());
-//          intent.putExtra("fullname", people.getFullname());
-//          intent.putExtra("birthdate", people.getBirthdate());
-//          intent.putExtra("gender", people.getGender());
-//          intent.putExtra("phone", people.getPhoneNumber());
           context.startActivity(intent);
         }
       });
@@ -254,9 +245,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = context.getString(R.string.error_webservice);
-        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          Message.error(responseMessage, context);
+        }
       }
     });
     removePeople(user);

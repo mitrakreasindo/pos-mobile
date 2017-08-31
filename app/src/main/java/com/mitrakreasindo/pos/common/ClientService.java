@@ -1,5 +1,7 @@
 package com.mitrakreasindo.pos.common;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,15 +18,17 @@ public class ClientService
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
     // set your desired log level
     logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-    // add your other interceptors …
-    // add logging as last interceptor
-    httpClient.addInterceptor(logging);  // <-- this is the important line!
+
+    final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+      .readTimeout(10, TimeUnit.SECONDS)
+      .connectTimeout(10, TimeUnit.SECONDS)
+      .addInterceptor(logging)
+      .build();
 
     return new Retrofit.Builder()
       .baseUrl(RestVariable.SERVER_URL)
       .addConverterFactory(JacksonConverterFactory.create())
-      .client(httpClient.build())
+      .client(okHttpClient)
       .build();
   }
 

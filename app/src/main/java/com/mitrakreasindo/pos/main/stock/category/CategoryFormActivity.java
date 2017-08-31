@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.birbit.android.jobqueue.JobManager;
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -66,6 +67,8 @@ public class CategoryFormActivity extends AppCompatActivity
   private List<Category> dataCategory;
   private ArrayAdapter<Category> categoryArrayAdapter;
   private Category category = new Category();
+
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -162,6 +165,12 @@ public class CategoryFormActivity extends AppCompatActivity
     int id = item.getItemId();
     if (id == R.id.action_confirm)
     {
+
+      progressDialog = new ProgressDialog(this);
+      progressDialog.setMessage(getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
+      progressDialog.show();
+
       if (bundle != null)
       {
         updateCategory();
@@ -175,11 +184,6 @@ public class CategoryFormActivity extends AppCompatActivity
 
   private void postCategory()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
     Category parentCategory = new Category();
     parentCategory.setId(null);
 
@@ -230,6 +234,8 @@ public class CategoryFormActivity extends AppCompatActivity
             categoryListAdapter.addCategory(category);
             categoryListAdapter.notifyDataSetChanged();
 
+            progressDialog.dismiss();
+            Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
             finish();
           }
         }
@@ -238,10 +244,11 @@ public class CategoryFormActivity extends AppCompatActivity
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        t.printStackTrace();
-        Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, CategoryFormActivity.this);
+        }
       }
 
     });
@@ -252,11 +259,6 @@ public class CategoryFormActivity extends AppCompatActivity
 
   private void updateCategory()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
     Category parentCategory = new Category();
     parentCategory.setId("663a30b3-fe7c-45e8-8061-9a98e9b23aae");
 
@@ -306,19 +308,20 @@ public class CategoryFormActivity extends AppCompatActivity
             categoryListAdapter.notifyDataSetChanged();
 
             progressDialog.dismiss();
-
+            Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
             finish();
           }
-          Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(CategoryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, CategoryFormActivity.this);
+        }
       }
     });
 

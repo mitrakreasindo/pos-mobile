@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
 import com.mitrakreasindo.pos.main.R;
@@ -53,6 +54,8 @@ public class TaxesFormActivity extends AppCompatActivity
   private Bundle bundle;
   private SharedPreferenceEditor sharedPreferenceEditor;
   private String kodeMerchant;
+
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -103,6 +106,12 @@ public class TaxesFormActivity extends AppCompatActivity
     int id = item.getItemId();
     if (id == R.id.action_confirm)
     {
+
+      progressDialog = new ProgressDialog(this);
+      progressDialog.setMessage(getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
+      progressDialog.show();
+
       if (bundle != null)
       {
         updateCategory();
@@ -120,11 +129,6 @@ public class TaxesFormActivity extends AppCompatActivity
 
   private void postCategory()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
-
     TaxCategory taxCategory = new TaxCategory();
     taxCategory.setId(UUID.randomUUID().toString());
 
@@ -169,15 +173,22 @@ public class TaxesFormActivity extends AppCompatActivity
 
             taxesListAdapter.addTax(tax);
             taxesListAdapter.notifyDataSetChanged();
+
+            progressDialog.dismiss();
+            Toast.makeText(TaxesFormActivity.this, "Succesfull add taxes", Toast.LENGTH_SHORT).show();
+            finish();
           }
-          Toast.makeText(TaxesFormActivity.this, "Succesfull add taxes", Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, TaxesFormActivity.this);
+        }
       }
     });
 
@@ -185,11 +196,6 @@ public class TaxesFormActivity extends AppCompatActivity
 
   private void updateCategory()
   {
-
-    final ProgressDialog progressDialog = new ProgressDialog(this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
 
     String id = bundle.getString("id");
     String categoryId = bundle.getString("category");
@@ -239,15 +245,21 @@ public class TaxesFormActivity extends AppCompatActivity
             taxesListAdapter.addTax(tax);
             taxesListAdapter.notifyDataSetChanged();
 
+            progressDialog.dismiss();
+            Toast.makeText(TaxesFormActivity.this, "Succesfull update tax", Toast.LENGTH_SHORT).show();
+            finish();
           }
-          Toast.makeText(TaxesFormActivity.this, "Succesfull update tax", Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, TaxesFormActivity.this);
+        }
       }
     });
 

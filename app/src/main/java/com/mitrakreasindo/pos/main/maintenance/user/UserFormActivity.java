@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.main.maintenance.user;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.ImageHelper;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.PasswordValidator;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TablePeopleHelper;
@@ -132,6 +134,8 @@ public class UserFormActivity extends AppCompatActivity
   private Bitmap bitmap;
   private ByteArrayOutputStream baos;
   private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -536,6 +540,11 @@ public class UserFormActivity extends AppCompatActivity
 
   public void ConfirmRegisterPeople(View view)
   {
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage(getString(R.string.progress_message));
+    progressDialog.setCancelable(false);
+    progressDialog.show();
+
     if (bundle == null)
     {
       if (attemptCreate())
@@ -584,24 +593,29 @@ public class UserFormActivity extends AppCompatActivity
 
             userListAdapter.addUser(people);
             userListAdapter.notifyDataSetChanged();
+
+            progressDialog.dismiss();
+            Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+            finish();
           }
-          Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, UserFormActivity.this);
+        }
       }
     });
   }
 
   private void updatePeople(final People people)
   {
+
     Call<HashMap<Integer, String>> call = peopleService.updatePeople(kodeMerchant, peopleId, people);
     call.enqueue(new Callback<HashMap<Integer, String>>()
     {
@@ -627,18 +641,22 @@ public class UserFormActivity extends AppCompatActivity
 
             userListAdapter.addUser(people);
             userListAdapter.notifyDataSetChanged();
+
+            progressDialog.dismiss();
+            Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+            finish();
           }
-          Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(UserFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, UserFormActivity.this);
+        }
       }
     });
   }

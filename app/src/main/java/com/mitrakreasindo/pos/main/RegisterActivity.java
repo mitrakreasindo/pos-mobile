@@ -23,7 +23,9 @@ import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.Event;
 import com.mitrakreasindo.pos.common.EventCode;
 import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.PasswordValidator;
+import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
 import com.mitrakreasindo.pos.model.Merchant;
 import com.mitrakreasindo.pos.model.MerchantCategories;
 import com.mitrakreasindo.pos.model.MerchantRegistration;
@@ -356,22 +358,28 @@ public class RegisterActivity extends AppCompatActivity
           {
             progressDialog.dismiss();
             buttonCreateAcc.setEnabled(true);
-            finish();
+
+            progressDialog.dismiss();
+            Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
           }
           else
+          {
             progressDialog.dismiss();
+            buttonCreateAcc.setEnabled(true);
+            Message.error(responseMessage, RegisterActivity.this);
+          }
         }
-        Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        progressDialog.dismiss();
-        buttonCreateAcc.setEnabled(true);
-        responseCode = -1;
-        responseMessage = RegisterActivity.this.getString(R.string.error_post_register);
-        Toast.makeText(RegisterActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          buttonCreateAcc.setEnabled(true);
+          Message.error(responseMessage, RegisterActivity.this);
+        }
       }
     });
   }
