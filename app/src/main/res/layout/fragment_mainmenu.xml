@@ -536,7 +536,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="No"
+                            android:text="@string/pending_transaction_no"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
@@ -545,7 +545,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="8"
-                            android:text="Sales ID"
+                            android:text="@string/pending_transaction_info"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
@@ -554,7 +554,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="8"
-                            android:text="Transaction Time"
+                            android:text="@string/pending_transaction_time"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
@@ -563,7 +563,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6"
-                            android:text="Total"
+                            android:text="@string/pending_transaction_total"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
@@ -572,7 +572,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6"
-                            android:text="Served By"
+                            android:text="@string/pending_transaction_host"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>

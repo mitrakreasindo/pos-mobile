@@ -1,6 +1,7 @@
 package com.mitrakreasindo.pos.main.stock.diary.activity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,9 +23,11 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.IDs;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
 import com.mitrakreasindo.pos.model.Location;
 import com.mitrakreasindo.pos.model.Product;
 import com.mitrakreasindo.pos.model.StockDiary;
@@ -89,6 +92,8 @@ public class DiaryFormActivity extends AppCompatActivity
   private SharedPreferenceEditor sharedPreferenceEditor;
   private TableProductHelper tableProductHelper;
   private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -213,6 +218,11 @@ public class DiaryFormActivity extends AppCompatActivity
         }
         else
         {
+          progressDialog = new ProgressDialog(DiaryFormActivity.this);
+          progressDialog.setMessage(getString(R.string.progress_message));
+          progressDialog.setCancelable(false);
+          progressDialog.show();
+
           postStockDiary();
         }
       }
@@ -310,17 +320,6 @@ public class DiaryFormActivity extends AppCompatActivity
       }
     });
 
-
-//    //Spinner Items
-//    List<String> spinnerArray =  new ArrayList<>();
-//    spinnerArray.add("Stock In (+)");
-//    spinnerArray.add("Stock Out (-)");
-//
-//    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//      this, android.R.layout.simple_spinner_item, spinnerArray);
-//
-//    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//    diaryProductReasonSpinner.setAdapter(adapter);
   }
 
   @Override
@@ -428,18 +427,22 @@ public class DiaryFormActivity extends AppCompatActivity
             tableProductHelper.open();
             tableProductHelper.updateProductStock(stockDiary.getProduct(), stockDiary.getReason());
             tableProductHelper.close();
+
+            progressDialog.dismiss();
+            Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+            finish();
           }
-          Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(DiaryFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, DiaryFormActivity.this);
+        }
       }
     });
   }

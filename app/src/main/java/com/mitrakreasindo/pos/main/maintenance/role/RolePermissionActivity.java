@@ -19,9 +19,11 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableRoleHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.taxes.TaxesFormActivity;
 import com.mitrakreasindo.pos.model.Permission;
 import com.mitrakreasindo.pos.model.Role;
 import com.mitrakreasindo.pos.service.RoleService;
@@ -257,6 +259,7 @@ public class RolePermissionActivity extends AppCompatActivity
   private Serializer serializer;
   private HashMap<Integer, String> listMenuId;
 
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -335,6 +338,11 @@ public class RolePermissionActivity extends AppCompatActivity
 
     if (id == R.id.action_confirm)
     {
+      progressDialog = new ProgressDialog(this);
+      progressDialog.setMessage(getString(R.string.progress_message));
+      progressDialog.setCancelable(false);
+      progressDialog.show();
+
       if (bundle != null)
       {
         updateRole();
@@ -757,10 +765,6 @@ public class RolePermissionActivity extends AppCompatActivity
 
   private void updateRole()
   {
-    final ProgressDialog progressDialog = new ProgressDialog(RolePermissionActivity.this);
-    progressDialog.setMessage(getString(R.string.progress_message));
-    progressDialog.setCancelable(false);
-    progressDialog.show();
     Log.d(getClass().getSimpleName(), "Put Role !!!");
 
     Bundle bundle = getIntent().getExtras();
@@ -798,18 +802,20 @@ public class RolePermissionActivity extends AppCompatActivity
             roleHelper.close();
 
             progressDialog.dismiss();
+            Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
             onBackPressed();
           }
         }
-        progressDialog.dismiss();
-        Toast.makeText(RolePermissionActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        progressDialog.dismiss();
-        onBackPressed();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, RolePermissionActivity.this);
+        }
       }
     });
   }

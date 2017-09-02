@@ -54,6 +54,8 @@ public class PendingTransactionListAdapter extends RecyclerView.Adapter<PendingT
       {
         Intent intent = new Intent(context, PaymentActivity.class);
         intent.putExtra("sales_id", viewPendingTransactions.getReceiptId());
+        intent.putExtra("pending_transaction", true);
+        intent.putExtra("additional_info", viewPendingTransactions.getCustomer());
         context.startActivity(intent);
       }
     });

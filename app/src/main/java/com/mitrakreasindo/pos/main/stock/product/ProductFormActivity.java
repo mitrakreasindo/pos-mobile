@@ -31,10 +31,12 @@ import android.widget.Toast;
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.IDs;
 import com.mitrakreasindo.pos.common.ImageHelper;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableCategoryHelper;
 import com.mitrakreasindo.pos.common.TableHelper.TableProductHelper;
 import com.mitrakreasindo.pos.main.R;
+import com.mitrakreasindo.pos.main.maintenance.user.UserFormActivity;
 import com.mitrakreasindo.pos.main.stock.product.controller.ProductListAdapter;
 import com.mitrakreasindo.pos.model.Category;
 import com.mitrakreasindo.pos.model.Product;
@@ -179,15 +181,6 @@ public class ProductFormActivity extends AppCompatActivity
     if (bundle != null)
     {
       product = (Product) bundle.getSerializable("product");
-//      String id = bundle.getString("id");
-//      String name = bundle.getString("name");
-//      String barcode = bundle.getString("barcode");
-//      String shortName = bundle.getString("shortName");
-//      String buyPrice = bundle.getString("buyPrice");
-//      String sellPrice = bundle.getString("sellPrice");
-//      String stockCost = bundle.getString("stockCost");
-//      String stockVolume = bundle.getString("stockVolume");
-//      String categoryId = bundle.getString("category");
       byte[] image = product.getImage();
       Toast.makeText(this, product.getName(), Toast.LENGTH_LONG).show();
 
@@ -261,7 +254,6 @@ public class ProductFormActivity extends AppCompatActivity
           else
             updateProduct(prepareData());
 
-          progressDialog.dismiss();
         }
       }
     });
@@ -450,7 +442,6 @@ public class ProductFormActivity extends AppCompatActivity
           responseCode = resultKey;
           responseMessage = data.get(resultKey);
 
-          Log.e("RESPONSE ", responseMessage);
           if (responseCode == 0)
           {
             TableProductHelper tableProductHelper = new TableProductHelper(ProductFormActivity.this);
@@ -459,20 +450,25 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.close();
             productListAdapter.addProduct(product);
             productListAdapter.notifyDataSetChanged();
+
+            progressDialog.dismiss();
+            Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+            finish();
           }
-          progressDialog.dismiss();
-          Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        progressDialog.dismiss();
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog = new ProgressDialog(ProductFormActivity.this);
+          progressDialog.setMessage(getString(R.string.progress_message));
+          progressDialog.setCancelable(false);
+          progressDialog.show();
+          Message.error(responseMessage, ProductFormActivity.this);
+        }
       }
     });
   }
@@ -501,20 +497,22 @@ public class ProductFormActivity extends AppCompatActivity
             tableProductHelper.open();
             tableProductHelper.update(product);
             tableProductHelper.close();
+
+            progressDialog.dismiss();
+            Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+            finish();
           }
-          progressDialog.dismiss();
-          Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
         }
-        finish();
       }
 
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        progressDialog.dismiss();
-        responseCode = -1;
-        responseMessage = getString(R.string.error_webservice);
-        Toast.makeText(ProductFormActivity.this, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          progressDialog.dismiss();
+          Message.error(responseMessage, ProductFormActivity.this);
+        }
       }
     });
   }

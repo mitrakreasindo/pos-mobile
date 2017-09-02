@@ -251,34 +251,34 @@ public class TableSalesItemHelper
   {
     List<SalesItem> salesItemList = new ArrayList<>();
 
-    SalesItem salesItem = new SalesItem();
-    Sales sales = new Sales();
-    Product product = new Product();
-    AttributesetInstance attributesetInstance = new AttributesetInstance();
-    Tax tax = new Tax();
-
-    for (ViewSalesItem viewSalesItem : list)
+    for (int i=0; i<list.size(); i++)
     {
-      salesItem.setId(viewSalesItem.getId());
+      SalesItem salesItem = new SalesItem();
+      Sales sales = new Sales();
+      Product product = new Product();
+      AttributesetInstance attributesetInstance = new AttributesetInstance();
+      Tax tax = new Tax();
 
-      sales.setId(viewSalesItem.getSales_id());
+      salesItem.setId(list.get(i).getId());
+
+      sales.setId(list.get(i).getSales_id());
       salesItem.setSalesId(sales);
-      salesItem.setLine(viewSalesItem.getLine());
+      salesItem.setLine(list.get(i).getLine());
 
-      product.setId(viewSalesItem.getProduct());
+      product.setId(list.get(i).getProduct());
       salesItem.setProduct(product);
 
-      attributesetInstance.setId(viewSalesItem.getAttributesetinstanceId());
+      attributesetInstance.setId(list.get(i).getAttributesetinstanceId());
       salesItem.setAttributesetinstanceId(attributesetInstance);
-      salesItem.setUnits(viewSalesItem.getUnits());
-      salesItem.setPrice(viewSalesItem.getPrice());
+      salesItem.setUnits(list.get(i).getUnits());
+      salesItem.setPrice(list.get(i).getPrice());
 
-      tax.setId(viewSalesItem.getTaxid());
+      tax.setId(list.get(i).getTaxid());
       salesItem.setTaxid(tax);
-      salesItem.setAttributes(viewSalesItem.getAttributes());
-      salesItem.setRefundqty(viewSalesItem.getRefundqty());
-      salesItem.setSiteguid(viewSalesItem.getSiteguid());
-      salesItem.setSflag(viewSalesItem.getSflag());
+      salesItem.setAttributes(list.get(i).getAttributes());
+      salesItem.setRefundqty(list.get(i).getRefundqty());
+      salesItem.setSiteguid(list.get(i).getSiteguid());
+      salesItem.setSflag(list.get(i).getSflag());
 
       salesItemList.add(salesItem);
     }

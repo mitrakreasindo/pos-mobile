@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.mitrakreasindo.pos.common.ClientService;
 import com.mitrakreasindo.pos.common.MenuIds;
+import com.mitrakreasindo.pos.common.Message;
 import com.mitrakreasindo.pos.common.PermissionUtil;
 import com.mitrakreasindo.pos.common.SharedPreferenceEditor;
 import com.mitrakreasindo.pos.common.TableHelper.TableTaxesHelper;
@@ -199,9 +200,10 @@ public class TaxesListAdapter extends RecyclerView.Adapter<TaxesListAdapter.View
       @Override
       public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
       {
-        responseCode = -1;
-        responseMessage = "Cannot delete tax. :( There is something wrong.";
-        Toast.makeText(context, responseMessage, Toast.LENGTH_LONG).show();
+        if (responseCode == 1)
+        {
+          Message.error(responseMessage, context);
+        }
       }
     });
 

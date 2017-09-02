@@ -395,7 +395,7 @@
     <string name="monthly_revenue">Monthly Revenue</string>
     <string name="weekly_revenue">Weekly Revenue</string>
     <string name="pending_transaction_no">No</string>
-    <string name="pending_transaction_customer">Customer</string>
+    <string name="pending_transaction_info">Info</string>
     <string name="pending_transaction_time">Transaction Time</string>
     <string name="pending_transaction_total">Total</string>
     <string name="pending_transaction_host">Host</string>
@@ -413,4 +413,6 @@
     <string name="success_download_report">Successfully Download Report !</string>
     <string name="unsuccess_download_report">Unsuccessfully Download Report !</string>
     <string name="product_name">Product Name</string>
+    <string name="Okay">Okay</string>
+    <string name="failed">Failed</string>
 </resources>

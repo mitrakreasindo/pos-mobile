@@ -229,8 +229,9 @@ public class TableProductHelper
 
   public int delete(String id)
   {
-    return db.delete(DATABASE_TABLE, R.string.tproduct_id + "='" + id + "'", null);
+    return db.delete(DATABASE_TABLE, context.getString(R.string.tproduct_id) + "='" + id + "'", null);
   }
+
 
   public long update(Product product)
   {
