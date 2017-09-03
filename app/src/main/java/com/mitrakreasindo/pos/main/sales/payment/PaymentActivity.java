@@ -980,11 +980,14 @@ public class PaymentActivity extends AppCompatActivity
     salesPack.setTaxlines(viewtaxlines);
     Log.d("TAX: ", salesPack.getTaxlines().toString());
   
-    TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
-    tableSalesHelper.open();
-    tableSalesHelper.insertSales(sales);
-    tableSalesHelper.close();
-  
+    if (!isPendingTransaction)
+    {
+      TableSalesHelper tableSalesHelper = new TableSalesHelper(PaymentActivity.this);
+      tableSalesHelper.open();
+      tableSalesHelper.insertSales(sales);
+      tableSalesHelper.close();
+    }
+      
     if (isPendingTransaction)
       updatePayment();
     else
