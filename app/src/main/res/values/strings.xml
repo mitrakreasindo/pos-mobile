@@ -325,7 +325,7 @@
     <string name="text_bluetooth_on">Bluetooth is On</string>
     <string name="txt_refresh">Refresh</string>
     <string name="refresh">Bluetooth is discovering</string>
-
+    <string name="succes">Success</string>
 
     <string name="text_connect">Connect</string>
     <string name="text_disconnect">Diconnect</string>

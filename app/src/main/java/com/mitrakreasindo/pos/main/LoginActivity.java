@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -94,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
-
     //Setup spinner
     spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
     {
@@ -558,6 +558,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
       mAuthTask = null;
       showProgress(false);
+    }
+  }
+  
+  private void showInputMethodPicker() {
+    InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
+    if (imeManager != null) {
+      imeManager.showInputMethodPicker();
+    } else {
+      Toast.makeText(this, "gk bisa", Toast.LENGTH_LONG).show();
     }
   }
 }

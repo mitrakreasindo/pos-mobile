@@ -298,7 +298,7 @@ public class TableProductHelper
   public void updateProductStockBylist(List<Product> products, List<Integer> reason)
   {
       ContentValues initialValues = new ContentValues();
-      for (int i = 0; i < products.size() ; i++)
+      for (int i = 0; i < products.size(); i++)
       {
         Product p = getProductById(products.get(i).getId());
         if (reason.get(i) == 1)

@@ -355,6 +355,7 @@
     <string name="text_outOfPaper">Printer kehabisan kertas, Muat kertas. Coba lagi</string>
     <string name="prepare_data">Menyiapkan data anda</string>
     <string name="phone">Telepon: </string>
+    <string name="succes">Sukses</string>
 
     <!-- Close Cash -->
     <string name="start_date">Tanggal Mulai Buka Kas</string>
